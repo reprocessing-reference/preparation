@@ -1,0 +1,11 @@
+{ 
+"@odata.context": "$metadata#AuxFileTypes",
+"LongName": "GIP_OLQCPA",
+"ShortName": "GIP_OLQCPA",
+"Format": "XML",
+"Origin": "ESA",
+"ProductLevelApplicability@odata.bind":  ["ProductLevels('L1')"],
+"Variability": "Static",
+"Rule": "LatestGeneration",
+"Description": "parameters and tests for the On Line Quality Control"
+}
