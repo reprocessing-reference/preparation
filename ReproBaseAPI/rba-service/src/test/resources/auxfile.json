@@ -1,0 +1,22 @@
+{
+    "@odata.context": "$metadata#AuxFiles",
+    "Id": "e872683a-ea5b-455d-bfb2-fb304cbfbacb",
+    "FileType": "$metadata#AuxFileTypes(GIP_OLQCPA)",
+    "FullName": "S2__OPER_GIP_OLQCPA_MPC__20191004T000021_V20191020T233000_21000101T000000_B00",
+    "ShortName": "GIP_OLQCPA",
+    "Baseline": "$metadata#Baselines(02.09)",
+    "Validity": {
+        "Start": "2019-02-17T09:00:00.000Z",
+        "End": "2019-02-17T21:00:00.000Z"
+    },
+    "CreationDate": "2019-02-16T12:00:00.000Z",
+    "Bands@odata.bind": [ "Bands('e872683a-ea5b-455d-bfb2-fb304cbfbacb')" ],
+    "Sensor@odata.bind": [
+        "Sensors('SENTINEL2A_S2MSI')"
+    ],
+    "Checksum": {
+        "Algorithm": "MD5",
+        "Value": "E8A303BF3D85200514F727DB60E7DB65",
+        "ChecksumDate": "2019-02-16T12:00:00.000Z"
+    }
+}
