@@ -67,14 +67,15 @@ public class JPADataSource implements DataSource {
 
             LOG.info("Persisting entity: {}", jpaEntity);
             entityManager.persist(jpaEntity);
-
-            return entityMapper.convertDSEntityToOData(jpaEntity, entity.getClass(), entityDataModel);
-        } finally {
+            
             if (transaction.isActive()) {
                 transaction.commit();
             } else {
                 transaction.rollback();
             }
+            return entityMapper.convertDSEntityToOData(jpaEntity, entity.getClass(), entityDataModel);
+        } finally {            
+            entityManager.close();
         }
     }
 
@@ -97,15 +98,16 @@ public class JPADataSource implements DataSource {
 
                     Object attached = entityManager.merge(jpaEntity);
                     entityManager.remove(attached);
-                } catch (PersistenceException e) {
-                    LOG.error("Could not remove entity: {}", entity);
-                    throw new ODataDataSourceException("Could not remove entity", e);
-                } finally {
                     if (transaction.isActive()) {
                         transaction.commit();
                     } else {
                         transaction.rollback();
                     }
+                } catch (PersistenceException e) {
+                    LOG.error("Could not remove entity: {}", entity);
+                    throw new ODataDataSourceException("Could not remove entity", e);
+                } finally {                    
+                    entityManager.close();
                 }
             } else {
                 throw new ODataDataSourceException("Could not remove entity, could not be loaded");

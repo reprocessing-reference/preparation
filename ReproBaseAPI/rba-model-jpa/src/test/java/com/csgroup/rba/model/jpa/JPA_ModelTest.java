@@ -106,7 +106,7 @@ public class JPA_ModelTest {
     	auxFile.setIdentifier(UUID.randomUUID());
     	auxFile.setSensors(Lists.newArrayList(sens));
     	TimeRangeJPA time = new TimeRangeJPA();
-    	time.setEnd(ZonedDateTime.now());
+    	time.setStop(ZonedDateTime.now());
     	time.setStart(ZonedDateTime.now());
     	auxFile.setValidity(time);
     	

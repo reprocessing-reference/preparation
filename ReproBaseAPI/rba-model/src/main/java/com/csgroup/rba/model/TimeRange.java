@@ -15,7 +15,7 @@ public class TimeRange {
 	public TimeRange(ZonedDateTime start, ZonedDateTime end) {
 		super();
 		Start = start;
-		End = end;
+		Stop = end;
 	}
 	
 	public TimeRange() {		
@@ -26,8 +26,8 @@ public class TimeRange {
 	private ZonedDateTime Start;
 	 
 	@ODataJPAProperty
-	@EdmProperty(name = "End",nullable = false, precision = 6)
-	private ZonedDateTime End;
+	@EdmProperty(name = "Stop",nullable = false, precision = 6)
+	private ZonedDateTime Stop;
 
 	public ZonedDateTime getStart() {
 		return Start;
@@ -37,12 +37,12 @@ public class TimeRange {
 		Start = start;
 	}
 
-	public ZonedDateTime getEnd() {
-		return End;
+	public ZonedDateTime getStop() {
+		return Stop;
 	}
 
-	public void setEnd(ZonedDateTime end) {
-		End = end;
+	public void setStop(ZonedDateTime end) {
+		Stop = end;
 	}
 	
 	
