@@ -8,6 +8,15 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmComplex(namespace = "OData.CSC")
 public class TimeRange {
 	 
+	public TimeRange(ZonedDateTime start, ZonedDateTime end) {
+		super();
+		Start = start;
+		End = end;
+	}
+	
+	public TimeRange() {		
+	}
+
 	@EdmProperty(name = "Start",nullable = false, precision = 6)
 	private ZonedDateTime Start;
 	 

@@ -8,6 +8,16 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmComplex(namespace = "OData.CSC")
 public class Checksum {
 
+	public Checksum(String algorithm, String value, ZonedDateTime checksumDate) {
+		super();
+		Algorithm = algorithm;
+		Value = value;
+		ChecksumDate = checksumDate;
+	}
+
+	public Checksum() {		
+	}
+
 	@EdmProperty(name = "Algorithm")
 	private String Algorithm;
 	

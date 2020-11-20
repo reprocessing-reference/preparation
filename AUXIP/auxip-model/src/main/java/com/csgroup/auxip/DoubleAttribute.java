@@ -11,7 +11,11 @@ public class DoubleAttribute extends Attribute {
 
 	@EdmProperty(name = "Value", nullable = false)
 	private double value;
-
+	
+	public DoubleAttribute()
+	{		
+	}
+	
 	public DoubleAttribute(String name, String valueType, double value) {
 		super(name, valueType);
 		this.value = value;

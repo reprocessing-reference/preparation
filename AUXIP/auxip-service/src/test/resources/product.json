@@ -1,0 +1,24 @@
+{ 
+"@odata.context": "$metadata#Products",
+"@odata.mediaContentType": "application/octet-stream",
+"Id": "e872683a-ea5b-455d-bfb2-fb304cbfbacb",
+"Name":
+"S2__OPER_AUX_ECMWFD_PDMC_20190216T120000_V20190217T090000_20190217T210000.TGZ",
+"ContentType": "application/octet-stream",
+"ContentLength": 8326253,
+"PublicationDate": "2019-02-16T12:00:00.000Z",
+"EvictionDate": "2019-02-23T12:00:00.000Z ",
+"Checksum"
+[
+{
+"Algorithm": "MD5",
+"Value": "E8A303BF3D85200514F727DB60E7DB65",
+"ChecksumDate": "2019-02-16T12:00:00.000Z",
+}
+]
+"ContentDate":
+{
+"Start": "2019-02-17T09:00:00.000Z",
+"End": "2019-02-17T21:00:00.000Z"
+}
+}

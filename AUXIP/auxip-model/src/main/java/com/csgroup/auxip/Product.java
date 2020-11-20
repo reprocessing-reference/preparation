@@ -60,33 +60,40 @@ public class Product {
     private TimeRange ContentDate;
 
        
-    @EdmNavigationProperty(name = "Attributes", nullable = false)
-    private List<Attribute> m_attributes;
+    @EdmNavigationProperty(name = "Attributes")
+    private List<Attribute> Attributes;
     
-    @EdmNavigationProperty(name = "StringAttributes", nullable = false)
-    private List<StringAttribute> m_stringAttributes;
+    @EdmNavigationProperty(name = "StringAttributes")
+    private List<StringAttribute> StringAttributes;
     
-    @EdmNavigationProperty(name = "IntegerAttributes", nullable = false)
-    private List<IntegerAttribute> m_integerAttributes;
+    @EdmNavigationProperty(name = "IntegerAttributes")
+    private List<IntegerAttribute> IntegerAttributes;
     
-    @EdmNavigationProperty(name = "DoubleAttributes", nullable = false)
-    private List<DoubleAttribute> m_doubleAttributes;
+    @EdmNavigationProperty(name = "DoubleAttributes")
+    private List<DoubleAttribute> DoubleAttributes;
 
-    @EdmNavigationProperty(name = "DateTimeOffsetAttributes", nullable = false)
-    private List<DateTimeOffsetAttribute> m_dateTimeOffsetAttributes;
+    @EdmNavigationProperty(name = "DateTimeOffsetAttributes")
+    private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
     
+		
+	public Product() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public Product(UUID id, String name, String contentType, long contentLength, ZonedDateTime originDate,
-		ZonedDateTime publicationDate, ZonedDateTime evictionDate, List<Attribute> attributes) {
-	Id = id;
-	Name = name;
-	ContentType = contentType;
-	ContentLength = contentLength;
-	OriginDate = originDate;
-	PublicationDate = publicationDate;
-	EvictionDate = evictionDate;
-	m_attributes = attributes;
-}
-
+			ZonedDateTime publicationDate, ZonedDateTime evictionDate, List<Checksum> checksums, TimeRange contentDate) {
+		super();
+		Id = id;
+		Name = name;
+		ContentType = contentType;
+		ContentLength = contentLength;
+		OriginDate = originDate;
+		PublicationDate = publicationDate;
+		EvictionDate = evictionDate;
+		Checksums = checksums;
+		ContentDate = contentDate;		
+	}
+	
 	public UUID getId() {
 		return Id;
 	}
@@ -144,12 +151,62 @@ public class Product {
 	}
 
 	public List<Attribute> getAttributes() {
-		return m_attributes;
+		return Attributes;
 	}
 
 	public void setAttributes(List<Attribute> attributes) {
-		m_attributes = attributes;
+		Attributes = attributes;
 	}
+
+	public List<Checksum> getChecksums() {
+		return Checksums;
+	}
+
+	public void setChecksums(List<Checksum> checksums) {
+		Checksums = checksums;
+	}
+
+	public TimeRange getContentDate() {
+		return ContentDate;
+	}
+
+	public void setContentDate(TimeRange contentDate) {
+		ContentDate = contentDate;
+	}
+
+	public List<StringAttribute> getStringAttributes() {
+		return StringAttributes;
+	}
+
+	public void setStringAttributes(List<StringAttribute> stringAttributes) {
+		StringAttributes = stringAttributes;
+	}
+
+	public List<IntegerAttribute> getIntegerAttributes() {
+		return IntegerAttributes;
+	}
+
+	public void setIntegerAttributes(List<IntegerAttribute> integerAttributes) {
+		IntegerAttributes = integerAttributes;
+	}
+
+	public List<DoubleAttribute> getDoubleAttributes() {
+		return DoubleAttributes;
+	}
+
+	public void setDoubleAttributes(List<DoubleAttribute> doubleAttributes) {
+		DoubleAttributes = doubleAttributes;
+	}
+
+	public List<DateTimeOffsetAttribute> getDateTimeOffsetAttributes() {
+		return DateTimeOffsetAttributes;
+	}
+
+	public void setDateTimeOffsetAttributes(List<DateTimeOffsetAttribute> dateTimeOffsetAttributes) {
+		DateTimeOffsetAttributes = dateTimeOffsetAttributes;
+	}
+
+
     
     
 

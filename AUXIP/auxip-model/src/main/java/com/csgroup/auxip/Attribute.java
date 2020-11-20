@@ -14,6 +14,9 @@ public abstract class Attribute {
 	@EdmProperty(name = "ValueType", nullable = false)
 	private String ValueType;
 	
+	public Attribute() {		
+	}
+	
 	public Attribute(String name, String valueType) {
 		Name = name;
 		ValueType = valueType;
