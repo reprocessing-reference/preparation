@@ -95,26 +95,31 @@ def main():
                     stop_dt = datetime.datetime.strptime("99991231T235959", "%Y%m%dT%H%M%S")
             start_good = datetime.datetime.strftime(start_dt, odata_datetime_format)
             stop_good = datetime.datetime.strftime(stop_dt, odata_datetime_format)
-            template["Validity"] = { "Start": start_good,"Stop": stop_good}
+            template["ValidityStart"] = start_good
+            template["ValidityStop"] = stop_good
+            template["SensingTimeApplicationStart"] = start_good
+            template["SensingTimeApplicationStop"] = stop_good
             crea_dt = datetime.datetime.strptime(s2dict['Creation_Date'], "%Y%m%dT%H%M%S")
             template["CreationDate"] = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             #band
             if "band_index" in s2dict.keys():
                 band_id = band_dict["B"+s2dict["band_index"]]
-                template["Bands@odata.bind"] = "Bands(" + band_id + ")"
+                template["Band@odata.bind"] = "Bands(" + band_id + ")"
             else:
-                template["Bands@odata.bind"] = "Bands("+band_dict["B00"]+")"
+                template["Band@odata.bind"] = "Bands("+band_dict["B00"]+")"
             #sensor
             if s2dict['Mission_ID'] == "S2A":
-                template["Sensor@odata.bind"] = ["Sensors('SENTINEL2A_S2MSI')"]
+                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2A_S2MSI')"]
             elif s2dict['Mission_ID'] == "S2B":
-                template["Sensor@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')"]
+                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')"]
             elif s2dict['Mission_ID'] == "S2_":
-                template["Sensor@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')", "Sensors('SENTINEL2A_S2MSI')"]
+                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')", "Sensors('SENTINEL2A_S2MSI')"]
+            else:
+                raise Exception("Unknown mission ID "+s2dict['Mission_ID'])
             #checksum
             template["Checksum"] = {
                 "Algorithm": "MD5",
-                "Value": md5(os.path.join(args.input,filename)),
+                "Value": "f627307817b9ed6f95b08c4f0ed4add1",#md5(os.path.join(args.input,filename)),
                 "ChecksumDate": datetime.datetime.strftime(datetime.datetime.now(), odata_datetime_format) }
 
             # Write down

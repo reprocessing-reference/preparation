@@ -20,6 +20,8 @@ import java.util.UUID;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -37,23 +39,28 @@ public class AuxFileJPA {
     private UUID identifier;    
 	
 	@ManyToOne(optional = false)
-	private AuxFileTypeJPA FileType;
+	private AuxTypeJPA AuxType;
 	
 	private String FullName;
     
 	@ManyToOne(optional = false)
 	private BaselineJPA Baseline;
 	
-	@Embedded
-	private TimeRangeJPA Validity;
+	@ManyToMany
+	private List<SensorJPA> Sensors;
+	@Enumerated(EnumType.STRING)
+	private TimeDependencyJPA TimeDependency;
+	private ZonedDateTime ValidityStart;
+	private ZonedDateTime ValidityStop;
+	
+	private ZonedDateTime SensingTimeApplicationStart;
+	
+	private ZonedDateTime SensingTimeApplicationStop;
    
 	private ZonedDateTime CreationDate;
 	
-	@ManyToMany
-	private List<BandJPA> Bands;
-        
-    @ManyToMany
-    private List<SensorJPA> Sensors;
+	@ManyToOne
+	private BandJPA Band;
     
     @Embedded
     private ChecksumJPA Checksum;
@@ -70,12 +77,12 @@ public class AuxFileJPA {
 		identifier = id_;
 	}
 
-	public AuxFileTypeJPA getFileType() {
-		return FileType;
+	public AuxTypeJPA getAuxType() {
+		return AuxType;
 	}
 
-	public void setFileType(AuxFileTypeJPA fileType) {
-		FileType = fileType;
+	public void setAuxType(AuxTypeJPA fileType) {
+		AuxType = fileType;
 	}
 
 	public String getFullName() {
@@ -93,13 +100,37 @@ public class AuxFileJPA {
 	public void setBaseline(BaselineJPA baseline) {
 		Baseline = baseline;
 	}
-
-	public TimeRangeJPA getValidity() {
-		return Validity;
+	
+	public ZonedDateTime getValidityStart() {
+		return ValidityStart;
 	}
 
-	public void setValidity(TimeRangeJPA validity) {
-		Validity = validity;
+	public void setValidityStart(ZonedDateTime validityStart) {
+		ValidityStart = validityStart;
+	}
+
+	public ZonedDateTime getValidityStop() {
+		return ValidityStop;
+	}
+
+	public void setValidityStop(ZonedDateTime validityStop) {
+		ValidityStop = validityStop;
+	}
+
+	public ZonedDateTime getSensingTimeApplicationStart() {
+		return SensingTimeApplicationStart;
+	}
+
+	public void setSensingTimeApplicationStart(ZonedDateTime sensingTimeApplicationStart) {
+		SensingTimeApplicationStart = sensingTimeApplicationStart;
+	}
+
+	public ZonedDateTime getSensingTimeApplicationStop() {
+		return SensingTimeApplicationStop;
+	}
+
+	public void setSensingTimeApplicationStop(ZonedDateTime sensingTimeApplicationStop) {
+		SensingTimeApplicationStop = sensingTimeApplicationStop;
 	}
 
 	public ZonedDateTime getCreationDate() {
@@ -110,20 +141,12 @@ public class AuxFileJPA {
 		CreationDate = creationDate;
 	}
 
-	public List<BandJPA> getBands() {
-		return Bands;
+	public BandJPA getBand() {
+		return Band;
 	}
 
-	public void setBands(List<BandJPA> bands) {
-		Bands = bands;
-	}
-
-	public List<SensorJPA> getSensors() {
-		return Sensors;
-	}
-
-	public void setSensors(List<SensorJPA> sensors) {
-		Sensors = sensors;
+	public void setBand(BandJPA bands) {
+		Band = bands;
 	}
 
 	public ChecksumJPA getChecksum() {
