@@ -4,7 +4,7 @@
 "ShortName": "GIP_OLQCPA",
 "Format": "XML",
 "Origin": "ESA",
-"ProductLevelApplicability@odata.bind":  ["ProductLevels('L1')"],
+"ProductTypes@odata.bind":  ["ProductLevels('L1')"],
 "Variability": "Static",
 "Rule": "LatestGeneration",
 "Description": "parameters and tests for the On Line Quality Control"

@@ -39,8 +39,8 @@ public class AuxFile {
     private UUID Id;    
 	
 	@ODataJPAProperty
-	@EdmNavigationProperty(name = "FileType", nullable = false)
-	private AuxFileType FileType;
+	@EdmNavigationProperty(name = "AuxType", nullable = false)
+	private AuxType AuxType;
 	
 	@ODataJPAProperty
 	@EdmProperty(name = "FullName", nullable = false)
@@ -51,20 +51,32 @@ public class AuxFile {
     private Baseline Baseline;
     
 	@ODataJPAProperty
-    @EdmProperty(name = "Validity", nullable = false)
-    private TimeRange Validity;
+    @EdmProperty(name = "TimeDependency", nullable = false)
+    private TimeDependency TimeDependency;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "ValidityStart", nullable = false)
+    private ZonedDateTime ValidityStart;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "ValidityStop", nullable = false)
+    private ZonedDateTime ValidityStop;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "SensingTimeApplicationStart", nullable = false)
+    private ZonedDateTime SensingTimeApplicationStart;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "SensingTimeApplicationStop", nullable = false)
+    private ZonedDateTime SensingTimeApplicationStop;
    
 	@ODataJPAProperty
     @EdmProperty(name = "CreationDate", precision = 3, nullable = false)
     private ZonedDateTime CreationDate;
     
 	@ODataJPAProperty
-    @EdmNavigationProperty(name = "Bands", nullable = false)
-    private List<Band> Bands;
-        
-	@ODataJPAProperty
-    @EdmNavigationProperty(name = "Sensor", nullable = false)
-    private List<Sensor> Sensors;
+    @EdmNavigationProperty(name = "Band", nullable = false)
+    private Band Band;
     
 	@ODataJPAProperty
     @EdmProperty(name = "Checksum", nullable = false)
@@ -82,12 +94,12 @@ public class AuxFile {
 		Id = id;
 	}
 
-	public AuxFileType getFileType() {
-		return FileType;
+	public AuxType getAuxType() {
+		return AuxType;
 	}
 
-	public void setFileType(AuxFileType fileType) {
-		FileType = fileType;
+	public void setAuxType(AuxType fileType) {
+		AuxType = fileType;
 	}
 
 	public String getFullName() {
@@ -105,13 +117,45 @@ public class AuxFile {
 	public void setBaseline(Baseline baseline) {
 		Baseline = baseline;
 	}
-
-	public TimeRange getValidity() {
-		return Validity;
+	
+	public TimeDependency getTimeDependency() {
+		return TimeDependency;
 	}
 
-	public void setValidity(TimeRange validity) {
-		Validity = validity;
+	public void setTimeDependency(TimeDependency timeDependency) {
+		TimeDependency = timeDependency;
+	}
+
+	public ZonedDateTime getValidityStart() {
+		return ValidityStart;
+	}
+
+	public void setValidityStart(ZonedDateTime validityStart) {
+		ValidityStart = validityStart;
+	}
+
+	public ZonedDateTime getValidityStop() {
+		return ValidityStop;
+	}
+
+	public void setValidityStop(ZonedDateTime validityStop) {
+		ValidityStop = validityStop;
+	}
+
+	public ZonedDateTime getSensingTimeApplicationStart() {
+		return SensingTimeApplicationStart;
+	}
+
+	public void setSensingTimeApplicationStart(ZonedDateTime sensingTimeApplicationStart) {
+		SensingTimeApplicationStart = sensingTimeApplicationStart;
+	}
+
+	public ZonedDateTime getSensingTimeApplicationStop() {
+		return SensingTimeApplicationStop;
+	}
+
+	public void setSensingTimeApplicationStop(ZonedDateTime sensingTimeApplicationStop) {
+		SensingTimeApplicationStop = sensingTimeApplicationStop;
 	}
 
 	public ZonedDateTime getCreationDate() {
@@ -122,20 +166,12 @@ public class AuxFile {
 		CreationDate = creationDate;
 	}
 
-	public List<Band> getBands() {
-		return Bands;
+	public Band getBand() {
+		return Band;
 	}
 
-	public void setBands(List<Band> bands) {
-		Bands = bands;
-	}
-
-	public List<Sensor> getSensors() {
-		return Sensors;
-	}
-
-	public void setSensors(List<Sensor> sensors) {
-		Sensors = sensors;
+	public void setBand(Band band) {
+		Band = band;
 	}
 
 	public Checksum getChecksum() {

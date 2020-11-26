@@ -8,18 +8,18 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 
 @EdmEntity(namespace = "OData.RBA", key = "Level", containerName = "Container")
 @EdmEntitySet("ProductLevels")
-@ODataJPAEntity(value = "com.csgroup.rba.model.jpa.ProductLevelJPA")
-public class ProductLevel {
+@ODataJPAEntity(value = "com.csgroup.rba.model.jpa.ProductTypeJPA")
+public class ProductType {
 
 	@ODataJPAProperty
-	@EdmProperty(name = "Level", nullable = false)
-    private String Level;
+	@EdmProperty(name = "Type", nullable = false)
+    private String Type;
 	
-	public String getLevel() {
-		return Level;
+	public String getType() {
+		return Type;
 	}
 
-	public void setLevel(String name) {
-		Level = name;
+	public void setType(String name) {
+		Type = name;
 	}	
 }

@@ -1,0 +1,5 @@
+{ 
+    "@odata.context": "$metadata#Sensors",    
+    "Name": "SENTINEL2",
+    "AuxFiles@odata.bind": ["AuxFiles('e872683a-ea5b-455d-bfb2-fb304cbfbacb')"] 
+}

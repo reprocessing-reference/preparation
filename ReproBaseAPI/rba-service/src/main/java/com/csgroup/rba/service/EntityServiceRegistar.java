@@ -19,17 +19,15 @@ import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
 import com.csgroup.rba.datasourcejpa.JPAODataModelVerifier;
 import com.csgroup.rba.model.AuxFile;
-import com.csgroup.rba.model.AuxFileType;
+import com.csgroup.rba.model.AuxType;
 import com.csgroup.rba.model.Band;
 import com.csgroup.rba.model.Baseline;
 import com.csgroup.rba.model.Checksum;
-import com.csgroup.rba.model.ProductLevel;
+import com.csgroup.rba.model.ProductType;
 import com.csgroup.rba.model.Rule;
 import com.csgroup.rba.model.Sensor;
 import com.csgroup.rba.model.TimeRange;
 import com.csgroup.rba.model.Variability;
-import com.csgroup.rba.model.jpa.ProductLevelJPA;
-import com.google.common.collect.Lists;
 
 
 import org.slf4j.Logger;
@@ -57,7 +55,7 @@ public class EntityServiceRegistar {
     
 
     private static final List<Class<?>> ENTITIES = new ArrayList<Class<?>>() { {
-    	add(AuxFileType.class);
+    	add(AuxType.class);
     	add(AuxFile.class);
     	add(Baseline.class);
         add(Sensor.class);
@@ -65,8 +63,11 @@ public class EntityServiceRegistar {
         add(Rule.class);
         add(Checksum.class);
         add(TimeRange.class);
-        add(ProductLevel.class);
-        add(Band.class);
+        add(ProductType.class);
+        add(Band.class);        
+        add(GetReproBaselineUnbound.class);
+        //add(GetReproBaselineImport.class);
+        
     }};
     
     

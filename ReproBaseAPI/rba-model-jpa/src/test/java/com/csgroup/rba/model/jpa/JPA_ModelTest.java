@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.csgroup.rba.model.jpa.AuxFileTypeJPA;
+import com.csgroup.rba.model.jpa.AuxTypeJPA;
 import com.csgroup.rba.model.jpa.BaselineJPA;
 import com.csgroup.rba.model.jpa.SensorJPA;
 
@@ -48,7 +48,7 @@ public class JPA_ModelTest {
     @Test
     public void whenFindingCustomerById_thenCorrect() throws Exception {
     	
-    	ProductLevelJPA level = new ProductLevelJPA();
+    	ProductTypeJPA level = new ProductTypeJPA();
     	level.setLevel("L1");
     	productLevelRepository.save(level);
     	assertEquals(productLevelRepository.findById("L1").get().getLevel(),"L1") ;
@@ -72,7 +72,7 @@ public class JPA_ModelTest {
     	base.setName("02.09");
     	baselineRepository.save(base);    	
     	
-    	AuxFileTypeJPA auxFileType = new AuxFileTypeJPA();
+    	AuxTypeJPA auxFileType = new AuxTypeJPA();
     	auxFileType.setDescription("machin");
     	auxFileType.setFormat("xml");
     	auxFileType.setOrigin("esa");
@@ -83,7 +83,7 @@ public class JPA_ModelTest {
     	auxFileType.setVariability(VariabilityJPA.Static);
     	auxFileTypeRepository.save(auxFileType);
     	
-    	AuxFileTypeJPA copytype = auxFileTypeRepository.findById("GIP_OLQCPA").get();
+    	AuxTypeJPA copytype = auxFileTypeRepository.findById("GIP_OLQCPA").get();
     	
     	if (copytype.getProductLevelApplicability() == null)
     	{
@@ -92,7 +92,7 @@ public class JPA_ModelTest {
     	
     	
     	AuxFileJPA auxFile = new AuxFileJPA();
-    	auxFile.setBands(Lists.newArrayList(band));
+    	auxFile.setBand(band);
     	auxFile.setBaseline(base);
     	ChecksumJPA check = new ChecksumJPA();
     	check.setAlgorithm("md5");
@@ -101,14 +101,11 @@ public class JPA_ModelTest {
     	check.setValue("ooijaoijaoijaoij");
     	auxFile.setChecksum(check);
     	auxFile.setCreationDate(ZonedDateTime.now());
-    	auxFile.setFileType(auxFileType);
+    	auxFile.setAuxType(auxFileType);
     	auxFile.setFullName("saszdssd");
     	auxFile.setIdentifier(UUID.randomUUID());
-    	auxFile.setSensors(Lists.newArrayList(sens));
-    	TimeRangeJPA time = new TimeRangeJPA();
-    	time.setStop(ZonedDateTime.now());
-    	time.setStart(ZonedDateTime.now());
-    	auxFile.setValidity(time);
+    	auxFile.setValidityStart(ZonedDateTime.now());
+    	auxFile.setValidityStop(ZonedDateTime.now());
     	
     	auxFileRepository.save(auxFile);
     	

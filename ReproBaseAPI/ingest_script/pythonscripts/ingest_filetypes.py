@@ -8,7 +8,7 @@ def main():
     parser = argparse.ArgumentParser(description="",  # main description for help
             epilog='Beta', formatter_class=argparse.RawTextHelpFormatter)  # displayed after help
     parser.add_argument("-i", "--input",
-                        help="input",
+                        help="input csv file from the xls of filetypes",
                        required=True)
     parser.add_argument("-t", "--template",
                         help="template",

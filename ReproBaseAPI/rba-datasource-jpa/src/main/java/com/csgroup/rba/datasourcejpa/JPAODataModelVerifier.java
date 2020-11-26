@@ -113,6 +113,8 @@ public class JPAODataModelVerifier {
 				 if (isStructuredType(getPropertyType(entityDataModel, property))) {
 					LOG.debug("is Structured "+jpaFieldName+ " "+property.getName());
 					odataVerifyJPA(getPropertyType(entityDataModel, property).getJavaType(), entityDataModel, visitedEntities);				
+				} else {
+					Field f = getField(jpaEntity.getClass(), jpaFieldName);
 				}
 			}
 		});		

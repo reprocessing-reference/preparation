@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface AuxFileTypeRepository extends JpaRepository<AuxFileTypeJPA, String> {
+public interface AuxFileTypeRepository extends JpaRepository<AuxTypeJPA, String> {
 
 }

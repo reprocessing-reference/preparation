@@ -13,58 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.csgroup.rba.model;
+package com.csgroup.rba.model.jpa;
 
 import java.util.List;
 
-import com.csgroup.rba.model.annotations.ODataJPAEntity;
-import com.csgroup.rba.model.annotations.ODataJPAProperty;
-import com.sdl.odata.api.edm.annotations.EdmEntity;
-import com.sdl.odata.api.edm.annotations.EdmEntitySet;
-import com.sdl.odata.api.edm.annotations.EdmNavigationProperty;
-import com.sdl.odata.api.edm.annotations.EdmProperty;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
 
 /**
  * @author besquis
  */
-@EdmEntity(namespace = "OData.RBA", key = "LongName", containerName = "Container")
-@EdmEntitySet("AuxFileTypes")
-@ODataJPAEntity(value = "com.csgroup.rba.model.jpa.AuxFileTypeJPA")
-public class AuxFileType {
+@Entity(name = "AuxFileTypes")
+public class AuxTypeJPA {
 
-	@ODataJPAProperty
-    @EdmProperty(name = "LongName", nullable = false)
+    @Id
     private String LongName;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "ShortName", nullable = false)
     private String ShortName;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "Format", nullable = false)
     private String Format;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "Origin", nullable = false)
     private String Origin;
     
-	@ODataJPAProperty
-	@EdmNavigationProperty(name = "ProductLevelApplicability", nullable = false)
-    private List<ProductLevel> ProductLevelApplicability;
+    @ManyToMany
+    private List<ProductTypeJPA> ProductTypes;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "Variability", nullable = false)
-    private Variability Variability;
+    @Enumerated(EnumType.STRING)
+    private VariabilityJPA Variability;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "Rule", precision = 3, nullable = false)
-    private Rule Rule;
+    @Enumerated(EnumType.STRING)
+    private RuleJPA Rule;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "Description", nullable = false)
     private String Description;
    	
-	public AuxFileType() {
+	public AuxTypeJPA() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -100,27 +89,27 @@ public class AuxFileType {
 		Origin = origin;
 	}
 
-	public List<ProductLevel> getProductLevelApplicability() {
+	public List<ProductTypeJPA> getProductLevelApplicability() {
 		return ProductLevelApplicability;
 	}
 
-	public void setProductLevelApplicability(List<ProductLevel> productLevelApplicability) {
+	public void setProductLevelApplicability(List<ProductTypeJPA> productLevelApplicability) {
 		ProductLevelApplicability = productLevelApplicability;
 	}
 
-	public Variability getVariability() {
+	public VariabilityJPA getVariability() {
 		return Variability;
 	}
 
-	public void setVariability(Variability variability) {
+	public void setVariability(VariabilityJPA variability) {
 		Variability = variability;
 	}
 
-	public Rule getRule() {
+	public RuleJPA getRule() {
 		return Rule;
 	}
 
-	public void setRule(Rule rule) {
+	public void setRule(RuleJPA rule) {
 		Rule = rule;
 	}
 
