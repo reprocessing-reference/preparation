@@ -1,43 +1,6 @@
 version: '3.8'
 
 services:
-  kong-db:
-    image: postgres
-    volumes:
-      - kong-datastore:/var/lib/postgresql/data
-    networks:
-      - kong-net
-    ports:
-      - "15432:5432"
-    environment:
-      POSTGRES_DB:       api-gw
-      POSTGRES_USER:     kong
-      POSTGRES_PASSWORD: 
-
-  kong:
-    image: kong:2.2.1-ubuntu
-    depends_on:
-      - kong-db
-    networks:
-      - kong-net
-    ports:
-      - "8000:8000" # Listener
-      - "8001:8001" # Admin API
-      - "8443:8443" # Listener  (SSL)
-      - "8444:8444" # Admin API (SSL)
-    environment:
-      KONG_DATABASE:         postgres
-      KONG_PG_HOST:          kong-db
-      KONG_PG_PORT:          5432
-      KONG_PG_DATABASE:      api-gw
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG:  /dev/stderr
-      KONG_ADMIN_ERROR_LOG:  /dev/stderr
-      KONG_PROXY_LISTEN:     0.0.0.0:8000, 0.0.0.0:8443 ssl
-      KONG_ADMIN_LISTEN:     0.0.0.0:8001, 0.0.0.0:8444 ssl
-      KONG_PLUGINS:          oidc
-
   database:
     image: postgres
     restart: always
@@ -45,8 +8,10 @@ services:
       POSTGRES_USER: "reprobaseline"
       POSTGRES_PASSWORD: "**reprobaseline**"
       PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
     volumes:
-     - /var/postgresql/data:/var/lib/postgresql/data
+      - /var/postgresql/data:/var/lib/postgresql/data
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -56,6 +21,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "**reprobaseline**"
     depends_on:
      - database
+    networks:
+      - proxynet
     ports:
       - 5050:80
       
@@ -63,23 +30,37 @@ services:
     image: reprobaseline:01.00.00
     restart: "no"
     depends_on:
-     - database
+      - database
     volumes:
-     - /home/beon/AUXIP/Code/preparation/ReproBaseAPI/distribution/ReproBaseline-01.00.00/conf/:/ReproBaseline-01.00.00/conf/
+      - /home/beon/AUXIP/Code/preparation/ReproBaseAPI/distribution/ReproBaseline-01.00.00/conf/:/ReproBaseline-01.00.00/conf/
+    networks:
+      - proxynet
     ports:
-     - "8080:8080"
+      - "8080:8080"
 
   proxy:
-    hostname: proxy
     image: nginx:1.19.5-alpine
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      - proxynet
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - pgadmin4 
 
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
 networks:
-  postgresql:
+  proxynet:
        driver: bridge
 
