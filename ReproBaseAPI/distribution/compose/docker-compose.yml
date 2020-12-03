@@ -39,7 +39,6 @@ services:
       - "8080:8080"
 
   proxy:
-    hostname: proxy
     image: nginx:1.19.5-alpine
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
