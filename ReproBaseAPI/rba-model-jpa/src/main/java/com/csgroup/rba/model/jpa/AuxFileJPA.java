@@ -43,13 +43,9 @@ public class AuxFileJPA {
 	
 	private String FullName;
     
-	@ManyToOne(optional = false)
-	private BaselineJPA Baseline;
+	private String Baseline;
 	
-	@ManyToMany
-	private List<SensorJPA> Sensors;
-	@Enumerated(EnumType.STRING)
-	private TimeDependencyJPA TimeDependency;
+	private String        Unit;
 	private ZonedDateTime ValidityStart;
 	private ZonedDateTime ValidityStop;
 	
@@ -58,12 +54,8 @@ public class AuxFileJPA {
 	private ZonedDateTime SensingTimeApplicationStop;
    
 	private ZonedDateTime CreationDate;
-	
-	@ManyToOne
-	private BandJPA Band;
-    
-    @Embedded
-    private ChecksumJPA Checksum;
+		
+	private String Band;    
     
 	public AuxFileJPA() {
 		// TODO Auto-generated constructor stub
@@ -91,15 +83,7 @@ public class AuxFileJPA {
 
 	public void setFullName(String fullName) {
 		FullName = fullName;
-	}
-
-	public BaselineJPA getBaseline() {
-		return Baseline;
-	}
-
-	public void setBaseline(BaselineJPA baseline) {
-		Baseline = baseline;
-	}
+	}	
 	
 	public ZonedDateTime getValidityStart() {
 		return ValidityStart;
@@ -141,21 +125,29 @@ public class AuxFileJPA {
 		CreationDate = creationDate;
 	}
 
-	public BandJPA getBand() {
+	public String getBand() {
 		return Band;
 	}
 
-	public void setBand(BandJPA bands) {
+	public void setBand(String bands) {
 		Band = bands;
 	}
 
-	public ChecksumJPA getChecksum() {
-		return Checksum;
+	public String getBaseline() {
+		return Baseline;
 	}
 
-	public void setChecksum(ChecksumJPA checksum) {
-		Checksum = checksum;
+	public void setBaseline(String baseline) {
+		Baseline = baseline;
 	}
+
+	public String getUnit() {
+		return Unit;
+	}
+
+	public void setUnit(String unit) {
+		Unit = unit;
+	}
+
 	
-   
 }

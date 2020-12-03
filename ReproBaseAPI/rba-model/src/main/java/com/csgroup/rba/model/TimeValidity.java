@@ -4,9 +4,9 @@ import com.sdl.odata.api.edm.annotations.EdmEnum;
 import com.sdl.odata.api.edm.model.PrimitiveType;
 
 
-@ODataJPAEntity(value = "com.csgroup.rba.model.jpa.TimeDependencyJPA")
-@EdmEnum(namespace = "OData.RBA", name = "TimeDependency", underlyingType = PrimitiveType.INT32, flags = false)
-public enum TimeDependency {
+@ODataJPAEntity(value = "com.csgroup.rba.model.jpa.TimeValidityJPA")
+@EdmEnum(namespace = "OData.RBA", name = "TimeValidity", underlyingType = PrimitiveType.INT32, flags = false)
+public enum TimeValidity {
 	ValidityPeriod,
 	AnyTime
 }

@@ -61,9 +61,6 @@ public class JPADatasourceProvider implements DataSourceProvider {
     @Autowired
     private EntityMapper<Object, Object> entityMapper;
 
-    @Autowired
-    private ODataProxyProcessor proxyProcessor;
-
     /**
      * Check if the given JPA entity class is a valid entity type.
      *
@@ -110,61 +107,14 @@ public class JPADatasourceProvider implements DataSourceProvider {
 
         return () -> {
 
-            List<Object> result = executeQueryListResult(query);
+            List<Object> result = jpaDataSource.executeQueryListResult(query);
             LOG.info("Found: {} items for query: {}", result.size(), query);
 
-            return from(convert(entityDataModel, expectedODataEntityType.typeName(), result));
+            return from(jpaDataSource.convert(entityDataModel, expectedODataEntityType.typeName(), result));
         };
     }
 
-    private List<?> convert(EntityDataModel entityDataModel, String expectedType, List<?> jpaEntities) {
-        Class<?> javaType = entityDataModel.getType(expectedType).getJavaType();
+    
 
-        return jpaEntities.stream().map(j -> {
-            try {
-                Object unproxied = proxyProcessor.process(j);
-                return entityMapper.convertDSEntityToOData(unproxied, javaType, entityDataModel);
-            } catch (ODataDataSourceException e) {
-                LOG.error("Could not convert entity", e);
-                return null;
-            }
-        }).collect(Collectors.toList());
-    }
-
-    private <T> List<T> executeQueryListResult(JPAQuery jpaQuery) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-
-        String queryString = jpaQuery.getQueryString();
-        LOG.debug("Query string : "+queryString);
-        Query query = em.createQuery(queryString);
-        int nrOfResults = jpaQuery.getLimitCount();
-        int startPosition = jpaQuery.getSkipCount();
-        Map<String, Object> queryParams = jpaQuery.getQueryParams();
-
-        try {
-            if (nrOfResults > 0) {
-                query.setMaxResults(nrOfResults);
-            }
-
-            if (startPosition > 0) {
-                query.setFirstResult(startPosition);
-            }
-
-            for (Map.Entry<String, Object> entry : queryParams.entrySet()) {
-                query.setParameter(entry.getKey(), tryConvert(entry.getValue()));
-            }
-
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    private Object tryConvert(Object parameterType) {
-        if (parameterType instanceof scala.math.BigDecimal) {
-            return ((scala.math.BigDecimal) parameterType).intValue();
-        }
-
-        return parameterType;
-    }
+   
 }

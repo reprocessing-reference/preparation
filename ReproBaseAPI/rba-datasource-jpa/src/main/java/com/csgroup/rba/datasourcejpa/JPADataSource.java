@@ -15,6 +15,7 @@
  */
 package com.csgroup.rba.datasourcejpa;
 
+import com.csgroup.rba.datasourcejpa.query.JPAQuery;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.model.EntityDataModel;
 import com.sdl.odata.api.mapper.EntityMapper;
@@ -35,8 +36,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 import static com.sdl.odata.api.parser.ODataUriUtil.extractEntityWithKeys;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The default JPA datasource, this datasource by default will create a transaction per operation.
@@ -56,6 +62,9 @@ public class JPADataSource implements DataSource {
 
     @Autowired
     private ApplicationContext applicationContext;
+    
+    @Autowired
+    private ODataProxyProcessor proxyProcessor;
 
     @Override
     public Object create(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {
@@ -124,6 +133,58 @@ public class JPADataSource implements DataSource {
     public void deleteLink(ODataUri uri, ODataLink link, EntityDataModel entityDataModel) throws ODataException {
 
     }
+    
+    public <T> List<T> executeQueryListResult(JPAQuery jpaQuery) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+
+        String queryString = jpaQuery.getQueryString();
+        LOG.debug("Query string : "+queryString);
+        Query query = em.createQuery(queryString);
+        int nrOfResults = jpaQuery.getLimitCount();
+        int startPosition = jpaQuery.getSkipCount();
+        Map<String, Object> queryParams = jpaQuery.getQueryParams();
+
+        try {
+            if (nrOfResults > 0) {
+                query.setMaxResults(nrOfResults);
+            }
+
+            if (startPosition > 0) {
+                query.setFirstResult(startPosition);
+            }
+
+            for (Map.Entry<String, Object> entry : queryParams.entrySet()) {
+                query.setParameter(entry.getKey(), tryConvert(entry.getValue()));
+            }
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }    
+    
+    public List<?> convert(EntityDataModel entityDataModel, String expectedType, List<?> jpaEntities) {
+        Class<?> javaType = entityDataModel.getType(expectedType).getJavaType();
+
+        return jpaEntities.stream().map(j -> {
+            try {
+                Object unproxied = proxyProcessor.process(j);
+                return entityMapper.convertDSEntityToOData(unproxied, javaType, entityDataModel);
+            } catch (ODataDataSourceException e) {
+                LOG.error("Could not convert entity", e);
+                return null;
+            }
+        }).collect(Collectors.toList());
+    }
+
+    private Object tryConvert(Object parameterType) {
+        if (parameterType instanceof scala.math.BigDecimal) {
+            return ((scala.math.BigDecimal) parameterType).intValue();
+        }
+
+        return parameterType;
+    }
+    
 
     protected EntityManagerFactory getEntityManagerFactory() {
         return entityManagerFactory;

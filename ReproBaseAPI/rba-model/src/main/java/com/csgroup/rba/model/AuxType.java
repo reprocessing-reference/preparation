@@ -43,11 +43,15 @@ public class AuxType {
 	@ODataJPAProperty
     @EdmProperty(name = "Format", nullable = false)
     private String Format;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "Mission", nullable = false)
+    private String Mission;
     
 	@ODataJPAProperty
-    @EdmProperty(name = "Origin", nullable = false)
-    private String Origin;
-    
+	@EdmNavigationProperty(name = "ProductLevels", nullable = false)
+    private List<ProductLevel> ProductLevels;
+	
 	@ODataJPAProperty
 	@EdmNavigationProperty(name = "ProductTypes", nullable = false)
     private List<ProductType> ProductTypes;
@@ -57,12 +61,16 @@ public class AuxType {
     private Variability Variability;
     
 	@ODataJPAProperty
+    @EdmProperty(name = "Validity", nullable = false)
+    private TimeValidity Validity;
+	
+	@ODataJPAProperty
     @EdmProperty(name = "Rule", precision = 3, nullable = false)
     private Rule Rule;
     
 	@ODataJPAProperty
-    @EdmProperty(name = "Description", nullable = false)
-    private String Description;
+    @EdmProperty(name = "Comments", nullable = false)
+    private String Comments;
    	
 	public AuxType() {
 		// TODO Auto-generated constructor stub
@@ -91,29 +99,22 @@ public class AuxType {
 	public void setFormat(String format) {
 		Format = format;
 	}
+		
 	
-	public String getOrigin() {
-		return Origin;
-	}
-
-	public void setOrigin(String origin) {
-		Origin = origin;
-	}
-
-	public List<ProductType> getProductTypes() {
-		return ProductTypes;
-	}
-
-	public void setProductTypes(List<ProductType> productTypes) {
-		ProductTypes = productTypes;
-	}
-
 	public Variability getVariability() {
 		return Variability;
 	}
 
 	public void setVariability(Variability variability) {
 		Variability = variability;
+	}
+	
+	public TimeValidity getValidity() {
+		return Validity;
+	}
+
+	public void setValidity(TimeValidity validity) {
+		Validity = validity;
 	}
 
 	public Rule getRule() {
@@ -124,13 +125,38 @@ public class AuxType {
 		Rule = rule;
 	}
 
-	public String getDescription() {
-		return Description;
+	public String getMission() {
+		return Mission;
 	}
 
-	public void setDescription(String description) {
-		Description = description;
+	public void setMission(String mission) {
+		Mission = mission;
 	}
+
+	
+	public List<ProductLevel> getProductLevels() {
+		return ProductLevels;
+	}
+
+	public void setProductLevels(List<ProductLevel> productLevels) {
+		ProductLevels = productLevels;
+	}
+
+	public List<ProductType> getProductTypes() {
+		return ProductTypes;
+	}
+
+	public void setProductTypes(List<ProductType> productTypes) {
+		ProductTypes = productTypes;
+	}
+
+	public String getComments() {
+		return Comments;
+	}
+
+	public void setComments(String comments) {
+		Comments = comments;
+	}	
 	
 	
    

@@ -15,7 +15,7 @@
  */
 package com.csgroup.rba.datasource.auxfiletype;
 
-import com.csgroup.rba.model.AuxFileType;
+import com.csgroup.rba.model.AuxType;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataSystemException;
 import com.sdl.odata.api.edm.model.EntityDataModel;
@@ -42,12 +42,12 @@ import java.util.concurrent.ConcurrentMap;
 public class AuxFileTypeDataSource implements DataSource {
 	private static final Logger LOG = LoggerFactory.getLogger(AuxFileTypeDataSource.class);
 
-    private ConcurrentMap<String, AuxFileType> auxFileTypeConcurrentMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, AuxType> auxFileTypeConcurrentMap = new ConcurrentHashMap<>();
 
 
     @Override
     public Object create(ODataUri oDataUri, Object o, EntityDataModel entityDataModel) throws ODataException {
-    	AuxFileType attrib = (AuxFileType) o;
+    	AuxType attrib = (AuxType) o;
         if(auxFileTypeConcurrentMap.putIfAbsent(attrib.getLongName(), attrib) != null) {
             throw new ODataDataSourceException("Could not create AuxFileType entity, already exists: "+attrib.getLongName());
         }
@@ -57,7 +57,7 @@ public class AuxFileTypeDataSource implements DataSource {
 
     @Override
     public Object update(ODataUri oDataUri, Object o, EntityDataModel entityDataModel) throws ODataException {
-    	AuxFileType attrib = (AuxFileType) o;
+    	AuxType attrib = (AuxType) o;
         if(auxFileTypeConcurrentMap.containsKey(attrib.getLongName())) {
         	auxFileTypeConcurrentMap.put(attrib.getLongName(), attrib);
 
@@ -71,7 +71,7 @@ public class AuxFileTypeDataSource implements DataSource {
     public void delete(ODataUri oDataUri, EntityDataModel entityDataModel) throws ODataException {
         Option<Object> entity = ODataUriUtil.extractEntityWithKeys(oDataUri, entityDataModel);
         if(entity.isDefined()) {
-        	AuxFileType attrib = (AuxFileType) entity.get();
+        	AuxType attrib = (AuxType) entity.get();
         	auxFileTypeConcurrentMap.remove(attrib.getLongName());
         }
     }
@@ -81,7 +81,7 @@ public class AuxFileTypeDataSource implements DataSource {
         throw new ODataSystemException("No support for transactions");
     }
 
-    public ConcurrentMap<String, AuxFileType> getAuxFileTypeConcurrentMap() {
+    public ConcurrentMap<String, AuxType> getAuxFileTypeConcurrentMap() {
         return auxFileTypeConcurrentMap;
     }
 

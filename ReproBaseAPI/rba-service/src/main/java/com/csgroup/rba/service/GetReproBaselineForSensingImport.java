@@ -15,13 +15,8 @@
  */
 package com.csgroup.rba.service;
 
-import com.sdl.odata.api.edm.annotations.EdmFunction;
 import com.sdl.odata.api.edm.annotations.EdmFunctionImport;
 import com.sdl.odata.api.edm.annotations.EdmParameter;
-import com.sdl.odata.api.edm.annotations.EdmReturnType;
-import com.sdl.odata.api.edm.model.Operation;
-import com.sdl.odata.api.processor.datasource.factory.DataSourceFactory;
-import com.sdl.odata.api.service.ODataRequestContext;
 
 import java.time.ZonedDateTime;
 
@@ -32,11 +27,14 @@ import org.slf4j.LoggerFactory;
 /**
  * @author besquis
  */
-@EdmFunctionImport(function = "GetReproBaselineUnbound", includeInServiceDocument = true,
-name = "GetReproBaseline", namespace = "OData.RBA")
-public class GetReproBaselineImport {
-	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineImport.class);
+@EdmFunctionImport(function = "GetReproBaselineListForSensingBound", includeInServiceDocument = true,
+name = "GetReproBaselineListForSensing", namespace = "OData.RBA")
+public class GetReproBaselineForSensingImport {
+	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineForSensingImport.class);
 
+	@EdmParameter
+    private String Mission;
+	
     @EdmParameter
     private String Unit;
 
@@ -68,6 +66,14 @@ public class GetReproBaselineImport {
 
 	public void setProductType(String productType) {
 		ProductType = productType;
+	}
+
+	public String getMission() {
+		return Mission;
+	}
+
+	public void setMission(String mission) {
+		Mission = mission;
 	}
 
        

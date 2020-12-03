@@ -15,7 +15,7 @@
  */
 package com.csgroup.rba.datasource.auxfiletype;
 
-import com.csgroup.rba.model.AuxFileType;
+import com.csgroup.rba.model.AuxType;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataSystemException;
 import com.sdl.odata.api.parser.CountOption;
@@ -55,14 +55,14 @@ import java.util.function.Predicate;
 public class AuxFileTypeStrategyBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(AuxFileTypeStrategyBuilder.class);
 
-    private List<Predicate<AuxFileType>> predicates = new ArrayList<>();
+    private List<Predicate<AuxType>> predicates = new ArrayList<>();
     private int limit = Integer.MAX_VALUE;
     private int skip = 0;
     private boolean count;
     private boolean includeCount;
     private List<String> propertyNames;
 
-    public List<Predicate<AuxFileType>> buildCriteria(QueryOperation queryOperation, ODataRequestContext requestContext)
+    public List<Predicate<AuxType>> buildCriteria(QueryOperation queryOperation, ODataRequestContext requestContext)
             throws ODataException {
         buildFromOperation(queryOperation);
         buildFromOptions(ODataUriUtil.getQueryOptions(requestContext.getUri()));
@@ -176,7 +176,7 @@ public class AuxFileTypeStrategyBuilder {
                 PropertyCriteriaValue propertyCriteriaValue = (PropertyCriteriaValue) comparisonCriteria.getLeft();
                 LiteralCriteriaValue literalCriteriaValue = (LiteralCriteriaValue) comparisonCriteria.getRight();
 
-                Predicate<AuxFileType> p = attrib -> {
+                Predicate<AuxType> p = attrib -> {
                     Object fieldValue = getProductField(attrib, propertyCriteriaValue.getPropertyName());
                     Object queryValue = literalCriteriaValue.getValue();
 
@@ -190,7 +190,7 @@ public class AuxFileTypeStrategyBuilder {
         }
     }
 
-    private Object getProductField(AuxFileType product, String propertyName) {
+    private Object getProductField(AuxType product, String propertyName) {
         try {
             Field field = product.getClass().getDeclaredField(propertyName);
             field.setAccessible(true);

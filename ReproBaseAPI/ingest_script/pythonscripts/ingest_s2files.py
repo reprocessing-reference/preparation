@@ -23,9 +23,6 @@ def main():
     parser.add_argument("-i", "--input",
                         help="input",
                        required=True)
-    parser.add_argument("-b", "--bands",
-                        help="bands jsons",
-                        required=True)
     parser.add_argument("-f", "--filetypes",
                         help="filetypes jsons",
                         required=True)
@@ -43,12 +40,12 @@ def main():
     with open(args.template) as f:
         template = json.load(f)
 
-    band_dict = {}
-    for (dirpath, dirnames, filenames) in os.walk(args.bands):
-        for filename in filenames:
-            with open(os.path.join(args.bands,filename)) as f:
-                band = json.load(f)
-                band_dict[band["Name"]] = band["Id"]
+    # band_dict = {}
+    # for (dirpath, dirnames, filenames) in os.walk(args.bands):
+    #     for filename in filenames:
+    #         with open(os.path.join(args.bands,filename)) as f:
+    #             band = json.load(f)
+    #             band_dict[band["Name"]] = band["Id"]
     filetype_dict = []
     for (dirpath, dirnames, filenames) in os.walk(args.filetypes):
         for filename in filenames:
@@ -75,15 +72,15 @@ def main():
                         break
                 if filetype is None:
                     raise Exception("unknown file type")
-                template["FileType@odata.bind"] = "AuxFileTypes('"+filetype+"')"
+                template["AuxType@odata.bind"] = "AuxTypes('"+filetype+"')"
             else:
                 raise Exception("unknown file type")
             template["FullName"] = filename
             template["ShortName"] = s2dict['File_Category']+s2dict['File_Semantic']
             if 'processing_baseline' in s2dict.keys():
-                template["Baseline@odata.bind"] = s2dict['processing_baseline']
+                template["Baseline"] = s2dict['processing_baseline']
             else:
-                template["Baseline@odata.bind"] = "Baselines('NoBaseline')"
+                template["Baseline"] = "02.09"
             #Date part
             start_str = s2dict['applicability_time_period'].split("_")[0]
             stop_str = s2dict['applicability_time_period'].split("_")[1]
@@ -103,25 +100,19 @@ def main():
             template["CreationDate"] = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             #band
             if "band_index" in s2dict.keys():
-                band_id = band_dict["B"+s2dict["band_index"]]
-                template["Band@odata.bind"] = "Bands(" + band_id + ")"
+                band_id = "B"+s2dict["band_index"]
+                template["Band"] = band_id
             else:
-                template["Band@odata.bind"] = "Bands("+band_dict["B00"]+")"
+                template["Band"] = "BXX"
             #sensor
             if s2dict['Mission_ID'] == "S2A":
-                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2A_S2MSI')"]
+                template["Unit"] = "A"
             elif s2dict['Mission_ID'] == "S2B":
-                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')"]
+                template["Unit"] = ["B')"]
             elif s2dict['Mission_ID'] == "S2_":
-                template["Sensors@odata.bind"] = ["Sensors('SENTINEL2B_S2MSI')", "Sensors('SENTINEL2A_S2MSI')"]
+                template["Unit"] = "X"
             else:
                 raise Exception("Unknown mission ID "+s2dict['Mission_ID'])
-            #checksum
-            template["Checksum"] = {
-                "Algorithm": "MD5",
-                "Value": "f627307817b9ed6f95b08c4f0ed4add1",#md5(os.path.join(args.input,filename)),
-                "ChecksumDate": datetime.datetime.strftime(datetime.datetime.now(), odata_datetime_format) }
-
             # Write down
             with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json"), 'w') as json_file:
                 json.dump(template, json_file)

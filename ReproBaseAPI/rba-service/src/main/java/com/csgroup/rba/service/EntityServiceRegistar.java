@@ -20,13 +20,10 @@ import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
 import com.csgroup.rba.datasourcejpa.JPAODataModelVerifier;
 import com.csgroup.rba.model.AuxFile;
 import com.csgroup.rba.model.AuxType;
-import com.csgroup.rba.model.Band;
-import com.csgroup.rba.model.Baseline;
-import com.csgroup.rba.model.Checksum;
+import com.csgroup.rba.model.ProductLevel;
 import com.csgroup.rba.model.ProductType;
 import com.csgroup.rba.model.Rule;
-import com.csgroup.rba.model.Sensor;
-import com.csgroup.rba.model.TimeRange;
+import com.csgroup.rba.model.TimeValidity;
 import com.csgroup.rba.model.Variability;
 
 
@@ -57,16 +54,13 @@ public class EntityServiceRegistar {
     private static final List<Class<?>> ENTITIES = new ArrayList<Class<?>>() { {
     	add(AuxType.class);
     	add(AuxFile.class);
-    	add(Baseline.class);
-        add(Sensor.class);
-        add(Variability.class);
+    	add(Variability.class);
         add(Rule.class);
-        add(Checksum.class);
-        add(TimeRange.class);
+        add(ProductLevel.class);
         add(ProductType.class);
-        add(Band.class);        
-        add(GetReproBaselineUnbound.class);
-        //add(GetReproBaselineImport.class);
+        add(TimeValidity.class);
+        add(GetReproBaselineForSensing.class);
+        //add(GetReproBaselineForSensingImport.class);
         
     }};
     

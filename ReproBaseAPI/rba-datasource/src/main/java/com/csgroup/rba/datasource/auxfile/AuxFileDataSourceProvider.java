@@ -28,7 +28,7 @@ import com.sdl.odata.api.service.ODataRequestContext;
 import com.csgroup.rba.datasource.auxfile.AuxFileDataSource;
 import com.csgroup.rba.datasource.auxfile.AuxFileStrategyBuilder;
 import com.csgroup.rba.model.AuxFile;
-import com.csgroup.rba.model.AuxFileType;
+import com.csgroup.rba.model.AuxType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

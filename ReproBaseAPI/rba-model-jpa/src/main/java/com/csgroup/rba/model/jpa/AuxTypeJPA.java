@@ -15,6 +15,7 @@
  */
 package com.csgroup.rba.model.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -42,16 +43,25 @@ public class AuxTypeJPA {
     
     private String Origin;
     
+    private String Mission;
+    
+    @ManyToMany
+    private List<ProductLevelJPA> ProductLevels;
+    
     @ManyToMany
     private List<ProductTypeJPA> ProductTypes;
-    
-    @Enumerated(EnumType.STRING)
+   
+
+	@Enumerated(EnumType.STRING)
     private VariabilityJPA Variability;
+    
+	@Enumerated(EnumType.STRING)
+	private TimeValidityJPA Validity;
     
     @Enumerated(EnumType.STRING)
     private RuleJPA Rule;
     
-    private String Description;
+    private String Comments;
    	
 	public AuxTypeJPA() {
 		// TODO Auto-generated constructor stub
@@ -88,14 +98,7 @@ public class AuxTypeJPA {
 	public void setOrigin(String origin) {
 		Origin = origin;
 	}
-
-	public List<ProductTypeJPA> getProductLevelApplicability() {
-		return ProductLevelApplicability;
-	}
-
-	public void setProductLevelApplicability(List<ProductTypeJPA> productLevelApplicability) {
-		ProductLevelApplicability = productLevelApplicability;
-	}
+	
 
 	public VariabilityJPA getVariability() {
 		return Variability;
@@ -113,14 +116,47 @@ public class AuxTypeJPA {
 		Rule = rule;
 	}
 
-	public String getDescription() {
-		return Description;
+	public String getComments() {
+		return Comments;
 	}
 
-	public void setDescription(String description) {
-		Description = description;
+	public void setComments(String description) {
+		Comments= description;
+	}	
+
+	public TimeValidityJPA getValidity() {
+		return Validity;
 	}
-	
+
+	public void setValidity(TimeValidityJPA timeValidity) {
+		Validity = timeValidity;
+	}
+
+	public String getMission() {
+		return Mission;
+	}
+
+	public void setMission(String mission) {
+		Mission = mission;
+	}
+
+	public List<ProductLevelJPA> getProductLevels() {
+		return ProductLevels;
+	}
+
+	public void setProductLevels(List<ProductLevelJPA> productLevels) {
+		ProductLevels = productLevels;
+	}
+
+	public List<ProductTypeJPA> getProductTypes() {
+		return ProductTypes;
+	}
+
+	public void setProductTypes(List<ProductTypeJPA> productTypes) {
+		ProductTypes = productTypes;
+	}
+	 
+    
 	
    
 }

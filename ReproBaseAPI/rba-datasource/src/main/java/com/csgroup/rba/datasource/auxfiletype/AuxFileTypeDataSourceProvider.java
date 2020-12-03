@@ -15,7 +15,7 @@
  */
 package com.csgroup.rba.datasource.auxfiletype;
 
-import com.csgroup.rba.model.AuxFileType;
+import com.csgroup.rba.model.AuxType;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.util.EdmUtil;
 import com.sdl.odata.api.parser.TargetType;
@@ -52,7 +52,7 @@ public class AuxFileTypeDataSourceProvider implements DataSourceProvider {
 
     @Override
     public boolean isSuitableFor(ODataRequestContext oDataRequestContext, String entityType) throws ODataDataSourceException {
-        return oDataRequestContext.getEntityDataModel().getType(entityType).getJavaType().isAssignableFrom(AuxFileType.class);
+        return oDataRequestContext.getEntityDataModel().getType(entityType).getJavaType().isAssignableFrom(AuxType.class);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class AuxFileTypeDataSourceProvider implements DataSourceProvider {
     @Override
     public QueryOperationStrategy getStrategy(ODataRequestContext oDataRequestContext, QueryOperation queryOperation, TargetType targetType) throws ODataException {
         AuxFileTypeStrategyBuilder builder = new AuxFileTypeStrategyBuilder();
-        List<Predicate<AuxFileType>> predicateList = builder.buildCriteria(queryOperation, oDataRequestContext);
+        List<Predicate<AuxType>> predicateList = builder.buildCriteria(queryOperation, oDataRequestContext);
 
         int limit = builder.getLimit();
         int skip = builder.getSkip();
@@ -71,9 +71,9 @@ public class AuxFileTypeDataSourceProvider implements DataSourceProvider {
 
         return () -> {
             LOG.debug("Executing query against in memory data");
-            Stream<AuxFileType> attribStream = inDataSource.getAuxFileTypeConcurrentMap().values().stream();
+            Stream<AuxType> attribStream = inDataSource.getAuxFileTypeConcurrentMap().values().stream();
 
-            List<AuxFileType> filteredAttributes = attribStream.filter(p -> predicateList.stream()
+            List<AuxType> filteredAttributes = attribStream.filter(p -> predicateList.stream()
                     .allMatch(f -> f.test(p))).collect(Collectors.toList());
 
             long count = 0;

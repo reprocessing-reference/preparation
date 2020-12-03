@@ -47,13 +47,9 @@ public class AuxFile {
     private String FullName;
     
 	@ODataJPAProperty
-    @EdmNavigationProperty(name = "Baseline", nullable = false)
-    private Baseline Baseline;
+    @EdmProperty(name = "Baseline", nullable = false)
+    private String Baseline;
     
-	@ODataJPAProperty
-    @EdmProperty(name = "TimeDependency", nullable = false)
-    private TimeDependency TimeDependency;
-	
 	@ODataJPAProperty
     @EdmProperty(name = "ValidityStart", nullable = false)
     private ZonedDateTime ValidityStart;
@@ -75,12 +71,12 @@ public class AuxFile {
     private ZonedDateTime CreationDate;
     
 	@ODataJPAProperty
-    @EdmNavigationProperty(name = "Band", nullable = false)
-    private Band Band;
-    
+    @EdmProperty(name = "Band", nullable = false)
+    private String Band;
+	
 	@ODataJPAProperty
-    @EdmProperty(name = "Checksum", nullable = false)
-    private Checksum Checksum;
+	@EdmProperty(name = "Unit", nullable = false)
+	private String Unit;
     
 	public AuxFile() {
 		// TODO Auto-generated constructor stub
@@ -108,24 +104,8 @@ public class AuxFile {
 
 	public void setFullName(String fullName) {
 		FullName = fullName;
-	}
-
-	public Baseline getBaseline() {
-		return Baseline;
-	}
-
-	public void setBaseline(Baseline baseline) {
-		Baseline = baseline;
-	}
-	
-	public TimeDependency getTimeDependency() {
-		return TimeDependency;
-	}
-
-	public void setTimeDependency(TimeDependency timeDependency) {
-		TimeDependency = timeDependency;
-	}
-
+	}	
+		
 	public ZonedDateTime getValidityStart() {
 		return ValidityStart;
 	}
@@ -166,21 +146,12 @@ public class AuxFile {
 		CreationDate = creationDate;
 	}
 
-	public Band getBand() {
+	public String getBand() {
 		return Band;
 	}
 
-	public void setBand(Band band) {
+	public void setBand(String band) {
 		Band = band;
 	}
-
-	public Checksum getChecksum() {
-		return Checksum;
-	}
-
-	public void setChecksum(Checksum checksum) {
-		Checksum = checksum;
-	}
-	
-   
+  
 }

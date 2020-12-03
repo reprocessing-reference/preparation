@@ -1,11 +1,13 @@
 { 
-"@odata.context": "$metadata#AuxFileTypes",
+"@odata.context": "$metadata#AuxTypes",
 "LongName": "GIP_OLQCPA",
 "ShortName": "GIP_OLQCPA",
 "Format": "XML",
-"Origin": "ESA",
-"ProductTypes@odata.bind":  ["ProductLevels('L1')"],
+"Mission": "S2MSI",
+"ProductLevels@odata.bind":  ["ProductLevels('L1')"],
+"ProductTypes@odata.bind":  ["ProductTypes('L1A')"],
 "Variability": "Static",
+"Validity": "ValidityPeriod",
 "Rule": "LatestGeneration",
-"Description": "parameters and tests for the On Line Quality Control"
+"Comments": "parameters and tests for the On Line Quality Control"
 }

@@ -18,8 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.csgroup.rba.model.jpa.AuxTypeJPA;
-import com.csgroup.rba.model.jpa.BaselineJPA;
-import com.csgroup.rba.model.jpa.SensorJPA;
+
 
 
 /**
@@ -30,76 +29,55 @@ import com.csgroup.rba.model.jpa.SensorJPA;
 
 public class JPA_ModelTest {
     
-    @Autowired
-    private SensorRepository sensorRepository;
-    
-    @Autowired
-    private BaselineRepository baselineRepository;
-    
+     
     @Autowired
     private AuxFileTypeRepository auxFileTypeRepository;
     @Autowired
     private AuxFileRepository auxFileRepository;
+    
     @Autowired
-    private BandRepository bandsRepository;
+    private ProductTypeRepository productTypeRepository;
+    
     @Autowired
     private ProductLevelRepository productLevelRepository;
     
     @Test
     public void whenFindingCustomerById_thenCorrect() throws Exception {
     	
-    	ProductTypeJPA level = new ProductTypeJPA();
+    	ProductLevelJPA level = new ProductLevelJPA();
     	level.setLevel("L1");
     	productLevelRepository.save(level);
-    	assertEquals(productLevelRepository.findById("L1").get().getLevel(),"L1") ;
+    	assertEquals(productLevelRepository.findById("L1").get().getLevel(),"L1") ;    	
     	
-    	BandJPA band = new BandJPA();
-    	band.setId(UUID.randomUUID());
-    	band.setName("B00");
-    	bandsRepository.save(band);
-    	assertEquals(bandsRepository.findById(band.getId()).get().getName(),"B00") ;
+    	ProductTypeJPA type = new ProductTypeJPA();
+    	type.setType("L1");
+    	productTypeRepository.save(type);
+    	assertEquals(productTypeRepository.findById("L1").get().getType(),"L1") ;   	
     	
     	
-    	SensorJPA sens = new SensorJPA();
-    	sens.setFullName("SENTINEL2A_S2MSI");
-    	sens.setSatellite("SENTINEL2A");
-    	sens.setShortName("S2MSI");
-    	sensorRepository.save(sens);
-    	assertEquals(sensorRepository.findById("SENTINEL2A_S2MSI").get().getFullName(),"SENTINEL2A_S2MSI") ;
-    	
-    	BaselineJPA base = new BaselineJPA();
-    	base.setDate(ZonedDateTime.now());
-    	base.setName("02.09");
-    	baselineRepository.save(base);    	
     	
     	AuxTypeJPA auxFileType = new AuxTypeJPA();
-    	auxFileType.setDescription("machin");
+    	auxFileType.setComments("machin");
     	auxFileType.setFormat("xml");
     	auxFileType.setOrigin("esa");
     	auxFileType.setLongName("GIP_OLQCPA");
     	auxFileType.setShortName("GIP_OLQCPA");
-    	auxFileType.setProductLevelApplicability(Lists.newArrayList(level));
+    	auxFileType.setProductTypes(Lists.newArrayList(type));
     	auxFileType.setRule(RuleJPA.BestCentredCover);
     	auxFileType.setVariability(VariabilityJPA.Static);
     	auxFileTypeRepository.save(auxFileType);
     	
     	AuxTypeJPA copytype = auxFileTypeRepository.findById("GIP_OLQCPA").get();
     	
-    	if (copytype.getProductLevelApplicability() == null)
+    	if (copytype.getProductTypes() == null)
     	{
     		throw new Exception("Procuct level applicability not saved correclty");
     	}
     	
     	
     	AuxFileJPA auxFile = new AuxFileJPA();
-    	auxFile.setBand(band);
-    	auxFile.setBaseline(base);
-    	ChecksumJPA check = new ChecksumJPA();
-    	check.setAlgorithm("md5");
-    	check.setChecksumDate(ZonedDateTime.now());
-    	check.setId(UUID.randomUUID());
-    	check.setValue("ooijaoijaoijaoij");
-    	auxFile.setChecksum(check);
+    	auxFile.setBand("B00");
+    	auxFile.setBaseline("01.09");    	
     	auxFile.setCreationDate(ZonedDateTime.now());
     	auxFile.setAuxType(auxFileType);
     	auxFile.setFullName("saszdssd");
@@ -113,7 +91,7 @@ public class JPA_ModelTest {
     	
     	AuxFileJPA copy = auxFileRepository.findById(auxFile.getIdentifier()).get();
     	
-    	System.out.println(copy.getBaseline().getName());
+    	System.out.println(copy.getBaseline());
     	
     	
     	

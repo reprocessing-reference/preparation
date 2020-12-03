@@ -1,7 +1,0 @@
-{ 
-    "@odata.context": "$metadata#Sensors",
-    "FullName": "SENTINEL2A_S2MSI",
-    "ShortName": "S2MSI",
-    "Unit": "A",
-    "Mission": "SENTINEL2"
-}
