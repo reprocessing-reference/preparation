@@ -14,7 +14,7 @@
 	<groupId>com.csgroup</groupId>
 	<artifactId>reprobaseline</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<name>Reprocessing baseline odata service</name>
 	<description>Reprocessing baselin odata provider</description>

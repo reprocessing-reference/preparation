@@ -31,8 +31,6 @@ services:
     restart: "no"
     depends_on:
       - database
-    volumes:
-      - /home/beon/AUXIP/Code/preparation/ReproBaseAPI/distribution/ReproBaseline-01.00.00/conf/:/ReproBaseline-01.00.00/conf/
     networks:
       - proxynet
     ports:
