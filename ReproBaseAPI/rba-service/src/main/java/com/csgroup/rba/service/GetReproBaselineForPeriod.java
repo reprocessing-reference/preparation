@@ -54,10 +54,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author besquis
  */
-@EdmFunction(name = "GetReproBaselineListForSensingUnBound", namespace = "OData.RBA", isBound = false)
+@EdmFunction(name = "GetReproBaselineListForPeriodUnBound", namespace = "OData.RBA", isBound = false)
 @EdmReturnType(type = "OData.RBA.AuxFile")
-public class GetReproBaselineForSensing implements Operation<List<AuxFile>> {
-	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineForSensing.class);
+public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
+	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineForPeriod.class);
 	
 	@EdmParameter
     private String Mission;
@@ -66,7 +66,10 @@ public class GetReproBaselineForSensing implements Operation<List<AuxFile>> {
     private String Unit;
 
     @EdmParameter
-    private ZonedDateTime SensingTime;
+    private ZonedDateTime SensingTimeStart;
+    
+    @EdmParameter
+    private ZonedDateTime SensingTimeStop;
     
     @EdmParameter
     private String ProductType;
@@ -85,9 +88,13 @@ public class GetReproBaselineForSensing implements Operation<List<AuxFile>> {
     	{
     		throw new ODataDataSourceException("Unit not filled in function");
     	}
-    	if (SensingTime == null)
+    	if (SensingTimeStart == null)
     	{
-    		throw new ODataDataSourceException("SensingTime not filled in function");
+    		throw new ODataDataSourceException("SensingTimeStart not filled in function");
+    	}
+    	if (SensingTimeStop == null)
+    	{
+    		throw new ODataDataSourceException("SensingTimeStop not filled in function");
     	}
     	if (ProductType == null)
     	{
@@ -99,13 +106,14 @@ public class GetReproBaselineForSensing implements Operation<List<AuxFile>> {
     	String query_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
     			+ "JOIN e1.AuxType e2 "
     			+ "JOIN e2.ProductTypes e3 "    			
-    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStart "    	
+    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "    	
     			+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart "    			
     			+ "AND e1.Unit = :e1Unit "    			
     			+ "AND e2.Mission = :e2Mission "
     			+ "AND e3.Type = :e3Type ";
     	Map<String, Object> queryParams = new HashMap<String,Object>();    	
-    	queryParams.put("e1SensingTimeApplicationStart",SensingTime );    	
+    	queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
+    	queryParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
     	queryParams.put("e1Unit",Unit );    	
     	queryParams.put("e2Mission",Mission );
     	queryParams.put("e3Type",ProductType);
@@ -116,13 +124,14 @@ public class GetReproBaselineForSensing implements Operation<List<AuxFile>> {
         String query_all_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
     			+ "JOIN e1.AuxType e2 "
     			+ "JOIN e2.ProductTypes e3 "    			
-    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStart "    	
+    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "    	
     			+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart "    			
     			+ "AND e1.Unit = :e1Unit "    			
     			+ "AND e2.Mission = :e2Mission "
     			+ "AND e3.Type = :e3Type ";
     	Map<String, Object> queryAllParams = new HashMap<String,Object>();    	
-    	queryAllParams.put("e1SensingTimeApplicationStart",SensingTime );    	
+    	queryAllParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
+    	queryAllParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
     	queryAllParams.put("e1Unit","X" );    	
     	queryAllParams.put("e2Mission",Mission );
     	queryAllParams.put("e3Type",ProductType);

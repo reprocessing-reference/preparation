@@ -60,7 +60,9 @@ public class EntityServiceRegistar {
         add(ProductType.class);
         add(TimeValidity.class);
         add(GetReproBaselineForSensing.class);
-        //add(GetReproBaselineForSensingImport.class);
+        add(GetReproBaselineForSensingImport.class);
+        add(GetReproBaselineForPeriod.class);
+        add(GetReproBaselineForPeriodImport.class);
         
     }};
     
