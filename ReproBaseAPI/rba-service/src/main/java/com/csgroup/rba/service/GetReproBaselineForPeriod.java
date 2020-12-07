@@ -25,9 +25,8 @@ import com.sdl.odata.api.processor.datasource.ODataDataSourceException;
 import com.sdl.odata.api.processor.datasource.factory.DataSourceFactory;
 import com.sdl.odata.api.processor.query.QueryResult;
 import com.sdl.odata.api.service.ODataRequestContext;
-import com.csgroup.rba.datasourcejpa.JPADataSource;
-import com.csgroup.rba.datasourcejpa.ODataProxyProcessor;
-import com.csgroup.rba.datasourcejpa.query.JPAQuery;
+import com.csgroup.jpadatasource.JPADataSource;
+import com.csgroup.jpadatasource.query.JPAQuery;
 import com.csgroup.rba.model.AuxFile;
 import com.google.common.collect.Lists;
 

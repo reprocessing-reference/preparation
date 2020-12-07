@@ -21,8 +21,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.csgroup</groupId>
-			<artifactId>rba-datasource-jpa</artifactId>
-			<version>${project.version}</version>
+			<artifactId>jpadatasource</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.csgroup</groupId>

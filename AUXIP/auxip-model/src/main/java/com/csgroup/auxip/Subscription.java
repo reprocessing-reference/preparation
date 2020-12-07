@@ -3,12 +3,14 @@ package com.csgroup.auxip;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import com.csgroup.jpadatasource.annotations.ODataJPAEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
 
 @EdmEntity(namespace = "OData.CSC", key = "Id", containerName = "Container")
 @EdmEntitySet("Subscriptions")
+@ODataJPAEntity(value = "com.csgroup.auxip.model.jpa.SubscriptionJPA")
 public class Subscription {
 
 	@EdmProperty(name = "Id")

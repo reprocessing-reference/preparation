@@ -35,6 +35,7 @@
 		<java.version>11</java.version>
 		<spring.boot.version>2.1.14.RELEASE</spring.boot.version>
 		<odata.version>2.9.0</odata.version>
+		<jpadatasource.version>1.0.0</jpadatasource.version>
 	</properties>
 
 	<dependencyManagement>
@@ -97,6 +98,12 @@
 				<artifactId>spring-boot-starter-security</artifactId>
 				<version>${spring.boot.version}</version>
 			</dependency>
+			<dependency>
+			  <groupId>com.csgroup</groupId>
+			  <artifactId>jpadatasource</artifactId>
+			  <version>${jpadatasource.version}</version>
+			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>
@@ -104,8 +111,6 @@
 	<modules>
 		<module>rba-model</module>
 		<module>rba-model-jpa</module>
-		<module>rba-datasource-jpa</module>
-		<!-- <module>rba-datasource</module> -->
 		<module>rba-service</module>
 	</modules>
 

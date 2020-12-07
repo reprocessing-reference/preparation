@@ -17,7 +17,7 @@ package com.csgroup.rba.service;
 
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
-import com.csgroup.rba.datasourcejpa.JPAODataModelVerifier;
+import com.csgroup.jpadatasource.JPAODataModelVerifier;
 import com.csgroup.rba.model.AuxFile;
 import com.csgroup.rba.model.AuxType;
 import com.csgroup.rba.model.ProductLevel;
