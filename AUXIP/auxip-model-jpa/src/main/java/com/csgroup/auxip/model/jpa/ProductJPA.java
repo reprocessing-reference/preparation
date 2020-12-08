@@ -16,6 +16,7 @@
 package com.csgroup.auxip.model.jpa;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -40,6 +41,7 @@ public class ProductJPA {
     private ZonedDateTime EvictionDate;    
     @OneToMany
     private List<ChecksumJPA> Checksums;
+    @Embedded
     private TimeRangeJPA ContentDate;
     @OneToMany
     private List<AttributeJPA> m_attributes;

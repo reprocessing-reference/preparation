@@ -15,8 +15,8 @@
  */
 package com.csgroup.rba.service;
 
+import com.csgroup.jpadatasource.JPADataSourceConfiguration;
 import com.csgroup.rba.service.ServiceContainer;
-import com.csgroup.rba.datasourcejpa.JPADataSourceConfiguration;
 import com.sdl.odata.service.ODataServiceConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

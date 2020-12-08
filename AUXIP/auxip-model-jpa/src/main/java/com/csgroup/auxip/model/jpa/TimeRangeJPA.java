@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 
 public class TimeRangeJPA {
 	private ZonedDateTime Start;
-	private ZonedDateTime End;
+	private ZonedDateTime Stop;
 
 	public ZonedDateTime getStart() {
 		return Start;
@@ -14,12 +14,12 @@ public class TimeRangeJPA {
 		Start = start;
 	}
 
-	public ZonedDateTime getEnd() {
-		return End;
+	public ZonedDateTime getStop() {
+		return Stop;
 	}
 
-	public void setEnd(ZonedDateTime end) {
-		End = end;
+	public void setStop(ZonedDateTime end) {
+		Stop = end;
 	}
 	
 	

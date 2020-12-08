@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 SDL Group
+ * Copyright (c) 2020 CS Group
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.csgroup.auxip.service;
 
 import com.csgroup.auxip.service.ServiceContainer;
-import com.csgroup.auxip.datasource.product.ProductDataSourceConfiguration;
+import com.csgroup.jpadatasource.JPADataSourceConfiguration;
 import com.sdl.odata.service.ODataServiceConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +32,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @author rdevries
+ * @author besquis
  */
 @Configuration
 @EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
-	    ProductDataSourceConfiguration.class,
+		JPADataSourceConfiguration.class,
         ODataServiceConfiguration.class
 })
 @ComponentScan

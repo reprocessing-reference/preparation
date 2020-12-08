@@ -1,5 +1,6 @@
 package com.csgroup.rba.model;
-import com.csgroup.rba.model.annotations.ODataJPAEntity;
+
+import com.csgroup.jpadatasource.annotations.ODataJPAEntity;
 import com.sdl.odata.api.edm.annotations.EdmEnum;
 import com.sdl.odata.api.edm.model.PrimitiveType;
 

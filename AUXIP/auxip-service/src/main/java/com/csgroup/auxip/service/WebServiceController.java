@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 SDL Group
+ * Copyright (c) 2020 CS Group
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @author rdevries
+ * @author besquis
  */
 @Controller
 @RequestMapping("/reprocessing.svc/**")

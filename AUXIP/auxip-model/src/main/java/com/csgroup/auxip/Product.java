@@ -15,6 +15,8 @@
  */
 package com.csgroup.auxip;
 
+import com.csgroup.jpadatasource.annotations.ODataJPAEntity;
+import com.csgroup.jpadatasource.annotations.ODataJPAProperty;
 import com.sdl.odata.api.edm.annotations.EdmEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmNavigationProperty;
@@ -29,50 +31,65 @@ import java.util.List;
  */
 @EdmEntity(namespace = "OData.CSC", key = "Id", containerName = "Container")
 @EdmEntitySet("Products")
+@ODataJPAEntity(value = "com.csgroup.auxip.model.jpa.ProductJPA")
 public class Product {
 
     @EdmProperty(name = "Id")
+    @ODataJPAProperty
     private UUID Id;
     
     @EdmProperty(name = "Name")
+    @ODataJPAProperty
     private String Name;
     
     @EdmProperty(name = "ContentType")
+    @ODataJPAProperty
     private String ContentType;
     
     @EdmProperty(name = "ContentLength")
+    @ODataJPAProperty
     private long ContentLength;
     
     @EdmProperty(name = "OriginDate", precision = 3)
+    @ODataJPAProperty
     private ZonedDateTime OriginDate;
     
     @EdmProperty(name = "PublicationDate", precision = 3)
+    @ODataJPAProperty
     private ZonedDateTime PublicationDate;
     
     @EdmProperty(name = "EvictionDate", precision = 3)
+    @ODataJPAProperty
     private ZonedDateTime EvictionDate;
           
    //"Checksum" Type="Collection(OData.CSC.Checksum)"/>
     @EdmProperty(name = "Checksum", nullable = false)
+    @ODataJPAProperty
     private List<Checksum> Checksums;
     
     @EdmProperty(name = "ContentDate", nullable = false)
+    @ODataJPAProperty
     private TimeRange ContentDate;
 
        
     @EdmNavigationProperty(name = "Attributes")
+    @ODataJPAProperty
     private List<Attribute> Attributes;
     
     @EdmNavigationProperty(name = "StringAttributes")
+    @ODataJPAProperty
     private List<StringAttribute> StringAttributes;
     
     @EdmNavigationProperty(name = "IntegerAttributes")
+    @ODataJPAProperty
     private List<IntegerAttribute> IntegerAttributes;
     
     @EdmNavigationProperty(name = "DoubleAttributes")
+    @ODataJPAProperty
     private List<DoubleAttribute> DoubleAttributes;
 
     @EdmNavigationProperty(name = "DateTimeOffsetAttributes")
+    @ODataJPAProperty
     private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
     
 		

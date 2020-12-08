@@ -1,7 +1,8 @@
 package com.csgroup.rba.model;
 
-import com.csgroup.rba.model.annotations.ODataJPAEntity;
-import com.csgroup.rba.model.annotations.ODataJPAProperty;
+
+import com.csgroup.jpadatasource.annotations.ODataJPAEntity;
+import com.csgroup.jpadatasource.annotations.ODataJPAProperty;
 import com.sdl.odata.api.edm.annotations.EdmEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
