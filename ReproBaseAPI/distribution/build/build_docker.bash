@@ -32,6 +32,8 @@ mkdir tmp_dir
 
 cp -r ReproBaseline-template tmp_dir/ReproBaseline-${VERSION}
 
+mkdir tmp_dir/ReproBaseline-${VERSION}/lib
+
 cp ../docker_build/source/rba-service/target/rba-service-*.jar tmp_dir/ReproBaseline-${VERSION}/lib/
 
 sed -i 's+<version>+'${VERSION}'+'  tmp_dir/ReproBaseline-${VERSION}/launch.bash

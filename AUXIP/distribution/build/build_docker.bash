@@ -32,6 +32,8 @@ mkdir tmp_dir
 
 cp -r Auxip-template tmp_dir/Auxip-${VERSION}
 
+mkdir  tmp_dir/Auxip-${VERSION}/lib
+
 cp ../docker_build/source/auxip-service/target/auxip-service-*.jar tmp_dir/Auxip-${VERSION}/lib/
 
 sed -i 's+<version>+'${VERSION}'+'  tmp_dir/Auxip-${VERSION}/launch.bash
