@@ -1,13 +1,17 @@
 package com.csgroup.auxip.model.jpa;
 
 import java.time.ZonedDateTime;
-import javax.persistence.Entity;
 
+import javax.persistence.Embeddable;
 
-@Entity(name = "DateTimeOffsetAttributes")
+@Embeddable
 public class DateTimeOffsetAttributeJPA extends AttributeJPA {
 		
 	private ZonedDateTime value;
+	
+	public DateTimeOffsetAttributeJPA() {
+		
+	}
 
 	public DateTimeOffsetAttributeJPA(String name, String valueType, ZonedDateTime value) {
 		super(name, valueType);

@@ -15,90 +15,104 @@
  */
 package com.csgroup.jpadatasource.util;
 
+import com.csgroup.jpadatasource.JPADataSource;
 import com.sdl.odata.api.processor.datasource.ODataDataSourceException;
 
 import java.lang.reflect.Field;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Small utility class that contains reflection shortcuts.
  * @author Renze de Vries
  */
 public final class ReflectionUtil {
-    private ReflectionUtil() {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ReflectionUtil.class);
 
-    }
+	private ReflectionUtil() {
 
-    /**
-     * Creates a new instance of the class.
-     * @param cls The class to create new instance for
-     * @param <T> The type of the class
-     * @return The instance of the class
-     * @throws ODataDataSourceException If unable to create the new class
-     */
-    public static <T> T newInstance(Class<T> cls) throws ODataDataSourceException {
-        try {
-            return cls.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new ODataDataSourceException("Cannot create new instance of: " + cls.getName(), e);
-        }
-    }
+	}
 
-    public static <T> T newInstance(String className) throws ODataDataSourceException {
-        return newInstance(newClass(className));
-    }
+	/**
+	 * Creates a new instance of the class.
+	 * @param cls The class to create new instance for
+	 * @param <T> The type of the class
+	 * @return The instance of the class
+	 * @throws ODataDataSourceException If unable to create the new class
+	 */
+	public static <T> T newInstance(Class<T> cls) throws ODataDataSourceException {
+		try {
+			return cls.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ODataDataSourceException("Cannot create new instance of: " + cls.getName(), e);
+		}
+	}
 
-    public static <T> Class<T> newClass(String className) throws ODataDataSourceException {
-        try {
-            return (Class<T>) Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new ODataDataSourceException("Cannot create class of: " + className, e);
-        }
-    }
+	public static <T> T newInstance(String className) throws ODataDataSourceException {
+		return newInstance(newClass(className));
+	}
 
-    /**
-     * Gets the field in a certain class for the given field name.
-     * @param cls The class to get the field from
-     * @param fieldName The name of the field
-     * @return The Field instance
-     * @throws ODataDataSourceException If unable to load the Field
-     */
-    public static Field getField(Class<?> cls, String fieldName) throws ODataDataSourceException {
-        try {
-            return cls.getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new ODataDataSourceException("Field " + fieldName + " does not exist in class: " + cls.getName(), e);
-        }
-    }
+	public static <T> Class<T> newClass(String className) throws ODataDataSourceException {
+		try {
+			return (Class<T>) Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			throw new ODataDataSourceException("Cannot create class of: " + className, e);
+		}
+	}
 
-    /**
-     * Reads the field data by getting the object.
-     * @param field The field to get the field value for
-     * @param object The object instance that contains the field
-     * @return The raw object for the field
-     * @throws ODataDataSourceException If unable to read the field
-     */
-    public static Object readField(Field field, Object object) throws ODataDataSourceException {
-        field.setAccessible(true);
-        try {
-            return field.get(object);
-        } catch (IllegalAccessException e) {
-            throw new ODataDataSourceException("Cannot read field: " + field.getName(), e);
-        }
-    }
+	/**
+	 * Gets the field in a certain class for the given field name.
+	 * @param cls The class to get the field from
+	 * @param fieldName The name of the field
+	 * @return The Field instance
+	 * @throws ODataDataSourceException If unable to load the Field
+	 */
+	public static Field getField(Class<?> cls, String fieldName) throws ODataDataSourceException {
+		 	
+		LOG.debug("Superclass: "+cls.getClass().toString());
+		try {        	
+			return cls.getDeclaredField(fieldName);
+		} catch (NoSuchFieldException e) {
+			try {        	
+				LOG.debug("Superclass: "+Class.forName(cls.getName()).getSuperclass().toString());
+				return Class.forName(cls.getName()).getSuperclass().getDeclaredField(fieldName);
+			} catch (NoSuchFieldException | ClassNotFoundException x) {
+				throw new ODataDataSourceException("Field " + fieldName + " does not exist in class: " + cls.getName(), x);			
+			}						
+		}		
+	}
 
-    /**
-     * Writes the object to the field.
-     * @param field The field to write the object to
-     * @param object The object instance on which the field is present
-     * @param value The value to write to the field
-     * @throws ODataDataSourceException If unable to write to the field
-     */
-    public static void writeField(Field field, Object object, Object value) throws ODataDataSourceException {
-        field.setAccessible(true);
-        try {
-            field.set(object, value);
-        } catch (IllegalAccessException e) {
-            throw new ODataDataSourceException("Cannot write field: " + field.getName(), e);
-        }
-    }
+	/**
+	 * Reads the field data by getting the object.
+	 * @param field The field to get the field value for
+	 * @param object The object instance that contains the field
+	 * @return The raw object for the field
+	 * @throws ODataDataSourceException If unable to read the field
+	 */
+	public static Object readField(Field field, Object object) throws ODataDataSourceException {
+		field.setAccessible(true);
+		try {
+			return field.get(object);
+		} catch (IllegalAccessException e) {
+			throw new ODataDataSourceException("Cannot read field: " + field.getName(), e);
+		}
+	}
+
+	/**
+	 * Writes the object to the field.
+	 * @param field The field to write the object to
+	 * @param object The object instance on which the field is present
+	 * @param value The value to write to the field
+	 * @throws ODataDataSourceException If unable to write to the field
+	 */
+	public static void writeField(Field field, Object object, Object value) throws ODataDataSourceException {
+		field.setAccessible(true);
+		try {
+			field.set(object, value);
+		} catch (IllegalAccessException e) {
+			throw new ODataDataSourceException("Cannot write field: " + field.getName(), e);
+		}
+	}
 }

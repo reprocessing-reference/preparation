@@ -1,11 +1,15 @@
 package com.csgroup.auxip.model.jpa;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 
-@Entity(name = "IntegerAttributes")
+@Embeddable
 public class IntegerAttributeJPA extends AttributeJPA {
 	
 	private long value;
+	
+	public IntegerAttributeJPA() {
+		
+	}
 
 	public IntegerAttributeJPA(String name, String valueType, long value) {
 		super(name, valueType);

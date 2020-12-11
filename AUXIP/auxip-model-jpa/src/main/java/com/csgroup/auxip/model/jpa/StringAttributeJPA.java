@@ -1,25 +1,26 @@
 package com.csgroup.auxip.model.jpa;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 
-import com.csgroup.auxip.model.jpa.AttributeJPA;
-
-@Entity(name = "StringAttributes")
+@Embeddable
 public class StringAttributeJPA extends AttributeJPA {
 	
-	private String value;
+	private String Value;
 
+	public StringAttributeJPA() {				
+	}
+	
 	public StringAttributeJPA(String name, String valueType, String value) {
 		super(name, valueType);
-		this.value = value;
+		this.Value = value;
 	}
 
 	public String getValue() {
-		return value;
+		return Value;
 	}
 
 	public void setValue(String value) {
-		this.value = value;
+		this.Value = value;
 	}
 	
 	

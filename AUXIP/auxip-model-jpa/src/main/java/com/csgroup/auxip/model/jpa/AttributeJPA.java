@@ -1,15 +1,18 @@
 package com.csgroup.auxip.model.jpa;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name ="Attributes")
-public abstract class AttributeJPA {
+@Embeddable
+public abstract class AttributeJPA {	
 	
-	@Id
 	private String Name;
 		
 	private String ValueType;
+	
+	public AttributeJPA() {		
+	}
 	
 	public AttributeJPA(String name, String valueType) {
 		Name = name;

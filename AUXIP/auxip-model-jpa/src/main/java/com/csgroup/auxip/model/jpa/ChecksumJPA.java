@@ -3,13 +3,11 @@ package com.csgroup.auxip.model.jpa;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.Id;
 
-@Entity(name = "CheckSum")
-public class ChecksumJPA {
-	@Id    
-	private UUID Id;
+@Embeddable
+public class ChecksumJPA {	
 	
 	private String Algorithm;
 	private String Value;	

@@ -23,11 +23,14 @@ import com.sdl.odata.api.edm.model.EntityType;
 import com.sdl.odata.api.processor.query.ArithmeticCriteriaValue;
 import com.sdl.odata.api.processor.query.ComparisonCriteria;
 import com.sdl.odata.api.processor.query.CompositeCriteria;
+import com.sdl.odata.api.processor.query.ContainsMethodCriteria;
 import com.sdl.odata.api.processor.query.Criteria;
 import com.sdl.odata.api.processor.query.CriteriaValue;
+import com.sdl.odata.api.processor.query.EndsWithMethodCriteria;
 import com.sdl.odata.api.processor.query.LiteralCriteriaValue;
 import com.sdl.odata.api.processor.query.ModOperator$;
 import com.sdl.odata.api.processor.query.PropertyCriteriaValue;
+import com.sdl.odata.api.processor.query.StartsWithMethodCriteria;
 import com.csgroup.jpadatasource.util.JPAMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,12 +78,58 @@ public class JPAWhereStrategyBuilder {
             buildFromCompositeCriteria((CompositeCriteria) criteria, builder);
         } else if (criteria instanceof ComparisonCriteria) {
             buildFromComparisonCriteria((ComparisonCriteria) criteria, builder);
+        } else if (criteria instanceof ContainsMethodCriteria) {
+            buildFromContainsCriteria((ContainsMethodCriteria) criteria, builder);
+        } else if (criteria instanceof StartsWithMethodCriteria) {
+                buildFromStartsWithCriteria((StartsWithMethodCriteria) criteria, builder);
+        } else if (criteria instanceof EndsWithMethodCriteria) {
+            buildFromEndsWithCriteria((EndsWithMethodCriteria) criteria, builder);
         } else {
             throw new ODataNotImplementedException("Unsupported criteria type: " + criteria);
         }
     }
 
-    private void buildFromComparisonCriteria(ComparisonCriteria criteria, StringBuilder builder) throws ODataException {
+    private void buildFromEndsWithCriteria(EndsWithMethodCriteria criteria, StringBuilder builder) throws ODataException {
+    	String containes = ""; 
+    	if (criteria.getStringLiteral() instanceof LiteralCriteriaValue) {
+    		containes = (String) ((LiteralCriteriaValue) criteria.getStringLiteral()).value() ;
+    	 } else {
+    		 throw new ODataNotImplementedException("criteria for contains is not a string");
+    	 }
+    	builder.append("(");
+        buildFromCriteriaValue(criteria.getProperty(), builder);
+        builder.append(" LIKE '%").append(containes).append("')");
+	}
+
+	private void buildFromStartsWithCriteria(StartsWithMethodCriteria criteria, StringBuilder builder) throws ODataException {
+    	String containes = ""; 
+    	if (criteria.getStringLiteral() instanceof LiteralCriteriaValue) {
+    		containes = (String) ((LiteralCriteriaValue) criteria.getStringLiteral()).value() ;
+    	 } else {
+    		 throw new ODataNotImplementedException("criteria for contains is not a string");
+    	 }
+    	
+    	builder.append("(");
+        buildFromCriteriaValue(criteria.getProperty(), builder);
+        builder.append(" LIKE '").append(containes).append("%')");
+		
+	}
+
+	private void buildFromContainsCriteria(ContainsMethodCriteria criteria, StringBuilder builder) throws ODataException {		
+    	String containes = ""; 
+    	if (criteria.getStringLiteral() instanceof LiteralCriteriaValue) {
+    		containes = (String) ((LiteralCriteriaValue) criteria.getStringLiteral()).value() ;
+    	 } else {
+    		 throw new ODataNotImplementedException("criteria for contains is not a string");
+    	 }
+    	
+    	builder.append("(");
+        buildFromCriteriaValue(criteria.getProperty(), builder);
+        builder.append(" LIKE '%").append(containes).append("%')");
+		
+	}
+
+	private void buildFromComparisonCriteria(ComparisonCriteria criteria, StringBuilder builder) throws ODataException {
         builder.append("(");
         buildFromCriteriaValue(criteria.left(), builder);
         builder.append(' ').append(criteria.operator().toString()).append(' ');

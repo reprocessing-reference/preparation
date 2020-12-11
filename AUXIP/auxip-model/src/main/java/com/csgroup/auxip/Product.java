@@ -70,47 +70,23 @@ public class Product {
     @EdmProperty(name = "ContentDate", nullable = false)
     @ODataJPAProperty
     private TimeRange ContentDate;
-
        
-    @EdmNavigationProperty(name = "Attributes")
-    @ODataJPAProperty
-    private List<Attribute> Attributes;
-    
-    @EdmNavigationProperty(name = "StringAttributes")
+    @EdmProperty(name = "StringAttributes", nullable = true)
     @ODataJPAProperty
     private List<StringAttribute> StringAttributes;
     
-    @EdmNavigationProperty(name = "IntegerAttributes")
+    @EdmProperty(name = "IntegerAttributes", nullable = true)
     @ODataJPAProperty
     private List<IntegerAttribute> IntegerAttributes;
     
-    @EdmNavigationProperty(name = "DoubleAttributes")
+    @EdmProperty(name = "DoubleAttributes", nullable = true)
     @ODataJPAProperty
     private List<DoubleAttribute> DoubleAttributes;
-
-    @EdmNavigationProperty(name = "DateTimeOffsetAttributes")
-    @ODataJPAProperty
-    private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
     
+    @EdmProperty(name = "DateTimeOffsetAttributes", nullable = true)
+    @ODataJPAProperty
+    private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;   
 		
-	public Product() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public Product(UUID id, String name, String contentType, long contentLength, ZonedDateTime originDate,
-			ZonedDateTime publicationDate, ZonedDateTime evictionDate, List<Checksum> checksums, TimeRange contentDate) {
-		super();
-		Id = id;
-		Name = name;
-		ContentType = contentType;
-		ContentLength = contentLength;
-		OriginDate = originDate;
-		PublicationDate = publicationDate;
-		EvictionDate = evictionDate;
-		Checksums = checksums;
-		ContentDate = contentDate;		
-	}
-	
 	public UUID getId() {
 		return Id;
 	}
@@ -166,15 +142,7 @@ public class Product {
 	public void setEvictionDate(ZonedDateTime evictionDate) {
 		EvictionDate = evictionDate;
 	}
-
-	public List<Attribute> getAttributes() {
-		return Attributes;
-	}
-
-	public void setAttributes(List<Attribute> attributes) {
-		Attributes = attributes;
-	}
-
+	
 	public List<Checksum> getChecksums() {
 		return Checksums;
 	}
@@ -190,42 +158,5 @@ public class Product {
 	public void setContentDate(TimeRange contentDate) {
 		ContentDate = contentDate;
 	}
-
-	public List<StringAttribute> getStringAttributes() {
-		return StringAttributes;
-	}
-
-	public void setStringAttributes(List<StringAttribute> stringAttributes) {
-		StringAttributes = stringAttributes;
-	}
-
-	public List<IntegerAttribute> getIntegerAttributes() {
-		return IntegerAttributes;
-	}
-
-	public void setIntegerAttributes(List<IntegerAttribute> integerAttributes) {
-		IntegerAttributes = integerAttributes;
-	}
-
-	public List<DoubleAttribute> getDoubleAttributes() {
-		return DoubleAttributes;
-	}
-
-	public void setDoubleAttributes(List<DoubleAttribute> doubleAttributes) {
-		DoubleAttributes = doubleAttributes;
-	}
-
-	public List<DateTimeOffsetAttribute> getDateTimeOffsetAttributes() {
-		return DateTimeOffsetAttributes;
-	}
-
-	public void setDateTimeOffsetAttributes(List<DateTimeOffsetAttribute> dateTimeOffsetAttributes) {
-		DateTimeOffsetAttributes = dateTimeOffsetAttributes;
-	}
-
-
-    
-    
-
-   
+	
 }

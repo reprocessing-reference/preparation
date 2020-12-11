@@ -23,6 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author besquis
  */
 @Controller
-@RequestMapping("/reprocessing.svc/**")
+@RequestMapping("/auxip.svc/**")
 public class WebServiceController extends AbstractODataController {
 }

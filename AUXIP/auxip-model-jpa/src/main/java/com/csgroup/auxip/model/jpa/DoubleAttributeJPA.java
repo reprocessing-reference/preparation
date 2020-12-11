@@ -1,11 +1,15 @@
 package com.csgroup.auxip.model.jpa;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 
-@Entity(name = "DoubleAttribute")
+@Embeddable
 public class DoubleAttributeJPA extends AttributeJPA {
 
 	private double value;
+	
+	public DoubleAttributeJPA() {
+		
+	}
 
 	public DoubleAttributeJPA(String name, String valueType, double value) {
 		super(name, valueType);

@@ -23,6 +23,7 @@ import com.sdl.odata.api.processor.datasource.DataSource;
 import com.sdl.odata.api.processor.datasource.DataSourceProvider;
 import com.sdl.odata.api.processor.datasource.ODataDataSourceException;
 import com.sdl.odata.api.processor.query.QueryOperation;
+import com.sdl.odata.api.processor.query.QueryResult;
 import com.sdl.odata.api.processor.query.strategy.QueryOperationStrategy;
 import com.sdl.odata.api.service.ODataRequestContext;
 import com.csgroup.jpadatasource.query.JPAQuery;
@@ -102,15 +103,26 @@ public class JPADatasourceProvider implements DataSourceProvider {
     public QueryOperationStrategy getStrategy(ODataRequestContext requestContext, QueryOperation operation,
                                               TargetType expectedODataEntityType) throws ODataException {
         EntityDataModel entityDataModel = requestContext.getEntityDataModel();
-        final JPAQuery query = new JPAQueryStrategyBuilder(entityDataModel).build(operation);
+        JPAQueryStrategyBuilder builder = new JPAQueryStrategyBuilder(entityDataModel); 
+        final JPAQuery query = builder.build(operation, requestContext);
         LOG.debug("JPA Query: {}", query);
 
         return () -> {
 
             List<Object> result = jpaDataSource.executeQueryListResult(query);
             LOG.info("Found: {} items for query: {}", result.size(), query);
-
-            return from(jpaDataSource.convert(entityDataModel, expectedODataEntityType.typeName(), result));
+            long count = 0;
+            if (builder.isCount() || builder.includeCount()) {
+                count = result.size();                
+                if (builder.isCount()) {
+                    return QueryResult.from(count);
+                }
+            }
+            QueryResult query_res = from(jpaDataSource.convert(entityDataModel, expectedODataEntityType.typeName(), result));
+            if (builder.includeCount()) {
+            	query_res = query_res.withCount(count);
+            }
+            return query_res; 
         };
     }
 

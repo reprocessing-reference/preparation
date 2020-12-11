@@ -16,6 +16,7 @@
 package com.csgroup.auxip.model.jpa;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -39,38 +40,23 @@ public class ProductJPA {
     private ZonedDateTime OriginDate;
     private ZonedDateTime PublicationDate;
     private ZonedDateTime EvictionDate;    
-    @OneToMany
+    @ElementCollection
     private List<ChecksumJPA> Checksums;
     @Embedded
     private TimeRangeJPA ContentDate;
-    @OneToMany
-    private List<AttributeJPA> m_attributes;
-    @OneToMany
-    private List<StringAttributeJPA> m_stringAttributes;
-    @OneToMany
-    private List<IntegerAttributeJPA> m_integerAttributes;
-    @OneToMany
-    private List<DoubleAttributeJPA> m_doubleAttributes;
-    @OneToMany
-    private List<DateTimeOffsetAttributeJPA> m_dateTimeOffsetAttributes;
-    
-	public ProductJPA(UUID id, String name, String contentType, long contentLength, ZonedDateTime originDate,
-		ZonedDateTime publicationDate, ZonedDateTime evictionDate, List<AttributeJPA> attributes) {
-	Id = id;
-	Name = name;
-	ContentType = contentType;
-	ContentLength = contentLength;
-	OriginDate = originDate;
-	PublicationDate = publicationDate;
-	EvictionDate = evictionDate;
-	m_attributes = attributes;
-    }
-	
-	public ProductJPA() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	
+    @ElementCollection
+    @Column(nullable = true)
+    private List<StringAttributeJPA> StringAttributes;
+    @ElementCollection
+    @Column(nullable = true)
+    private List<IntegerAttributeJPA> IntegerAttributes;
+    @ElementCollection
+    @Column(nullable = true)
+    private List<DoubleAttributeJPA> DoubleAttributes;
+    @ElementCollection
+    @Column(nullable = true)
+    private List<DateTimeOffsetAttributeJPA> DateTimeOffsetAttributes;
+        
 	public UUID getId() {
 		return Id;
 	}
@@ -125,46 +111,6 @@ public class ProductJPA {
 
 	public void setEvictionDate(ZonedDateTime evictionDate) {
 		EvictionDate = evictionDate;
-	}
-	
-	public List<AttributeJPA> getAttributes() {
-		return m_attributes;
-	}
-
-	public void setAttributes(List<AttributeJPA> attributes) {
-		m_attributes = attributes;
-	}
-
-	public List<IntegerAttributeJPA> getIntegerAttributes() {
-		return m_integerAttributes;
-	}
-
-	public void setIntegerAttributes(List<IntegerAttributeJPA> m_integerAttributes) {
-		this.m_integerAttributes = m_integerAttributes;
-	}
-
-	public List<DoubleAttributeJPA> getDoubleAttributes() {
-		return m_doubleAttributes;
-	}
-
-	public void setDoubleAttributes(List<DoubleAttributeJPA> m_doubleAttributes) {
-		this.m_doubleAttributes = m_doubleAttributes;
-	}
-
-	public List<DateTimeOffsetAttributeJPA> getDateTimeOffsetAttributes() {
-		return m_dateTimeOffsetAttributes;
-	}
-
-	public void setDateTimeOffsetAttributes(List<DateTimeOffsetAttributeJPA> m_dateTimeOffsetAttributes) {
-		this.m_dateTimeOffsetAttributes = m_dateTimeOffsetAttributes;
-	}
-
-	public List<StringAttributeJPA> getStringAttributes() {
-		return m_stringAttributes;
-	}
-
-	public void setStringAttributes(List<StringAttributeJPA> m_stringAttributes) {
-		this.m_stringAttributes = m_stringAttributes;
 	}
 
 	public List<ChecksumJPA> getChecksums() {

@@ -22,6 +22,10 @@ import com.sdl.odata.api.ODataSystemException;
 import com.sdl.odata.api.edm.model.EntityDataModel;
 import com.sdl.odata.api.edm.model.EntitySet;
 import com.sdl.odata.api.edm.model.EntityType;
+import com.sdl.odata.api.parser.CountOption;
+import com.sdl.odata.api.parser.ODataUriUtil;
+import com.sdl.odata.api.parser.QueryOption;
+import com.sdl.odata.api.processor.query.CountOperation;
 import com.sdl.odata.api.processor.query.CriteriaFilterOperation;
 import com.sdl.odata.api.processor.query.ExpandOperation;
 import com.sdl.odata.api.processor.query.JoinOperation;
@@ -36,6 +40,9 @@ import com.sdl.odata.api.processor.query.SelectByKeyOperation;
 import com.sdl.odata.api.processor.query.SelectOperation;
 import com.sdl.odata.api.processor.query.SelectPropertiesOperation;
 import com.sdl.odata.api.processor.query.SkipOperation;
+import com.sdl.odata.api.service.ODataRequestContext;
+
+import scala.collection.Iterator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,15 +69,38 @@ public final class JPAQueryStrategyBuilder {
 
     private int paramCount = 0;
 
+    private boolean count;
+    private boolean includeCount;
+    
+    public boolean isCount() {
+        return count;
+    }
+
+    public boolean includeCount() {
+        return includeCount;
+    }
+  
     public JPAQueryStrategyBuilder(EntityDataModel entityDataModel) {
         this.entityDataModel = entityDataModel;
     }
 
-    public JPAQuery build(QueryOperation operation) throws ODataException {
-        return  buildFromOperation(operation).build();
+    public JPAQuery build(QueryOperation operation, ODataRequestContext requestContext) throws ODataException {
+    	buildFromOptions(ODataUriUtil.getQueryOptions(requestContext.getUri()));
+    	return  buildFromOperation(operation).build();
     }
 
-    private JPAQueryBuilder buildFromOperation(QueryOperation operation) throws ODataException {
+    private void buildFromOptions(scala.collection.immutable.List<QueryOption> queryOptions) {
+    	 Iterator<QueryOption> optIt = queryOptions.iterator();
+         while (optIt.hasNext()) {
+             QueryOption opt = optIt.next();
+             if (opt instanceof CountOption && ((CountOption) opt).value()) {
+                 includeCount = true;
+                 break;
+             }
+         }		
+	}
+
+	private JPAQueryBuilder buildFromOperation(QueryOperation operation) throws ODataException {
         LOG.debug("QueryOperation : "+operation.toString());
     	
     	if (operation instanceof JoinOperation) {
@@ -83,6 +113,8 @@ public final class JPAQueryStrategyBuilder {
             return buildFromCriteriaFilter((CriteriaFilterOperation) operation);
         } else if (operation instanceof LimitOperation) {
             return buildFromLimit((LimitOperation) operation);
+        } else if (operation instanceof CountOperation) {
+            buildFromCount((CountOperation) operation);
         } else if (operation instanceof SkipOperation) {
             return buildFromSkip((SkipOperation) operation);
         } else if (operation instanceof ExpandOperation) {
@@ -96,7 +128,13 @@ public final class JPAQueryStrategyBuilder {
         throw new ODataSystemException("Unsupported query operation: " + operation);
     }
 
-    private JPAQueryBuilder buildFromJoin(JoinOperation operation) throws ODataException {
+    private void buildFromCount(CountOperation operation) throws ODataException {
+    	this.count = true;
+        LOG.debug("Counting {} records", operation.getSource().entitySetName());
+        buildFromOperation(operation.getSource());		
+	}
+
+	private JPAQueryBuilder buildFromJoin(JoinOperation operation) throws ODataException {
         JPAQueryBuilder left = buildFromOperation(operation.getLeftSource());
         JPAQueryBuilder right = buildFromOperation(operation.getRightSource());
 
