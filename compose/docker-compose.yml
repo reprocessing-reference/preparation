@@ -38,7 +38,7 @@ services:
       - proxynet
       
   reprobase:
-    image: reprobaseline:01.00.00
+    image: reprobaseline:1.0
     restart: "no"
     depends_on:
       - database
@@ -46,7 +46,7 @@ services:
       - proxynet
 
   auxip:
-    image: auxip:01.00.00
+    image: auxip:1.0-SNAPSHOT
     restart: "no"
     depends_on:
       - database_auxip
@@ -69,6 +69,7 @@ services:
     depends_on:
       - pgadmin4
       - reprobase
+      - auxip
 
   certbot:
     image: certbot/certbot
