@@ -13,6 +13,19 @@ services:
     volumes:
       - /var/postgresql/data:/var/lib/postgresql/data
 
+  database_auxip:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "auxip"
+      POSTGRES_PASSWORD: "**auxip**"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/data_auxip:/var/lib/postgresql/data
+
+
   pgadmin4:
     image: dpage/pgadmin4
     restart: always
@@ -31,6 +44,15 @@ services:
       - database
     networks:
       - proxynet
+
+  auxip:
+    image: auxip:01.00.00
+    restart: "no"
+    depends_on:
+      - database_auxip
+    networks:
+      - proxynet
+
 
   proxy:
     image: nginx:1.19.5-alpine
