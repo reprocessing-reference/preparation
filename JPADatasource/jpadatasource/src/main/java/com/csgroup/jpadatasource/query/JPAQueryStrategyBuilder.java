@@ -102,7 +102,8 @@ public final class JPAQueryStrategyBuilder {
 
 	private JPAQueryBuilder buildFromOperation(QueryOperation operation) throws ODataException {
         LOG.debug("QueryOperation : "+operation.toString());
-    	
+        LOG.debug(Boolean.toString(operation instanceof CountOperation));
+        LOG.debug(Boolean.toString(operation instanceof SelectOperation));
     	if (operation instanceof JoinOperation) {
             return buildFromJoin((JoinOperation) operation);
         } else if (operation instanceof SelectOperation) {
@@ -114,7 +115,7 @@ public final class JPAQueryStrategyBuilder {
         } else if (operation instanceof LimitOperation) {
             return buildFromLimit((LimitOperation) operation);
         } else if (operation instanceof CountOperation) {
-            buildFromCount((CountOperation) operation);
+            return buildFromCount((CountOperation) operation);
         } else if (operation instanceof SkipOperation) {
             return buildFromSkip((SkipOperation) operation);
         } else if (operation instanceof ExpandOperation) {
@@ -128,10 +129,10 @@ public final class JPAQueryStrategyBuilder {
         throw new ODataSystemException("Unsupported query operation: " + operation);
     }
 
-    private void buildFromCount(CountOperation operation) throws ODataException {
+    private JPAQueryBuilder buildFromCount(CountOperation operation) throws ODataException {
     	this.count = true;
         LOG.debug("Counting {} records", operation.getSource().entitySetName());
-        buildFromOperation(operation.getSource());		
+        return buildFromOperation(operation.getSource());		
 	}
 
 	private JPAQueryBuilder buildFromJoin(JoinOperation operation) throws ODataException {
