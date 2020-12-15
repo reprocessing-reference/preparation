@@ -34,6 +34,7 @@ services:
 
   proxy:
     image: nginx:1.19.5-alpine
+    restart: always
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
       - proxynet
@@ -50,6 +51,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    restart: always
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
