@@ -1,10 +1,8 @@
 package com.csgroup.auxip.model.jpa;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-@Embeddable
+@MappedSuperclass
 public abstract class AttributeJPA {	
 	
 	private String Name;

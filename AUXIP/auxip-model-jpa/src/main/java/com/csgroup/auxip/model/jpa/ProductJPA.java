@@ -19,8 +19,12 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -40,21 +44,22 @@ public class ProductJPA {
     private ZonedDateTime OriginDate;
     private ZonedDateTime PublicationDate;
     private ZonedDateTime EvictionDate;    
-    @ElementCollection
-    private List<ChecksumJPA> Checksums;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<ChecksumJPA> Checksum;
     @Embedded
     private TimeRangeJPA ContentDate;
-    @ElementCollection
-    @Column(nullable = true)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<StringAttributeJPA> StringAttributes;
-    @ElementCollection
-    @Column(nullable = true)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<IntegerAttributeJPA> IntegerAttributes;
-    @ElementCollection
-    @Column(nullable = true)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<DoubleAttributeJPA> DoubleAttributes;
-    @ElementCollection
-    @Column(nullable = true)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<DateTimeOffsetAttributeJPA> DateTimeOffsetAttributes;
         
 	public UUID getId() {
@@ -111,14 +116,6 @@ public class ProductJPA {
 
 	public void setEvictionDate(ZonedDateTime evictionDate) {
 		EvictionDate = evictionDate;
-	}
-
-	public List<ChecksumJPA> getChecksums() {
-		return Checksums;
-	}
-
-	public void setChecksums(List<ChecksumJPA> checksums) {
-		Checksums = checksums;
 	}
 	
 	@Column

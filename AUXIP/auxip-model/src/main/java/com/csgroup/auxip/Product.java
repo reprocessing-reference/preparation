@@ -65,7 +65,7 @@ public class Product {
    //"Checksum" Type="Collection(OData.CSC.Checksum)"/>
     @EdmProperty(name = "Checksum", nullable = false)
     @ODataJPAProperty
-    private List<Checksum> Checksums;
+    private List<Checksum> Checksum;
     
     @EdmProperty(name = "ContentDate", nullable = false)
     @ODataJPAProperty
@@ -141,14 +141,6 @@ public class Product {
 
 	public void setEvictionDate(ZonedDateTime evictionDate) {
 		EvictionDate = evictionDate;
-	}
-	
-	public List<Checksum> getChecksums() {
-		return Checksums;
-	}
-
-	public void setChecksums(List<Checksum> checksums) {
-		Checksums = checksums;
 	}
 
 	public TimeRange getContentDate() {
