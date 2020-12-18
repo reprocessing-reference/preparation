@@ -1,7 +1,7 @@
 {
     "@odata.context": "$metadata#AuxFiles",
     "Id": "e872683a-ea5b-455d-bfb2-fb304cbfbacb",
-    "AuxType@odata.bind": "$metadata#AuxFileTypes(GIP_OLQCPA)",
+    "AuxType@odata.bind": "AuxTypes('AUX_PREORB')",
     "FullName": "S2__OPER_GIP_OLQCPA_MPC__20191004T000021_V20191020T233000_21000101T000000_B00",
     "Baseline": "02.09",
     "ValidityStart": "2019-02-17T09:00:00.000Z",

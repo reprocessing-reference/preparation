@@ -77,68 +77,148 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     public List<AuxFile> doOperation(ODataRequestContext requestContext,
                               DataSourceFactory dataSourceFactory) throws ODataDataSourceException {    	
     	JPADataSource dataSource = (JPADataSource) dataSourceFactory.getDataSource(requestContext, "OData.RBA.AuxFile");
-    	
+    	boolean hasMission = true; 
+    	boolean hasUnit = true;
+    	boolean hasSensingStart = true;
+    	boolean hasSensingStop = true;
+    	boolean hasProductType = true;
     	
     	if (Mission == null)
     	{
-    		throw new ODataDataSourceException("Mission not filled in function");
+    		hasMission = false;
     	}
     	if (Unit == null)
     	{
-    		throw new ODataDataSourceException("Unit not filled in function");
+    		hasUnit = false;
     	}
     	if (SensingTimeStart == null)
     	{
-    		throw new ODataDataSourceException("SensingTimeStart not filled in function");
+    		hasSensingStart = false;    		
     	}
     	if (SensingTimeStop == null)
     	{
-    		throw new ODataDataSourceException("SensingTimeStop not filled in function");
+    		hasSensingStop = false;    		
     	}
     	if (ProductType == null)
     	{
-    		throw new ODataDataSourceException("ProductType not filled in function");
+    		hasProductType = false;
     	}
-    	
+    	Map<String, Object> queryParams = new HashMap<String,Object>();
     	EntityDataModel entityDataModel = requestContext.getEntityDataModel();
-    	
+    	boolean firstWhere = true;
     	String query_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
     			+ "JOIN e1.AuxType e2 "
-    			+ "JOIN e2.ProductTypes e3 "    			
-    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "    	
-    			+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart "    			
-    			+ "AND e1.Unit = :e1Unit "    			
-    			+ "AND e2.Mission = :e2Mission "
-    			+ "AND e3.Type = :e3Type ";
-    	Map<String, Object> queryParams = new HashMap<String,Object>();    	
-    	queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
-    	queryParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
-    	queryParams.put("e1Unit",Unit );    	
-    	queryParams.put("e2Mission",Mission );
-    	queryParams.put("e3Type",ProductType);
+    			+ "JOIN e2.ProductTypes e3 ";    			
+    	if (hasSensingStart && hasSensingStop)
+    	{
+    		if (firstWhere) {
+    			query_string = query_string.concat("WHERE ");
+    			firstWhere = false;
+    		}
+    		query_string = query_string.concat("e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "
+    				+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart ");
+    		queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
+        	queryParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
+    	}
+    	if (hasUnit)
+    	{
+    		if (firstWhere) {
+    			query_string = query_string.concat("WHERE ");
+    			firstWhere = false;
+    		} else {
+    			query_string = query_string.concat("AND ");
+    		}
+    		query_string = query_string.concat("e1.Unit = :e1Unit ");
+    		queryParams.put("e1Unit",Unit );			
+    		
+    	}
+    	if (hasMission)
+    	{
+    		if (firstWhere) {
+    			query_string = query_string.concat("WHERE ");
+    			firstWhere = false;
+    		} else {
+    			query_string = query_string.concat("AND ");
+    		}
+    		query_string = query_string.concat("e2.Mission = :e2Mission ");
+    		queryParams.put("e2Mission",Mission );	    		
+    	}
+    	if (hasProductType)
+    	{
+    		if (firstWhere) {
+    			query_string = query_string.concat("WHERE ");
+    			firstWhere = false;
+    		} else {
+    			query_string = query_string.concat("AND ");
+    		}
+    		query_string = query_string.concat("e3.Type = :e3Type ");
+    		queryParams.put("e3Type",ProductType);	    		
+    	}
+    	
+    	
 		JPAQuery query = new JPAQuery(query_string, queryParams);
 		List<Object> result = dataSource.executeQueryListResult(query);
         LOG.info("Found: {} items for query: {}", result.size(), query);
-
-        String query_all_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
-    			+ "JOIN e1.AuxType e2 "
-    			+ "JOIN e2.ProductTypes e3 "    			
-    			+ "WHERE e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "    	
-    			+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart "    			
-    			+ "AND e1.Unit = :e1Unit "    			
-    			+ "AND e2.Mission = :e2Mission "
-    			+ "AND e3.Type = :e3Type ";
-    	Map<String, Object> queryAllParams = new HashMap<String,Object>();    	
-    	queryAllParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
-    	queryAllParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
-    	queryAllParams.put("e1Unit","X" );    	
-    	queryAllParams.put("e2Mission",Mission );
-    	queryAllParams.put("e3Type",ProductType);
-		JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
-		List<Object> result_all = dataSource.executeQueryListResult(query_all);
-        LOG.info("Found: {} items for query: {}", result_all.size(), query_all);
-        //Concatenate both results
-        result.addAll(result_all);        
+        
+        if (hasUnit) {
+        	Map<String, Object> queryAllParams = new HashMap<String,Object>();
+        	boolean firstWhereAll = true;
+        	String query_all_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
+        			+ "JOIN e1.AuxType e2 "
+        			+ "JOIN e2.ProductTypes e3 ";    			
+        	if (hasSensingStart && hasSensingStop)
+        	{
+        		if (firstWhereAll) {
+        			query_all_string = query_all_string.concat("WHERE ");
+        			firstWhereAll = false;
+        		}
+        		query_all_string = query_all_string.concat("e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "
+        				+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart ");
+        		queryAllParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
+        		queryAllParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
+        	}
+        	if (hasUnit)
+        	{
+        		if (firstWhereAll) {
+        			query_all_string = query_all_string.concat("WHERE ");
+        			firstWhereAll = false;
+        		} else {
+        			query_all_string = query_all_string.concat("AND ");
+        		}
+        		query_all_string = query_all_string.concat("e1.Unit = :e1Unit ");
+        		queryAllParams.put("e1Unit","X" );			
+        		
+        	}
+        	if (hasMission)
+        	{
+        		if (firstWhereAll) {
+        			query_all_string = query_all_string.concat("WHERE ");
+        			firstWhereAll = false;
+        		} else {
+        			query_all_string = query_all_string.concat("AND ");
+        		}
+        		query_all_string = query_all_string.concat("e2.Mission = :e2Mission ");
+        		queryAllParams.put("e2Mission",Mission );	    		
+        	}
+        	if (hasProductType)
+        	{
+        		if (firstWhereAll) {
+        			query_all_string = query_all_string.concat("WHERE ");
+        			firstWhereAll = false;
+        		} else {
+        			query_all_string = query_all_string.concat("AND ");
+        		}
+        		query_all_string = query_all_string.concat("e3.Type = :e3Type ");
+        		queryAllParams.put("e3Type",ProductType);	    		
+        	}
+			JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
+			List<Object> result_all = dataSource.executeQueryListResult(query_all);
+	        LOG.info("Found: {} items for query: {}", result_all.size(), query_all);
+	        //Concatenate both results
+	        result.addAll(result_all);        
+        }
+        
+        //Convert and sort
         QueryResult q_result = from(dataSource.convert(entityDataModel, "OData.RBA.AuxFile", result));
         List<Object> obj_result = (List<Object>)q_result.getData();
         List<AuxFile> aux_result = Lists.newArrayList();

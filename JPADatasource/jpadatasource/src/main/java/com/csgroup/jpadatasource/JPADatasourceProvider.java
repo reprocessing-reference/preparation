@@ -112,14 +112,14 @@ public class JPADatasourceProvider implements DataSourceProvider {
             List<Object> result = jpaDataSource.executeQueryListResult(query);
             LOG.info("Found: {} items for query: {}", result.size(), query);
             long count = 0;
-            if (builder.isCount() || builder.includeCount()) {
+            if (builder.isCount()) {
                 count = result.size();                
-                if (builder.isCount()) {
-                    return QueryResult.from(count);
+                if (builder.isCount() && !builder.includeCount()) {
+                	return QueryResult.from(count);
                 }
             }
             QueryResult query_res = from(jpaDataSource.convert(entityDataModel, expectedODataEntityType.typeName(), result));
-            if (builder.includeCount()) {
+            if (builder.isCount() && builder.includeCount()) {
             	query_res = query_res.withCount(count);
             }
             return query_res; 

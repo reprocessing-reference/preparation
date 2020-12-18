@@ -89,8 +89,34 @@ public class JPADataSource implements DataSource {
     }
 
     @Override
-    public Object update(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {
-        return create(uri, entity, entityDataModel);
+    public Object update(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {        
+        Object jpaEntity = entityMapper.convertODataEntityToDS(entity, entityDataModel);
+        if (jpaEntity != null) {
+            EntityManager entityManager = getEntityManager();
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+
+                Object attached = entityManager.merge(jpaEntity);                
+                if (transaction.isActive()) {
+                    transaction.commit();
+                } else {
+                    transaction.rollback();
+                }
+                Object unproxied = proxyProcessor.process(attached); 
+                Class<?> javaType = entityDataModel.getType(entity.getClass()).getJavaType();
+                return entityMapper.convertDSEntityToOData(unproxied, javaType, entityDataModel);
+            } catch (PersistenceException e) {
+                LOG.error("Could not update entity: {}", entity);
+                throw new ODataDataSourceException("Could not update entity", e);
+            } finally {                    
+                entityManager.close();
+            }
+        } else {
+        	LOG.error("Could not update entity: {}", entity);
+            throw new ODataDataSourceException("Could not update entity "+ entity);
+        }
+		
     }
 
     @Override
