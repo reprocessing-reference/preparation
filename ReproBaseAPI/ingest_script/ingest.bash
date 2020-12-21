@@ -1,30 +1,30 @@
 url="http://reprocessing-preparation.ml:8080/reprocessing.svc"
 pass="VC&&v*9rS4cFVSMW"
+base_path="/home/beon/AUXIP/Code/"
+rm -r ${base_path}/json/file_types
+rm -r ${base_path}/json/*files
+rm -r ${base_path}/json/*files_updated
+mkdir ${base_path}/json/file_types
+mkdir ${base_path}/json/s1_files
+mkdir ${base_path}/json/s2_files
+mkdir ${base_path}/json/s3_files
+mkdir ${base_path}/json/s1_files_updated
+mkdir ${base_path}/json/s2_files_updated
+mkdir ${base_path}/json/s3_files_updated
 
-rm -r json/file_types
-rm -r json/*files
-rm -r json/*files_updated
-mkdir json/file_types
-mkdir json/s1_files
-mkdir json/s2_files
-mkdir json/s3_files
-mkdir json/s1_files_updated
-mkdir json/s2_files_updated
-mkdir json/s3_files_updated
+python pythonscripts/ingest_filetypes.py -i RRPP_all_AUX.csv -t ../rba-service/src/test/resources/auxfiletype.json -o ${base_path}/json/file_types/
 
-python pythonscripts/ingest_filetypes.py -i RRPP_all_AUX.csv -t ../rba-service/src/test/resources/auxfiletype.json -o json/file_types/
+python pythonscripts/ingest_s2files.py -i ~/sentinel2/ -f ${base_path}/json/file_types/ -t ../rba-service/src/test/resources/auxfile.json -o ${base_path}/json/s2_files/
 
-python pythonscripts/ingest_s2files.py -i ~/sentinel2/ -f json/file_types/ -t ../rba-service/src/test/resources/auxfile.json -o json/s2_files/
+python pythonscripts/update_s2file_validity.py -i ${base_path}/json/s2_files/ -o ${base_path}/json/s2_files_updated
 
-python pythonscripts/update_s2file_validity.py -i json/s2_files/ -o json/s2_files_updated
+python pythonscripts/ingest_s3files.py -i listS3.txt -t ../rba-service/src/test/resources/auxfile.json -o ${base_path}/json/s3_files/ -f ${base_path}/json/file_types/
 
-python pythonscripts/ingest_s3files.py -i listS3.txt -t ../rba-service/src/test/resources/auxfile.json -o json/s3_files/ -f json/file_types/
+python pythonscripts/update_s2file_validity.py -i ${base_path}/json/s3_files/ -o ${base_path}/json/s3_files_updated
 
-python pythonscripts/update_s2file_validity.py -i json/s3_files/ -o json/s3_files_updated
+python pythonscripts/ingest_s1files.py -i listS1.txt -t ../rba-service/src/test/resources/auxfile.json -o ${base_path}/json/s1_files/ -f ${base_path}/json/file_types/
 
-python pythonscripts/ingest_s1files.py -i listS1.txt -t ../rba-service/src/test/resources/auxfile.json -o json/s1_files/ -f json/file_types/
-
-python pythonscripts/update_s2file_validity.py -i json/s1_files/ -o json/s1_files_updated
+python pythonscripts/update_s2file_validity.py -i ${base_path}/json/s1_files/ -o ${base_path}/json/s1_files_updated
 
 exit 0
 

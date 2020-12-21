@@ -191,7 +191,7 @@ def main():
             shortname = dic["ShortName"]
         elif "AUX_PREORB" in filename:
             print("AUX_PREORB file detected")
-            filetype_str = "AUX_PREORB"
+            filetype_str = "AUX_PREORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
             stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
@@ -202,7 +202,7 @@ def main():
             shortname = dic["ShortName"]
         elif "AUX_RESORB" in filename:
             print("AUX_RESORB file detected")
-            filetype_str = "AUX_RESORB"
+            filetype_str = "AUX_RESORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
             stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
@@ -213,7 +213,7 @@ def main():
             shortname = dic["ShortName"]
         elif "AUX_POEORB" in filename:
             print("AUX_PREORB file detected")
-            filetype_str = "AUX_POEORB"
+            filetype_str = "AUX_POEORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
             stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
@@ -235,7 +235,7 @@ def main():
             shortname = dic["ShortName"]
         elif "AMV_ERRMAT" in filename:
             print("AMV_ERRMAT file detected")
-            filetype_str = "AMH_ERRMAT_MPC"
+            filetype_str = "AMV_ERRMAT_MPC"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
             stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")

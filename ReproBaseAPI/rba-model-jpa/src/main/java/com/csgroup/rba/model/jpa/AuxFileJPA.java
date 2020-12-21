@@ -18,6 +18,7 @@ package com.csgroup.rba.model.jpa;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,6 +45,9 @@ public class AuxFileJPA {
 	private String FullName;
     
 	private String Baseline;
+	
+	@Column(nullable = true)
+	private String IpfVersion;
 	
 	private String        Unit;
 	private ZonedDateTime ValidityStart;
@@ -147,6 +151,14 @@ public class AuxFileJPA {
 
 	public void setUnit(String unit) {
 		Unit = unit;
+	}
+
+	public String getIpfVersion() {
+		return IpfVersion;
+	}
+
+	public void setIpfVersion(String ipfVersion) {
+		IpfVersion = ipfVersion;
 	}
 
 	

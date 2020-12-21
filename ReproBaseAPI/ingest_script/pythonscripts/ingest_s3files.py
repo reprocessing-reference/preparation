@@ -107,8 +107,20 @@ def main():
         template["Baseline"] = "06.11"
         if "SRAL" in mission:
             template["Baseline"] = "06.19"
+            if "S3A" in filename:
+                template["IpfVersion"] = "S3A-2.69"
+            elif "S3B" in filename:
+                template["IpfVersion"] = "S3B-1.45"
+            else:
+                template["IpfVersion"] = "S3A-2.69 & S3B-1.45"
         if "MWR" in mission:
             template["Baseline"] = "06.11"
+            if "S3A" in filename:
+                template["IpfVersion"] = "S3A-2.69"
+            elif "S3B" in filename:
+                template["IpfVersion"] = "S3B-1.45"
+            else:
+                template["IpfVersion"] = "S3A-2.69 & S3B-1.45"
         #Date part
         template["ValidityStart"] = start_good
         template["ValidityStop"] = stop_good

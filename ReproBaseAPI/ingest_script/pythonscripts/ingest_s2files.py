@@ -66,12 +66,17 @@ def main():
             template["Id"] = str(uuid.uuid4())
             if 'File_Semantic' in s2dict.keys():
                 filetype = None
-                for type in filetype_dict:
-                    if s2dict['File_Semantic'] in type:
-                        filetype = type
-                        break
-                if filetype is None:
-                    raise Exception("unknown file type")
+                if s2dict['File_Semantic'] == "AUX_RESORB":
+                    filetype = "AUX_RESORB_S2"
+                elif s2dict['File_Semantic'] == "AUX_PREORB":
+                    filetype = "AUX_PREORB_S2"
+                else:
+                    for type in filetype_dict:
+                        if s2dict['File_Semantic'] in type:
+                            filetype = type
+                            break
+                    if filetype is None:
+                        raise Exception("unknown file type")
                 template["AuxType@odata.bind"] = "AuxTypes('"+filetype+"')"
             else:
                 raise Exception("unknown file type")

@@ -49,6 +49,10 @@ public class AuxFile {
 	@ODataJPAProperty
     @EdmProperty(name = "Baseline", nullable = false)
     private String Baseline;
+	
+	@ODataJPAProperty
+    @EdmProperty(name = "IpfVersion", nullable = true)
+    private String IpfVersion;
     
 	@ODataJPAProperty
     @EdmProperty(name = "ValidityStart", nullable = false)

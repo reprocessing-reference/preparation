@@ -411,7 +411,6 @@ def treatOneDict(dict_file, input, output):
                         nt_file_stop = datetime.datetime.strptime(fofo[1]["ValidityStop"], odata_datetime_format)
                         nt_file_creation = datetime.datetime.strptime(fofo[1]["CreationDate"], odata_datetime_format)
                         nt_file_start = datetime.datetime.strptime(fofo[1]["ValidityStart"], odata_datetime_format)
-                        print("N; " + str(n) + " : " + fofo[1]["ValidityStart"] + " : " + fifi[1]["ValidityStart"])
                     dt_sensing_start = fifi[1]["ValidityStart"]
                     dt_sensing_stop = fofo[1]["ValidityStart"]
                     print("Sensing validity for file : " + fifi[0] + " : " + dt_sensing_start + " : " + dt_sensing_stop)
@@ -430,6 +429,51 @@ def treatOneDict(dict_file, input, output):
                 # Write down
                 with open(os.path.join(output, l_sorted[-1][0]), 'w') as json_file:
                     json.dump(l_sorted[-1][1], json_file)
+
+def treatOneDictERRMAT(dict_file, input, output):
+    dict_band = {}
+    for s in dict_file:
+        if s[1]["Band"] in dict_band.keys():
+            dict_band[s[1]["Band"]].append(s)
+        else:
+            dict_band[s[1]["Band"]] = []
+            dict_band[s[1]["Band"]].append(s)
+    for band, files in dict_band.items():
+        if len(files) == 1:
+            print("only one file for band : " + band)
+            print("not updating : " + files[0][0])
+            shutil.copyfile(os.path.join(input, files[0][0]), os.path.join(output, files[0][0]))
+            continue
+        print("Band " + band)
+        time_validity = "ValidityPeriod"
+        l_sorted = sorted(files,
+                          key=lambda x: datetime.datetime.strptime(x[1]["ValidityStop"], odata_datetime_format))
+        for idx in range(len(l_sorted) - 1):
+            fifi = l_sorted[idx]
+            dt_file_stop = datetime.datetime.strptime(fifi[1]["ValidityStop"], odata_datetime_format)
+            dt_file_creation = datetime.datetime.strptime(fifi[1]["CreationDate"], odata_datetime_format)
+            dt_file_start = datetime.datetime.strptime(fifi[1]["ValidityStart"], odata_datetime_format)
+            fofo = l_sorted[idx + 1]
+            nt_file_stop = datetime.datetime.strptime(fofo[1]["ValidityStop"], odata_datetime_format)
+            nt_file_creation = datetime.datetime.strptime(fofo[1]["CreationDate"], odata_datetime_format)
+            nt_file_start = datetime.datetime.strptime(fofo[1]["ValidityStart"], odata_datetime_format)
+            fifi[1]["SensingTimeApplicationStart"] = fifi[1]["ValidityStop"]
+            fifi[1]["SensingTimeApplicationStop"] = fofo[1]["ValidityStop"]
+            if isTheLatest(fifi, idx, l_sorted):
+                # Write down
+                with open(os.path.join(output, fifi[0]), 'w') as json_file:
+                    json.dump(fifi[1], json_file)
+        dt_sensing_start_last = l_sorted[-1][1]["ValidityStart"]
+        dt_sensing_stop_last = l_sorted[-1][1]["ValidityStop"]
+        print("Sensing validity for last file : " + l_sorted[-1][
+            0] + " : " + dt_sensing_start_last + " : " + dt_sensing_stop_last)
+        l_sorted[-1][1]["SensingTimeApplicationStart"] = dt_sensing_stop_last
+        l_sorted[-1][1]["SensingTimeApplicationStop"] = "2100-01-01T00:00:00.000000Z"
+        if isTheLatest(l_sorted[-1], len(l_sorted) - 1, l_sorted):
+            # Write down
+            with open(os.path.join(output, l_sorted[-1][0]), 'w') as json_file:
+                json.dump(l_sorted[-1][1], json_file)
+
 
 def isTheLatest(file, idx, sorted_list):
     dt_file_stop = datetime.datetime.strptime(file[1]["ValidityStop"], odata_datetime_format)
@@ -521,9 +565,22 @@ def main():
                         raise Exception("Bad Sensor")
                 #list_of_sibling = search_similar(f, v)
                 #print("Number of sibling for file : "+f[0] + " : "+str(len(list_of_sibling)))
-            treatOneDict(dict_sensor["X"],args.input, args.output)
-            treatOneDict(dict_sensor["A"], args.input, args.output)
-            treatOneDict(dict_sensor["B"], args.input, args.output)
+            if k == "AuxTypes('AMH_ERRMAT_MPC')" or k == "AuxTypes('AMV_ERRMAT_MPC')" \
+                    or k == "AuxTypes('MW_1_DNB_AX')"\
+                    or k == "AuxTypes('MW_1_MON_AX')"\
+                    or k == "AuxTypes('MW_1_NIR_AX')"\
+                    or k == "AuxTypes('SR_1_CA1LAX')"\
+                    or k == "AuxTypes('SR_1_CA1SAX')"\
+                    or k == "AuxTypes('SR_1_CA2CAX')"\
+                    or k == "AuxTypes('SR_1_CA2KAX')" \
+                    or k == "AuxTypes('SR_2_POL_AX')" :
+                treatOneDictERRMAT(dict_sensor["X"], args.input, args.output)
+                treatOneDictERRMAT(dict_sensor["A"], args.input, args.output)
+                treatOneDictERRMAT(dict_sensor["B"], args.input, args.output)
+            else:
+                treatOneDict(dict_sensor["X"],args.input, args.output)
+                treatOneDict(dict_sensor["A"], args.input, args.output)
+                treatOneDict(dict_sensor["B"], args.input, args.output)
 
 
 
