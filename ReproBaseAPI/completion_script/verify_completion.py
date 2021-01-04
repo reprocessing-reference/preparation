@@ -57,7 +57,7 @@ def main():
             work_dt = work_dt + datetime.timedelta(hours=int(args.step))
             work_odata = datetime.datetime.strftime(work_dt, odata_datetime_format)
             request = url + "?$filter=contains(FullName,'"+args.type+"') and SensingTimeApplicationStart lt "+work_odata+\
-                      " and SensingTimeApplicationStop gt "+work_odata+" and startswith(FullName,'"+args.mission+"')&$top=10"
+                      " and SensingTimeApplicationStop gt "+work_odata+" and startswith(FullName,'"+args.mission+"')"
             result = send_request(request,login,password)
             if "value" not in result.keys():
                 raise Exception("Result is wrong for request "+request)

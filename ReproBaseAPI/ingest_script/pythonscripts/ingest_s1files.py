@@ -1,4 +1,5 @@
 import argparse
+import copy
 import datetime
 import hashlib
 import json
@@ -61,9 +62,9 @@ def main():
             required=True)
 
     args = parser.parse_args()
-    template = None
+    template_base = None
     with open(args.template) as f:
-        template = json.load(f)
+        template_base = json.load(f)
 
     # band_dict = {}
     # for (dirpath, dirnames, filenames) in os.walk(args.bands):
@@ -95,6 +96,14 @@ def main():
     for filenames in lines:
         filename = os.path.basename(filenames)
         print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
+        template = None
+        update = False
+        if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
+            with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
+                template = json.load(f)
+            update = True
+        else:
+            template = copy.copy(template_base)
         if "S1A" in filename:
             template["Unit"] = "A"
         elif "S1B" in filename:
@@ -267,7 +276,8 @@ def main():
             raise Exception("unknown file type")
         template["AuxType@odata.bind"] = "AuxTypes('" + filetype + "')"
         template["@odata.context"] = "$metadata#AuxFiles"
-        template["Id"] = str(uuid.uuid4())
+        if not update:
+            template["Id"] = str(uuid.uuid4())
         template["FullName"] = filename.strip()
         template["ShortName"] = shortname
         template["Baseline"] = "03.31"

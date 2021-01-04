@@ -1,4 +1,5 @@
 import argparse
+import copy
 import datetime
 import hashlib
 import json
@@ -40,9 +41,9 @@ def main():
             required=True)
 
     args = parser.parse_args()
-    template = None
+    template_base = None
     with open(args.template) as f:
-        template = json.load(f)
+        template_base = json.load(f)
 
     # band_dict = {}
     # for (dirpath, dirnames, filenames) in os.walk(args.bands):
@@ -55,7 +56,7 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"]))
+                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductTypes@odata.bind"]))
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -74,6 +75,14 @@ def main():
     for filenames in lines:
         filename = os.path.basename(filenames)
         print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
+        template = None
+        update = False
+        if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
+            with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
+                template = json.load(f)
+            update = True
+        else:
+            template = copy.copy(template_base)
         if "S3A" in filename:
             template["Unit"] = "A"
         elif "S3B" in filename:
@@ -92,16 +101,19 @@ def main():
 
         filetype = None
         mission = None
+        product_levels = None
         for type in filetype_dict:
             if filetype_str in type[0]:
                 filetype = type[0]
                 mission = type[1]
+                product_levels = type[2]
                 break
         if filetype is None:
             raise Exception("unknown file type")
         template["AuxType@odata.bind"] = "AuxTypes('" + filetype + "')"
         template["@odata.context"] = "$metadata#AuxFiles"
-        template["Id"] = str(uuid.uuid4())
+        if not update:
+            template["Id"] = str(uuid.uuid4())
         template["FullName"] = filename.strip()
         template["ShortName"] = shortname
         template["Baseline"] = "06.11"
@@ -121,6 +133,54 @@ def main():
                 template["IpfVersion"] = "S3B-1.45"
             else:
                 template["IpfVersion"] = "S3A-2.69 & S3B-1.45"
+        if "OLCI" in mission:
+            if "ProductLevels('L2')" in product_levels:
+                template["Baseline"] = "06.13"
+            elif "ProductLevels('L1')" in product_levels:
+                template["Baseline"] = "06.11"
+            else:
+                raise Exception("Unknown product level for "+filename)
+            if "S3A" in filename:
+               template["IpfVersion"] = "S3A-2.66"
+            elif "S3B" in filename:
+               template["IpfVersion"] = "S3B-1.40"
+            else:
+               template["IpfVersion"] = "S3A-2.66 & S3B-1.40"
+        if "SLSTR" in mission:
+            if "ProductLevels('L2')" in product_levels:
+                template["Baseline"] = "06.16"
+                if "S3A" in filename:
+                    template["IpfVersion"] = "S3A-2.61"
+                elif "S3B" in filename:
+                    template["IpfVersion"] = "S3B-1.33"
+                else:
+                    template["IpfVersion"] = "S3A-2.61 & S3B-1.33"
+            elif "ProductLevels('L1')" in product_levels:
+                template["Baseline"] = "06.17"
+                if "S3A" in filename:
+                    template["IpfVersion"] = "S3A-2.59"
+                elif "S3B" in filename:
+                    template["IpfVersion"] = "S3B-1.31"
+                else:
+                    template["IpfVersion"] = "S3A-2.59 & S3B-1.31"
+            else:
+                raise Exception("Unknown product level for " + filename)
+        if "SYN" in mission:
+            if "ProductLevels('L2')" in product_levels:
+                template["Baseline"] = "06.20"
+            elif "ProductLevels('L1')" in product_levels:
+                template["Baseline"] = "03.37"
+            else:
+                raise Exception("Unknown product level for " + filename)
+            if "S3A" in filename:
+                template["IpfVersion"] = "S3A-2.66"
+            elif "S3B" in filename:
+                template["IpfVersion"] = "S3B-1.40"
+            else:
+                template["IpfVersion"] = "S3A-2.66 & S3B-1.40"
+
+
+
         #Date part
         template["ValidityStart"] = start_good
         template["ValidityStop"] = stop_good

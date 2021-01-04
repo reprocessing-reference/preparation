@@ -1,4 +1,5 @@
 import argparse
+import copy
 import csv
 import datetime
 import hashlib
@@ -36,9 +37,9 @@ def main():
             required=True)
 
     args = parser.parse_args()
-    template = None
+    template_base = None
     with open(args.template) as f:
-        template = json.load(f)
+        template_base = json.load(f)
 
     # band_dict = {}
     # for (dirpath, dirnames, filenames) in os.walk(args.bands):
@@ -61,9 +62,18 @@ def main():
     for (dirpath, dirnames, filenames) in os.walk(args.input):
         for filename in filenames:
             print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
+            template = None
+            update = False
+            if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
+                with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
+                    template = json.load(f)
+                update = True
+            else:
+                template = copy.copy(template_base)
             s2dict =parse_all_as_dict(filename)
             template["@odata.context"] = "$metadata#AuxFiles"
-            template["Id"] = str(uuid.uuid4())
+            if not update:
+                template["Id"] = str(uuid.uuid4())
             if 'File_Semantic' in s2dict.keys():
                 filetype = None
                 if s2dict['File_Semantic'] == "AUX_RESORB":
