@@ -281,6 +281,7 @@ def main():
         template["FullName"] = filename.strip()
         template["ShortName"] = shortname
         template["Baseline"] = "03.31"
+        template["IpfVersion"] = "S1-IPF-03.31"
         #Date part
         template["ValidityStart"] = start_good
         template["ValidityStop"] = stop_good

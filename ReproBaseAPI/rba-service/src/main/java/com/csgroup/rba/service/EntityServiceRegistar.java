@@ -63,7 +63,8 @@ public class EntityServiceRegistar {
         add(GetReproBaselineForSensingImport.class);
         add(GetReproBaselineForPeriod.class);
         add(GetReproBaselineForPeriodImport.class);
-        
+        add(GetReproBaselineNamesForPeriod.class);
+        add(GetReproBaselineNamesForPeriodImport.class);        
     }};
     
     

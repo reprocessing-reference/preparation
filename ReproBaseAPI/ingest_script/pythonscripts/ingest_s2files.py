@@ -52,7 +52,7 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append(filetype["LongName"])
+                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductTypes@odata.bind"]))
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -74,16 +74,24 @@ def main():
             template["@odata.context"] = "$metadata#AuxFiles"
             if not update:
                 template["Id"] = str(uuid.uuid4())
+            filetype = None
+            mission = None
+            product_levels = None
             if 'File_Semantic' in s2dict.keys():
-                filetype = None
                 if s2dict['File_Semantic'] == "AUX_RESORB":
                     filetype = "AUX_RESORB_S2"
+                    mission = "S2MSI"
+                    product_levels = "ProductLevels('L1')"
                 elif s2dict['File_Semantic'] == "AUX_PREORB":
                     filetype = "AUX_PREORB_S2"
+                    mission = "S2MSI"
+                    product_levels = "ProductLevels('L1')"
                 else:
                     for type in filetype_dict:
-                        if s2dict['File_Semantic'] in type:
-                            filetype = type
+                        if s2dict['File_Semantic'] in type[0]:
+                            filetype = type[0]
+                            mission = type[1]
+                            product_levels = type[2]
                             break
                     if filetype is None:
                         raise Exception("unknown file type")
@@ -95,7 +103,14 @@ def main():
             if 'processing_baseline' in s2dict.keys():
                 template["Baseline"] = s2dict['processing_baseline']
             else:
-                template["Baseline"] = "02.09"
+                if "ProductLevels('L2')" in product_levels:
+                    template["Baseline"] = "02.14"
+                    template["IpfVersion"] = "V02.08.00"
+                elif "ProductLevels('L1')" in product_levels:
+                    template["Baseline"] = "02.09"
+                    template["IpfVersion"] = "V2B-4.2.8"
+                else:
+                    raise Exception("unknown product level")
             #Date part
             start_str = s2dict['applicability_time_period'].split("_")[0]
             stop_str = s2dict['applicability_time_period'].split("_")[1]
