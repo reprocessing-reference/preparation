@@ -5,7 +5,8 @@ import requests
 from pip._vendor.requests import auth
 from requests.auth import HTTPBasicAuth
 
-odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ"
+odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
+odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 url = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
 login="user"
 password = "*K7KzTrZWhC2zkc"
@@ -23,12 +24,6 @@ def send_request(request, log, passwd):
 def main():
     parser = argparse.ArgumentParser(description="",  # main description for help
             epilog='Beta', formatter_class=argparse.RawTextHelpFormatter)  # displayed after help
-    parser.add_argument("-d", "--startdate",
-                        help="starting date to search",
-                        required=True)
-    parser.add_argument("-e", "--enddate",
-                        help="ending date to search",
-                        required=True)
     parser.add_argument("-s", "--step",
                         help="step of the search in hours",
                         required=True)
@@ -46,25 +41,29 @@ def main():
 
     args = parser.parse_args()
 
-
-    work_dt = datetime.datetime.strptime(args.startdate, "%Y%m%dT%H%M%S")
-    stop_dt = datetime.datetime.strptime(args.enddate, "%Y%m%dT%H%M%S")
     with open(args.output, mode='w') as report:
-        report.write("##### Report start : type : " + args.type + " , startdate :  " + args.startdate +
-                     " , enddate :  " + args.enddate + " , step :  " + args.step + " hours ########\n")
+        report.write("##### Report start : type : " + args.type + " , step :  " + args.step + " hours ########\n")
+        request = url + "?$orderby=SensingTimeApplicationStart asc&$filter=contains(FullName,'"+args.type+"') and startswith(FullName,'"+args.mission+"')"
+        result = send_request(request,login,password)
+        print(str(len(result['value'])))
+        start_date_str = result['value'][0]['SensingTimeApplicationStart']
+        stop_date_str = result['value'][-1]['SensingTimeApplicationStop']
+        if len(start_date_str) == 22:
+            start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_nosec_format)
+        else:
+            start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_format)
+        if len(stop_date_str) == 22:
+            stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_nosec_format)
+        else:
+            stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_format)
+        report.write("Start date : "+start_date_str+"\n")
+        report.write("Stop date : " + stop_date_str + "\n")
+        work_dt = start_dt
         while work_dt < stop_dt:
             print("Tested date :"+datetime.datetime.strftime(work_dt, odata_datetime_format))
             work_dt = work_dt + datetime.timedelta(hours=int(args.step))
-            work_odata = datetime.datetime.strftime(work_dt, odata_datetime_format)
-            request = url + "?$filter=contains(FullName,'"+args.type+"') and SensingTimeApplicationStart lt "+work_odata+\
-                      " and SensingTimeApplicationStop gt "+work_odata+" and startswith(FullName,'"+args.mission+"')"
-            result = send_request(request,login,password)
-            if "value" not in result.keys():
-                raise Exception("Result is wrong for request "+request)
-            if len(result["value"]) > 1:
-                report.write(work_odata + " has "+str(len(result["value"]))+" value while only one expected\n")
-            if len(result["value"]) == 0 :
-                report.write(work_odata + " has NO value while only one expected\n")
+
+
         report.write("##### Report end ########\n")
 
 

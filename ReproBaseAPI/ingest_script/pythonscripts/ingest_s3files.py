@@ -137,7 +137,7 @@ def main():
             if "ProductLevels('L2')" in product_levels:
                 template["Baseline"] = "06.13"
             elif "ProductLevels('L1')" in product_levels:
-                template["Baseline"] = "06.11"
+                template["Baseline"] = "06.08"
             else:
                 raise Exception("Unknown product level for "+filename)
             if "S3A" in filename:
