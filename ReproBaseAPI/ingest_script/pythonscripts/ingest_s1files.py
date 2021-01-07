@@ -211,6 +211,8 @@ def main():
             shortname = dic["ShortName"]
         elif "AUX_RESORB" in filename:
             print("AUX_RESORB file detected")
+            print("AUX_RESORB out of scope")
+            continue
             filetype_str = "AUX_RESORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")

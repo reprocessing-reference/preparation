@@ -412,7 +412,10 @@ def treatOneDict(dict_file, input, output):
                         nt_file_creation = datetime.datetime.strptime(fofo[1]["CreationDate"], odata_datetime_format)
                         nt_file_start = datetime.datetime.strptime(fofo[1]["ValidityStart"], odata_datetime_format)
                     dt_sensing_start = fifi[1]["ValidityStart"]
-                    dt_sensing_stop = fofo[1]["ValidityStart"]
+                    if nt_file_stop <= dt_file_stop:
+                        dt_sensing_stop = fofo[1]["ValidityStart"]
+                    else:
+                        dt_sensing_stop = fifi[1]["ValidityStop"]
                     print("Sensing validity for file : " + fifi[0] + " : " + dt_sensing_start + " : " + dt_sensing_stop)
                     fifi[1]["SensingTimeApplicationStart"] = dt_sensing_start
                     fifi[1]["SensingTimeApplicationStop"] = dt_sensing_stop
