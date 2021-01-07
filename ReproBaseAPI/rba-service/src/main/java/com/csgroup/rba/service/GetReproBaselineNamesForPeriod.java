@@ -121,6 +121,16 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     		queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
         	queryParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
     	}
+    	else if (hasSensingStart)
+    	{
+    		if (firstWhere) {
+    			query_string = query_string.concat("WHERE ");
+    			firstWhere = false;
+    		}
+    		query_string = query_string.concat("e1.SensingTimeApplicationStart <= :e1SensingTimeApplicationStart "
+    				+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart ");
+    		queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );
+    	}
     	if (hasUnit)
     	{
     		if (firstWhere) {

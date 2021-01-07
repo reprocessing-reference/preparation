@@ -466,7 +466,7 @@ def treatOneDictERRMAT(dict_file, input, output):
         dt_sensing_start_last = l_sorted[-1][1]["ValidityStart"]
         dt_sensing_stop_last = l_sorted[-1][1]["ValidityStop"]
         print("Sensing validity for last file : " + l_sorted[-1][
-            0] + " : " + dt_sensing_start_last + " : " + dt_sensing_stop_last)
+            0] + " : " + dt_sensing_stop_last + " : " + "2100-01-01T00:00:00.000000Z")
         l_sorted[-1][1]["SensingTimeApplicationStart"] = dt_sensing_stop_last
         l_sorted[-1][1]["SensingTimeApplicationStop"] = "2100-01-01T00:00:00.000000Z"
         if isTheLatest(l_sorted[-1], len(l_sorted) - 1, l_sorted):
@@ -573,7 +573,9 @@ def main():
                     or k == "AuxTypes('SR_1_CA1SAX')"\
                     or k == "AuxTypes('SR_1_CA2CAX')"\
                     or k == "AuxTypes('SR_1_CA2KAX')" \
-                    or k == "AuxTypes('SR_2_POL_AX')" :
+                    or k == "AuxTypes('SR_1_CA2KAX')" \
+                    or k == "AuxTypes('SR_2_POL_AX')" \
+                    or k == "AuxTypes('SR_1_USO_AX')" :
                 treatOneDictERRMAT(dict_sensor["X"], args.input, args.output)
                 treatOneDictERRMAT(dict_sensor["A"], args.input, args.output)
                 treatOneDictERRMAT(dict_sensor["B"], args.input, args.output)

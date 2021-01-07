@@ -58,9 +58,7 @@ public class EntityServiceRegistar {
         add(Rule.class);
         add(ProductLevel.class);
         add(ProductType.class);
-        add(TimeValidity.class);
-        add(GetReproBaselineForSensing.class);
-        add(GetReproBaselineForSensingImport.class);
+        add(TimeValidity.class);        
         add(GetReproBaselineForPeriod.class);
         add(GetReproBaselineForPeriodImport.class);
         add(GetReproBaselineNamesForPeriod.class);
