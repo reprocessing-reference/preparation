@@ -98,7 +98,7 @@ def main():
                     break
                 idx = idx + 1
             try:
-                work_dt = work_dt + datetime.timedelta(minutes=int(args.step))
+                work_dt = work_dt + datetime.timedelta(hours=int(args.step))
             except OverflowError as e:
                 work_dt = stop_dt
         report.write("#### Testing steps stop ####\n")

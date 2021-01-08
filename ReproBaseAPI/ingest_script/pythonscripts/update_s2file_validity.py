@@ -9,6 +9,8 @@ import uuid
 import shutil
 from FileUtils import parse_all_as_dict
 
+DEBUG=False
+
 time_dependency_dict = {
 "AUX_ECMWFD" : "ValidityPeriod",
 "R2ABCA" : "ValidityPeriod",
@@ -372,11 +374,13 @@ def treatOneDict(dict_file, input, output):
             dict_band[s[1]["Band"]].append(s)
     for band, files in dict_band.items():
         if len(files) == 1:
-            print("only one file for band : " + band)
-            print("not updating : " + files[0][0])
+            if DEBUG:
+                print("only one file for band : " + band)
+                print("not updating : " + files[0][0])
             shutil.copyfile(os.path.join(input, files[0][0]), os.path.join(output, files[0][0]))
             continue
-        print("Band " + band)
+        if DEBUG:
+            print("Band " + band)
         found = False
         for k, v in time_dependency_dict.items():
             if k in files[0][1]['ShortName']:
@@ -388,12 +392,14 @@ def treatOneDict(dict_file, input, output):
         if time_validity == "AnyTime":
             l_sorted = sorted(files, key=lambda x: datetime.datetime.strptime(x[1]["CreationDate"],
                                                                               odata_datetime_format))
-            print("Only writing : " + l_sorted[-1][0])
+            if DEBUG:
+                print("Only writing : " + l_sorted[-1][0])
             shutil.copyfile(os.path.join(input, l_sorted[-1][0]), os.path.join(output, l_sorted[-1][0]))
         else:
             l_sorted = sorted(files,
                               key=lambda x: datetime.datetime.strptime(x[1]["ValidityStart"], odata_datetime_format))
-            print(len(l_sorted))
+            if DEBUG:
+                print(len(l_sorted))
             for idx in range(len(l_sorted) - 1):
                 fifi = l_sorted[idx]
                 dt_file_stop = datetime.datetime.strptime(fifi[1]["ValidityStop"], odata_datetime_format)
@@ -412,11 +418,12 @@ def treatOneDict(dict_file, input, output):
                         nt_file_creation = datetime.datetime.strptime(fofo[1]["CreationDate"], odata_datetime_format)
                         nt_file_start = datetime.datetime.strptime(fofo[1]["ValidityStart"], odata_datetime_format)
                     dt_sensing_start = fifi[1]["ValidityStart"]
-                    if nt_file_stop <= dt_file_stop:
+                    if nt_file_start <= dt_file_stop:
                         dt_sensing_stop = fofo[1]["ValidityStart"]
                     else:
                         dt_sensing_stop = fifi[1]["ValidityStop"]
-                    print("Sensing validity for file : " + fifi[0] + " : " + dt_sensing_start + " : " + dt_sensing_stop)
+                    if DEBUG:
+                        print("Sensing validity for file : " + fifi[0] + " : " + dt_sensing_start + " : " + dt_sensing_stop)
                     fifi[1]["SensingTimeApplicationStart"] = dt_sensing_start
                     fifi[1]["SensingTimeApplicationStop"] = dt_sensing_stop
                     # Write down
@@ -425,7 +432,8 @@ def treatOneDict(dict_file, input, output):
             if isTheLatest(l_sorted[-1], len(l_sorted) - 1, l_sorted):
                 dt_sensing_start_last = l_sorted[-1][1]["ValidityStart"]
                 dt_sensing_stop_last = l_sorted[-1][1]["ValidityStop"]
-                print("Sensing validity for last file : " + l_sorted[-1][
+                if DEBUG:
+                    print("Sensing validity for last file : " + l_sorted[-1][
                     0] + " : " + dt_sensing_start_last + " : " + dt_sensing_stop_last)
                 l_sorted[-1][1]["SensingTimeApplicationStart"] = dt_sensing_start_last
                 l_sorted[-1][1]["SensingTimeApplicationStop"] = dt_sensing_stop_last
@@ -443,11 +451,13 @@ def treatOneDictERRMAT(dict_file, input, output):
             dict_band[s[1]["Band"]].append(s)
     for band, files in dict_band.items():
         if len(files) == 1:
-            print("only one file for band : " + band)
-            print("not updating : " + files[0][0])
+            if DEBUG:
+                print("only one file for band : " + band)
+                print("not updating : " + files[0][0])
             shutil.copyfile(os.path.join(input, files[0][0]), os.path.join(output, files[0][0]))
             continue
-        print("Band " + band)
+        if DEBUG:
+            print("Band " + band)
         time_validity = "ValidityPeriod"
         l_sorted = sorted(files,
                           key=lambda x: datetime.datetime.strptime(x[1]["ValidityStop"], odata_datetime_format))
@@ -468,7 +478,8 @@ def treatOneDictERRMAT(dict_file, input, output):
                     json.dump(fifi[1], json_file)
         dt_sensing_start_last = l_sorted[-1][1]["ValidityStart"]
         dt_sensing_stop_last = l_sorted[-1][1]["ValidityStop"]
-        print("Sensing validity for last file : " + l_sorted[-1][
+        if DEBUG:
+            print("Sensing validity for last file : " + l_sorted[-1][
             0] + " : " + dt_sensing_stop_last + " : " + "2100-01-01T00:00:00.000000Z")
         l_sorted[-1][1]["SensingTimeApplicationStart"] = dt_sensing_stop_last
         l_sorted[-1][1]["SensingTimeApplicationStop"] = "2100-01-01T00:00:00.000000Z"
@@ -488,9 +499,11 @@ def isTheLatest(file, idx, sorted_list):
         nt_file_creation = datetime.datetime.strptime(sorted_list[tmp_idx][1]["CreationDate"], odata_datetime_format)
         nt_file_start = datetime.datetime.strptime(sorted_list[tmp_idx][1]["ValidityStart"], odata_datetime_format)
         if nt_file_start == dt_file_start and nt_file_stop == dt_file_stop:
-            print("Two files have same properties : " + file[0] + " : " + sorted_list[tmp_idx][0])
+            if DEBUG:
+                print("Two files have same properties : " + file[0] + " : " + sorted_list[tmp_idx][0])
             if dt_file_creation < nt_file_creation:
-                print("Not the latest : " + file[0])
+                if DEBUG:
+                    print("Not the latest : " + file[0])
                 return False
         else:
             break
@@ -501,15 +514,18 @@ def isTheLatest(file, idx, sorted_list):
         nt_file_creation = datetime.datetime.strptime(sorted_list[tmp_idx][1]["CreationDate"], odata_datetime_format)
         nt_file_start = datetime.datetime.strptime(sorted_list[tmp_idx][1]["ValidityStart"], odata_datetime_format)
         if nt_file_start == dt_file_start and nt_file_stop == dt_file_stop:
-            print("Two files have same properties : " + file[0] + " : " + sorted_list[tmp_idx][0])
+            if DEBUG:
+                print("Two files have same properties : " + file[0] + " : " + sorted_list[tmp_idx][0])
             if dt_file_creation < nt_file_creation:
-                print("Not the latest : "+file[0])
+                if DEBUG:
+                    print("Not the latest : "+file[0])
                 return False
         else:
             break
         tmp_idx = tmp_idx + 1
     #No one to prove the contrary
-    print("Latest : " + file[0])
+    if DEBUG:
+        print("Latest : " + file[0])
     return True
 
 
@@ -535,7 +551,8 @@ def main():
     idx = 1
     for (dirpath, dirnames, filenames) in os.walk(args.input):
         for filename in filenames:
-            print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
+            if DEBUG:
+                print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
             auxfile = None
             with open(os.path.join(args.input, filename)) as f:
                 auxfile = json.load(f)
@@ -547,10 +564,13 @@ def main():
             idx = idx + 1
 
     for k, v in dict_type_file.items():
-        print("Treating file type : " + k)
+        if DEBUG:
+            print("Treating file type : " + k)
         if len(v) == 1:
-            print("only one file for type : "+k)
-            print("not updating : " + v[0][0])
+            if DEBUG:
+                print("only one file for type : "+k)
+            if DEBUG:
+                print("not updating : " + v[0][0])
             shutil.copyfile(os.path.join(args.input, v[0][0]), os.path.join(args.output, v[0][0]))
         else:
             dict_sensor = { "A" : [],
