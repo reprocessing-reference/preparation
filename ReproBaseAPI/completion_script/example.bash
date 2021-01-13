@@ -4,15 +4,15 @@ mkdir reports
 python verify_completion.py -o reports/reportS2ECMWFD.txt -s 3 -t 'ECMWFD' -m 'S2' &
 python verify_completion.py -o reports/reportS2UT1UTC.txt -s 168 -t 'AUX_UT1UTC' -m 'S2' &
 #not yet available
-#python verify_completion.py -o reports/reportS2ARESORB.txt -d 20140101T010000 -e 20191018T110000 -s 24 -t 'AUX_RESORB' -m 'S2A'
-#python verify_completion.py -o reports/reportS2ARESORB.txt -d 20140101T010000 -e 20191018T110000 -s 24 -t 'AUX_RESORB' -m 'S2B'
+#python verify_completion.py -o reports/reportS2ARESORB.txt -s 24 -t 'AUX_RESORB' -m 'S2A'
+#python verify_completion.py -o reports/reportS2ARESORB.txt -s 24 -t 'AUX_RESORB' -m 'S2B'
 
 #S1
 python verify_completion.py -o reports/reportS1WND.txt -s 3 -t 'AUX_WND' -m 'S1' &
 python verify_completion.py -o reports/reportS1WAV.txt -s 3 -t 'AUX_WAV' -m 'S1' &
 python verify_completion.py -o reports/reportS1ICE.txt -s 24 -t 'AUX_ICE' -m 'S1' &
-python verify_completion.py -o reports/reportS1APOEORB.txt -s 1 -t 'AUX_POEORB' -m 'S1A' &
-python verify_completion.py -o reports/reportS1BPOEORB.txt -s 1 -t 'AUX_POEORB' -m 'S1B' &
+python verify_completion.py -o reports/reportS1APOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1A' &
+python verify_completion.py -o reports/reportS1BPOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1B' &
 
 #S3
 python verify_completion.py -o reports/reportS3A_AX___FRO_AX.txt -s 24 -t 'AX___FRO_AX' -m 'S3A' &

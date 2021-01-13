@@ -10,6 +10,8 @@ import uuid
 
 from FileUtils import parse_all_as_dict
 
+DEBUG=False
+
 def md5(fname):
     hash_md5 = hashlib.md5()
     with open(fname, "rb") as f:
@@ -52,7 +54,7 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductTypes@odata.bind"]))
+                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -61,12 +63,17 @@ def main():
     idx = 1
     for (dirpath, dirnames, filenames) in os.walk(args.input):
         for filename in filenames:
-            print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
+            if DEBUG:
+                print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
             template = None
             update = False
             if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
                 with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
-                    template = json.load(f)
+                    try:
+                        template = json.load(f)
+                    except Exception as e:
+                        raise Exception(
+                            "Could not open : " + os.path.join(args.output, os.path.splitext(filename)[0] + ".json"))
                 update = True
             else:
                 template = copy.copy(template_base)

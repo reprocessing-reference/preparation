@@ -80,6 +80,8 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     	JPADataSource dataSource = (JPADataSource) dataSourceFactory.getDataSource(requestContext, "OData.RBA.AuxFile");
     	boolean hasMission = true; 
     	boolean hasUnit = true;
+    	boolean isS3SRAL = false;
+    	boolean isS3 = false;
     	boolean hasSensingStart = true;
     	boolean hasSensingStop = true;
     	boolean hasProductType = true;
@@ -87,6 +89,15 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     	if (Mission == null)
     	{
     		hasMission = false;
+    	} else {
+    		if (Mission.equals("S3SRAL"))
+    		{
+    			isS3SRAL = true;
+    		}
+    		if (Mission.startsWith("S3") && !Mission.equals("S3ALL"))
+    		{
+    			isS3 = true;
+    		}
     	}
     	if (Unit == null)
     	{
@@ -106,7 +117,87 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     	}
     	Map<String, Object> queryParams = new HashMap<String,Object>();
     	EntityDataModel entityDataModel = requestContext.getEntityDataModel();
-    	boolean firstWhere = true;
+    	String query_string = getQuery(hasMission, Mission, hasUnit,Unit,hasSensingStart, hasSensingStop, hasProductType,
+				queryParams);    	
+    	
+		JPAQuery query = new JPAQuery(query_string, queryParams);
+		List<Object> result = dataSource.executeQueryListResult(query);
+        LOG.info("Found: {} items for query: {}", result.size(), query);
+        
+        if (isS3SRAL) {
+        	Map<String, Object> queryS3MWRParams = new HashMap<String,Object>();
+        	String query_S3MWR_string = getQuery(true, "S3MWR" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType,
+        			queryS3MWRParams);        	
+			JPAQuery query_S3MWR = new JPAQuery(query_S3MWR_string, queryS3MWRParams);
+			List<Object> result_S3MWR = dataSource.executeQueryListResult(query_S3MWR);
+	        LOG.info("Found: {} items for query: {}", result_S3MWR.size(), query_S3MWR);
+	        //Concatenate both results
+	        result.addAll(result_S3MWR);        
+        }
+        if (isS3) {
+        	Map<String, Object> queryS3ALLParams = new HashMap<String,Object>();
+        	String query_S3ALL_string = getQuery(true, "S3ALL" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType,
+        			queryS3ALLParams);        	
+			JPAQuery query_S3ALL = new JPAQuery(query_S3ALL_string, queryS3ALLParams);
+			List<Object> result_S3ALL = dataSource.executeQueryListResult(query_S3ALL);
+	        LOG.info("Found: {} items for query: {}", result_S3ALL.size(), query_S3ALL);
+	        //Concatenate both results
+	        result.addAll(result_S3ALL);        
+        }
+
+        
+        if (hasUnit) {
+        	Map<String, Object> queryAllParams = new HashMap<String,Object>();
+        	String query_all_string = getQuery(hasMission, Mission, true, "X",hasSensingStart, hasSensingStop, hasProductType,
+        			queryAllParams);     
+			JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
+			List<Object> result_all = dataSource.executeQueryListResult(query_all);
+	        LOG.info("Found: {} items for query: {}", result_all.size(), query_all);
+	        //Concatenate both results
+	        result.addAll(result_all);  
+	        if (isS3SRAL) {
+	        	Map<String, Object> queryS3MWRXParams = new HashMap<String,Object>();
+	        	String query_S3MWRX_string = getQuery(true, "S3MWR" , true, "X",hasSensingStart, hasSensingStop, hasProductType,
+	        			queryS3MWRXParams);        	
+				JPAQuery query_S3MWRX = new JPAQuery(query_S3MWRX_string, queryS3MWRXParams);
+				List<Object> result_S3MWRX = dataSource.executeQueryListResult(query_S3MWRX);
+		        LOG.info("Found: {} items for query: {}", result_S3MWRX.size(), query_S3MWRX);
+		        //Concatenate both results
+		        result.addAll(result_S3MWRX);        
+	        }
+	        if (isS3) {
+	        	Map<String, Object> queryS3ALLXParams = new HashMap<String,Object>();
+	        	String query_S3ALLX_string = getQuery(true, "S3ALL" , true, "X",hasSensingStart, hasSensingStop, hasProductType,
+	        			queryS3ALLXParams);        	
+				JPAQuery query_S3ALLX = new JPAQuery(query_S3ALLX_string, queryS3ALLXParams);
+				List<Object> result_S3ALLX = dataSource.executeQueryListResult(query_S3ALLX);
+		        LOG.info("Found: {} items for query: {}", result_S3ALLX.size(), query_S3ALLX);
+		        //Concatenate both results
+		        result.addAll(result_S3ALLX);        
+	        }
+        }
+        
+        //Convert and sort
+        QueryResult q_result = from(dataSource.convert(entityDataModel, "OData.RBA.AuxFile", result));
+        List<Object> obj_result = (List<Object>)q_result.getData();
+        List<AuxFile> aux_result = Lists.newArrayList();
+        for (Object obj : obj_result)
+        {
+        	if (obj instanceof AuxFile)
+        	{
+        		aux_result.add((AuxFile)obj);
+        	}
+        }
+       
+		Stream<AuxFile> tmp_aux = aux_result.stream().distinct();
+		return tmp_aux.map(w -> w.getFullName()).collect(Collectors.toList());
+    	
+    } 
+    
+    
+    private String getQuery(boolean hasMission, String mission, boolean hasUnit, String unit, boolean hasSensingStart, boolean hasSensingStop,
+			boolean hasProductType, Map<String, Object> queryParams) {
+		boolean firstWhere = true;
     	String query_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
     			+ "JOIN e1.AuxType e2 "
     			+ "JOIN e2.ProductTypes e3 ";    			
@@ -120,7 +211,7 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     				+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart ");
     		queryParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
         	queryParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
-    	}
+    	} 
     	else if (hasSensingStart)
     	{
     		if (firstWhere) {
@@ -140,7 +231,7 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     			query_string = query_string.concat("AND ");
     		}
     		query_string = query_string.concat("e1.Unit = :e1Unit ");
-    		queryParams.put("e1Unit",Unit );			
+    		queryParams.put("e1Unit",unit );			
     		
     	}
     	if (hasMission)
@@ -152,7 +243,7 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     			query_string = query_string.concat("AND ");
     		}
     		query_string = query_string.concat("e2.Mission = :e2Mission ");
-    		queryParams.put("e2Mission",Mission );	    		
+    		queryParams.put("e2Mission",mission );	    		
     	}
     	if (hasProductType)
     	{
@@ -165,84 +256,6 @@ public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
     		query_string = query_string.concat("e3.Type = :e3Type ");
     		queryParams.put("e3Type",ProductType);	    		
     	}
-    	
-    	
-		JPAQuery query = new JPAQuery(query_string, queryParams);
-		List<Object> result = dataSource.executeQueryListResult(query);
-        LOG.info("Found: {} items for query: {}", result.size(), query);
-        
-        if (hasUnit) {
-        	Map<String, Object> queryAllParams = new HashMap<String,Object>();
-        	boolean firstWhereAll = true;
-        	String query_all_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
-        			+ "JOIN e1.AuxType e2 "
-        			+ "JOIN e2.ProductTypes e3 ";    			
-        	if (hasSensingStart && hasSensingStop)
-        	{
-        		if (firstWhereAll) {
-        			query_all_string = query_all_string.concat("WHERE ");
-        			firstWhereAll = false;
-        		}
-        		query_all_string = query_all_string.concat("e1.SensingTimeApplicationStart < :e1SensingTimeApplicationStop "
-        				+ "AND e1.SensingTimeApplicationStop > :e1SensingTimeApplicationStart ");
-        		queryAllParams.put("e1SensingTimeApplicationStart",SensingTimeStart );    	
-        		queryAllParams.put("e1SensingTimeApplicationStop",SensingTimeStop );
-        	}
-        	if (hasUnit)
-        	{
-        		if (firstWhereAll) {
-        			query_all_string = query_all_string.concat("WHERE ");
-        			firstWhereAll = false;
-        		} else {
-        			query_all_string = query_all_string.concat("AND ");
-        		}
-        		query_all_string = query_all_string.concat("e1.Unit = :e1Unit ");
-        		queryAllParams.put("e1Unit","X" );			
-        		
-        	}
-        	if (hasMission)
-        	{
-        		if (firstWhereAll) {
-        			query_all_string = query_all_string.concat("WHERE ");
-        			firstWhereAll = false;
-        		} else {
-        			query_all_string = query_all_string.concat("AND ");
-        		}
-        		query_all_string = query_all_string.concat("e2.Mission = :e2Mission ");
-        		queryAllParams.put("e2Mission",Mission );	    		
-        	}
-        	if (hasProductType)
-        	{
-        		if (firstWhereAll) {
-        			query_all_string = query_all_string.concat("WHERE ");
-        			firstWhereAll = false;
-        		} else {
-        			query_all_string = query_all_string.concat("AND ");
-        		}
-        		query_all_string = query_all_string.concat("e3.Type = :e3Type ");
-        		queryAllParams.put("e3Type",ProductType);	    		
-        	}
-			JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
-			List<Object> result_all = dataSource.executeQueryListResult(query_all);
-	        LOG.info("Found: {} items for query: {}", result_all.size(), query_all);
-	        //Concatenate both results
-	        result.addAll(result_all);        
-        }
-        
-        //Convert and sort
-        QueryResult q_result = from(dataSource.convert(entityDataModel, "OData.RBA.AuxFile", result));
-        List<Object> obj_result = (List<Object>)q_result.getData();
-        List<AuxFile> aux_result = Lists.newArrayList();
-        for (Object obj : obj_result)
-        {
-        	if (obj instanceof AuxFile)
-        	{
-        		aux_result.add((AuxFile)obj);
-        	}
-        }
-       
-		Stream<AuxFile> tmp_aux = aux_result.stream().distinct();
-		return tmp_aux.map(w -> w.getFullName()).collect(Collectors.toList());
-    	
-    }    
+		return query_string;
+	}
 }

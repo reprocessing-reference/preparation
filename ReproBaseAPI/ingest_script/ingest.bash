@@ -1,5 +1,5 @@
 url="http://reprocessing-preparation.ml:8080/reprocessing.svc"
-pass="VC&&v*9rS4cFVSMW"
+pass="%HEl$1698OgDa%L"
 base_path="/home/beon/AUXIP/Code/"
 #rm -r ${base_path}/json/file_types
 #rm -r ${base_path}/json/*files
@@ -8,9 +8,9 @@ base_path="/home/beon/AUXIP/Code/"
 #mkdir ${base_path}/json/s1_files
 #mkdir ${base_path}/json/s2_files
 #mkdir ${base_path}/json/s3_files
-#mkdir ${base_path}/json/s1_files_updated
-#mkdir ${base_path}/json/s2_files_updated
-#mkdir ${base_path}/json/s3_files_updated
+mkdir ${base_path}/json/s1_files_updated
+mkdir ${base_path}/json/s2_files_updated
+mkdir ${base_path}/json/s3_files_updated
 
 python pythonscripts/ingest_filetypes.py -i RRPP_all_AUX.csv -t ../rba-service/src/test/resources/auxfiletype.json -o ${base_path}/json/file_types/
 

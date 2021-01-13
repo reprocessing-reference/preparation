@@ -7,8 +7,11 @@ import os
 import re
 import uuid
 
+DEBUG=False
+
 def parse_filename_wnd(the_file_name):
-    print(the_file_name)
+    if DEBUG:
+        print(the_file_name)
     p = re.compile('(S1A|S1B|S1_)_([A-Z|0-9|_]{7})_V([A-Z|0-9|_]{15})_G([A-Z|0-9|_]{15}).*')
     ama = p.match(the_file_name)
     if not ama:
@@ -23,7 +26,8 @@ def parse_filename_wnd(the_file_name):
     return result
 
 def parse_filename_orb(the_file_name):
-    print(the_file_name)
+    if DEBUG:
+        print(the_file_name)
     p = re.compile('(S1A|S1B|S1_)_([A-Z|0-9]{4})_([A-Z|0-9|_]{4})([A-Z|0-9|_]{6})_([A-Z|0-9|_]{4})_([A-Z|0-9|_]{15})_V([A-Z|0-9|_]{15})_([A-Z|0-9|_]{15}).*')
     ama = p.match(the_file_name)
     if not ama:
@@ -64,7 +68,10 @@ def main():
     args = parser.parse_args()
     template_base = None
     with open(args.template) as f:
-        template_base = json.load(f)
+        try:
+            template_base = json.load(f)
+        except Exception as e:
+            raise Exception("Could not open : "+args.template)
 
     # band_dict = {}
     # for (dirpath, dirnames, filenames) in os.walk(args.bands):
@@ -95,12 +102,16 @@ def main():
     idx = 1
     for filenames in lines:
         filename = os.path.basename(filenames)
-        print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
+        if DEBUG:
+            print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
         template = None
         update = False
         if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
             with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
-                template = json.load(f)
+                try:
+                    template = json.load(f)
+                except Exception as e:
+                    raise Exception("Could not open : " + os.path.join(args.output, os.path.splitext(filename)[0] + ".json"))
             update = True
         else:
             template = copy.copy(template_base)
@@ -111,7 +122,8 @@ def main():
         else:
             template["Unit"] = "X"
         if "AUX_WND" in filename:
-            print("AUX_WND file detected")
+            if DEBUG:
+                print("AUX_WND file detected")
             filetype_str = "S1__AUX_WND"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -122,7 +134,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_WAV" in filename:
-            print("AUX_WAVE file detected")
+            if DEBUG:
+                print("AUX_WAVE file detected")
             filetype_str = "S1__AUX_WAV"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -133,7 +146,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_ICE" in filename:
-            print("AUX_ICE file detected")
+            if DEBUG:
+                print("AUX_ICE file detected")
             filetype_str = "S1__AUX_ICE"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -144,7 +158,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_PP1" in filename:
-            print("AUX_PP1 file detected")
+            if DEBUG:
+                print("AUX_PP1 file detected")
             filetype_str = "AUX_PP1"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -155,7 +170,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_PP2" in filename:
-            print("AUX_PP2 file detected")
+            if DEBUG:
+                print("AUX_PP2 file detected")
             filetype_str = "AUX_PP2"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -166,7 +182,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_CAL" in filename:
-            print("AUX_CAL file detected")
+            if DEBUG:
+                print("AUX_CAL file detected")
             filetype_str = "AUX_CAL"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -177,7 +194,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_INS" in filename:
-            print("AUX_INS file detected")
+            if DEBUG:
+                print("AUX_INS file detected")
             filetype_str = "AUX_INS"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -188,7 +206,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_SCS" in filename:
-            print("AUX_SCS file detected")
+            if DEBUG:
+                print("AUX_SCS file detected")
             filetype_str = "AUX_SCS"
             dic = parse_filename_wnd(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -199,7 +218,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_PREORB" in filename:
-            print("AUX_PREORB file detected")
+            if DEBUG:
+                print("AUX_PREORB file detected")
             filetype_str = "AUX_PREORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -210,8 +230,10 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_RESORB" in filename:
-            print("AUX_RESORB file detected")
-            print("AUX_RESORB out of scope")
+            if DEBUG:
+                print("AUX_RESORB file detected")
+            if DEBUG:
+                print("AUX_RESORB out of scope")
             continue
             filetype_str = "AUX_RESORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
@@ -223,7 +245,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_POEORB" in filename:
-            print("AUX_PREORB file detected")
+            if DEBUG:
+                print("AUX_PREORB file detected")
             filetype_str = "AUX_POEORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -234,7 +257,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AMH_ERRMAT" in filename:
-            print("AMH_ERRMAT file detected")
+            if DEBUG:
+                print("AMH_ERRMAT file detected")
             filetype_str = "AMH_ERRMAT_MPC"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -245,7 +269,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AMV_ERRMAT" in filename:
-            print("AMV_ERRMAT file detected")
+            if DEBUG:
+                print("AMV_ERRMAT file detected")
             filetype_str = "AMV_ERRMAT_MPC"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
@@ -256,7 +281,8 @@ def main():
             crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
             shortname = dic["ShortName"]
         elif "AUX_RESATT" in filename:
-            print("AUX_RESATT file detected")
+            if DEBUG:
+                print("AUX_RESATT file detected")
             filetype_str = "AUX_RESATT"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])
             start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
