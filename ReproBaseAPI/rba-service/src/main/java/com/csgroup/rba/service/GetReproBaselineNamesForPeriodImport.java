@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author besquis
  */
-@EdmFunctionImport(function = "GetReproBaselineListForSensingUnBound", includeInServiceDocument = true,
-name = "GetReproBaselineListForSensing", namespace = "OData.RBA")
-public class GetReproBaselineForSensingImport {
-	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineForSensingImport.class);
+@EdmFunctionImport(function = "GetReproBaselineNamesForPeriodUnBound", includeInServiceDocument = true,
+name = "GetReproBaselineNamesForPeriod", namespace = "OData.RBA")
+public class GetReproBaselineNamesForPeriodImport {
+	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineNamesForPeriodImport.class);
 
 	@EdmParameter
     private String Mission;
@@ -39,7 +39,10 @@ public class GetReproBaselineForSensingImport {
     private String Unit;
 
     @EdmParameter
-    private ZonedDateTime SensingTime;
+    private ZonedDateTime SensingTimeStart;
+    
+    @EdmParameter
+    private ZonedDateTime SensingTimeStop;
     
     @EdmParameter
     private String ProductType;
@@ -50,14 +53,22 @@ public class GetReproBaselineForSensingImport {
 
 	public void setUnit(String unit) {
 		Unit = unit;
+	}	
+
+	public ZonedDateTime getSensingTimeStart() {
+		return SensingTimeStart;
 	}
 
-	public ZonedDateTime getSensingTime() {
-		return SensingTime;
+	public void setSensingTimeStart(ZonedDateTime sensingTimeStart) {
+		SensingTimeStart = sensingTimeStart;
 	}
 
-	public void setSensingTime(ZonedDateTime sensingTime) {
-		SensingTime = sensingTime;
+	public ZonedDateTime getSensingTimeStop() {
+		return SensingTimeStop;
+	}
+
+	public void setSensingTimeStop(ZonedDateTime sensingTimeStop) {
+		SensingTimeStop = sensingTimeStop;
 	}
 
 	public String getProductType() {

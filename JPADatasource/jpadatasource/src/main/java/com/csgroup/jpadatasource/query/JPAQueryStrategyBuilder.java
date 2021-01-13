@@ -147,7 +147,7 @@ public final class JPAQueryStrategyBuilder {
         JoinString joinString = new JoinString(
                 operation.isOuterJoin() ? JoinString.JoinType.OUTER : JoinString.JoinType.INNER,
                 String.format("%s.%s %s", leftAlias,
-                        getJPAPropertyName(leftEntityType, operation.getJoinPropertyName()), right.getFromAlias()));
+                        getJPAPropertyName(leftEntityType, operation.getJoinPropertyName(),entityDataModel), right.getFromAlias()));
 
         String leftWhere = left.getWhereClause();
         String rightWhere = right.getWhereClause();
@@ -216,7 +216,7 @@ public final class JPAQueryStrategyBuilder {
         Map<String, Object> params = new HashMap<>();
         for (Map.Entry<String, Object> entry : operation.getKeyAsJava().entrySet()) {
         	EntityType entityType = getUnderlyingEntityType(operation);
-        	String jpaType = getJPAPropertyName(entityType, entry.getKey());        	
+        	String jpaType = getJPAPropertyName(entityType, entry.getKey(),entityDataModel);        	
         	String paramName = alias + jpaType;
             whereClauseElements.add(alias + "." + jpaType + " = :" + paramName);
             params.put(paramName, entry.getValue());
@@ -230,7 +230,8 @@ public final class JPAQueryStrategyBuilder {
         JPAWhereStrategyBuilder whereStrategyBuilder =
             new JPAWhereStrategyBuilder(
                 getUnderlyingEntityType(operation.getSource()),
-                builder);
+                builder,
+                entityDataModel);
         whereStrategyBuilder.setParamCount(paramCount).build(operation.getCriteria());
         this.setParamCount(whereStrategyBuilder.getParamCount());
         return builder;
@@ -259,7 +260,7 @@ public final class JPAQueryStrategyBuilder {
 
     private JPAQueryBuilder addExpandProperty(JPAQueryBuilder builder, String propertyName, String alias,
                                               EntityType entityType) {
-        return builder.addExpandField(alias + "." + getJPAPropertyName(entityType, propertyName));
+        return builder.addExpandField(alias + "." + getJPAPropertyName(entityType, propertyName,entityDataModel));
     }
 
     private JPAQueryBuilder buildFromOrderBy(OrderByOperation operation) throws ODataException {
@@ -270,7 +271,7 @@ public final class JPAQueryStrategyBuilder {
         String alias = builder.getFromAlias();
 
         for (OrderByProperty orderByProperty : operation.getOrderByPropertiesAsJava()) {
-            builder.addOrderByField(alias + "." + getJPAPropertyName(entityType, orderByProperty.getPropertyName()) +
+            builder.addOrderByField(alias + "." + getJPAPropertyName(entityType, orderByProperty.getPropertyName(),entityDataModel) +
                     " " + orderByProperty.getDirection().toString());
         }
 
@@ -285,7 +286,7 @@ public final class JPAQueryStrategyBuilder {
         String alias = builder.getFromAlias();
 
         for (String propertyName : operation.getPropertyNamesAsJava()) {
-            builder.addToSelectList(alias + "." + getJPAPropertyName(entityType, propertyName));
+            builder.addToSelectList(alias + "." + getJPAPropertyName(entityType, propertyName,entityDataModel));
         }
 
         return builder;

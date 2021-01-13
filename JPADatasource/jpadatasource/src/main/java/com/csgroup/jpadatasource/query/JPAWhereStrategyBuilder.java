@@ -19,6 +19,7 @@ package com.csgroup.jpadatasource.query;
 
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataNotImplementedException;
+import com.sdl.odata.api.edm.model.EntityDataModel;
 import com.sdl.odata.api.edm.model.EntityType;
 import com.sdl.odata.api.processor.query.ArithmeticCriteriaValue;
 import com.sdl.odata.api.processor.query.ComparisonCriteria;
@@ -46,14 +47,17 @@ public class JPAWhereStrategyBuilder {
 
     private static final String PREFIX_PARAM = "value";
 
+    private final EntityDataModel entityDataModel;
+    
     private final EntityType targetEntityType;
 
     private final JPAQueryBuilder jpaQueryBuilder;
 
     private int paramCount = 0;
 
-    public JPAWhereStrategyBuilder(EntityType targetEntityType, JPAQueryBuilder jpaQueryBuilder) {
-        this.targetEntityType = targetEntityType;
+    public JPAWhereStrategyBuilder(EntityType targetEntityType, JPAQueryBuilder jpaQueryBuilder,EntityDataModel entityDataModel) {
+        this.entityDataModel = entityDataModel;
+		this.targetEntityType = targetEntityType;
         this.jpaQueryBuilder = jpaQueryBuilder;
     }
 
@@ -173,8 +177,8 @@ public class JPAWhereStrategyBuilder {
 
     private void buildFromPropertyCriteriaValue(PropertyCriteriaValue value, StringBuilder builder) {
         builder.append(jpaQueryBuilder.getFromAlias());
-        builder.append(".");
-        builder.append(JPAMetadataUtil.getJPAPropertyName(targetEntityType, value.propertyName()));
+        builder.append(".");                
+        builder.append(JPAMetadataUtil.getJPAPropertyName(targetEntityType, value.propertyName(),entityDataModel));
     }
 
     private void buildFromCompositeCriteria(CompositeCriteria criteria, StringBuilder builder) throws ODataException {

@@ -7,8 +7,11 @@ import os
 import re
 import uuid
 
+DEBUG=True
+
 def parse_filename_s3(the_file_name):
-    print(the_file_name)
+    if DEBUG:
+        print(the_file_name)
     p = re.compile('(S3_|S3B|S3A)_([A-Z|0-9|_]{11})_([A-Z|0-9|_]{15})_([A-Z|0-9|_]{15})_([A-Z|0-9|_]{15}).*')
     ama = p.match(the_file_name)
     if not ama:
@@ -56,7 +59,7 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductTypes@odata.bind"]))
+                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -74,12 +77,16 @@ def main():
     idx = 1
     for filenames in lines:
         filename = os.path.basename(filenames)
-        print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
+        if DEBUG:
+            print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
         template = None
         update = False
         if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
             with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
-                template = json.load(f)
+                try:
+                    template = json.load(f)
+                except Exception as e:
+                    raise Exception("Could not open : " + os.path.join(args.output, os.path.splitext(filename)[0] + ".json"))
             update = True
         else:
             template = copy.copy(template_base)
@@ -90,15 +97,9 @@ def main():
         else:
             template["Unit"] = "X"
         dic = parse_filename_s3(os.path.splitext(os.path.splitext(filename)[0])[0])
-        start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
-        stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
-        start_good = datetime.datetime.strftime(start_dt, odata_datetime_format)
-        stop_good = datetime.datetime.strftime(stop_dt, odata_datetime_format)
-        crea_dt = datetime.datetime.strptime(dic['Generation_Date'], "%Y%m%dT%H%M%S")
-        crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
+
         shortname = dic["File_Class"]
         filetype_str = dic["File_Class"]
-
         filetype = None
         mission = None
         product_levels = None
@@ -110,6 +111,20 @@ def main():
                 break
         if filetype is None:
             raise Exception("unknown file type")
+        start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
+        stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
+        if "SR_2_RMO_AX" in filetype:
+            start_dt = start_dt - datetime.timedelta(hours=6)
+            stop_dt = stop_dt + datetime.timedelta(hours=6)
+        start_good = datetime.datetime.strftime(start_dt, odata_datetime_format)
+        stop_good = datetime.datetime.strftime(stop_dt, odata_datetime_format)
+        crea_dt = datetime.datetime.strptime(dic['Generation_Date'], "%Y%m%dT%H%M%S")
+        crea_good = datetime.datetime.strftime(crea_dt, odata_datetime_format)
+
+        if "SR_2_RMO_AX" in filetype and "_ST_" in filename:
+            if DEBUG:
+                print("Skipped : "+filename)
+            continue
         template["AuxType@odata.bind"] = "AuxTypes('" + filetype + "')"
         template["@odata.context"] = "$metadata#AuxFiles"
         if not update:
@@ -137,9 +152,9 @@ def main():
             if "ProductLevels('L2')" in product_levels:
                 template["Baseline"] = "06.13"
             elif "ProductLevels('L1')" in product_levels:
-                template["Baseline"] = "06.11"
+                template["Baseline"] = "06.08"
             else:
-                raise Exception("Unknown product level for "+filename)
+                raise Exception("Unknown product level for "+filename+ " "+mission)
             if "S3A" in filename:
                template["IpfVersion"] = "S3A-2.66"
             elif "S3B" in filename:

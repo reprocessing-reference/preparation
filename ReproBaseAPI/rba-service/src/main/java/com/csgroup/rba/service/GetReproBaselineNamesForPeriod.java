@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -53,10 +54,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author besquis
  */
-@EdmFunction(name = "GetReproBaselineListForPeriodUnBound", namespace = "OData.RBA", isBound = false)
-@EdmReturnType(type = "OData.RBA.AuxFile")
-public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
-	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineForPeriod.class);
+@EdmFunction(name = "GetReproBaselineNamesForPeriodUnBound", namespace = "OData.RBA", isBound = false)
+@EdmReturnType(type = "Collection(Edm.String)")
+public class GetReproBaselineNamesForPeriod implements Operation<List<String>> {
+	private static final Logger LOG = LoggerFactory.getLogger(GetReproBaselineNamesForPeriod.class);
 	
 	@EdmParameter
     private String Mission;
@@ -74,20 +75,20 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     private String ProductType;
     
     @Override
-    public List<AuxFile> doOperation(ODataRequestContext requestContext,
+    public List<String> doOperation(ODataRequestContext requestContext,
                               DataSourceFactory dataSourceFactory) throws ODataDataSourceException {    	
     	JPADataSource dataSource = (JPADataSource) dataSourceFactory.getDataSource(requestContext, "OData.RBA.AuxFile");
     	boolean hasMission = true; 
+    	boolean hasUnit = true;
     	boolean isS3SRAL = false;
     	boolean isS3 = false;
-    	boolean hasUnit = true;
     	boolean hasSensingStart = true;
     	boolean hasSensingStop = true;
     	boolean hasProductType = true;
     	
     	if (Mission == null)
     	{
-    		hasMission = false;    		
+    		hasMission = false;
     	} else {
     		if (Mission.equals("S3SRAL"))
     		{
@@ -114,14 +115,12 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     	{
     		hasProductType = false;
     	}
-    	
     	Map<String, Object> queryParams = new HashMap<String,Object>();
     	EntityDataModel entityDataModel = requestContext.getEntityDataModel();
     	String query_string = getQuery(hasMission, Mission, hasUnit,Unit,hasSensingStart, hasSensingStop, hasProductType,
-				queryParams);
-        
+				queryParams);    	
     	
-    	JPAQuery query = new JPAQuery(query_string, queryParams);
+		JPAQuery query = new JPAQuery(query_string, queryParams);
 		List<Object> result = dataSource.executeQueryListResult(query);
         LOG.info("Found: {} items for query: {}", result.size(), query);
         
@@ -150,12 +149,12 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
         if (hasUnit) {
         	Map<String, Object> queryAllParams = new HashMap<String,Object>();
         	String query_all_string = getQuery(hasMission, Mission, true, "X",hasSensingStart, hasSensingStop, hasProductType,
-        			queryAllParams);        	
+        			queryAllParams);     
 			JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
 			List<Object> result_all = dataSource.executeQueryListResult(query_all);
 	        LOG.info("Found: {} items for query: {}", result_all.size(), query_all);
 	        //Concatenate both results
-	        result.addAll(result_all);
+	        result.addAll(result_all);  
 	        if (isS3SRAL) {
 	        	Map<String, Object> queryS3MWRXParams = new HashMap<String,Object>();
 	        	String query_S3MWRX_string = getQuery(true, "S3MWR" , true, "X",hasSensingStart, hasSensingStop, hasProductType,
@@ -178,8 +177,6 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
 	        }
         }
         
-        
-        
         //Convert and sort
         QueryResult q_result = from(dataSource.convert(entityDataModel, "OData.RBA.AuxFile", result));
         List<Object> obj_result = (List<Object>)q_result.getData();
@@ -192,13 +189,13 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
         	}
         }
        
-		return aux_result.stream()
-			     .distinct()
-			     .collect(Collectors.toList());
+		Stream<AuxFile> tmp_aux = aux_result.stream().distinct();
+		return tmp_aux.map(w -> w.getFullName()).collect(Collectors.toList());
     	
-    }
-
-	private String getQuery(boolean hasMission, String mission, boolean hasUnit, String unit, boolean hasSensingStart, boolean hasSensingStop,
+    } 
+    
+    
+    private String getQuery(boolean hasMission, String mission, boolean hasUnit, String unit, boolean hasSensingStart, boolean hasSensingStop,
 			boolean hasProductType, Map<String, Object> queryParams) {
 		boolean firstWhere = true;
     	String query_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
@@ -260,5 +257,5 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     		queryParams.put("e3Type",ProductType);	    		
     	}
 		return query_string;
-	}    
+	}
 }
