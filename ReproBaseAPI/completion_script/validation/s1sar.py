@@ -9,7 +9,7 @@ s.auth = ('user', '*K7KzTrZWhC2zkc')
 
 mission = "S1SAR"
 
-wb = load_workbook("S1IPF03.31ESRIN_rev_KC.xlsx")
+wb = load_workbook("./data/S1IPF03.31ESRIN_rev_KC.xlsx")
 sheet = wb['S1IPF03.31 New']
 
 periods_dict = {}

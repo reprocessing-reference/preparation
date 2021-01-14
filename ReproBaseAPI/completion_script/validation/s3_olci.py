@@ -8,7 +8,7 @@ s.auth = ('user', '*K7KzTrZWhC2zkc')
 
 mission = "S3OLCI"
 
-wb = load_workbook("S3OLCI_AUX_for_reprocessing_baseline_ESRIN.xlsx")
+wb = load_workbook("./data/S3OLCI_AUX_for_reprocessing_baseline_ESRIN.xlsx")
 sheet = wb['Feuil1']
 
 static_aux = [
