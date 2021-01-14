@@ -28,25 +28,49 @@ for i in range( len(rules_names)):
     if name :
         rules_dict[name.strip()] = int(rules_ids[i])
 
-
+product_types_bis =[]
 product_types_dict = {}
 for i in range( len(product_types)):
     ptype = product_types[i]
     rule = corresponding_rules[i]
     if ptype and rule :
         # print(ptype)
-        product_types_dict[ptype.strip()] = int(rule)
+        ptype = ptype.strip()
+        if ptype in ["SR_2_SDMMAX","SR_2_SIMMAX","AUX_PREORB","AUX_RESORB"]:
+            if ptype in ["SR_2_SDMMAX","SR_2_SIMMAX" ]:
 
+                # product_types.remove(ptype)
+                for m in range(1,13):
+                    new_type = ptype.replace("MM","%02d" % m )
+                    product_types_dict[new_type] = int(rule)
+                    # product_types.append(new_type)
+                    product_types_bis.append(new_type)
+            else:
+                p_for_s1 = "%s_S1" % ptype
+                p_for_s2 = "%s_S1" % ptype
+                # product_types.remove(ptype)
 
+                if  p_for_s1 not in product_types_dict:
+                    product_types_dict[p_for_s1] = int(rule)
+                    product_types_bis.append(p_for_s1)
+                    
+                if  p_for_s2 not in product_types_dict:
+                    product_types_dict[p_for_s1] = int(rule)
+                    product_types_bis.append(p_for_s2)
+        else:
+            product_types_dict[ptype] = int(rule)
+            product_types_bis.append(ptype)
 
 raw = 1
-for product_type in product_types:
+for product_type in product_types_bis:
     
     if product_type : 
         product_type = product_type.strip()
         try:
             request = "https://reprocessing-preparation.ml/reprocessing.svc/AuxTypes('%s')" % product_type
             r = s.get(request)
+
+            # print("GET %s" % request )
 
             root = ET.fromstring(r.content)
             rule_name = root[11][0][6].text.strip()
