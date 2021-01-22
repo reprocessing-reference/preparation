@@ -89,12 +89,21 @@ static_aux_B = []
 
 for aux in static_aux:
     if "S2B" not in aux:
-        static_aux_A.append(aux)
+        if "BXX" in aux:
+            for m in range(1,13):
+                static_aux_A.append( aux.replace("XX","%02d" % m ) )
+        else:
+            static_aux_A.append(aux)
+
+
 
 for aux in static_aux:
     if "S2A" not in aux:
-        static_aux_B.append(aux)
-
+        if "BXX" in aux:
+            for m in range(1,13):
+                static_aux_B.append( aux.replace("XX","%02d" % m ) )
+        else:
+            static_aux_B.append(aux)
 
 periods_dict = {}
 
@@ -177,7 +186,7 @@ for period in periods_dict :
     # write report
     file = open(r"test-%s-%s-%s-%s.txt" % (mission,unit,start,stop),"w")
 
-    for check in checks:
+    for check in sorted(checks.keys()):
         file.write( "%s\t%s" %  (check,checks[check]) )
         file.write( "\n")
         print( "%s\t\t%s" %  (check,checks[check]) )
