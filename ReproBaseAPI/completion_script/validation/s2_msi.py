@@ -126,16 +126,29 @@ def read_sheet(sheet,periods_dict):
                 else:
                     period = period.strip() + "-%s" % unit
         
-        for aux in sheet['E'][i*10+1:i*10+4] :
+        for aux in sheet['E'][i*10+1:i*10+5] :
             if period not in periods_dict:
                 periods_dict[period] = [[],unit]
 
-            periods_dict[period][0].append(aux.value.strip())
+            aux_name = aux.value.strip()
+
+            if "BXX" in aux_name:
+                for m in range(1,13):
+                    periods_dict[period][0].append(  aux_name.replace("XX","%02d" % m ) )
+            else:
+                periods_dict[period][0].append( aux_name )
+
 
             if period2 :
                 if period2 not in periods_dict:
                     periods_dict[period2] = [[],unit]
-                periods_dict[period2][0].append(aux.value.strip())
+                
+                if "BXX" in aux_name:
+                    for m in range(1,13):
+                        periods_dict[period2][0].append(  aux_name.replace("XX","%02d" % m ) )
+                else:
+                    periods_dict[period2][0].append( aux_name )
+
             
         
     
