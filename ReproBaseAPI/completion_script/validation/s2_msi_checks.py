@@ -2,6 +2,7 @@ import requests
 from openpyxl import load_workbook
 from datetime import datetime 
 from requests import Request, Session
+import xml.etree.ElementTree as ET
 
 s = Session()
 s.auth = ('user', '*K7KzTrZWhC2zkc')
@@ -30,8 +31,7 @@ static_aux = [
 "S2A_OPER_GIP_DECOMP_MPC__20121031T075922_V19830101T000000_21000101T000000_B00",
 "S2B_OPER_GIP_DECOMP_MPC__20121031T075922_V19830101T000000_21000101T000000_B00",
 "S2__OPER_GIP_EARMOD_MPC__20150605T094736_V20150622T000000_21000101T000000_B00",
-"S2A_OPER_GIP_ECMWFP_MPC__20121031T075922_V19830101T000000_21000101T000000_B00",
-"S2B_OPER_GIP_ECMWFP_MPC__20121031T075922_V19830101T000000_21000101T000000_B00",
+"S2__OPER_GIP_ECMWFP_MPC__20121031T075922_V19830101T000000_21000101T000000_B00",
 "S2A_OPER_GIP_G2PARA_MPC__20150605T094736_V20150622T000000_21000101T000000_B00",
 "S2B_OPER_GIP_G2PARA_MPC__20170206T103032_V20170101T000000_21000101T000000_B00",
 "S2A_OPER_GIP_G2PARE_MPC__20150605T094736_V20150622T000000_21000101T000000_B00",
@@ -42,14 +42,12 @@ static_aux = [
 "S2B_OPER_GIP_INTDET_MPC__20170523T080300_V20170322T000000_21000101T000000_B00",
 "S2A_OPER_GIP_INVLOC_MPC__20171206T000000_V20150703T000000_21000101T000000_B00",
 "S2B_OPER_GIP_INVLOC_MPC__20170523T080300_V20170322T000000_21000101T000000_B00",
-"S2A_OPER_GIP_JP2KPA_MPC__20160222T110000_V20150622T000000_21000101T000000_B00",
-"S2B_OPER_GIP_JP2KPA_MPC__20160222T110000_V20150622T000000_21000101T000000_B00",
+"S2__OPER_GIP_JP2KPA_MPC__20160222T110000_V20150622T000000_21000101T000000_B00",
 "S2A_OPER_GIP_LREXTR_MPC__20150605T094736_V20150622T000000_21000101T000000_B00",
 "S2B_OPER_GIP_LREXTR_MPC__20170206T103047_V20170101T000000_21000101T000000_B00",
 "S2A_OPER_GIP_MASPAR_MPC__20161104T000000_V20150622T000000_21000101T000000_B00",
 "S2B_OPER_GIP_MASPAR_MPC__20170206T103032_V20170101T000000_21000101T000000_B00",
-"S2A_OPER_GIP_OLQCPA_MPC__20191004T000021_V20191020T233000_21000101T000000_B00",
-"S2B_OPER_GIP_OLQCPA_MPC__20191004T000021_V20191021T003000_21000101T000000_B00",
+"S2__OPER_GIP_OLQCPA_MPC__20191004T000021_V20191020T233000_21000101T000000_B00",
 "S2A_OPER_GIP_PRDLOC_MPC__20180301T130000_V20180305T005000_21000101T000000_B00",
 "S2B_OPER_GIP_PRDLOC_MPC__20180301T130000_V20180305T014000_21000101T000000_B00",
 "S2A_OPER_GIP_PROBAS_MPC__20200221T000209_V20200225T013000_21000101T000000_B00",
@@ -83,7 +81,8 @@ static_aux = [
 "S2__OPER_GIP_L2ACAC_MPC__20191018T000003_V20150622T000000_21000101T000000_B00",
 "S2__OPER_GIP_L2ACSC_MPC__20181003T000002_V20181007T234500_21000101T000000_B00",
 "S2__OPER_GIP_PROBA2_MPC__20200221T000214_V20200225T013000_21000101T000000_B00",
-"S2__OPER_GIP_L2ACFG_MPC__20200723T120000_V20190506T004000_21000101T000000_B00"]
+"S2__OPER_GIP_L2ACFG_MPC__20200723T120000_V20190506T004000_21000101T000000_B00"
+]
 
 
 static_aux_A = []
@@ -199,26 +198,37 @@ for period in periods_dict :
     stop = period.strip().split('-')[1]
 
     # write report
-    file = open(r"test-%s-%s-%s-%s.txt" % (mission,unit,start,stop),"w")
+    # file = open(r"test-%s-%s-%s-%s.txt" % (mission,unit,start,stop),"w")
 
+
+    ko_list = []
+    ko_in_db_list = []
     for check in sorted(checks.keys()):
-        file.write( "%s\t%s" %  (check,checks[check]) )
-        file.write( "\n")
-        print( "%s\t\t%s" %  (check,checks[check]) )
+        if checks[check] == "KO":
+        
+            # print( "%s\t\t%s" %  (check,checks[check]) )
+
+            request="https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles?$filter=contains(FullName,'%s')" % check
+            r = s.get(request)
+            if r.ok:
+                root = ET.fromstring(r.content)
+                try:
+                    full_name = root[4][9][0][1].text.strip()
+                    if full_name not in ko_in_db_list:
+                        ko_in_db_list.append( full_name )
+                        print("\t %s " % full_name )
+                        print( "\t\tsensing_start : %s === sensing_stop : %s" % ( root[4][9][0][6].text,root[4][9][0][7].text) )
+                except Exception as e:
+                    if check not in ko_list:
+                        ko_list.append(check)
+                        # print( check )
+            else:
+                print ( r.content ) 
+
+       
+        
         # print(" ")
 
-    
-    file.write( "\n")
-    file.write( "\n")
-
-    file.write( "\tGET %s " % request)
-    file.write( "\n")
-    file.write( "\n")
-    for element in response_list:
-        file.write("\t fullname : %s " % element )
-        file.write( "\n")
-
-    file.close()
 
 
 

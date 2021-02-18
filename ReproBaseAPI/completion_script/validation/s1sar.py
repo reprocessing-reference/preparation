@@ -55,7 +55,7 @@ for period in periods_dict :
     # GET request
     request="https://reprocessing-preparation.ml/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s')" % (mission,unit,start,stop)
 
-    # print(request)
+    print(request)
 
     r = s.get(request)
     response_list = r.json()['value']
