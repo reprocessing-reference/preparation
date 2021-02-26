@@ -25,6 +25,17 @@ services:
     volumes:
       - /var/postgresql/data_auxip:/var/lib/postgresql/data
 
+  database_auxip_olingo:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "auxip"
+      POSTGRES_PASSWORD: "**auxip**"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/data_auxip_olingo:/var/lib/postgresql/data
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -53,6 +64,14 @@ services:
     networks:
       - proxynet
 
+  auxip_olingo:
+    image: auxip:0.0.2
+    restart: "no"
+    depends_on:
+      - database_auxip_olingo
+    networks:
+      - proxynet
+
 
   proxy:
     image: nginx:1.19.5-alpine
@@ -70,6 +89,7 @@ services:
       - pgadmin4
       - reprobase
       - auxip
+      - auxip_olingo
 
   certbot:
     image: certbot/certbot
