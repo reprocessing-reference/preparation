@@ -21,7 +21,8 @@ cp -rf ../../src build_dir
 cp -rf ../../pom.xml build_dir
 
 # add the the target configuration 
-cp application.properties build_dir/src/main/resources
+rm build_dir/src/main/resources/application.properties
+cp ../build_package/application.properties build_dir/src/main/resources
 
 # remove test folder
 rm -rf build_dir/src/test
