@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VERSION="0.0.2"
+VERSION="1.0.1"
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
@@ -14,7 +14,7 @@ echo "copy the package "
 cp build_dir/target/auxip*.jar .
 
 echo "build the docker image"
-docker build -t auxip:${VERSION} .
+docker build -t auxip_olingo:${VERSION} .
 
 echo " clean all"
 

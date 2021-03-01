@@ -67,7 +67,7 @@ services:
       - proxynet
 
   auxip_olingo:
-    image: auxip:0.0.2
+    image: auxip_olingo:1.0.1
     restart: "no"
     depends_on:
       - database_auxip_olingo
