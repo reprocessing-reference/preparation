@@ -28,6 +28,8 @@ services:
   database_auxip_olingo:
     image: postgres
     restart: always
+    ports:
+    - 5432:5432
     environment:
       POSTGRES_USER: "auxip"
       POSTGRES_PASSWORD: "**auxip**"
