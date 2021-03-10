@@ -98,20 +98,26 @@ public class JPADatasourceProvider implements DataSourceProvider {
     public DataSource getDataSource(ODataRequestContext requestContext) {
         return jpaDataSource;
     }
-
+    
     @Override
     public QueryOperationStrategy getStrategy(ODataRequestContext requestContext, QueryOperation operation,
                                               TargetType expectedODataEntityType) throws ODataException {
         EntityDataModel entityDataModel = requestContext.getEntityDataModel();
         JPAQueryStrategyBuilder builder = new JPAQueryStrategyBuilder(entityDataModel); 
         final JPAQuery query = builder.build(operation, requestContext);
+        boolean is_value_query = requestContext.getRequest().getUri().endsWith("/$value");
+        
         LOG.debug("JPA Query: {}", query);
-
+        
         return () -> {
 
             List<Object> result = jpaDataSource.executeQueryListResult(query);
             LOG.info("Found: {} items for query: {}", result.size(), query);
             long count = 0;
+            if (is_value_query) {
+            	return QueryResult.from(new String("www.google.fr"));
+            }
+            
             if (builder.isCount()) {
                 count = result.size();                
                 if (builder.isCount() && !builder.includeCount()) {

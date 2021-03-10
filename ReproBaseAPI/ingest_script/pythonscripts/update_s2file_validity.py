@@ -186,8 +186,8 @@ time_dependency_dict = {
     "AX___FPO_AX": "ValidityPeriod",
     "AX___OSF_AX": "AnyTime",
     "SY_1_GCPBAX": "AnyTime",
-    "OL_1_MCHDAX": "AnyTime",
-    "SL_1_MCHDAX": "AnyTime",
+    "OL_1_MCHDAX": "ValidityPeriod",
+    "SL_1_MCHDAX": "ValidityPeriod",
     "SY_2_PCP_AX": "AnyTime",
     "SY_2_RAD_AX": "AnyTime",
     "SY_2_RADPAX": "AnyTime",
@@ -233,7 +233,7 @@ time_dependency_dict = {
     "SL_1_VSC_AX": "ValidityPeriod",
     "SL_1_VIC_AX": "AnyTime",
     "SL_1_GEO_AX": "AnyTime",
-    "SL_1_GEC_AX": "AnyTime",
+    "SL_1_GEC_AX": "ValidityPeriod",
     "SL_1_ESSTAX": "AnyTime",
     "SL_1_CLO_AX": "AnyTime",
     "SL_2_PCP_AX": "AnyTime",
@@ -241,8 +241,8 @@ time_dependency_dict = {
     "OL_1_EO__AX": "ValidityPeriod",
     "OL_1_RAC_AX": "ValidityPeriod",
     "OL_1_SPC_AX": "ValidityPeriod",
-    "OL_1_CLUTAX": "AnyTime",
-    "OL_1_INS_AX": "AnyTime",
+    "OL_1_CLUTAX": "ValidityPeriod",
+    "OL_1_INS_AX": "ValidityPeriod",
     "OL_1_CAL_AX": "ValidityPeriod",
     "OL_1_PRG_AX": "ValidityPeriod",
     "SL_2_S7N_AX": "AnyTime",
@@ -394,7 +394,12 @@ def treatOneDict(dict_file, input, output, offset=0):
                                                                               odata_datetime_format))
             if DEBUG:
                 print("Only writing : " + l_sorted[-1][0])
-            shutil.copyfile(os.path.join(input, l_sorted[-1][0]), os.path.join(output, l_sorted[-1][0]))
+            l_sorted[-1][1]["SensingTimeApplicationStart"] = "1983-01-01T00:00:00.000000Z"
+            l_sorted[-1][1]["SensingTimeApplicationStop"] = "2100-01-01T00:00:00.000000Z"
+            # Write down
+            with open(os.path.join(output, l_sorted[-1][0]), 'w') as json_file:
+                json.dump(l_sorted[-1][1], json_file)
+            #shutil.copyfile(os.path.join(input, l_sorted[-1][0]), os.path.join(output, l_sorted[-1][0]))
         else:
             l_sorted = sorted(files,
                               key=lambda x: datetime.datetime.strptime(x[1]["ValidityStart"], odata_datetime_format))

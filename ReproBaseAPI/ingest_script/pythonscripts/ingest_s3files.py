@@ -90,9 +90,9 @@ def main():
             update = True
         else:
             template = copy.copy(template_base)
-        if "S3A" in filename:
+        if "S3A_" in filename:
             template["Unit"] = "A"
-        elif "S3B" in filename:
+        elif "S3B_" in filename:
             template["Unit"] = "B"
         else:
             template["Unit"] = "X"
@@ -134,17 +134,17 @@ def main():
         template["Baseline"] = "06.11"
         if "SRAL" in mission:
             template["Baseline"] = "06.19"
-            if "S3A" in filename:
+            if "S3A_" in filename:
                 template["IpfVersion"] = "S3A-2.69"
-            elif "S3B" in filename:
+            elif "S3B_" in filename:
                 template["IpfVersion"] = "S3B-1.45"
             else:
                 template["IpfVersion"] = "S3A-2.69 & S3B-1.45"
         if "MWR" in mission:
             template["Baseline"] = "06.11"
-            if "S3A" in filename:
+            if "S3A_" in filename:
                 template["IpfVersion"] = "S3A-2.69"
-            elif "S3B" in filename:
+            elif "S3B_" in filename:
                 template["IpfVersion"] = "S3B-1.45"
             else:
                 template["IpfVersion"] = "S3A-2.69 & S3B-1.45"
@@ -155,26 +155,26 @@ def main():
                 template["Baseline"] = "06.08"
             else:
                 raise Exception("Unknown product level for "+filename+ " "+mission)
-            if "S3A" in filename:
+            if "S3A_" in filename:
                template["IpfVersion"] = "S3A-2.66"
-            elif "S3B" in filename:
+            elif "S3B_" in filename:
                template["IpfVersion"] = "S3B-1.40"
             else:
                template["IpfVersion"] = "S3A-2.66 & S3B-1.40"
         if "SLSTR" in mission:
             if "ProductLevels('L2')" in product_levels:
                 template["Baseline"] = "06.16"
-                if "S3A" in filename:
+                if "S3A_" in filename:
                     template["IpfVersion"] = "S3A-2.61"
-                elif "S3B" in filename:
+                elif "S3B_" in filename:
                     template["IpfVersion"] = "S3B-1.33"
                 else:
                     template["IpfVersion"] = "S3A-2.61 & S3B-1.33"
             elif "ProductLevels('L1')" in product_levels:
                 template["Baseline"] = "06.17"
-                if "S3A" in filename:
+                if "S3A_" in filename:
                     template["IpfVersion"] = "S3A-2.59"
-                elif "S3B" in filename:
+                elif "S3B_" in filename:
                     template["IpfVersion"] = "S3B-1.31"
                 else:
                     template["IpfVersion"] = "S3A-2.59 & S3B-1.31"
@@ -187,9 +187,9 @@ def main():
                 template["Baseline"] = "03.37"
             else:
                 raise Exception("Unknown product level for " + filename)
-            if "S3A" in filename:
+            if "S3A_" in filename:
                 template["IpfVersion"] = "S3A-2.66"
-            elif "S3B" in filename:
+            elif "S3B_" in filename:
                 template["IpfVersion"] = "S3B-1.40"
             else:
                 template["IpfVersion"] = "S3A-2.66 & S3B-1.40"

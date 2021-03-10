@@ -10,7 +10,7 @@ odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 url = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
 login="user"
 password = "*K7KzTrZWhC2zkc"
-test_dur=False
+test_dur=True
 test_miss=False
 
 def send_request(request, log, passwd):
@@ -111,7 +111,7 @@ def main():
             report.write("#### Testing that file have more than the step duration starts ####\n")
             for f in working_list:
                 if f[1] - f[0] > datetime.timedelta(hours=int(args.step)):
-                    report.write("File has an extend more than the step : " + f[2]['FullName'] +" : " +str(f[0])+" / " +str(f[1])+"\n")
+                    report.write("Extend more than the step : " + f[2]['FullName'] +" : " +str(f[0])+" / " +str(f[1])+" : "+ str(f[1] - f[0])+"\n")
             report.write("#### Testing that file have more than the step duration stop ####\n")
         report.write("#### Testing overlaps/gaps start ####\n")
         # test if there is only one file for a given date using the step

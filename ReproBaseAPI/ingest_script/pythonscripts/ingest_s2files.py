@@ -10,7 +10,7 @@ import uuid
 
 from FileUtils import parse_all_as_dict
 
-DEBUG=False
+DEBUG=True
 
 def md5(fname):
     hash_md5 = hashlib.md5()
@@ -61,99 +61,101 @@ def main():
 
     list_of_files = {}
     idx = 1
-    for (dirpath, dirnames, filenames) in os.walk(args.input):
-        for filename in filenames:
-            if DEBUG:
-                print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(filenames)))
-            template = None
-            update = False
-            if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
-                with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
-                    try:
-                        template = json.load(f)
-                    except Exception as e:
-                        raise Exception(
-                            "Could not open : " + os.path.join(args.output, os.path.splitext(filename)[0] + ".json"))
-                update = True
+    file1 = open(args.input, 'r')
+    lines = file1.readlines()
+    for filenames in lines:
+        filename = os.path.basename(filenames)
+        if DEBUG:
+            print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
+        template = None
+        update = False
+        if os.path.exists(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")):
+            with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json")) as f:
+                try:
+                    template = json.load(f)
+                except Exception as e:
+                    raise Exception(
+                        "Could not open : " + os.path.join(args.output, os.path.splitext(filename)[0] + ".json"))
+            update = True
+        else:
+            template = copy.copy(template_base)
+        s2dict =parse_all_as_dict(filename)
+        template["@odata.context"] = "$metadata#AuxFiles"
+        if not update:
+            template["Id"] = str(uuid.uuid4())
+        filetype = None
+        mission = None
+        product_levels = None
+        if 'File_Semantic' in s2dict.keys():
+            if s2dict['File_Semantic'] == "AUX_RESORB":
+                filetype = "AUX_RESORB_S2"
+                mission = "S2MSI"
+                product_levels = "ProductLevels('L1')"
+            elif s2dict['File_Semantic'] == "AUX_PREORB":
+                filetype = "AUX_PREORB_S2"
+                mission = "S2MSI"
+                product_levels = "ProductLevels('L1')"
             else:
-                template = copy.copy(template_base)
-            s2dict =parse_all_as_dict(filename)
-            template["@odata.context"] = "$metadata#AuxFiles"
-            if not update:
-                template["Id"] = str(uuid.uuid4())
-            filetype = None
-            mission = None
-            product_levels = None
-            if 'File_Semantic' in s2dict.keys():
-                if s2dict['File_Semantic'] == "AUX_RESORB":
-                    filetype = "AUX_RESORB_S2"
-                    mission = "S2MSI"
-                    product_levels = "ProductLevels('L1')"
-                elif s2dict['File_Semantic'] == "AUX_PREORB":
-                    filetype = "AUX_PREORB_S2"
-                    mission = "S2MSI"
-                    product_levels = "ProductLevels('L1')"
-                else:
-                    for type in filetype_dict:
-                        if s2dict['File_Semantic'] in type[0]:
-                            filetype = type[0]
-                            mission = type[1]
-                            product_levels = type[2]
-                            break
-                    if filetype is None:
-                        raise Exception("unknown file type")
-                template["AuxType@odata.bind"] = "AuxTypes('"+filetype+"')"
+                for type in filetype_dict:
+                    if s2dict['File_Semantic'] in type[0]:
+                        filetype = type[0]
+                        mission = type[1]
+                        product_levels = type[2]
+                        break
+                if filetype is None:
+                    raise Exception("unknown file type")
+            template["AuxType@odata.bind"] = "AuxTypes('"+filetype+"')"
+        else:
+            raise Exception("unknown file type")
+        template["FullName"] = filename
+        template["ShortName"] = s2dict['File_Category']+s2dict['File_Semantic']
+        if 'processing_baseline' in s2dict.keys():
+            template["Baseline"] = s2dict['processing_baseline']
+        else:
+            if "ProductLevels('L2')" in product_levels:
+                template["Baseline"] = "02.14"
+                template["IpfVersion"] = "V02.08.00"
+            elif "ProductLevels('L1')" in product_levels:
+                template["Baseline"] = "02.09"
+                template["IpfVersion"] = "V2B-4.2.8"
             else:
-                raise Exception("unknown file type")
-            template["FullName"] = filename
-            template["ShortName"] = s2dict['File_Category']+s2dict['File_Semantic']
-            if 'processing_baseline' in s2dict.keys():
-                template["Baseline"] = s2dict['processing_baseline']
-            else:
-                if "ProductLevels('L2')" in product_levels:
-                    template["Baseline"] = "02.14"
-                    template["IpfVersion"] = "V02.08.00"
-                elif "ProductLevels('L1')" in product_levels:
-                    template["Baseline"] = "02.09"
-                    template["IpfVersion"] = "V2B-4.2.8"
-                else:
-                    raise Exception("unknown product level")
-            #Date part
-            start_str = s2dict['applicability_time_period'].split("_")[0]
-            stop_str = s2dict['applicability_time_period'].split("_")[1]
-            start_dt = datetime.datetime.strptime(start_str, "%Y%m%dT%H%M%S")
-            try:
-                stop_dt = datetime.datetime.strptime(stop_str, "%Y%m%dT%H%M%S")
-            except:
-                if stop_str == "99999999T999999":
-                    stop_dt = datetime.datetime.strptime("99991231T235959", "%Y%m%dT%H%M%S")
-            start_good = datetime.datetime.strftime(start_dt, odata_datetime_format)
-            stop_good = datetime.datetime.strftime(stop_dt, odata_datetime_format)
-            template["ValidityStart"] = start_good
-            template["ValidityStop"] = stop_good
-            template["SensingTimeApplicationStart"] = start_good
-            template["SensingTimeApplicationStop"] = stop_good
-            crea_dt = datetime.datetime.strptime(s2dict['Creation_Date'], "%Y%m%dT%H%M%S")
-            template["CreationDate"] = datetime.datetime.strftime(crea_dt, odata_datetime_format)
-            #band
-            if "band_index" in s2dict.keys():
-                band_id = "B"+s2dict["band_index"]
-                template["Band"] = band_id
-            else:
-                template["Band"] = "BXX"
-            #sensor
-            if s2dict['Mission_ID'] == "S2A":
-                template["Unit"] = "A"
-            elif s2dict['Mission_ID'] == "S2B":
-                template["Unit"] = ["B')"]
-            elif s2dict['Mission_ID'] == "S2_":
-                template["Unit"] = "X"
-            else:
-                raise Exception("Unknown mission ID "+s2dict['Mission_ID'])
-            # Write down
-            with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json"), 'w') as json_file:
-                json.dump(template, json_file)
-            idx = idx + 1
+                raise Exception("unknown product level")
+        #Date part
+        start_str = s2dict['applicability_time_period'].split("_")[0]
+        stop_str = s2dict['applicability_time_period'].split("_")[1]
+        start_dt = datetime.datetime.strptime(start_str, "%Y%m%dT%H%M%S")
+        try:
+            stop_dt = datetime.datetime.strptime(stop_str, "%Y%m%dT%H%M%S")
+        except:
+            if stop_str == "99999999T999999":
+                stop_dt = datetime.datetime.strptime("99991231T235959", "%Y%m%dT%H%M%S")
+        start_good = datetime.datetime.strftime(start_dt, odata_datetime_format)
+        stop_good = datetime.datetime.strftime(stop_dt, odata_datetime_format)
+        template["ValidityStart"] = start_good
+        template["ValidityStop"] = stop_good
+        template["SensingTimeApplicationStart"] = start_good
+        template["SensingTimeApplicationStop"] = stop_good
+        crea_dt = datetime.datetime.strptime(s2dict['Creation_Date'], "%Y%m%dT%H%M%S")
+        template["CreationDate"] = datetime.datetime.strftime(crea_dt, odata_datetime_format)
+        #band
+        if "band_index" in s2dict.keys():
+            band_id = "B"+s2dict["band_index"]
+            template["Band"] = band_id
+        else:
+            template["Band"] = "BXX"
+        #sensor
+        if s2dict['Mission_ID'] == "S2A":
+            template["Unit"] = "A"
+        elif s2dict['Mission_ID'] == "S2B":
+            template["Unit"] = "B"
+        elif s2dict['Mission_ID'] == "S2_":
+            template["Unit"] = "X"
+        else:
+            raise Exception("Unknown mission ID "+s2dict['Mission_ID'])
+        # Write down
+        with open(os.path.join(args.output, os.path.splitext(filename)[0] + ".json"), 'w') as json_file:
+            json.dump(template, json_file)
+        idx = idx + 1
 
 
 if __name__ == "__main__":
