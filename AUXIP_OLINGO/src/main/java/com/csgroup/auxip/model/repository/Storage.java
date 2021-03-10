@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,6 +21,8 @@ import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
+import org.apache.olingo.commons.api.http.HttpStatusCode;
+import org.apache.olingo.server.api.ODataApplicationException;
 import org.apache.olingo.server.api.uri.UriInfoResource;
 import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
@@ -29,6 +32,8 @@ import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
 import org.apache.olingo.server.api.uri.queryoption.FilterOption;
 import org.apache.olingo.server.api.uri.queryoption.OrderByItem;
 import org.apache.olingo.server.api.uri.queryoption.OrderByOption;
+import org.apache.olingo.server.api.uri.queryoption.SkipOption;
+import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Binary;
 import org.apache.olingo.server.api.uri.queryoption.expression.Method;
 import org.springframework.data.util.Pair;
@@ -488,7 +493,7 @@ public class Storage {
   }
 
   public EntityCollection readEntitySetData(EdmEntitySet edmEntitySet, FilterOption filterOption,
-      ExpandOption expandOption,OrderByOption orderByOption) {
+      ExpandOption expandOption,OrderByOption orderByOption, SkipOption skipOption, TopOption topOption) throws ODataApplicationException {
     EntityCollection entitySet = new EntityCollection();
 
     String queryString;
@@ -511,7 +516,29 @@ public class Storage {
     EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 
     Query query = entityManager.createQuery(queryString);
-
+    
+    //Set the top option
+    if (topOption != null)
+    {
+    	int topNumber = topOption.getValue();
+        if (topNumber >= 0) {	
+        	query.setMaxResults(topOption.getValue());
+        } else {
+            throw new ODataApplicationException("Invalid value for $top", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+        }
+    }
+    //Set the skipOption
+    if (skipOption != null)
+    {
+    	int skipNumber = skipOption.getValue();
+        if (skipNumber >= 0) {
+        	query.setFirstResult(skipNumber);
+        } else {
+        	throw new ODataApplicationException("Invalid value for $skip", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+        }
+    }
+    
+    //Cast to destination class
     if(entitySetName.equals(Product.ES_NAME) )
     {
       List<Product> products = query.getResultList();
