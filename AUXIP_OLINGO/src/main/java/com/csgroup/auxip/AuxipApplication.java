@@ -8,16 +8,19 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
+@EnableScheduling
 @Import({
 		JPADataSourceConfiguration.class,
 		S3WasabiConfiguration.class,
 })
-@ComponentScan(basePackages={"com.csgroup.auxip.controller"})
+//@ComponentScan(basePackages={"com.csgroup.auxip.controller"})
+
 public class AuxipApplication {
 
 	public static void main(String[] args) {

@@ -182,6 +182,27 @@ public class Product {
 		ContentDate = contentDate;
 	}
     
+	public List<Checksum> getChecksum() {
+		return Checksum;
+	}
+	
+	
+
+	public List<StringAttribute> getStringAttributes() {
+		return StringAttributes;
+	}
+
+	public List<IntegerAttribute> getIntegerAttributes() {
+		return IntegerAttributes;
+	}
+
+	public List<DoubleAttribute> getDoubleAttributes() {
+		return DoubleAttributes;
+	}
+
+	public List<DateTimeOffsetAttribute> getDateTimeOffsetAttributes() {
+		return DateTimeOffsetAttributes;
+	}
 
 	public static CsdlEntityType getEntityType()
 	{
