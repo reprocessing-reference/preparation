@@ -120,7 +120,8 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       responseEdmEntitySet = startEdmEntitySet; // the response body is built from the first (and only) entitySet
       // apply system query options
       
-      responseEntityCollection = storage.readEntitySetData(startEdmEntitySet,filterOption,expandOption,orderByOption);
+      responseEntityCollection = storage.readEntitySetData(startEdmEntitySet,filterOption,expandOption,orderByOption,
+    		  skipOption, topOption);
 
     } else { // this would be the case for e.g. Products(uuid)/Attributes
       throw new ODataApplicationException("Not supported",
@@ -138,33 +139,6 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
         boolean isCount = countOption.getValue();
         if(isCount){
             returnEntityCollection.setCount(entityList.size());
-        }
-    }
-
-    // handle $skip
-    if (skipOption != null) {
-        int skipNumber = skipOption.getValue();
-        if (skipNumber >= 0) {
-            if(skipNumber <= entityList.size()) {
-                entityList = entityList.subList(skipNumber, entityList.size());
-            } else {
-                // The client skipped all entities
-                entityList.clear();
-            }
-        } else {
-            throw new ODataApplicationException("Invalid value for $skip", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
-        }
-    }
-
-    // handle $top
-    if (topOption != null) {
-        int topNumber = topOption.getValue();
-        if (topNumber >= 0) {
-            if(topNumber <= entityList.size()) {
-                entityList = entityList.subList(0, topNumber);
-            }  // else the client has requested more entities than available => return what we have
-        } else {
-            throw new ODataApplicationException("Invalid value for $top", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
         }
     }
 
