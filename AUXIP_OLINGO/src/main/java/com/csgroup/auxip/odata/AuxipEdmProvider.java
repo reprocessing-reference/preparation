@@ -73,8 +73,10 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     }else if (entityTypeName.equals(Subscription.FQN)) {
       entityType = Subscription.getEntityType();
       
+    } else if (entityTypeName.equals(Metric.FQN)) {
+        entityType = Metric.getEntityType();
+        
     }
-  
     return entityType;
 
   }
@@ -128,9 +130,9 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
           entitySet = DateTimeOffsetAttribute.getEntitySet();
           break;
 
-        // case Metric.ES_NAME:
-        //   entitySet = Metric.getEntitySet();
-        //   break;
+        case Metric.ES_NAME:
+          entitySet = Metric.getEntitySet();
+          break;
 
         case Subscription.ES_NAME:
           entitySet = Subscription.getEntitySet();
@@ -167,7 +169,7 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     List<CsdlEntityType> entityTypes = new ArrayList<CsdlEntityType>();
 
     FullQualifiedName[] fullQualifiedNames = new FullQualifiedName[] { Product.FQN, Attribute.FQN, StringAttribute.FQN,
-    IntegerAttribute.FQN, DoubleAttribute.FQN, DateTimeOffsetAttribute.FQN  ,Subscription.FQN /*Metric.FQN,*/};
+    IntegerAttribute.FQN, DoubleAttribute.FQN, DateTimeOffsetAttribute.FQN  ,Subscription.FQN , Metric.FQN};
 
     for (FullQualifiedName fullQualifiedName : fullQualifiedNames) {
       entityTypes.add(getEntityType(fullQualifiedName));
@@ -187,6 +189,7 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     List<CsdlEnumType> enumTypes = new ArrayList<>();
 
     enumTypes.add( SubscriptionStatus.getEnumType() );
+    enumTypes.add( MetricType.getEnumType() );
     schema.setEnumTypes(enumTypes);
 
     // // add EntityContainer
@@ -265,8 +268,7 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     List<CsdlEntitySet> entitySets = new ArrayList<CsdlEntitySet>();
 
     String[] entitySetNames = new String[] { Product.ES_NAME, Attribute.ES_NAME, StringAttribute.ES_NAME,
-        IntegerAttribute.ES_NAME, DoubleAttribute.ES_NAME, DateTimeOffsetAttribute.ES_NAME /*, Metric.ES_NAME */,
-    Subscription.ES_NAME};
+        IntegerAttribute.ES_NAME, DoubleAttribute.ES_NAME, DateTimeOffsetAttribute.ES_NAME, Metric.ES_NAME, Subscription.ES_NAME};
 
     for (String esName : entitySetNames) {
       entitySets.add(getEntitySet(CONTAINER, esName));
