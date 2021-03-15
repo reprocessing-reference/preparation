@@ -81,7 +81,7 @@ public class Metric {
 		// create EntityType properties
 		CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty timestamp = new CsdlProperty().setName("TimeStamp").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName());
-		CsdlProperty metric_type = new CsdlProperty().setName("MetricType").setType(MetricType.getFullQualifiedName());
+		//CsdlProperty metric_type = new CsdlProperty().setName("MetricType").setType(MetricType.getFullQualifiedName());
 		CsdlProperty gauge = new CsdlProperty().setName("Gauge").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty counter = new CsdlProperty().setName("Counter").setType(EdmPrimitiveTypeKind.Int64.getFullQualifiedName());
 		// create PropertyRef for Key element
@@ -91,7 +91,7 @@ public class Metric {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(name,timestamp,metric_type,gauge,counter));
+		entityType.setProperties(Arrays.asList(name,timestamp,gauge,counter));
 		entityType.setKey(Arrays.asList(propertyRef));
 
 		return entityType;
@@ -114,7 +114,7 @@ public class Metric {
 		// create EntityType properties
 		Property id = new Property(stringType, "Name",ValueType.PRIMITIVE,this.Name) ;
 		
-		Property metric_type = new Property("OData.CSC.MetricType", "MetricType",ValueType.ENUM,this.metricType) ;
+		//Property metric_type = new Property("MetricType", "MetricType",ValueType.ENUM,this.metricType) ;
 
 		Property gauge = new Property(stringType, "Gauge",ValueType.PRIMITIVE,this.Gauge) ;
 		Property counter = new Property("Int64", "Counter",ValueType.PRIMITIVE,this.Counter) ;
@@ -122,7 +122,7 @@ public class Metric {
 				
 		entity.addProperty( id );
 		entity.addProperty( timestamp );
-		entity.addProperty( metric_type );
+		//entity.addProperty( metric_type );
 		entity.addProperty( gauge );
 		entity.addProperty( counter );
 		

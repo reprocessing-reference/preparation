@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.csgroup.auxip.model.repository.Storage;
-
-
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
@@ -56,9 +54,13 @@ import org.apache.olingo.server.api.uri.queryoption.SelectOption;
 import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor {
+	
+  private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityCollectionProcessor.class);
 
   private OData odata;
   private ServiceMetadata srvMetadata;
@@ -81,6 +83,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       UriInfo uriInfo, ContentType responseFormat)
       throws ODataApplicationException, SerializerException {
 
+	LOG.info("Starting readEntityCollection");
     EdmEntitySet responseEdmEntitySet = null; // we'll need this to build the ContextURL
     EntityCollection responseEntityCollection = null; // we'll need this to set the response body
     EdmEntityType responseEdmEntityType = null;
@@ -126,12 +129,13 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     } else { // this would be the case for e.g. Products(uuid)/Attributes
       throw new ODataApplicationException("Not supported",
           HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
-    }
+    }    
 
     // 3rd: apply System Query Options
     // modify the result set according to the query options, specified by the end user
     List<Entity> entityList = responseEntityCollection.getEntities();
     EntityCollection returnEntityCollection = new EntityCollection();
+    LOG.info("entityList contains "+String.valueOf(entityList.size()+" elements"));
 
     // handle $count: return the original number of entities, ignore $top and $skip
     
@@ -152,7 +156,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     // we need the property names of the $select, in order to build the context URL
     String selectList = odata.createUriHelper().buildContextURLSelectList(edmEntityType, expandOption, selectOption);
     ContextURL contextUrl = ContextURL.with().entitySet(responseEdmEntitySet).selectList(selectList).build();
-
+    LOG.info("Building response");
     // adding the selectOption to the serializerOpts will actually tell the lib to do the job
     final String id = request.getRawBaseUri() + "/" + responseEdmEntitySet.getName();
     EntityCollectionSerializerOptions opts = EntityCollectionSerializerOptions.with()
@@ -162,15 +166,14 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
         .id(id)
         .count(countOption)
         .build();
-
+    LOG.info("Serializing "+edmEntityType.toString());
     ODataSerializer serializer = odata.createSerializer(responseFormat);
-    SerializerResult serializerResult = serializer.entityCollection(srvMetadata, edmEntityType, returnEntityCollection, opts);
-
+    SerializerResult serializerResult = serializer.entityCollection(srvMetadata, edmEntityType, returnEntityCollection, opts);    
     // 5th: configure the response object: set the body, headers and status code
     response.setContent(serializerResult.getContent());
     response.setStatusCode(HttpStatusCode.OK.getStatusCode());
     response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());
-
+    LOG.info("Done");
   }
 
   private boolean isContNav(UriInfo uriInfo) {
