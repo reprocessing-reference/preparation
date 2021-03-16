@@ -41,24 +41,16 @@ import java.net.URI;
  */
 @Configuration
 @ComponentScan
-public class ArchiveConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(ArchiveConfiguration.class);
-
-    @Value("${archive.temp_folder}")
-    private String tempFolder;
+public class MetricsConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(MetricsConfiguration.class);
     
-    @Value("${archive.active}")
+    @Value("${metric.active}")
     private Boolean active;
     
-
-    @Value("${archive.ontrigger}")
+    @Value("${metric.ontrigger}")
     private Boolean ontrigger;
     
 
-	public String getTempFolder() {
-		return tempFolder;
-	}
-    
 	public Boolean getActive() {
 		return active;
 	}

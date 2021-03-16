@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import com.csgroup.auxip.config.ArchiveConfiguration;
 import com.csgroup.auxip.model.jpa.Product;
+import com.csgroup.auxip.model.repository.StorageStatus;
 import com.csgroup.auxip.serializer.ProductSerializer;
 
 @Component
@@ -43,15 +44,28 @@ public class ArchiveCreator {
 	private static List<String> ADG = new ArrayList<>(List.of(""));
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-
+	@Autowired
+	private StorageStatus storageStatus;
 	@Autowired
 	private ArchiveConfiguration config;
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	//@Scheduled(fixedRate = 300000, initialDelay = 5000)
+	@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
 	public void reportCurrentTime() {
+		if (!config.getActive())
+		{
+			LOG.info("Archiving is not activated in config");
+			return;
+		}
+		
 		LOG.info("The time is now {}", dateFormat.format(new Date()));		
+		if (config.getOnTrigger() && !storageStatus.hasChanges())
+		{
+			LOG.info("No change in the repository, nothing to do");
+			return;
+		}
+		
 		LOG.info("Working in "+config.getTempFolder());
 		Path working_path = Paths.get(config.getTempFolder());
 
@@ -141,6 +155,7 @@ public class ArchiveCreator {
 		}
 
 		LOG.info("Number of exported products : "+String.valueOf(total_exported));
+		storageStatus.archiveDone();
 	}
 
 	public List<Product> filterProducts(final List<Product> inProducts, final String sat, final LocalDateTime startDate, final LocalDateTime stopDate){

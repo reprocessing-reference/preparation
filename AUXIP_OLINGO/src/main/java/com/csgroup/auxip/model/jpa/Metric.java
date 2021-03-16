@@ -13,7 +13,7 @@ import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,7 +24,7 @@ public class Metric {
 
 	 @Id
 	 private String Name;
-	 private ZonedDateTime Timestamp;
+	 private Timestamp Timestamp;
 	 @Enumerated(EnumType.STRING)
 	 private MetricType metricType;
 	 private String Gauge;
@@ -42,11 +42,11 @@ public class Metric {
 		Name = name;
 	}
 
-	public ZonedDateTime getTimestamp() {
+	public Timestamp getTimestamp() {
 		return Timestamp;
 	}
 
-	public void setTimestamp(ZonedDateTime timestamp) {
+	public void setTimestamp(Timestamp timestamp) {
 		Timestamp = timestamp;
 	}
 
@@ -81,7 +81,7 @@ public class Metric {
 		// create EntityType properties
 		CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty timestamp = new CsdlProperty().setName("TimeStamp").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName());
-		//CsdlProperty metric_type = new CsdlProperty().setName("MetricType").setType(MetricType.getFullQualifiedName());
+		CsdlProperty metric_type = new CsdlProperty().setName("MetricType").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty gauge = new CsdlProperty().setName("Gauge").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty counter = new CsdlProperty().setName("Counter").setType(EdmPrimitiveTypeKind.Int64.getFullQualifiedName());
 		// create PropertyRef for Key element
@@ -91,7 +91,7 @@ public class Metric {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(name,timestamp,gauge,counter));
+		entityType.setProperties(Arrays.asList(name,timestamp,metric_type,gauge,counter));
 		entityType.setKey(Arrays.asList(propertyRef));
 
 		return entityType;
@@ -114,15 +114,15 @@ public class Metric {
 		// create EntityType properties
 		Property id = new Property(stringType, "Name",ValueType.PRIMITIVE,this.Name) ;
 		
-		//Property metric_type = new Property("MetricType", "MetricType",ValueType.ENUM,this.metricType) ;
+		Property metric_type = new Property("MetricType", "MetricType",ValueType.ENUM,this.metricType) ;
 
 		Property gauge = new Property(stringType, "Gauge",ValueType.PRIMITIVE,this.Gauge) ;
 		Property counter = new Property("Int64", "Counter",ValueType.PRIMITIVE,this.Counter) ;
-		Property timestamp = new Property("DateTimeOffset", "Timestamp",ValueType.PRIMITIVE,this.Timestamp) ;
+		Property timestamp = new Property("DateTimeOffset", "TimeStamp",ValueType.PRIMITIVE,this.Timestamp) ;
 				
 		entity.addProperty( id );
 		entity.addProperty( timestamp );
-		//entity.addProperty( metric_type );
+		entity.addProperty( metric_type );
 		entity.addProperty( gauge );
 		entity.addProperty( counter );
 		
