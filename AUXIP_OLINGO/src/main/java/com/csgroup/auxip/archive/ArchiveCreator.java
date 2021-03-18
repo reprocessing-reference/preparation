@@ -48,8 +48,8 @@ public class ArchiveCreator {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	//@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
-	@Scheduled(fixedRate = 3000000, initialDelay = 5000)
+	@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
+	//@Scheduled(fixedRate = 3000000, initialDelay = 5000)
 	public void reportCurrentTime() {
 		if (!config.getActive())
 		{
@@ -77,6 +77,7 @@ public class ArchiveCreator {
 		//get current date
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter_file = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
 		String queryString = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity WHERE " ;
 		//queryString = queryString.concat("entity.ContentDate.Start <= :publicationStop AND entity.ContentDate.Start >= :publicationStart");
@@ -159,7 +160,7 @@ public class ArchiveCreator {
 							if (mpc_products.size() > 0)
 							{
 								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_C-V" + "_catalogue_"+now.format(formatter)+".json";
+										String.format("%02d", d) + "_" + "AUX_C-V" + "_catalogue_"+now.format(formatter_file)+".json";
 								LOG.debug("Exporting MPC to : "+filename);
 								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
 								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
@@ -174,7 +175,7 @@ public class ArchiveCreator {
 							if (pod_products.size() > 0)
 							{
 								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_POD" + "_catalogue_"+now.format(formatter)+".json";
+										String.format("%02d", d) + "_" + "AUX_POD" + "_catalogue_"+now.format(formatter_file)+".json";
 								LOG.debug("Exporting POD to : "+filename);
 								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
 								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
@@ -189,7 +190,7 @@ public class ArchiveCreator {
 							if (adg_products.size() > 0)
 							{
 								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_ADG" + "_catalogue_"+now.format(formatter)+".json";
+										String.format("%02d", d) + "_" + "AUX_ADG" + "_catalogue_"+now.format(formatter_file)+".json";
 								LOG.debug("Exporting ADG to : "+filename);
 								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
 								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {

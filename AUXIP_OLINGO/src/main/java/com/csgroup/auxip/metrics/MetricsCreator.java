@@ -29,6 +29,7 @@ import com.csgroup.auxip.model.jpa.MetricType;
 import com.csgroup.auxip.model.jpa.Product;
 import com.csgroup.auxip.model.repository.StorageStatus;
 
+
 @Component
 public class MetricsCreator {
 	private static final Logger LOG = LoggerFactory.getLogger(MetricsCreator.class);
@@ -48,6 +49,19 @@ public class MetricsCreator {
 		put("S3_", "Sentinel3.All");
 		put("S3A", "Sentinel3.A");
 		put("S3B", "Sentinel3.B");
+	}};
+	
+	
+	private static Map<String, List<List<String>>> SATS_FILE_TYPES = new HashMap<String, List<List<String>>>() {{
+		put("S1_", new ArrayList<>(List.of(AuxTypes.S1_AUX_TYPES)));
+		put("S1A", new ArrayList<>(List.of(AuxTypes.S1_AUX_TYPES)));
+		put("S1B", new ArrayList<>(List.of(AuxTypes.S1_AUX_TYPES)));
+		put("S2_", new ArrayList<>(List.of(AuxTypes.S2_AUX_TYPES)));
+		put("S2B", new ArrayList<>(List.of(AuxTypes.S2_AUX_TYPES)));
+		put("S2A", new ArrayList<>(List.of(AuxTypes.S2_AUX_TYPES)));
+		put("S3_", new ArrayList<>(List.of(AuxTypes.S3_MWR_AUX_TYPES,AuxTypes.S3_OLCI_AUX_TYPES,AuxTypes.S3_SLSTR_AUX_TYPES,AuxTypes.S3_SRAL_AUX_TYPES,AuxTypes.S3_SYN_AUX_TYPES)));
+		put("S3A", new ArrayList<>(List.of(AuxTypes.S3_MWR_AUX_TYPES,AuxTypes.S3_OLCI_AUX_TYPES,AuxTypes.S3_SLSTR_AUX_TYPES,AuxTypes.S3_SRAL_AUX_TYPES,AuxTypes.S3_SYN_AUX_TYPES)));
+		put("S3B", new ArrayList<>(List.of(AuxTypes.S3_MWR_AUX_TYPES,AuxTypes.S3_OLCI_AUX_TYPES,AuxTypes.S3_SLSTR_AUX_TYPES,AuxTypes.S3_SRAL_AUX_TYPES,AuxTypes.S3_SYN_AUX_TYPES)));
 	}};
 
 	@Autowired
@@ -92,45 +106,78 @@ public class MetricsCreator {
 				products_m = query_m.getResultList();
 				LOG.debug("Number of products : "+String.valueOf(products_m.size()));
 				List<Metric> list = doMetricProducts(products_m, entry.getValue());
-
-				for (Metric m : list)
+				
+				//Product TYpe metrics
+				for (List<String> types :  SATS_FILE_TYPES.get(entry.getKey()))
 				{
-					transaction.begin();				
-					Metric attached = entityManager.merge(m);                
-					if (transaction.isActive()) {
-						transaction.commit();
-					} else {
-						transaction.rollback();
-					}
+					Map<String,Long> counts = null;
+					Map<String,Long> sizes = null;
+					counts = new HashMap<String,Long>();
+					sizes = new HashMap<String,Long>();
+					countProducts(products_m,types,counts, sizes);
+					for (String type : types) {
+						List<Metric> list_t = doMetricCountSize(counts.get(type), sizes.get(type), type+"."+entry.getValue());
+						list.addAll(list_t);	
+					}					
 				}
+				//Put metric in base
+				transaction.begin();
+				for (Metric m : list)
+				{									
+					Metric attached = entityManager.merge(m);
+				}
+				if (transaction.isActive()) {
+					transaction.commit();
+				} else {
+					transaction.rollback();
+				}				
 			} finally {                    
 				entityManager.close();
 			}
 		}
-
-
 		storageStatus.metricsDone();
-
+		LOG.debug("Metrics Done");
 
 	}
 
-	private List<Product> filterProducts(final List<Product> inProducts, final String sat, final LocalDateTime startDate, final LocalDateTime stopDate){
+	private void countProducts(final List<Product> products_m,final List<String> types,Map<String,Long> counts, Map<String,Long> sizes) {
+		
+		for (final String type : types)
+		{
+			counts.put(type, 0L);
+			sizes.put(type, 0L);
+		}
+		for (final Product pr : products_m)
+		{
+			for (final String type : types)
+			{
+				if (pr.getName().contains(type))
+				{
+					counts.put(type, counts.get(type)+1L);
+					sizes.put(type, sizes.get(type)+1L);
+				}
+			}
+		}		
+	}
+
+	private List<Product> filterProducts(final List<Product> inProducts, final String type){
 		List<Product> products = new ArrayList<>();
 		for (Product pr : inProducts)
 		{
-			if (pr.getName().startsWith(sat) && pr.getContentDate().getStart().toInstant().atZone(ZoneId.of("Z")).toLocalDateTime().isBefore(stopDate)
-					&& pr.getContentDate().getStart().toInstant().atZone(ZoneId.of("Z")).toLocalDateTime().isAfter(startDate))
+			if (pr.getName().contains(type))
 			{
 				products.add(pr);
 			}
 		}
-
 		return products;
 
 	}
 
 	private List<Metric> doMetricProducts(final List<Product> inProducts,final String name) {
 		List<Metric> list = new ArrayList<Metric>();
+		if (inProducts.size() == 0) {
+			return list;
+		}
 		//Count metric
 		Metric metric = new Metric();
 		metric.setName(name+".count");
@@ -149,6 +196,31 @@ public class MetricsCreator {
 		metric_size.setName(name+".size");
 		metric_size.setMetricType(MetricType.Counter);
 		metric_size.setCounter(total_size);
+		metric_size.setGauge("");
+		metric_size.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+		list.add(metric_size);
+		return list;
+
+	}
+	
+	private List<Metric> doMetricCountSize(final Long count, final Long size,final String name) {
+		List<Metric> list = new ArrayList<Metric>();
+		if (count == 0) {
+			return list;
+		}
+		//Count metric
+		Metric metric = new Metric();
+		metric.setName(name+".count");
+		metric.setMetricType(MetricType.Counter);
+		metric.setCounter(count);
+		metric.setGauge("");
+		metric.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+		list.add(metric);
+		//Size metric
+		Metric metric_size = new Metric();
+		metric_size.setName(name+".size");
+		metric_size.setMetricType(MetricType.Counter);
+		metric_size.setCounter(size);
 		metric_size.setGauge("");
 		metric_size.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
 		list.add(metric_size);

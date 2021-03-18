@@ -87,6 +87,7 @@ services:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      - /auxip_snapshot:/etc/nginx/html/archives
     depends_on:
       - pgadmin4
       - reprobase
