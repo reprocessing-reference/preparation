@@ -17,6 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import org.hibernate.QueryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import com.csgroup.auxip.config.MetricsConfiguration;
 import com.csgroup.auxip.model.jpa.Metric;
 import com.csgroup.auxip.model.jpa.MetricType;
 import com.csgroup.auxip.model.jpa.Product;
+import com.csgroup.auxip.model.jpa.ProductTypedCounter;
+import com.csgroup.auxip.model.jpa.User;
 import com.csgroup.auxip.model.repository.StorageStatus;
 
 
@@ -92,7 +95,6 @@ public class MetricsCreator {
 
 		for (Map.Entry<String, String> entry : SATS.entrySet()) {
 			LOG.debug("Treating: "+entry.getKey());
-
 			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			try {			
 				EntityTransaction transaction = entityManager.getTransaction();
@@ -135,6 +137,72 @@ public class MetricsCreator {
 				entityManager.close();
 			}
 		}
+		
+		//User downloads metrics
+		//Query
+		String queryStringUser = "SELECT entity FROM com.csgroup.auxip.model.jpa.User entity" ;
+		EntityManager entityManagerUser = this.entityManagerFactory.createEntityManager();
+		List<Metric> listMetricsUsers = new ArrayList<Metric>(); 
+		try {			
+			EntityTransaction transaction = entityManagerUser.getTransaction();
+			List<User> users;
+			Query query_m = entityManagerUser.createQuery(queryStringUser);
+			users = query_m.getResultList();
+			LOG.debug("Number of users : "+String.valueOf(users.size()));
+			for (User u : users)
+			{
+				for (ProductTypedCounter count : u.getDownloadedVolumes())
+				{
+					//Count metric
+					Metric metric = new Metric();
+					metric.setName("Download."+count.getProductType()+"."+count.getPlateForm()+"."+count.getUnit()+"."+u.getName()+".size");
+					metric.setMetricType(MetricType.Counter);
+					metric.setCounter(count.getValue());
+					metric.setGauge("");
+					metric.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+					listMetricsUsers.add(metric);
+				}
+				for (ProductTypedCounter count : u.getNumberOfCompletedDownloads())
+				{
+					//Count metric
+					Metric metric = new Metric();
+					metric.setName("Download."+count.getProductType()+"."+count.getPlateForm()+"."+count.getUnit()+"."+u.getName()+".completed");
+					metric.setMetricType(MetricType.Counter);
+					metric.setCounter(count.getValue());
+					metric.setGauge("");
+					metric.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+					listMetricsUsers.add(metric);
+				}
+				for (ProductTypedCounter count : u.getNumberOfFailedDownloads())
+				{
+					//Count metric
+					Metric metric = new Metric();
+					metric.setName("Download."+count.getProductType()+"."+count.getPlateForm()+"."+count.getUnit()+"."+u.getName()+".failed");
+					metric.setMetricType(MetricType.Counter);
+					metric.setCounter(count.getValue());
+					metric.setGauge("");
+					metric.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+					listMetricsUsers.add(metric);
+				}
+			}
+			//Put metric in base
+			transaction.begin();
+			for (Metric m : listMetricsUsers)
+			{									
+				Metric attached = entityManagerUser.merge(m);
+			}
+			if (transaction.isActive()) {
+				transaction.commit();
+			} else {
+				transaction.rollback();
+			}
+		} catch (Exception e) {
+			LOG.warn("Query coudn't be executed on metrics : "+queryStringUser);
+			LOG.warn(e.getLocalizedMessage());
+		} finally {                    
+			entityManagerUser.close();
+		}
+		
 		storageStatus.metricsDone();
 		LOG.debug("Metrics Done");
 
