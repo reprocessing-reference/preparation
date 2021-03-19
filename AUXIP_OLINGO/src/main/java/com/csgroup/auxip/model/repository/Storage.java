@@ -36,6 +36,7 @@ import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Binary;
 import org.apache.olingo.server.api.uri.queryoption.expression.Method;
+import org.keycloak.representations.AccessToken;
 import org.springframework.data.util.Pair;
 import org.apache.olingo.server.api.uri.queryoption.expression.Member;
 import org.apache.olingo.server.api.uri.queryoption.expression.BinaryOperatorKind;
@@ -47,6 +48,7 @@ import com.csgroup.auxip.model.jpa.Metric;
 import com.csgroup.auxip.model.jpa.Product;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
+import com.csgroup.auxip.model.jpa.User;
 
 class AttributeFilter {
 
@@ -63,15 +65,26 @@ class AttributeFilter {
 
 public class Storage {
 
-  // @Autowired
-  // private JPADataSourceConfiguration jpaConfig;
-
   private EntityManagerFactory entityManagerFactory;
+  private AccessToken accessToken;
+  private User user;
+
+  public User getUser() {
+      return user;
+  }
+  public void setUser(User user) {
+      this.user = user;
+  }
 
   public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
     this.entityManagerFactory = entityManagerFactory;
   }
 
+  public void setAccessToken(AccessToken accessToken) {
+      this.accessToken = accessToken;
+      this.user = new User(accessToken);
+      
+  }
   // utility member
   private Map<String, String> operatorsMapping = new HashMap<>();
 
