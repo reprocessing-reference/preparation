@@ -32,7 +32,7 @@ SNAP_FOLDER=$REP_WORK/snap_$(date '+%Y%m%d')
 mkdir $SNAP_FOLDER
 
 #find files older than days
-FILES=$(find $ARCHIVE -type f -mtime +$DAYS)
+FILES=$(find $ARCHIVE -type f -mtime +$DAYS -name "*json")
 
 for f in $FILES;
 do
