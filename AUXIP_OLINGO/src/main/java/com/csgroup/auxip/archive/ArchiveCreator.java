@@ -21,8 +21,10 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.persistence.QueryHint;
 
 import org.apache.olingo.commons.api.data.EntityCollection;
+import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +50,8 @@ public class ArchiveCreator {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
-	//@Scheduled(fixedRate = 3000000, initialDelay = 5000)
+	//@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
+	@Scheduled(fixedRate = 3000000, initialDelay = 5000)
 	public void reportCurrentTime() {
 		if (!config.getActive())
 		{
@@ -79,7 +81,14 @@ public class ArchiveCreator {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		DateTimeFormatter formatter_file = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-		String queryString = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity WHERE " ;
+		String queryString1= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+				+ "JOIN entity.StringAttributes e1 WHERE e1.product_id = entity.Id AND ";				
+		String queryString2 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+				+ "JOIN entity.IntegerAttributes e2 WHERE " ;
+		String queryString3 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+				+ "JOIN entity.DoubleAttributes p1 WHERE " ;
+		String queryString4= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+				+ "JOIN entity.DateTimeOffsetAttributes e4 WHERE " ;
 		//queryString = queryString.concat("entity.ContentDate.Start <= :publicationStop AND entity.ContentDate.Start >= :publicationStart");
 		//List of years to do
 		List<Integer> years = new ArrayList<>(List.of(1983,1987,2000));
@@ -101,112 +110,138 @@ public class ArchiveCreator {
 				LocalDateTime tmp_dt_m_stop = tmp_dt_m_start.with(TemporalAdjusters.lastDayOfMonth()).withHour(23)
 						.withMinute(59).withSecond(59);				
 				Map<String, Object> queryParams_m = new HashMap<String,Object>();						
-				String tmp_query = queryString.concat("entity.ContentDate.Start <= '"+tmp_dt_m_stop.format(formatter)+"' ");
-				tmp_query = tmp_query.concat("AND entity.ContentDate.Start >= '"+tmp_dt_m_start.format(formatter)+"'");
-				LOG.debug(tmp_query);
+				String tmp_query1 = queryString1.concat("entity.ContentDate.Start <= '"+tmp_dt_m_stop.format(formatter)+"' ");
+				tmp_query1= tmp_query1.concat("AND entity.ContentDate.Start >= '"+tmp_dt_m_start.format(formatter)+"'");
+				String tmp_query2 = queryString2.concat("entity.ContentDate.Start <= '"+tmp_dt_m_stop.format(formatter)+"' ");
+				tmp_query2= tmp_query2.concat("AND entity.ContentDate.Start >= '"+tmp_dt_m_start.format(formatter)+"'");
+				String tmp_query3 = queryString3.concat("entity.ContentDate.Start <= '"+tmp_dt_m_stop.format(formatter)+"' ");
+				tmp_query3= tmp_query3.concat("AND entity.ContentDate.Start >= '"+tmp_dt_m_start.format(formatter)+"'");
+				String tmp_query4 = queryString4.concat("entity.ContentDate.Start <= '"+tmp_dt_m_stop.format(formatter)+"' ");
+				tmp_query4= tmp_query4.concat("AND entity.ContentDate.Start >= '"+tmp_dt_m_start.format(formatter)+"'");
+				LOG.debug(tmp_query1);
+				LOG.debug(tmp_query2);
+				LOG.debug(tmp_query3);
+				LOG.debug(tmp_query4);
 				LOG.debug("StartDate: "+tmp_dt_m_start.toString());
 				LOG.debug("StopDate: "+tmp_dt_m_stop.format(formatter));				
-				Query query_m = entityManager.createQuery(tmp_query);
+				Query query_m1 = entityManager.createQuery(tmp_query1);
 				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
-					query_m.setParameter(entry_m.getKey(), entry_m.getValue());
+					query_m1.setParameter(entry_m.getKey(), entry_m.getValue());
+				}
+				Query query_m2 = entityManager.createQuery(tmp_query2);
+				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
+					query_m2.setParameter(entry_m.getKey(), entry_m.getValue());
+				}
+				Query query_m3 = entityManager.createQuery(tmp_query3);
+				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
+					query_m3.setParameter(entry_m.getKey(), entry_m.getValue());
+				}
+				Query query_m4 = entityManager.createQuery(tmp_query4);
+				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
+					query_m4.setParameter(entry_m.getKey(), entry_m.getValue());
 				}
 				List<Product> products_m;
 				try {	
-					products_m = query_m.getResultList();
-				} finally {
-					entityManager.close();
-				}
-				if (products_m.size() ==0)
-				{
-					continue;
-				}
-				LOG.info("Number of products found for date ["+tmp_dt_m_start.toString()+"/"+tmp_dt_m_stop.toString()+"] : "+products_m.size());
-				List<Product> products_nofilter = new ArrayList<>();
-				products_nofilter.addAll(products_m);
-				total_found = total_found + products_m.size();
-				//Loop on days
-				for (int d = tmp_dt_m_start.getDayOfMonth();d <= tmp_dt_m_stop.getDayOfMonth();d++)
-				{
-					LocalDateTime tmp_dt_start = LocalDateTime.of(y, m,d, 0, 0);
-					LocalDateTime tmp_dt_stop = LocalDateTime.of(y, m,d, 23, 59,59,999999999);						
-					LOG.debug("StartDate: "+tmp_dt_start.toString());
-					LOG.debug("StopDate: "+tmp_dt_stop.format(formatter));
-					//Loop on SAT
-					for (String str_sat : SATS)
+					products_m = query_m1.getResultList();					
+					products_m = query_m2.getResultList();
+					products_m = query_m3.getResultList();
+					products_m = query_m4.getResultList();					
+
+					if (products_m.size() ==0)
 					{
-						List<Product> products;
-						
-						products = filterProducts(products_m, str_sat, Timestamp.valueOf(tmp_dt_start.format(formatter)),
-								Timestamp.valueOf(tmp_dt_stop.format(formatter)),products_nofilter);
-
-						LOG.info("Number of products found for sat "+str_sat+" for date ["+tmp_dt_start.toString()+"/"+tmp_dt_stop.toString()+"] : "+products.size());
-
-						if (products.size() > 0)
+						continue;
+					}
+					LOG.info("Number of products found for date ["+tmp_dt_m_start.toString()+"/"+tmp_dt_m_stop.toString()+"] : "+products_m.size());
+					List<Product> products_nofilter = new ArrayList<>();
+					products_nofilter.addAll(products_m);
+					total_found = total_found + products_m.size();
+					//Loop on days
+					for (int d = tmp_dt_m_start.getDayOfMonth();d <= tmp_dt_m_stop.getDayOfMonth();d++)
+					{
+						LocalDateTime tmp_dt_start = LocalDateTime.of(y, m,d, 0, 0);
+						LocalDateTime tmp_dt_stop = LocalDateTime.of(y, m,d, 23, 59,59,999999999);						
+						LOG.debug("StartDate: "+tmp_dt_start.toString());
+						LOG.debug("StopDate: "+tmp_dt_stop.format(formatter));
+						//Loop on SAT
+						for (String str_sat : SATS)
 						{
-							List<Product> mpc_products = new ArrayList<>();
-							List<Product> pod_products = new ArrayList<>();
-							List<Product> adg_products = new ArrayList<>();
-							filterProvider(products, mpc_products, pod_products, adg_products);
-							LOG.debug("MPC: "+String.valueOf(mpc_products.size())+" ,POD: "+String.valueOf(pod_products.size())+" ,ADG: "+String.valueOf(adg_products.size()));
+							List<Product> products;
 
-							//Create year folder
-							Path dir_path = Paths.get(config.getTempFolder(),str_sat, String.valueOf(y),String.valueOf(m));
-							try {
-								Files.createDirectories(dir_path);
-							} catch (Exception e) {
-								LOG.error("Couldnt create folder " +dir_path.toString());	  
-							}
-							//MPC products export
-							if (mpc_products.size() > 0)
+							products = filterProducts(products_m, str_sat, Timestamp.valueOf(tmp_dt_start.format(formatter)),
+									Timestamp.valueOf(tmp_dt_stop.format(formatter)),products_nofilter);
+
+							LOG.info("Number of products found for sat "+str_sat+" for date ["+tmp_dt_start.toString()+"/"+tmp_dt_stop.toString()+"] : "+products.size());
+
+							if (products.size() > 0)
 							{
-								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_C-V" + "_catalogue_"+now.format(formatter_file)+".json";
-								LOG.debug("Exporting MPC to : "+filename);
-								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
-								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
-									ProductSerializer serializer = new ProductSerializer();
-									serializer.SerializeProductList(mpc_products, fos);
+								List<Product> mpc_products = new ArrayList<>();
+								List<Product> pod_products = new ArrayList<>();
+								List<Product> adg_products = new ArrayList<>();
+								filterProvider(products, mpc_products, pod_products, adg_products);
+								LOG.debug("MPC: "+String.valueOf(mpc_products.size())+" ,POD: "+String.valueOf(pod_products.size())+" ,ADG: "+String.valueOf(adg_products.size()));
+
+								//Create year folder
+								Path dir_path = Paths.get(config.getTempFolder(),str_sat, String.valueOf(y),String.valueOf(m));
+								try {
+									Files.createDirectories(dir_path);
 								} catch (Exception e) {
-									LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+									LOG.error("Couldnt create folder " +dir_path.toString());	  
 								}
-								total_exported = total_exported + mpc_products.size();
-							}
-							//POD products export
-							if (pod_products.size() > 0)
-							{
-								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_POD" + "_catalogue_"+now.format(formatter_file)+".json";
-								LOG.debug("Exporting POD to : "+filename);
-								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
-								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
-									ProductSerializer serializer = new ProductSerializer();
-									serializer.SerializeProductList(pod_products, fos);
-								} catch (Exception e) {
-									LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+								//MPC products export
+								if (mpc_products.size() > 0)
+								{
+									String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
+											String.format("%02d", d) + "_" + "AUX_C-V" + "_catalogue_"+now.format(formatter_file)+".json";
+									LOG.debug("Exporting MPC to : "+filename);
+									Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
+									try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
+										ProductSerializer serializer = new ProductSerializer();
+										serializer.SerializeProductList(mpc_products, fos);
+									} catch (Exception e) {
+										LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+									}
+									total_exported = total_exported + mpc_products.size();
 								}
-								total_exported = total_exported + pod_products.size();
-							}
-							//ADG products export
-							if (adg_products.size() > 0)
-							{
-								String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
-										String.format("%02d", d) + "_" + "AUX_ADG" + "_catalogue_"+now.format(formatter_file)+".json";
-								LOG.debug("Exporting ADG to : "+filename);
-								Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
-								try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
-									ProductSerializer serializer = new ProductSerializer();
-									serializer.SerializeProductList(adg_products, fos);
-								} catch (Exception e) {
-									LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+								//POD products export
+								if (pod_products.size() > 0)
+								{
+									String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
+											String.format("%02d", d) + "_" + "AUX_POD" + "_catalogue_"+now.format(formatter_file)+".json";
+									LOG.debug("Exporting POD to : "+filename);
+									Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
+									try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
+										ProductSerializer serializer = new ProductSerializer();
+										serializer.SerializeProductList(pod_products, fos);
+									} catch (Exception e) {
+										LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+									}
+									total_exported = total_exported + pod_products.size();
 								}
-								total_exported = total_exported + adg_products.size();
+								//ADG products export
+								if (adg_products.size() > 0)
+								{
+									String filename = str_sat + "_" + String.format("%04d", y) + String.format("%02d", m) + 
+											String.format("%02d", d) + "_" + "AUX_ADG" + "_catalogue_"+now.format(formatter_file)+".json";
+									LOG.debug("Exporting ADG to : "+filename);
+									Path file_path = Paths.get(config.getTempFolder(),str_sat,String.valueOf(y),String.valueOf(m),filename);
+									try (FileOutputStream fos = new FileOutputStream(file_path.toString())) {
+										ProductSerializer serializer = new ProductSerializer();
+										serializer.SerializeProductList(adg_products, fos);
+									} catch (Exception e) {
+										LOG.error("Couldnt write products to file " +e.getLocalizedMessage());	    	
+									}
+									total_exported = total_exported + adg_products.size();
+								}
 							}
 						}
 					}
-				}
-				for (Product p : products_nofilter)
-				{
-					LOG.debug("Product : "+p.getName()+" : "+p.getContentDate().getStart().toLocalDateTime().toString()+" / "+p.getContentDate().getEnd().toLocalDateTime().toString() +" has not been filtered");
+
+					for (Product p : products_nofilter)
+					{
+						LOG.debug("Product : "+p.getName()+" : "+p.getContentDate().getStart().toLocalDateTime().toString()+" / "+p.getContentDate().getEnd().toLocalDateTime().toString() +" has not been filtered");
+					}
+				} finally {
+					entityManager.close();
 				}
 			}
 		}

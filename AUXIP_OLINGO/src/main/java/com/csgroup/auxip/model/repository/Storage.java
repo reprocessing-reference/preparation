@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,9 +22,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
+import org.apache.olingo.commons.api.data.Property;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
+import org.apache.olingo.commons.api.ex.ODataRuntimeException;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
 import org.apache.olingo.server.api.ODataApplicationException;
 import org.apache.olingo.server.api.uri.UriInfoResource;
@@ -30,6 +34,7 @@ import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceLambdaAny;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
+import org.apache.olingo.server.api.uri.queryoption.ExpandItem;
 import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
 import org.apache.olingo.server.api.uri.queryoption.FilterOption;
 import org.apache.olingo.server.api.uri.queryoption.OrderByItem;
@@ -47,10 +52,11 @@ import org.apache.olingo.server.api.uri.queryoption.expression.BinaryOperatorKin
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
 
-import com.csgroup.auxip.archive.ArchiveCreator;
+import com.csgroup.auxip.model.jpa.Attribute;
 import com.csgroup.auxip.model.jpa.Globals;
 import com.csgroup.auxip.model.jpa.Metric;
 import com.csgroup.auxip.model.jpa.Product;
+import com.csgroup.auxip.model.jpa.StringAttribute;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
 import com.csgroup.auxip.model.jpa.User;
@@ -72,7 +78,7 @@ class AttributeFilter {
 }
 
 public class Storage {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(Storage.class);
 
 	private EntityManagerFactory entityManagerFactory;
@@ -551,7 +557,7 @@ public class Storage {
 		}
 
 		// add OrderBy Options
-		//queryString = addOrderByOption(entitySetName,queryString, orderByOption);
+		//queryString = addOrderByOption(entitySetName,queryString, orderByOption);		
 		LOG.debug("Query: "+queryString);
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 
@@ -591,7 +597,7 @@ public class Storage {
 				entityManager.close();
 			}
 			LOG.debug("Top Ok :"+String.valueOf(products.size()));			
-			Boolean expandAttributes = (expandOption != null);
+			Boolean expandAttributes = false;
 			for (Product product : products) {
 				entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
 			}
@@ -614,7 +620,6 @@ public class Storage {
 
 		return entitySet;
 	}
-
 
 	public String addOrderByOption(String entitySetName,String query,OrderByOption orderByOption)
 	{
@@ -680,7 +685,7 @@ public class Storage {
 
 	// Navigation
 
-	public Entity getRelatedEntity(Entity entity, EdmEntityType relatedEntityType) {
+	public Entity getRelatedEntity(Entity entity, EdmEntityType relatedEntityType) throws ODataApplicationException {
 		EntityCollection collection = getRelatedEntityCollection(entity, relatedEntityType);
 		if (collection.getEntities().isEmpty()) {
 			return null;
@@ -688,7 +693,7 @@ public class Storage {
 		return collection.getEntities().get(0);
 	}
 
-	public Entity getRelatedEntity(Entity entity, EdmEntityType relatedEntityType, List<UriParameter> keyPredicates) {
+	public Entity getRelatedEntity(Entity entity, EdmEntityType relatedEntityType, List<UriParameter> keyPredicates) throws ODataApplicationException {
 		// Entity entity = null;
 
 		EntityCollection relatedEntities = getRelatedEntityCollection(entity, relatedEntityType);
@@ -696,14 +701,40 @@ public class Storage {
 		return entity;
 	}
 
-	public EntityCollection getRelatedEntityCollection(Entity sourceEntity, EdmEntityType targetEntityType) {
+	public EntityCollection getRelatedEntityCollection(Entity sourceEntity, EdmEntityType targetEntityType) throws ODataApplicationException {
 		EntityCollection navigationTargetEntityCollection = new EntityCollection();
 
 		FullQualifiedName relatedEntityFqn = targetEntityType.getFullQualifiedName();
 		String sourceEntityFqn = sourceEntity.getType();
+		LOG.debug("SourceEntity : "+sourceEntityFqn);
+		switch (sourceEntityFqn) {
+		case Product.ET_NAME:
+			String className = StringAttribute.class.getName();
+			navigationTargetEntityCollection.setId(createId(sourceEntity, "ID", "Attributes"));
+			String queryString = "SELECT entity FROM " + className + " entity WHERE entity.product_id = :productid";
+			Map<String, Object> queryParams_m = new HashMap<String,Object>();						
+			queryParams_m.put("productid", UUID.fromString(sourceEntity.getProperty("ID").toString()));
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			try {
+				List<StringAttribute> strAttribs;
+				Query query_m = entityManager.createQuery(queryString);
+				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
+					query_m.setParameter(entry_m.getKey(), entry_m.getValue());
+				}
+				strAttribs = query_m.getResultList();
+				for (StringAttribute s:strAttribs)
+				{
+					navigationTargetEntityCollection.getEntities().add(s.getOdataEntity());	
+				}				
+			} finally {                    
+				entityManager.close();
+			}
+			break;
+		}
 
 		if (navigationTargetEntityCollection.getEntities().isEmpty()) {
-			return null;
+			throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			//return null;
 		}
 
 		return navigationTargetEntityCollection;
@@ -719,19 +750,19 @@ public class Storage {
 			if (contentTypeString.equals("application/json"))
 			{
 				LOG.debug("In product");
-				 ObjectMapper mapper = new ObjectMapper();
-				 try {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
 					JsonNode actualObj = mapper.readTree(new String(mediaContent));
 					prod.setId(UUID.fromString(actualObj.get("uuid").asText()));
 					//prod.setContentLength(actualObj.get("").);
 					LOG.debug("Id: "+actualObj.get("uuid").asText());
 				} catch (JsonProcessingException e) {
 					throw new ODataApplicationException("Can't parse body as JSON for product POST", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
-					          Locale.ENGLISH);
+							Locale.ENGLISH);
 				}
 			} else {
 				throw new ODataApplicationException("Bad contenttype for Product POST request", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
-				          Locale.ENGLISH);
+						Locale.ENGLISH);
 			}
 			LOG.debug("In product");
 			entity = prod.getOdataEntity(false);
@@ -755,5 +786,31 @@ public class Storage {
 		return entity;
 	}
 
+	private URI createId(Entity entity, String idPropertyName) {
+		return createId(entity, idPropertyName, null);
+	}
+
+	private URI createId(Entity entity, String idPropertyName, String navigationName) {
+		try {
+			StringBuilder sb = new StringBuilder(getEntitySetName(entity)).append("(");
+			final Property property = entity.getProperty(idPropertyName);
+			sb.append(property.asPrimitive()).append(")");
+			if(navigationName != null) {
+				sb.append("/").append(navigationName);
+			}
+			return new URI(sb.toString());
+		} catch (URISyntaxException e) {
+			throw new ODataRuntimeException("Unable to create (Atom) id for entity: " + entity, e);
+		}
+	}
+
+	private String getEntitySetName(Entity entity) {
+		if(entity.getType().equals(Product.ET_NAME)) {
+			return Product.ES_NAME;
+		} else if(entity.getType().equals(Subscription.ET_NAME)) {
+			return Subscription.ES_NAME;
+		}
+		return entity.getType();
+	}
 
 }

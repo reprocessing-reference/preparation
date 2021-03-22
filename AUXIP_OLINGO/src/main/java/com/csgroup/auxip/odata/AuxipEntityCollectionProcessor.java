@@ -22,12 +22,17 @@ import java.util.List;
 import java.util.Locale;
 
 import com.csgroup.auxip.model.repository.Storage;
+
+import org.apache.olingo.commons.api.Constants;
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
+import org.apache.olingo.commons.api.data.Link;
+import org.apache.olingo.commons.api.edm.EdmElement;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.edm.EdmNavigationProperty;
+import org.apache.olingo.commons.api.edm.EdmNavigationPropertyBinding;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
@@ -47,6 +52,7 @@ import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceEntitySet;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
 import org.apache.olingo.server.api.uri.queryoption.CountOption;
+import org.apache.olingo.server.api.uri.queryoption.ExpandItem;
 import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
 import org.apache.olingo.server.api.uri.queryoption.FilterOption;
 import org.apache.olingo.server.api.uri.queryoption.OrderByOption;
@@ -133,24 +139,69 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
 
     // 3rd: apply System Query Options
     // modify the result set according to the query options, specified by the end user
-    List<Entity> entityList = responseEntityCollection.getEntities();
-    EntityCollection returnEntityCollection = new EntityCollection();
-    LOG.info("entityList contains "+String.valueOf(entityList.size()+" elements"));
-
-    // handle $count: return the original number of entities, ignore $top and $skip
-    
-    if (countOption != null) {
-        boolean isCount = countOption.getValue();
-        if(isCount){
-            returnEntityCollection.setCount(entityList.size());
+    LOG.info("entityList contains "+String.valueOf(responseEntityCollection.getCount()+" elements"));
+    // in our example: http://localhost:8080/DemoService/DemoService.svc/Categories/$expand=Products
+    // or http://localhost:8080/DemoService/DemoService.svc/Products?$expand=Category
+    if (expandOption != null) {
+      // retrieve the EdmNavigationProperty from the expand expression
+      // Note: in our example, we have only one NavigationProperty, so we can directly access it
+      EdmNavigationProperty edmNavigationProperty = null;
+      ExpandItem expandItem = expandOption.getExpandItems().get(0);
+      if(expandItem.isStar()) {
+        List<EdmNavigationPropertyBinding> bindings = responseEdmEntitySet.getNavigationPropertyBindings();
+        // we know that there are navigation bindings
+        // however normally in this case a check if navigation bindings exists is done
+        if(!bindings.isEmpty()) {
+          // can in our case only be 'Category' or 'Products', so we can take the first
+          EdmNavigationPropertyBinding binding = bindings.get(0);
+          EdmElement property = responseEdmEntitySet.getEntityType().getProperty(binding.getPath());
+          // we don't need to handle error cases, as it is done in the Olingo library
+          if(property instanceof EdmNavigationProperty) {
+            edmNavigationProperty = (EdmNavigationProperty) property;
+          }
         }
+      } else {
+        // can be 'Category' or 'Products', no path supported
+        UriResource uriResource_expand = expandItem.getResourcePath().getUriResourceParts().get(0);
+        // we don't need to handle error cases, as it is done in the Olingo library
+        if(uriResource_expand instanceof UriResourceNavigation) {
+          edmNavigationProperty = ((UriResourceNavigation) uriResource_expand).getProperty();
+        }
+      }
+
+      // can be 'Category' or 'Products', no path supported
+      // we don't need to handle error cases, as it is done in the Olingo library
+      if(edmNavigationProperty != null) {
+        String navPropName = edmNavigationProperty.getName();
+        EdmEntityType expandEdmEntityType = edmNavigationProperty.getType();
+
+        List<Entity> entityList = responseEntityCollection.getEntities();
+        for (Entity entity : entityList) {
+          Link link = new Link();
+          link.setTitle(navPropName);
+          link.setType(Constants.ENTITY_NAVIGATION_LINK_TYPE);
+          link.setRel(Constants.NS_ASSOCIATION_LINK_REL + navPropName);
+
+          if (edmNavigationProperty.isCollection()) { // in case of Categories/$expand=Products
+            // fetch the data for the $expand (to-many navigation) from backend
+            EntityCollection expandEntityCollection = storage.getRelatedEntityCollection(entity, expandEdmEntityType);
+            link.setInlineEntitySet(expandEntityCollection);
+            link.setHref(expandEntityCollection.getId().toASCIIString());
+          } else { // in case of Products?$expand=Category
+            // fetch the data for the $expand (to-one navigation) from backend
+            // here we get the data for the expand
+            Entity expandEntity = storage.getRelatedEntity(entity, expandEdmEntityType);
+            link.setInlineEntity(expandEntity);
+            link.setHref(expandEntity.getId().toASCIIString());
+          }
+
+          // set the link - containing the expanded data - to the current entity
+          entity.getNavigationLinks().add(link);
+        }
+      }
     }
 
-    // after applying the query options, create EntityCollection based on the reduced list
-    for(Entity entity : entityList){
-        returnEntityCollection.getEntities().add(entity);
-    }
-
+    
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();
     // we need the property names of the $select, in order to build the context URL
@@ -168,7 +219,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
         .build();
     LOG.info("Serializing "+edmEntityType.toString());
     ODataSerializer serializer = odata.createSerializer(responseFormat);
-    SerializerResult serializerResult = serializer.entityCollection(srvMetadata, edmEntityType, returnEntityCollection, opts);    
+    SerializerResult serializerResult = serializer.entityCollection(srvMetadata, edmEntityType, responseEntityCollection, opts);    
     // 5th: configure the response object: set the body, headers and status code
     response.setContent(serializerResult.getContent());
     response.setStatusCode(HttpStatusCode.OK.getStatusCode());
