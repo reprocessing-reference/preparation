@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.olingo.server.api.OData;
@@ -41,12 +42,17 @@ public class AuxipEdmController {
 
 	public static final String URI = "/auxipv2";
 
-    	/** The ProductRepository to get data with */
-
-    private Storage storage;
     @Autowired
     private EntityManagerFactory  entityManagerFactory;
-
+    
+    OData odata;
+    ServiceMetadata edm;
+    
+    @PostConstruct
+    public void postConstruct() {
+    	odata = OData.newInstance();
+        edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());
+    }
 	/**
 	 * Process.
 	 *
@@ -72,17 +78,17 @@ public class AuxipEdmController {
 
         try {
 
-            if( token == null )
-            {
-                throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
-            }
+            //if( token == null )
+            //{
+            //    throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
+            //}
 
-            storage = new Storage();
+            Storage storage = new Storage();
             storage.setEntityManagerFactory(entityManagerFactory);
             storage.setAccessToken(token) ;
             // create odata handler and configure it with EdmProvider and Processor
-            OData odata = OData.newInstance();
-            ServiceMetadata edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());
+            //OData odata = OData.newInstance();
+            //ServiceMetadata edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());
             ODataHttpHandler handler = odata.createHandler(edm);
 
             handler.register(new AuxipEntityCollectionProcessor(storage));

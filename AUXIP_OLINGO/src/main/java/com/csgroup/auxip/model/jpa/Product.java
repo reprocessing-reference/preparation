@@ -34,16 +34,21 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.csgroup.auxip.controller.AuxipBeanUtil;
+import com.csgroup.auxip.model.repository.Storage;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.ManyToAny;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.annotation.Transient;
@@ -76,7 +81,11 @@ import software.amazon.awssdk.utils.IoUtils;
  */
 @Entity(name = "Product")
 public class Product {
-	@Id    
+	private static final Logger LOG = LoggerFactory.getLogger(Product.class);
+	
+	@Id
+	@GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private UUID Id;
     private String Name;
     private String ContentType;
@@ -93,19 +102,19 @@ public class Product {
     @Embedded
 	private TimeRange ContentDate;
 	
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<StringAttribute> StringAttributes;
 	
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<IntegerAttribute> IntegerAttributes;
 	
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DoubleAttribute> DoubleAttributes;
 	
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
 	@Fetch(value = FetchMode.SUBSELECT)
     private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
 		
@@ -291,7 +300,6 @@ public class Product {
 	public org.apache.olingo.commons.api.data.Entity getOdataEntity(Boolean expandAttributes)
 	{
 		org.apache.olingo.commons.api.data.Entity entity = new org.apache.olingo.commons.api.data.Entity();
-
 		// create EntityType properties
 		Property id = new Property("Guid", "ID",ValueType.PRIMITIVE,this.Id) ;
 		Property name = new Property("String", "Name",ValueType.PRIMITIVE,this.Name) ;
@@ -300,15 +308,11 @@ public class Product {
 		Property origindate = new Property("DateTimeOffset", "OriginDate",ValueType.PRIMITIVE,this.OriginDate) ;
 		Property evictiondate = new Property("DateTimeOffset", "EvictionDate",ValueType.PRIMITIVE,this.EvictionDate) ;
 		Property publicationdate = new Property("DateTimeOffset", "PublicationDate",ValueType.PRIMITIVE,this.PublicationDate) ;
-
 		Property mediaValue = new Property(null, MEDIA_PROPERTY_NAME,ValueType.PRIMITIVE, this.getPresignedUrl().getBytes()) ;
-
 		ComplexValue timeRange = new ComplexValue() ;
 		timeRange.getValue().add( new Property(null, "Start", ValueType.PRIMITIVE, this.ContentDate.getStart())) ;
 		timeRange.getValue().add( new Property(null, "End", ValueType.PRIMITIVE, this.ContentDate.getEnd()) );
-			 
 		Property contentDate = new Property(null, "ContentDate",ValueType.COMPLEX, timeRange ) ;
-
 		List<ComplexValue> checksums = new ArrayList<>();
 		for( Checksum cs : this.Checksum )
 		{
@@ -320,7 +324,6 @@ public class Product {
 			checksums.add(checksum);
 		}
 		Property checksum = new Property(null, "Checksum",ValueType.COLLECTION_COMPLEX,checksums) ;
-
 		entity.addProperty( id );
 		entity.addProperty( name );
 		entity.addProperty( contenttype );
@@ -335,7 +338,6 @@ public class Product {
 		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("text/plain").toContentTypeString());
 
 		entity.setType(FQN.getFullQualifiedNameAsString());
-
 		try {
 			StringBuilder sb = new StringBuilder(ES_NAME).append("(");
 			sb.append(id.asPrimitive()).append(")");
@@ -371,7 +373,6 @@ public class Product {
 		    link.setHref("Products(uuid)/Attributes".replace( "uuid", this.Id.toString() ));
 			entity.getNavigationLinks().add(link);
 		}
-
 		return entity;
 	}
 

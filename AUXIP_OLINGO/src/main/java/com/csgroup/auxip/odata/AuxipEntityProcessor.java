@@ -52,9 +52,13 @@ import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceEntitySet;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcessor {
 
+  private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityProcessor.class);
+  
   private OData odata;
   private ServiceMetadata serviceMetadata;
   private Storage storage;
@@ -248,9 +252,28 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
    */
   @Override
   public void createMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-      ContentType requestFormat, ContentType responseFormat)
-      throws ODataApplicationException, DeserializerException, SerializerException {
-    throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+		  ContentType requestFormat, ContentType responseFormat)
+				  throws ODataApplicationException, DeserializerException, SerializerException {
+	  final UriResource firstResoucePart = uriInfo.getUriResourceParts().get(0);
+	  UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) firstResoucePart;
+	  EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
+	  final byte[] mediaContent = odata.createFixedFormatDeserializer().binary(request.getBody());
+
+	  final Entity entity = storage.createMediaEntity(edmEntitySet.getEntityType(), 
+			  requestFormat.toContentTypeString(), 
+			  mediaContent);
+	  LOG.debug("Entity created : "+entity.getType());
+	  final ContextURL contextUrl = ContextURL.with().entitySet(edmEntitySet).suffix(Suffix.ENTITY).build();
+	  final EntitySerializerOptions opts = EntitySerializerOptions.with().contextURL(contextUrl).build();
+	  final SerializerResult serializerResult = odata.createSerializer(responseFormat).entity(serviceMetadata,
+			  edmEntitySet.getEntityType(), entity, opts);
+
+	  final String location = request.getRawBaseUri() + '/'
+			  + odata.createUriHelper().buildCanonicalURL(edmEntitySet, entity);
+	  response.setContent(serializerResult.getContent());
+	  response.setStatusCode(HttpStatusCode.CREATED.getStatusCode());
+	  response.setHeader(HttpHeader.LOCATION, location);
+	  response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());	  
   }
   @Override
   public void updateMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
