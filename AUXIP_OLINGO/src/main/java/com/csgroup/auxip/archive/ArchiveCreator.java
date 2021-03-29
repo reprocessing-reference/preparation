@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -58,8 +59,8 @@ public class ArchiveCreator {
 			LOG.info("Archiving is not activated in config");
 			return;
 		}
-
-		LOG.info("The time is now {}", dateFormat.format(new Date()));		
+		LocalDateTime now = LocalDateTime.now();		
+		LOG.info("The time is now {}", now.toString());		
 		if (config.getOnTrigger() && !storageStatus.hasChanges())
 		{
 			LOG.info("No change in the repository, nothing to do");
@@ -77,12 +78,12 @@ public class ArchiveCreator {
 		long total_exported = 0;
 		long total_found = 0;
 		//get current date
-		LocalDateTime now = LocalDateTime.now();
+		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		DateTimeFormatter formatter_file = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
 		String queryString1= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
-				+ "JOIN entity.StringAttributes e1 WHERE e1.product_id = entity.Id AND ";				
+				+ "JOIN entity.StringAttributes e1 WHERE ";				
 		String queryString2 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
 				+ "JOIN entity.IntegerAttributes e2 WHERE " ;
 		String queryString3 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
@@ -249,6 +250,7 @@ public class ArchiveCreator {
 
 		LOG.info("Number of exported products : "+String.valueOf(total_exported));
 		LOG.info("Number of products found : "+String.valueOf(total_found));
+		LOG.info("Done in {} min {} seconds", Duration.between(now, LocalDateTime.now()).toMinutes(), Duration.between(now, LocalDateTime.now()).toSecondsPart());
 		storageStatus.archiveDone();
 	}
 

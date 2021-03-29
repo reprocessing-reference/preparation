@@ -2,17 +2,12 @@ package com.csgroup.auxip.model.jpa;
 
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
-import org.apache.olingo.commons.api.edm.provider.CsdlAbstractEdmProvider;
-import org.apache.olingo.commons.api.edm.provider.CsdlComplexType;
-import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainer;
-import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainerInfo;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntitySet;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntityType;
 import org.apache.olingo.commons.api.edm.provider.CsdlNavigationProperty;
 import org.apache.olingo.commons.api.edm.provider.CsdlNavigationPropertyBinding;
 import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
 import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
-import org.apache.olingo.commons.api.edm.provider.CsdlSchema;
 import org.apache.olingo.commons.api.ex.ODataRuntimeException;
 import org.apache.olingo.commons.api.data.ComplexValue;
 import org.apache.olingo.commons.api.data.EntityCollection;
@@ -21,59 +16,38 @@ import org.apache.olingo.commons.api.data.Property;
 import org.apache.olingo.commons.api.data.ValueType;
 import org.apache.olingo.commons.api.Constants;
 
-import java.io.ObjectInputStream.GetField;
-import java.lang.module.FindException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.csgroup.auxip.controller.AuxipBeanUtil;
-import com.csgroup.auxip.model.repository.Storage;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.ManyToAny;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.data.annotation.Transient;
 
-import java.util.UUID;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-
-
-import java.net.HttpURLConnection;
 import java.time.Duration;
 
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.utils.IoUtils;
 
 
 /**
@@ -95,28 +69,24 @@ public class Product {
 	private Timestamp EvictionDate;    
 	
 	
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @ElementCollection    
+    @Fetch(value = FetchMode.JOIN)
 	private List<Checksum> Checksum;
 	
     @Embedded
 	private TimeRange ContentDate;
 	
-    @ElementCollection
-	@Fetch(value = FetchMode.SUBSELECT)
+    @ElementCollection(fetch = FetchType.LAZY)    
 	private List<StringAttribute> StringAttributes;
 	
-    @ElementCollection
-	@Fetch(value = FetchMode.SUBSELECT)
+    @ElementCollection(fetch = FetchType.LAZY)
 	private List<IntegerAttribute> IntegerAttributes;
 	
-    @ElementCollection
-	@Fetch(value = FetchMode.SUBSELECT)
+    @ElementCollection(fetch = FetchType.LAZY)
 	private List<DoubleAttribute> DoubleAttributes;
 	
-    @ElementCollection
-	@Fetch(value = FetchMode.SUBSELECT)
-    private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
+    @ElementCollection(fetch = FetchType.LAZY)
+	private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
 		
 
 	// Product

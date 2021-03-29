@@ -138,8 +138,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     }    
 
     // 3rd: apply System Query Options
-    // modify the result set according to the query options, specified by the end user
-    LOG.info("entityList contains "+String.valueOf(responseEntityCollection.getCount()+" elements"));
+    // modify the result set according to the query options, specified by the end user    
     // in our example: http://localhost:8080/DemoService/DemoService.svc/Categories/$expand=Products
     // or http://localhost:8080/DemoService/DemoService.svc/Products?$expand=Category
     if (expandOption != null) {
@@ -184,15 +183,23 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
 
           if (edmNavigationProperty.isCollection()) { // in case of Categories/$expand=Products
             // fetch the data for the $expand (to-many navigation) from backend
+        	LOG.debug("rela prod "+expandEdmEntityType.getName());
             EntityCollection expandEntityCollection = storage.getRelatedEntityCollection(entity, expandEdmEntityType);
-            link.setInlineEntitySet(expandEntityCollection);
-            link.setHref(expandEntityCollection.getId().toASCIIString());
+            LOG.debug("rela prod done");
+            if (expandEntityCollection != null) {
+            	link.setInlineEntitySet(expandEntityCollection);
+            	link.setHref(expandEntityCollection.getId().toASCIIString());
+            }
           } else { // in case of Products?$expand=Category
             // fetch the data for the $expand (to-one navigation) from backend
             // here we get the data for the expand
+        	LOG.debug("relauni prod");
             Entity expandEntity = storage.getRelatedEntity(entity, expandEdmEntityType);
-            link.setInlineEntity(expandEntity);
-            link.setHref(expandEntity.getId().toASCIIString());
+            LOG.debug("relauni prod done");
+            if (expandEntity != null) {
+            	link.setInlineEntity(expandEntity);
+            	link.setHref(expandEntity.getId().toASCIIString());
+            }
           }
 
           // set the link - containing the expanded data - to the current entity

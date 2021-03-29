@@ -53,7 +53,10 @@ import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
 
 import com.csgroup.auxip.model.jpa.Attribute;
+import com.csgroup.auxip.model.jpa.DateTimeOffsetAttribute;
+import com.csgroup.auxip.model.jpa.DoubleAttribute;
 import com.csgroup.auxip.model.jpa.Globals;
+import com.csgroup.auxip.model.jpa.IntegerAttribute;
 import com.csgroup.auxip.model.jpa.Metric;
 import com.csgroup.auxip.model.jpa.Product;
 import com.csgroup.auxip.model.jpa.StringAttribute;
@@ -557,7 +560,8 @@ public class Storage {
 		}
 
 		// add OrderBy Options
-		//queryString = addOrderByOption(entitySetName,queryString, orderByOption);		
+		queryString = addOrderByOption(entitySetName,queryString, orderByOption);
+		//queryString = addJoinOption(entitySetName,queryString);	
 		LOG.debug("Query: "+queryString);
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 
@@ -567,8 +571,7 @@ public class Storage {
 		if (topOption != null)
 		{
 			int topNumber = topOption.getValue();
-			if (topNumber >= 0) {
-				LOG.debug("In max");
+			if (topNumber >= 0) {				
 				query.setMaxResults(topOption.getValue());
 				query.setFirstResult(0);
 			} else {
@@ -588,15 +591,15 @@ public class Storage {
 
 		//Cast to destination class
 		switch (entitySetName) {
-		case Product.ES_NAME:
-			LOG.debug("Top Be");
+		case Product.ES_NAME:			
 			List<Product> products;
 			try {
+				LOG.debug("main prod");
 				products = query.getResultList();
+				LOG.debug("main prod done");
 			} finally {
 				entityManager.close();
-			}
-			LOG.debug("Top Ok :"+String.valueOf(products.size()));			
+			}						
 			Boolean expandAttributes = false;
 			for (Product product : products) {
 				entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
@@ -649,22 +652,25 @@ public class Storage {
 
 			query += orderBy ;
 
-		}else{
-			switch (entitySetName) {
-			case Product.ES_NAME:
-				// By default, the Products query are to be ordered by Publication Date, in an ascending order 
-				query += " ORDER BY entity.PublicationDate ASC";
-				break;
-			case Subscription.ES_NAME:
-				query += " ORDER BY entity.SubmissionDate ASC";
-				break;		
-			default:
-				break;
-			}
 		}
+		return query;
+	}
+
+	public String addJoinOption(String entitySetName,String query)
+	{
+		switch (entitySetName) {
+		case Product.ES_NAME:
+			// By default fetch the checksum 
+			query += " INNER JOIN entity.Checksum c1 ";
+			break;
+		default:
+			break;
+		}
+
 
 		return query;
 	}
+
 
 	public Entity readEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyParams) {
 		Entity entity = null;
@@ -705,36 +711,58 @@ public class Storage {
 		EntityCollection navigationTargetEntityCollection = new EntityCollection();
 
 		FullQualifiedName relatedEntityFqn = targetEntityType.getFullQualifiedName();
-		String sourceEntityFqn = sourceEntity.getType();
-		LOG.debug("SourceEntity : "+sourceEntityFqn);
-		switch (sourceEntityFqn) {
-		case Product.ET_NAME:
+		String sourceEntityFqn = sourceEntity.getType();				
+		if (sourceEntityFqn.equals(Product.FQN.getFullQualifiedNameAsString())
+				&& relatedEntityFqn.equals(Attribute.FQN)) {
 			String className = StringAttribute.class.getName();
 			navigationTargetEntityCollection.setId(createId(sourceEntity, "ID", "Attributes"));
-			String queryString = "SELECT entity FROM " + className + " entity WHERE entity.product_id = :productid";
+			String queryString1= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+					+ "JOIN entity.StringAttributes e1 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+			String queryString2 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+					+ "JOIN entity.IntegerAttributes e2 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+			String queryString3 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+					+ "JOIN entity.DoubleAttributes p1 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+			String queryString4= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
+					+ "JOIN entity.DateTimeOffsetAttributes e4 WHERE  entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
 			Map<String, Object> queryParams_m = new HashMap<String,Object>();						
-			queryParams_m.put("productid", UUID.fromString(sourceEntity.getProperty("ID").toString()));
+			//queryParams_m.put("productid", UUID.fromString(sourceEntity.getProperty("ID").getValue().toString()));
 			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			try {
-				List<StringAttribute> strAttribs;
-				Query query_m = entityManager.createQuery(queryString);
-				for (Map.Entry<String, Object> entry_m : queryParams_m.entrySet()) {
-					query_m.setParameter(entry_m.getKey(), entry_m.getValue());
-				}
-				strAttribs = query_m.getResultList();
-				for (StringAttribute s:strAttribs)
-				{
-					navigationTargetEntityCollection.getEntities().add(s.getOdataEntity());	
+				List<Product> strAttribs;
+				Query query_1 = entityManager.createQuery(queryString1);
+				Query query_2 = entityManager.createQuery(queryString2);
+				Query query_3 = entityManager.createQuery(queryString3);
+				Query query_4 = entityManager.createQuery(queryString4);			
+
+				strAttribs = query_1.getResultList();
+				strAttribs = query_2.getResultList();
+				strAttribs = query_3.getResultList();
+				strAttribs = query_4.getResultList();
+				for (Product s:strAttribs)
+				{					
+					for (StringAttribute a: s.getStringAttributes()) {
+						navigationTargetEntityCollection.getEntities().add(a.getOdataEntity());
+					}	
+					for (IntegerAttribute i: s.getIntegerAttributes()) {
+						navigationTargetEntityCollection.getEntities().add(i.getOdataEntity());
+					}
+					for (DoubleAttribute d: s.getDoubleAttributes()) {
+						navigationTargetEntityCollection.getEntities().add(d.getOdataEntity());
+					}
+					for (DateTimeOffsetAttribute o: s.getDateTimeOffsetAttributes()) {
+						navigationTargetEntityCollection.getEntities().add(o.getOdataEntity());
+					}
 				}				
-			} finally {                    
+			} catch (Exception e) {
+				LOG.debug("Exception : "+e.getLocalizedMessage());
+			}finally {                    
 				entityManager.close();
-			}
-			break;
+			}			
 		}
 
 		if (navigationTargetEntityCollection.getEntities().isEmpty()) {
-			throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
-			//return null;
+			//throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			return null;
 		}
 
 		return navigationTargetEntityCollection;
