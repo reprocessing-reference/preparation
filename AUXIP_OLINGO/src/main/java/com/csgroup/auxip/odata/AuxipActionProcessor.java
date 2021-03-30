@@ -84,7 +84,6 @@ public class AuxipActionProcessor implements ActionVoidProcessor, ActionEntityCo
       ContentType requestFormat) throws ODataApplicationException, ODataLibraryException {
 
 
-        System.out.println(" ======================processActionVoid=======================");
         // the first UriResource part should be Subscriptions
         UriResource uriResource = uriInfo.asUriInfoResource().getUriResourceParts().get(0);
         // Check if this action is associated to the right EntitySet = Subscriptions 
@@ -117,28 +116,8 @@ public class AuxipActionProcessor implements ActionVoidProcessor, ActionEntityCo
       ContentType requestFormat, ContentType responseFormat)
       throws ODataApplicationException, ODataLibraryException {
     // TODO Auto-generated method stub
-    
-      System.out.println(" ======================processActionEntity=======================");
-
-    final EdmAction edmAction = ((UriResourceAction) uriInfo.asUriInfoResource().getUriResourceParts()
-                                                                            .get(0)).getAction();
-
-    response.setStatusCode(HttpStatusCode.NO_CONTENT.getStatusCode());
-
   }
-  // pro
-  // @Override
-  // public void processBoundActionEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-  //     ContentType requestFormat, ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
-
-
-  //   // 1st Get the action from the resource path
-  //   final EdmAction edmAction = ((UriResourceAction) uriInfo.asUriInfoResource().getUriResourceParts()
-  //                                                                               .get(0)).getAction();
-
-  //   response.setStatusCode(HttpStatusCode.NO_CONTENT.getStatusCode());
-  // }
-
+  
 
   @Override
   public void processActionEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,

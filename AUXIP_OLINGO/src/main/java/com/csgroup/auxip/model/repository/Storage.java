@@ -60,25 +60,11 @@ class AttributeFilter {
 public class Storage {
 
   private EntityManagerFactory entityManagerFactory;
-  private AccessToken accessToken;
-  private User user;
-
-  public User getUser() {
-      return user;
-  }
-  public void setUser(User user) {
-      this.user = user;
-  }
 
   public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
     this.entityManagerFactory = entityManagerFactory;
   }
 
-  public void setAccessToken(AccessToken accessToken) {
-      this.accessToken = accessToken;
-      this.user = new User(accessToken);
-      
-  }
   // utility member
   private Map<String, String> operatorsMapping = new HashMap<>();
 

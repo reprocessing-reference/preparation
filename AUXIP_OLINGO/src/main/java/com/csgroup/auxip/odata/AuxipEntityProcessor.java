@@ -21,8 +21,17 @@ package com.csgroup.auxip.odata;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+
+import javax.print.DocFlavor.STRING;
+
+import com.csgroup.auxip.model.jpa.CounterType;
+import com.csgroup.auxip.model.jpa.Globals;
 import com.csgroup.auxip.model.jpa.Subscription;
+import com.csgroup.auxip.model.jpa.User;
+import com.csgroup.auxip.model.jpa.UserManager;
 import com.csgroup.auxip.model.repository.Storage;
+import com.csgroup.auxip.model.security.AccessControl;
+
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.ContextURL.Suffix;
 import org.apache.olingo.commons.api.data.Entity;
@@ -81,6 +90,13 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
     EdmEntityType responseEdmEntityType = null; // we'll need this to build the ContextURL
     Entity responseEntity = null; // required for serialization of the response body
     EdmEntitySet responseEdmEntitySet = null; // we need this for building the contextUrl
+
+    // Check the client access role 
+    if ( !AccessControl.userCanDealWith(request, uriInfo) )
+    {
+      throw new ODataApplicationException("Unauthorized Request !",
+      HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+    }
 
     // 1st step: retrieve the requested Entity: can be "normal" read operation, or navigation (to-one)
     List<UriResource> resourceParts = uriInfo.getUriResourceParts();
@@ -154,6 +170,14 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
       ContentType requestFormat, ContentType responseFormat)
       throws ODataApplicationException, DeserializerException, SerializerException {
 
+
+        // Check the client access role 
+        if ( !AccessControl.userCanDealWith(request, uriInfo) )
+        {
+          throw new ODataApplicationException("Unauthorized Request !",
+          HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+        }
+
          // 1. Retrieve the entity type from the URI
         List<UriResource> resourceParts = uriInfo.getUriResourceParts();
     
@@ -215,7 +239,11 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
   @Override
   public void readMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType responseFormat)
       throws ODataApplicationException, ODataLibraryException {
-    
+  
+    UserManager userManager = new UserManager();
+    User user = userManager.getUser(request);
+    AccessControl accessControl = new AccessControl(user);
+
     //this call comes from /Products(uuid)/$value
     final UriResource firstResoucePart = uriInfo.getUriResourceParts().get(0);
     if(firstResoucePart instanceof UriResourceEntitySet) 
@@ -229,9 +257,29 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
         throw new ODataApplicationException("Entity not found", HttpStatusCode.NOT_FOUND.getStatusCode(), 
             Locale.ENGLISH);
       }
+      String productName = (String)entity.getProperty("Name").asPrimitive();
+      // Role & Quota checking
+      if( !accessControl.userCanDownload() )
+      {
+        // update number of failed downloads
+        user.incrementDownloadsCounter( productName , CounterType.failed );
+        userManager.saveUser();
+        userManager.close();
 
-      final byte[] mediaContent = (byte[])entity.getProperty("$value").asPrimitive();
+        throw new ODataApplicationException("Too Many Requests !",Globals.TOO_MANY_REQUESTS, Locale.ROOT);
+      }
+      // increment the completed downloads counter
+      user.incrementDownloadsCounter(productName, CounterType.completed );
+      // update downloaded volumes
+      long productLength = (long)entity.getProperty("ContentLength").asPrimitive() ;
+      user.incrementDownloadsCounter(productName, CounterType.volume , productLength );
+      user.updateDownloadedVolume(productLength);
       
+      userManager.saveUser();
+      userManager.close();
+
+
+      final byte[] mediaContent = (byte[])entity.getProperty("$value").asPrimitive();      
       final InputStream responseContent = odata.createFixedFormatSerializer().binary(mediaContent);
       
       response.setStatusCode(HttpStatusCode.OK.getStatusCode());

@@ -84,20 +84,6 @@ public class JPADataSourceConfiguration {
         return jpaVendorAdapter;
     }
 
-    // @Bean
-    // @Primary
-    // public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    //     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
-    //             new LocalContainerEntityManagerFactoryBean();
-    //     localContainerEntityManagerFactoryBean.setDataSource(primaryDataSource());
-    //     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
-    //     localContainerEntityManagerFactoryBean.setPackagesToScan(entityModel);
-    //     localContainerEntityManagerFactoryBean.afterPropertiesSet();
-
-    //     return localContainerEntityManagerFactoryBean;
-    // }
-
-
     @Bean
     @Primary
     public EntityManagerFactory entityManagerFactory(){

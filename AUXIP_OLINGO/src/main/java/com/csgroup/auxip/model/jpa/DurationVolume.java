@@ -1,37 +1,27 @@
 package com.csgroup.auxip.model.jpa;
 
-import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
-import org.apache.olingo.commons.api.edm.FullQualifiedName;
-import org.apache.olingo.commons.api.edm.provider.CsdlComplexType;
-import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
 
-import jdk.jfr.Name;
-
-import java.sql.Timestamp;
-import java.time.Duration;
-import java.util.Arrays;
-
-import javax.persistence.Column;
+import java.time.LocalDateTime;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-
-
+/**
+ * Downloaded volume over a period/duration
+ */
 @Embeddable
 public class DurationVolume {
 	// starting point of the period where to count a downloaded volumes
-	private Timestamp periodStart;
-	// duration of the 
-	@Transient
-	private Duration duration = Globals.DOWNLOAD_DURATION;
-	// cumulative volume in the current duration ( period )
+	private LocalDateTime periodStart;
+	// the period/duration is now configurable and read from the service properties
+	// @Transient
+	// private Duration duration = Globals.DOWNLOAD_DURATION;
+	// cumulative volume in the current duration ( period ) in Bytes as for size of auxiliary data files
 	private long volume;
 
 
-	public Timestamp getPeriodStart() {
+	public LocalDateTime getPeriodStart() {
 		return periodStart;
 	}
 
-	public void setPeriodStart(Timestamp periodStart) {
+	public void setPeriodStart(LocalDateTime periodStart) {
 		this.periodStart = periodStart;
 	}
 
@@ -43,6 +33,10 @@ public class DurationVolume {
 		this.volume = volume;
 	}
 
+	public void addVolume(long volume)
+	{
+		this.volume += volume ;
+	}
 
 
 
