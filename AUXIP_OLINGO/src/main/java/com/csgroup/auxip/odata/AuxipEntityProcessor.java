@@ -89,7 +89,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	 */
 	public void readEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType responseFormat)
 			throws ODataApplicationException, SerializerException {
-
+		LOG.debug("Starting ReadEntity ...");
 		EdmEntityType responseEdmEntityType = null; // we'll need this to build the ContextURL
 		Entity responseEntity = null; // required for serialization of the response body
 		EdmEntitySet responseEdmEntitySet = null; // we need this for building the contextUrl
@@ -130,6 +130,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		// in our example: http://localhost:8080/DemoService/DemoService.svc/Categories(1)/$expand=Products
 		// or http://localhost:8080/DemoService/DemoService.svc/Products(1)?$expand=Category
 		if(expandOption != null) {
+			LOG.debug("Expand Option ON");
 			// retrieve the EdmNavigationProperty from the expand expression
 			// Note: in our example, we have only one NavigationProperty, so we can directly access it
 			EdmNavigationProperty edmNavigationProperty = null;
@@ -159,6 +160,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			// can be 'Category' or 'Products', no path supported
 			// we don't need to handle error cases, as it is done in the Olingo library
 			if(edmNavigationProperty != null) {
+				LOG.debug("Found Navigation Property ...");
 				EdmEntityType expandEdmEntityType = edmNavigationProperty.getType();
 				String navPropName = edmNavigationProperty.getName();
 
@@ -172,14 +174,18 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 					// fetch the data for the $expand (to-many navigation) from backend
 					// here we get the data for the expand
 					EntityCollection expandEntityCollection = storage.getRelatedEntityCollection(responseEntity, expandEdmEntityType);
-					link.setInlineEntitySet(expandEntityCollection);
-					link.setHref(expandEntityCollection.getId().toASCIIString());
+					if (expandEntityCollection != null) {
+						link.setInlineEntitySet(expandEntityCollection);
+						link.setHref(expandEntityCollection.getId().toASCIIString());
+					}
 				} else {  // in case of Products(1)?$expand=Category
 					// fetch the data for the $expand (to-one navigation) from backend
 					// here we get the data for the expand
 					Entity expandEntity = storage.getRelatedEntity(responseEntity, expandEdmEntityType);
-					link.setInlineEntity(expandEntity);
-					link.setHref(expandEntity.getId().toASCIIString());
+					if (expandEntity != null) {
+						link.setInlineEntity(expandEntity);
+						link.setHref(expandEntity.getId().toASCIIString());
+					}
 				}
 
 				// set the link - containing the expanded data - to the current entity
@@ -197,7 +203,10 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			contextUrl = ContextURL.with().entitySet(responseEdmEntitySet).suffix(Suffix.ENTITY).build();
 		}
 
-		EntitySerializerOptions opts = EntitySerializerOptions.with().contextURL(contextUrl).build();
+		EntitySerializerOptions opts = EntitySerializerOptions.with()
+				.contextURL(contextUrl)
+				.expand(expandOption)
+				.build();
 
 		ODataSerializer serializer = this.odata.createSerializer(responseFormat);
 		SerializerResult serializerResult = serializer.entity(this.serviceMetadata,
@@ -207,6 +216,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		response.setContent(serializerResult.getContent());
 		response.setStatusCode(HttpStatusCode.OK.getStatusCode());
 		response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());
+		
+		LOG.debug("ReadEntity Done");
 	}
 
 	private boolean isContNav(UriInfo uriInfo) {

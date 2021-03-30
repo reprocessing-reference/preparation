@@ -183,9 +183,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
 
           if (edmNavigationProperty.isCollection()) { // in case of Categories/$expand=Products
             // fetch the data for the $expand (to-many navigation) from backend
-        	LOG.debug("rela prod "+expandEdmEntityType.getName());
-            EntityCollection expandEntityCollection = storage.getRelatedEntityCollection(entity, expandEdmEntityType);
-            LOG.debug("rela prod done");
+        	EntityCollection expandEntityCollection = storage.getRelatedEntityCollection(entity, expandEdmEntityType);
             if (expandEntityCollection != null) {
             	link.setInlineEntitySet(expandEntityCollection);
             	link.setHref(expandEntityCollection.getId().toASCIIString());
@@ -193,9 +191,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
           } else { // in case of Products?$expand=Category
             // fetch the data for the $expand (to-one navigation) from backend
             // here we get the data for the expand
-        	LOG.debug("relauni prod");
-            Entity expandEntity = storage.getRelatedEntity(entity, expandEdmEntityType);
-            LOG.debug("relauni prod done");
+        	Entity expandEntity = storage.getRelatedEntity(entity, expandEdmEntityType);
             if (expandEntity != null) {
             	link.setInlineEntity(expandEntity);
             	link.setHref(expandEntity.getId().toASCIIString());

@@ -684,7 +684,12 @@ public class Storage {
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 
 		Query query = entityManager.createQuery(queryString);
-		Product product = (Product)query.getSingleResult();
+		Product product;
+		try {
+			product = (Product)query.getSingleResult();	
+		} finally {
+			entityManager.close();
+		} 
 
 		return product.getOdataEntity(false);
 	}
@@ -708,6 +713,8 @@ public class Storage {
 	}
 
 	public EntityCollection getRelatedEntityCollection(Entity sourceEntity, EdmEntityType targetEntityType) throws ODataApplicationException {
+		LOG.debug("Starting getRelatedEntityCollection ...");
+		
 		EntityCollection navigationTargetEntityCollection = new EntityCollection();
 
 		FullQualifiedName relatedEntityFqn = targetEntityType.getFullQualifiedName();
@@ -761,10 +768,10 @@ public class Storage {
 		}
 
 		if (navigationTargetEntityCollection.getEntities().isEmpty()) {
-			//throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
-			return null;
+			throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			//return null;
 		}
-
+		LOG.debug("getRelatedEntityCollection Done : "+String.valueOf(navigationTargetEntityCollection.getEntities().size()));
 		return navigationTargetEntityCollection;
 	}
 
