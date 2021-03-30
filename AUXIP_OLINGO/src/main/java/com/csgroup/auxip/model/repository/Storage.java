@@ -53,6 +53,7 @@ import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
 
 import com.csgroup.auxip.model.jpa.Attribute;
+import com.csgroup.auxip.model.jpa.Checksum;
 import com.csgroup.auxip.model.jpa.DateTimeOffsetAttribute;
 import com.csgroup.auxip.model.jpa.DoubleAttribute;
 import com.csgroup.auxip.model.jpa.Globals;
@@ -62,6 +63,7 @@ import com.csgroup.auxip.model.jpa.Product;
 import com.csgroup.auxip.model.jpa.StringAttribute;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
+import com.csgroup.auxip.model.jpa.TimeRange;
 import com.csgroup.auxip.model.jpa.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -788,9 +790,70 @@ public class Storage {
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					JsonNode actualObj = mapper.readTree(new String(mediaContent));
-					prod.setId(UUID.fromString(actualObj.get("uuid").asText()));
-					//prod.setContentLength(actualObj.get("").);
-					LOG.debug("Id: "+actualObj.get("uuid").asText());
+					prod.setId(UUID.fromString(actualObj.get("ID").asText()));
+					prod.setContentLength(actualObj.get("ContentLength").asLong());
+					prod.setName(actualObj.get("Name").asText());
+					prod.setContentType(actualObj.get("ContentType").asText());
+					prod.setOriginDate(Timestamp.valueOf(actualObj.get("OriginDate").asText()));
+					prod.setPublicationDate(Timestamp.valueOf(actualObj.get("PublicationDate").asText()));
+					prod.setEvictionDate(Timestamp.valueOf(actualObj.get("EvictionDate").asText()));
+					JsonNode checks_node = actualObj.get("Checksum");
+					List<Checksum> checks_list = new ArrayList<>();
+					if (checks_node.isArray()) {
+						for (JsonNode check : checks_node) {
+							Checksum ch = new Checksum();
+							ch.setAlgorithm(check.get("Algorithm").asText());
+							ch.setValue(check.get("Value").asText());
+							ch.setChecksumDate(Timestamp.valueOf(check.get("ChecksumDate").asText()));
+						}
+					}
+					TimeRange content_date = new TimeRange();
+					content_date.setStart(Timestamp.valueOf(actualObj.get("ContentDate").get("Start").asText()));
+					content_date.setEnd(Timestamp.valueOf(actualObj.get("ContentDate").get("End").asText()));
+					prod.setContentDate(content_date);
+					JsonNode attribs_node = actualObj.get("Attributes");
+					List<StringAttribute> strAttrib_list = new ArrayList<>();
+					List<IntegerAttribute> intAttrib_list = new ArrayList<>();
+					List<DoubleAttribute> doubleAttrib_list = new ArrayList<>();
+					List<DateTimeOffsetAttribute> datetimeAttrib_list = new ArrayList<>();
+					if (attribs_node.isArray()) {
+						for (JsonNode attrib : attribs_node) {
+							String type = attrib.get("ValueType").asText();
+							switch (type) {
+							case "String":
+								StringAttribute att = new StringAttribute();
+								att.setName(attrib.get("Name").asText());
+								att.setValueType(attrib.get("ValueType").asText());
+								att.setValue(attrib.get("Value").asText());
+								strAttrib_list.add(att);
+								break;
+							case "Integer":
+								IntegerAttribute atti = new IntegerAttribute();
+								atti.setName(attrib.get("Name").asText());
+								atti.setValueType(attrib.get("ValueType").asText());
+								atti.setValue(attrib.get("Value").asLong());
+								intAttrib_list.add(atti);
+								break;
+							case "Double":
+								DoubleAttribute attd = new DoubleAttribute();
+								attd.setName(attrib.get("Name").asText());
+								attd.setValueType(attrib.get("ValueType").asText());
+								attd.setValue(attrib.get("Value").asDouble());
+								doubleAttrib_list.add(attd);
+								break;
+							case "DateTimeOffset":
+								DateTimeOffsetAttribute attt = new DateTimeOffsetAttribute();
+								attt.setName(attrib.get("Name").asText());
+								attt.setValueType(attrib.get("ValueType").asText());
+								attt.setValue(Timestamp.valueOf(attrib.get("Value").asText()));
+								datetimeAttrib_list.add(attt);
+								break;
+							default:
+								break;
+							}
+						}
+					}
+					LOG.debug("Id: "+actualObj.get("ID").asText());
 				} catch (JsonProcessingException e) {
 					throw new ODataApplicationException("Can't parse body as JSON for product POST", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
 							Locale.ENGLISH);
@@ -802,7 +865,7 @@ public class Storage {
 			LOG.debug("In product");
 			entity = prod.getOdataEntity(false);
 			LOG.debug("Entity : "+entity.getType());
-			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			/*EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			EntityTransaction transac = entityManager.getTransaction();			
 			transac.begin();
 			try {
@@ -814,7 +877,7 @@ public class Storage {
 				}				
 			} finally {                    
 				entityManager.close();
-			}
+			}*/
 
 		}
 
