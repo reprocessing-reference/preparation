@@ -20,6 +20,7 @@ public class ProductTypedCounter {
     //  value of the counter 
      private long value;
 
+
      public CounterType getCounterType() {
          return counterType;
      }
