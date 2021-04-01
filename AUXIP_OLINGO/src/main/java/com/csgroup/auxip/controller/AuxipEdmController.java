@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataHttpHandler;
 import org.apache.olingo.server.api.ServiceMetadata;
+import org.keycloak.TokenVerifier;
+import org.keycloak.common.VerificationException;
+import org.keycloak.representations.AccessToken;
 import org.apache.olingo.commons.api.edmx.EdmxReference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +39,7 @@ public class AuxipEdmController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuxipEdmController.class);
 
-	public static final String URI = "/odata";
+	public static final String URI = "/auxipv2";
 
     	/** The ProductRepository to get data with */
 
@@ -54,32 +57,29 @@ public class AuxipEdmController {
 	public void process(HttpServletRequest request, HttpServletResponse response) {
 
 
+        // Get a bearer token 
+        AccessToken token;
+        try
+        {
+            String bearerToken = request.getHeader("Authorization").replace("Bearer ", "") ;
+            token = TokenVerifier.create(bearerToken,AccessToken.class).getToken();
+            
+        }catch (Exception e)
+        {
+            token = null;
+            LOG.error("Server Error occurred while trying to get AccessToken in Auxip request", e);
+        }
 
-    // TODO : Parse Token and get roles and groups 
-
-    //   AccessToken token ;
-    //   String bearerToken = request.getHeader("Authorization").replace("Bearer ", "") ;
-    //   try
-    //   {
-    //     token = TokenVerifier.create(bearerToken,AccessToken.class).getToken();
-    //     System.out.printf("iss = %s%n", token.getIssuer());
-    //     System.out.printf("sub = %s%n", token.getSubject());
-    //     System.out.printf("typ = %s%n", token.getType());
-
-    //     System.out.printf("getOtherClaims = %s%n",  token.getOtherClaims().get("groups").toString() );
-       
-    //   }
-    //   catch (VerificationException e)
-    //   {
-    //     // some error handling
-    //     System.err.println(e.toString());
-    //   }
- 
         try {
+
+            if( token == null )
+            {
+                throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
+            }
 
             storage = new Storage();
             storage.setEntityManagerFactory(entityManagerFactory);
-            
+            storage.setAccessToken(token) ;
             // create odata handler and configure it with EdmProvider and Processor
             OData odata = OData.newInstance();
             ServiceMetadata edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());
@@ -104,7 +104,6 @@ public class AuxipEdmController {
             }, response);
           } catch (RuntimeException e) {
             LOG.error("Server Error occurred in Auxip service", e);
-            
           }
         }
 

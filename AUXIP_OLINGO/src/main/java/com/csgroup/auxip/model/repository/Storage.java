@@ -36,6 +36,7 @@ import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Binary;
 import org.apache.olingo.server.api.uri.queryoption.expression.Method;
+import org.keycloak.representations.AccessToken;
 import org.springframework.data.util.Pair;
 import org.apache.olingo.server.api.uri.queryoption.expression.Member;
 import org.apache.olingo.server.api.uri.queryoption.expression.BinaryOperatorKind;
@@ -43,9 +44,11 @@ import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
 
 import com.csgroup.auxip.model.jpa.Globals;
+import com.csgroup.auxip.model.jpa.Metric;
 import com.csgroup.auxip.model.jpa.Product;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
+import com.csgroup.auxip.model.jpa.User;
 
 class AttributeFilter {
 
@@ -62,15 +65,26 @@ class AttributeFilter {
 
 public class Storage {
 
-  // @Autowired
-  // private JPADataSourceConfiguration jpaConfig;
-
   private EntityManagerFactory entityManagerFactory;
+  private AccessToken accessToken;
+  private User user;
+
+  public User getUser() {
+      return user;
+  }
+  public void setUser(User user) {
+      this.user = user;
+  }
 
   public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
     this.entityManagerFactory = entityManagerFactory;
   }
 
+  public void setAccessToken(AccessToken accessToken) {
+      this.accessToken = accessToken;
+      this.user = new User(accessToken);
+      
+  }
   // utility member
   private Map<String, String> operatorsMapping = new HashMap<>();
 
@@ -108,8 +122,7 @@ public class Storage {
     return subscription.getOdataEntity();
 
   }
-
-  
+    
 
   public Integer subscriptionAction(final String actionName,final String uuid ) {
     
@@ -498,8 +511,20 @@ public class Storage {
 
     String queryString;
     String entitySetName = edmEntitySet.getName();
-    String className = entitySetName.equals(Product.ES_NAME) ? Product.class.getName() : Subscription.class.getName() ;
-
+    String className;
+    switch (entitySetName) {
+	case Product.ES_NAME:
+		className = Product.class.getName();
+		break;
+	case Subscription.ES_NAME:
+		className = Subscription.class.getName();
+		break;
+	case Metric.ES_NAME:
+		className = Metric.class.getName();
+		break;
+	default:
+		throw new ODataApplicationException("No Class found for "+entitySetName, HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);		
+    }
     if( filterOption != null )
     {
       Expression filterExpression = filterOption.getExpression();
@@ -539,19 +564,29 @@ public class Storage {
     }
     
     //Cast to destination class
-    if(entitySetName.equals(Product.ES_NAME) )
-    {
-      List<Product> products = query.getResultList();
-      Boolean expandAttributes = (expandOption != null);
-      for (Product product : products) {
-        entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
-      }
-    }else{
-      List<Subscription> subscriptions = query.getResultList();
-      for (Subscription subscription : subscriptions) {
-        entitySet.getEntities().add(subscription.getOdataEntity());
-      }
-    }
+    switch (entitySetName) {
+	case Product.ES_NAME:
+		List<Product> products = query.getResultList();
+	      Boolean expandAttributes = (expandOption != null);
+	      for (Product product : products) {
+	        entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
+	      }
+		break;
+	case Subscription.ES_NAME:
+		List<Subscription> subscriptions = query.getResultList();
+	      for (Subscription subscription : subscriptions) {
+	        entitySet.getEntities().add(subscription.getOdataEntity());
+	      }
+		break;
+	case Metric.ES_NAME:
+		List<Metric> metrics = query.getResultList();
+	      for (Metric metric : metrics) {
+	        entitySet.getEntities().add(metric.getOdataEntity());
+	      }
+		break;
+	default:		
+		break;
+	}    
 
     return entitySet;
   }
@@ -586,15 +621,17 @@ public class Storage {
         query += orderBy ;
 
     }else{
-      if( entitySetName.equals(Product.ES_NAME) )
-      {
-              // By default, the Products query are to be ordered by Publication Date, in an ascending order 
-        query += " ORDER BY entity.PublicationDate ASC";
-      }else // Subscription
-      {
-        query += " ORDER BY entity.SubmissionDate ASC";
-      }
-
+    	switch (entitySetName) {
+    	case Product.ES_NAME:
+    		// By default, the Products query are to be ordered by Publication Date, in an ascending order 
+    		query += " ORDER BY entity.PublicationDate ASC";
+    		break;
+    	case Subscription.ES_NAME:
+    		query += " ORDER BY entity.SubmissionDate ASC";
+    		break;		
+    	default:
+    		break;
+    	}
     }
 
     return query;
