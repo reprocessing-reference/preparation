@@ -39,7 +39,7 @@ public class AuxipEdmController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuxipEdmController.class);
 
-	public static final String URI = "/auxipv2";
+	public static final String URI = "/auxipv2.svc";
 
     	/** The ProductRepository to get data with */
 
