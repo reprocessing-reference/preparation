@@ -21,8 +21,11 @@ package com.csgroup.auxip.odata;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+
+import com.csgroup.auxip.controller.AuxipBeanUtil;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.repository.Storage;
+import com.csgroup.auxip.model.repository.StorageStatus;
 
 import org.apache.olingo.commons.api.Constants;
 import org.apache.olingo.commons.api.data.ContextURL;
@@ -37,6 +40,7 @@ import org.apache.olingo.commons.api.edm.EdmNavigationProperty;
 import org.apache.olingo.commons.api.edm.EdmNavigationPropertyBinding;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
+import org.apache.olingo.commons.api.http.HttpMethod;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataApplicationException;
@@ -287,7 +291,27 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			ContentType requestFormat, ContentType responseFormat)
 					throws ODataApplicationException, DeserializerException, SerializerException {
 
-		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+		// 1. Retrieve the entity set which belongs to the requested entity 
+		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
+		// Note: only in our example we can assume that the first segment is the EntitySet
+		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); 
+		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
+		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
+
+		// 2. update the data in backend
+		// 2.1. retrieve the payload from the PUT request for the entity to be updated 
+		InputStream requestInputStream = request.getBody();
+		ODataDeserializer deserializer = odata.createDeserializer(requestFormat);
+		DeserializerResult result = deserializer.entity(requestInputStream, edmEntityType);
+		Entity requestEntity = result.getEntity();
+		// 2.2 do the modification in backend
+		List<UriParameter> keyPredicates = uriResourceEntitySet.getKeyPredicates();
+		// Note that this updateEntity()-method is invoked for both PUT or PATCH operations
+		HttpMethod httpMethod = request.getMethod();
+		storage.updateEntityData(edmEntitySet, keyPredicates, requestEntity, httpMethod);
+		
+		//3. configure the response object
+		response.setStatusCode(HttpStatusCode.NO_CONTENT.getStatusCode());
 	}
 
 	public void deleteEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo)
@@ -316,13 +340,10 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 						Locale.ENGLISH);
 			}
 
-			final byte[] mediaContent = (byte[])entity.getProperty("$value").asPrimitive();
-
-			final InputStream responseContent = odata.createFixedFormatSerializer().binary(mediaContent);
-
-			response.setStatusCode(HttpStatusCode.OK.getStatusCode());
-			response.setContent(responseContent);
-			response.setHeader(HttpHeader.CONTENT_TYPE, entity.getMediaContentType());
+			final String mediaContent = entity.getProperty("$value").getValue().toString();
+			response.setStatusCode(HttpStatusCode.FOUND.getStatusCode());
+			response.setHeader("Content-Disposition", "filename="+entity.getProperty("Name").getValue().toString());
+			response.setHeader(HttpHeader.LOCATION, mediaContent);
 		} else {
 			throw new ODataApplicationException("Not implemented", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
 					Locale.ENGLISH);
@@ -355,7 +376,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		response.setContent(serializerResult.getContent());
 		response.setStatusCode(HttpStatusCode.CREATED.getStatusCode());
 		response.setHeader(HttpHeader.LOCATION, location);
-		response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());	  
+		response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());		
 	}
 	@Override
 	public void updateMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,

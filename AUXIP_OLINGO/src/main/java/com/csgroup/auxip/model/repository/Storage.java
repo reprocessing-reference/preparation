@@ -7,6 +7,8 @@
 package com.csgroup.auxip.model.repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.ex.ODataRuntimeException;
+import org.apache.olingo.commons.api.http.HttpMethod;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
 import org.apache.olingo.server.api.ODataApplicationException;
 import org.apache.olingo.server.api.uri.UriInfoResource;
@@ -52,6 +55,7 @@ import org.apache.olingo.server.api.uri.queryoption.expression.BinaryOperatorKin
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
 
+import com.csgroup.auxip.controller.AuxipBeanUtil;
 import com.csgroup.auxip.model.jpa.Attribute;
 import com.csgroup.auxip.model.jpa.Checksum;
 import com.csgroup.auxip.model.jpa.DateTimeOffsetAttribute;
@@ -695,6 +699,13 @@ public class Storage {
 
 		return product.getOdataEntity(false);
 	}
+	
+	//Update Entity
+	public void updateEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyPredicates, Entity requestEntity,
+			HttpMethod httpMethod) {
+		LOG.debug("Starting updateEntityData");
+		
+	}
 
 	// Navigation
 
@@ -794,9 +805,9 @@ public class Storage {
 					prod.setContentLength(actualObj.get("ContentLength").asLong());
 					prod.setName(actualObj.get("Name").asText());
 					prod.setContentType(actualObj.get("ContentType").asText());
-					prod.setOriginDate(Timestamp.valueOf(actualObj.get("OriginDate").asText()));
-					prod.setPublicationDate(Timestamp.valueOf(actualObj.get("PublicationDate").asText()));
-					prod.setEvictionDate(Timestamp.valueOf(actualObj.get("EvictionDate").asText()));
+					prod.setOriginDate(convertFromISOString(actualObj.get("OriginDate").asText()));
+					prod.setPublicationDate(convertFromISOString(actualObj.get("PublicationDate").asText()));
+					prod.setEvictionDate(convertFromISOString(actualObj.get("EvictionDate").asText()));
 					JsonNode checks_node = actualObj.get("Checksum");
 					List<Checksum> checks_list = new ArrayList<>();
 					if (checks_node.isArray()) {
@@ -804,12 +815,14 @@ public class Storage {
 							Checksum ch = new Checksum();
 							ch.setAlgorithm(check.get("Algorithm").asText());
 							ch.setValue(check.get("Value").asText());
-							ch.setChecksumDate(Timestamp.valueOf(check.get("ChecksumDate").asText()));
+							ch.setChecksumDate(convertFromISOString(check.get("ChecksumDate").asText()));
+							checks_list.add(ch);
 						}
 					}
+					prod.setChecksum(checks_list);
 					TimeRange content_date = new TimeRange();
-					content_date.setStart(Timestamp.valueOf(actualObj.get("ContentDate").get("Start").asText()));
-					content_date.setEnd(Timestamp.valueOf(actualObj.get("ContentDate").get("End").asText()));
+					content_date.setStart(convertFromISOString(actualObj.get("ContentDate").get("Start").asText()));
+					content_date.setEnd(convertFromISOString(actualObj.get("ContentDate").get("End").asText()));
 					prod.setContentDate(content_date);
 					JsonNode attribs_node = actualObj.get("Attributes");
 					List<StringAttribute> strAttrib_list = new ArrayList<>();
@@ -845,7 +858,7 @@ public class Storage {
 								DateTimeOffsetAttribute attt = new DateTimeOffsetAttribute();
 								attt.setName(attrib.get("Name").asText());
 								attt.setValueType(attrib.get("ValueType").asText());
-								attt.setValue(Timestamp.valueOf(attrib.get("Value").asText()));
+								attt.setValue(convertFromISOString(attrib.get("Value").asText()));
 								datetimeAttrib_list.add(attt);
 								break;
 							default:
@@ -862,22 +875,23 @@ public class Storage {
 				throw new ODataApplicationException("Bad contenttype for Product POST request", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
 						Locale.ENGLISH);
 			}
-			LOG.debug("In product");
 			entity = prod.getOdataEntity(false);
 			LOG.debug("Entity : "+entity.getType());
-			/*EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			EntityTransaction transac = entityManager.getTransaction();			
 			transac.begin();
 			try {
 				entityManager.persist(prod);
 				if (transac.isActive()) {
 					transac.commit();
+					//Commit the change in database
+					AuxipBeanUtil.getBean(StorageStatus.class).modified();
 				} else {
 					transac.rollback();
 				}				
 			} finally {                    
 				entityManager.close();
-			}*/
+			}
 
 		}
 
@@ -910,5 +924,11 @@ public class Storage {
 		}
 		return entity.getType();
 	}
+	
+	private Timestamp convertFromISOString(final String str) {
+		ZonedDateTime dt = ZonedDateTime.parse(str);
+		return Timestamp.from(dt.toInstant());
+	}
+	
 
 }

@@ -163,9 +163,11 @@ public class Product {
     
 	public List<Checksum> getChecksum() {
 		return Checksum;
+	}	
+
+	public void setChecksum(List<Checksum> checksum) {
+		Checksum = checksum;
 	}
-	
-	
 
 	public List<StringAttribute> getStringAttributes() {
 		return StringAttributes;
@@ -278,7 +280,7 @@ public class Product {
 		Property origindate = new Property("DateTimeOffset", "OriginDate",ValueType.PRIMITIVE,this.OriginDate) ;
 		Property evictiondate = new Property("DateTimeOffset", "EvictionDate",ValueType.PRIMITIVE,this.EvictionDate) ;
 		Property publicationdate = new Property("DateTimeOffset", "PublicationDate",ValueType.PRIMITIVE,this.PublicationDate) ;
-		Property mediaValue = new Property(null, MEDIA_PROPERTY_NAME,ValueType.PRIMITIVE, this.getPresignedUrl().getBytes()) ;
+		Property mediaValue = new Property("String", MEDIA_PROPERTY_NAME,ValueType.PRIMITIVE, this.getPresignedUrl()) ;
 		ComplexValue timeRange = new ComplexValue() ;
 		timeRange.getValue().add( new Property(null, "Start", ValueType.PRIMITIVE, this.ContentDate.getStart())) ;
 		timeRange.getValue().add( new Property(null, "End", ValueType.PRIMITIVE, this.ContentDate.getEnd()) );
@@ -287,10 +289,9 @@ public class Product {
 		for( Checksum cs : this.Checksum )
 		{
 			ComplexValue checksum = new ComplexValue() ;
-			checksum.getValue().add( new Property(null, "ChecksumDate", ValueType.PRIMITIVE, cs.getChecksumDate() ) );
-			checksum.getValue().add( new Property(null, "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm() ) );
-			checksum.getValue().add( new Property(null, "Value", ValueType.PRIMITIVE, cs.getValue() ) );
-
+			checksum.getValue().add( new Property("DateTimeOffset", "ChecksumDate", ValueType.PRIMITIVE, cs.getChecksumDate() ) );
+			checksum.getValue().add( new Property("String", "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm() ) );
+			checksum.getValue().add( new Property("String", "Value", ValueType.PRIMITIVE, cs.getValue() ) );
 			checksums.add(checksum);
 		}
 		Property checksum = new Property(null, "Checksum",ValueType.COLLECTION_COMPLEX,checksums) ;
@@ -304,9 +305,8 @@ public class Product {
 		entity.addProperty( contentDate );
 		entity.addProperty( mediaValue );
 		entity.addProperty( checksum );
-
 		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("text/plain").toContentTypeString());
-
+		
 		entity.setType(FQN.getFullQualifiedNameAsString());
 		try {
 			StringBuilder sb = new StringBuilder(ES_NAME).append("(");
@@ -375,7 +375,7 @@ public class Product {
 		// that need to be freed. If you are using one S3Presigner per application (as recommended), this
 		// usually is not needed.
 		presigner.close();
-
+		LOG.debug(presignedGetObjectRequest.url().toString());
 		return presignedGetObjectRequest.url().toString();
 	}
 
