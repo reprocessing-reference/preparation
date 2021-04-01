@@ -101,6 +101,8 @@ def main():
     list_of_files = {}
     idx = 1
     for filenames in lines:
+        if filenames.startswith("#"):
+            continue
         filename = os.path.basename(filenames)
         if DEBUG:
             print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))

@@ -11,9 +11,9 @@ RUN apt-get update -y \
     && apt-get clean
 
 ADD rolling-cron /etc/cron.d/
-
+RUN chmod a+x /etc/cron.d/rolling-cron
 RUN crontab /etc/cron.d/rolling-cron
 
 CMD ["cron","-f"]
 
-ENTRYPOINT ["/bin/bash"]
+#ENTRYPOINT ["/bin/bash"]
