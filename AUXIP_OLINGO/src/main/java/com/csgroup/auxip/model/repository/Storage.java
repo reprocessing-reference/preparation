@@ -21,7 +21,10 @@ import java.net.URISyntaxException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+
+import org.apache.olingo.commons.api.data.ComplexValue;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Property;
@@ -72,6 +75,7 @@ import com.csgroup.auxip.model.jpa.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 class AttributeFilter {
 
@@ -699,12 +703,193 @@ public class Storage {
 
 		return product.getOdataEntity(false);
 	}
-	
+
 	//Update Entity
 	public void updateEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyPredicates, Entity requestEntity,
 			HttpMethod httpMethod) {
 		LOG.debug("Starting updateEntityData");
-		
+		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
+
+		if (edmEntitySet.getName().equals(Subscription.ES_NAME)) {
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			EntityTransaction transac = entityManager.getTransaction();
+
+			transac.begin();
+			Subscription subscription = new Subscription();
+
+			subscription.setFilterParam(requestEntity.getProperty("FilterParam").getValue().toString());
+			subscription.setStatus( SubscriptionStatus.running );
+			subscription.setNotificationEndpoint(requestEntity.getProperty("NotificationEndpoint").getValue().toString());
+			subscription.setNotificationEpUsername(requestEntity.getProperty("NotificationEpUsername").getValue().toString());
+			subscription.setNotificationEpPassword(requestEntity.getProperty("NotificationEpPassword").getValue().toString());
+			subscription.setSubmissionDate( new Timestamp(System.currentTimeMillis()) );
+			try {
+				entityManager.merge(subscription);
+				if (transac.isActive()) {
+					transac.commit();
+				} else {
+					transac.rollback();
+				}	
+				//Commit the change in database
+				AuxipBeanUtil.getBean(StorageStatus.class).modified();
+			} finally {                    
+				entityManager.close();
+			}			
+		} else if (edmEntitySet.getName().equals(Product.ES_NAME)) {
+			Product prod = new Product();
+			prod.setId(UUID.fromString(requestEntity.getProperty("ID").getValue().toString()));
+			prod.setContentLength((long) requestEntity.getProperty("ContentLength").getValue());
+			prod.setName(requestEntity.getProperty("Name").getValue().toString());
+			prod.setContentType(requestEntity.getProperty("ContentType").getValue().toString());
+			prod.setOriginDate((Timestamp) requestEntity.getProperty("OriginDate").getValue());
+			prod.setPublicationDate((Timestamp) requestEntity.getProperty("PublicationDate").getValue());
+			prod.setEvictionDate((Timestamp) requestEntity.getProperty("EvictionDate").getValue());
+			LOG.debug(requestEntity.getProperty("Checksum").getValueType().toString());
+			List<Checksum> checksums = new ArrayList<>();
+			List<?> checksums_in = requestEntity.getProperty("Checksum").asCollection();
+			for (Object obj : checksums_in) {
+				ComplexValue check_in = (ComplexValue)obj;
+				Checksum check = new Checksum();
+				for (Property pop : check_in.getValue())
+				{
+					switch (pop.getName()) {
+					case "ChecksumDate":
+						check.setChecksumDate((Timestamp) pop.getValue());
+						break;
+					case "Algorithm":
+						check.setAlgorithm(pop.getValue().toString());
+						break;
+					case "Value":
+						check.setValue(pop.getValue().toString());
+						break;
+					default:
+						LOG.debug(pop.getName());
+					}
+				}
+				checksums.add(check);
+			}
+			prod.setChecksum(checksums);
+			TimeRange content_date = new TimeRange();
+			ComplexValue tm_in = requestEntity.getProperty("ContentDate").asComplex();
+			for (Property pop : tm_in.getValue())
+			{
+				LOG.debug(pop.getName());
+				switch (pop.getName()) {
+				case "End":
+					content_date.setEnd((Timestamp) pop.getValue());
+					break;
+				case "Start":
+					content_date.setStart((Timestamp) pop.getValue());
+					break;
+				default:
+					break;
+				}
+			}
+			prod.setContentDate(content_date);
+			//COmmit to base
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			EntityTransaction transac = entityManager.getTransaction();
+			transac.begin();
+			try {
+				entityManager.merge(prod);
+				if (transac.isActive()) {
+					transac.commit();
+				} else {
+					transac.rollback();
+				}		
+				//Commit the change in database
+				AuxipBeanUtil.getBean(StorageStatus.class).modified();
+			} finally {                    
+				entityManager.close();
+			}
+		}
+
+	}
+
+	//Delete entity
+	public void deleteEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyParams)
+			throws ODataApplicationException {
+
+		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
+
+		if (edmEntitySet.getName().equals(Product.ES_NAME)) {
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			EntityTransaction transaction = entityManager.getTransaction();
+
+			Product prod = new Product();
+			UUID uid = null;
+			for (UriParameter p: keyParams)
+			{
+				LOG.debug(p.getName());
+				if (p.getName() == "ID")
+				{
+					uid = UUID.fromString(p.getText());
+				}
+			}
+			if (uid == null) {
+				LOG.debug("No entity given to delete");
+				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			}
+			LOG.debug("Entity to delete : "+uid.toString());
+			prod.setId(uid);
+			try {
+				transaction.begin();
+
+				Object attached = entityManager.merge(prod);
+				entityManager.remove(attached);
+				if (transaction.isActive()) {
+					transaction.commit();
+				} else {
+					transaction.rollback();
+				}
+				//Commit the change in database
+				AuxipBeanUtil.getBean(StorageStatus.class).modified();
+			} catch (PersistenceException e) {
+				LOG.error("Could not remove entity: {}", prod);
+				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			} finally {                    
+				entityManager.close();
+			}		
+
+		} else if(edmEntitySet.getName().equals(Subscription.ES_NAME)) {
+			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+			EntityTransaction transaction = entityManager.getTransaction();
+
+			Subscription sub = new Subscription();
+			UUID uid = null;
+			for (UriParameter p: keyParams)
+			{
+				LOG.debug(p.getName());
+				if (p.getName() == "Id")
+				{
+					uid = UUID.fromString(p.getText());
+				}
+			}
+			if (uid == null) {
+				LOG.debug("No entity given to delete");
+				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			}
+			LOG.debug("Entity to delete : "+uid.toString());
+			sub.setId(uid);
+			try {
+				transaction.begin();
+
+				Object attached = entityManager.merge(sub);
+				entityManager.remove(attached);
+				if (transaction.isActive()) {
+					transaction.commit();
+				} else {
+					transaction.rollback();
+				}
+				//Commit the change in database
+				AuxipBeanUtil.getBean(StorageStatus.class).modified();
+			} catch (PersistenceException e) {
+				LOG.error("Could not remove entity: {}", sub);
+				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			} finally {                    
+				entityManager.close();
+			}	
+		}
 	}
 
 	// Navigation
@@ -727,7 +912,7 @@ public class Storage {
 
 	public EntityCollection getRelatedEntityCollection(Entity sourceEntity, EdmEntityType targetEntityType) throws ODataApplicationException {
 		LOG.debug("Starting getRelatedEntityCollection ...");
-		
+
 		EntityCollection navigationTargetEntityCollection = new EntityCollection();
 
 		FullQualifiedName relatedEntityFqn = targetEntityType.getFullQualifiedName();
@@ -793,11 +978,9 @@ public class Storage {
 		LOG.debug(contentTypeString);
 		LOG.debug(entityType.getName());
 		if(entityType.getName().equals(Product.ET_NAME)) {
-			LOG.debug("In product");
 			Product prod = new Product();
 			if (contentTypeString.equals("application/json"))
 			{
-				LOG.debug("In product");
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					JsonNode actualObj = mapper.readTree(new String(mediaContent));
@@ -866,6 +1049,10 @@ public class Storage {
 							}
 						}
 					}
+					prod.setDoubleAttributes(doubleAttrib_list);
+					prod.setIntegerAttributes(intAttrib_list);
+					prod.setDateTimeOffsetAttributes(datetimeAttrib_list);
+					prod.setStringAttributes(strAttrib_list);
 					LOG.debug("Id: "+actualObj.get("ID").asText());
 				} catch (JsonProcessingException e) {
 					throw new ODataApplicationException("Can't parse body as JSON for product POST", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
@@ -924,11 +1111,11 @@ public class Storage {
 		}
 		return entity.getType();
 	}
-	
+
 	private Timestamp convertFromISOString(final String str) {
 		ZonedDateTime dt = ZonedDateTime.parse(str);
 		return Timestamp.from(dt.toInstant());
 	}
-	
+
 
 }

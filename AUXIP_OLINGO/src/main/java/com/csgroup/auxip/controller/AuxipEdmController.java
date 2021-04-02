@@ -78,10 +78,10 @@ public class AuxipEdmController {
 
         try {
 
-            //if( token == null )
-            //{
-            //    throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
-            //}
+            if( token == null )
+            {
+                throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
+            }
 
             Storage storage = new Storage();
             storage.setEntityManagerFactory(entityManagerFactory);

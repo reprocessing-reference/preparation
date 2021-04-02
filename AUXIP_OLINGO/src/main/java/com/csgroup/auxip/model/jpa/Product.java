@@ -58,8 +58,8 @@ public class Product {
 	private static final Logger LOG = LoggerFactory.getLogger(Product.class);
 	
 	@Id
-	@GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	//@GeneratedValue(generator = "UUID")
+    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private UUID Id;
     private String Name;
     private String ContentType;
@@ -77,17 +77,17 @@ public class Product {
 	private TimeRange ContentDate;
 	
     @ElementCollection(fetch = FetchType.LAZY)    
-	private List<StringAttribute> StringAttributes;
+	private List<StringAttribute> StringAttributes = new ArrayList<>();
 	
     @ElementCollection(fetch = FetchType.LAZY)
-	private List<IntegerAttribute> IntegerAttributes;
+	private List<IntegerAttribute> IntegerAttributes = new ArrayList<>();
 	
     @ElementCollection(fetch = FetchType.LAZY)
-	private List<DoubleAttribute> DoubleAttributes;
+	private List<DoubleAttribute> DoubleAttributes = new ArrayList<>();
 	
     @ElementCollection(fetch = FetchType.LAZY)
-	private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes;
-		
+	private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes = new ArrayList<>();
+	
 
 	// Product
 	public static final String ET_NAME = "Product";
@@ -103,7 +103,7 @@ public class Product {
 	public void setId(UUID id) {
 		Id = id;
 	}
-	@Column
+	
 	public String getName() {
 		return Name;
 	}
@@ -111,7 +111,7 @@ public class Product {
 	public void setName(String name) {
 		Name = name;
 	}
-	@Column
+	
 	public String getContentType() {
 		return ContentType;
 	}
@@ -119,7 +119,7 @@ public class Product {
 	public void setContentType(String contentType) {
 		ContentType = contentType;
 	}
-	@Column
+	
 	public long getContentLength() {
 		return ContentLength;
 	}
@@ -127,7 +127,7 @@ public class Product {
 	public void setContentLength(long contentLength) {
 		ContentLength = contentLength;
 	}
-	@Column
+	
 	public Timestamp getOriginDate() {
 		return OriginDate;
 	}
@@ -135,7 +135,7 @@ public class Product {
 	public void setOriginDate(Timestamp originDate) {
 		OriginDate = originDate;
 	}
-	@Column
+	
 	public Timestamp getPublicationDate() {
 		return PublicationDate;
 	}
@@ -143,7 +143,7 @@ public class Product {
 	public void setPublicationDate(Timestamp publicationDate) {
 		PublicationDate = publicationDate;
 	}
-	@Column
+	
 	public Timestamp getEvictionDate() {
 		return EvictionDate;
 	}
@@ -152,7 +152,6 @@ public class Product {
 		EvictionDate = evictionDate;
 	}
 	
-	@Column
 	public TimeRange getContentDate() {
 		return ContentDate;
 	}
@@ -183,6 +182,24 @@ public class Product {
 
 	public List<DateTimeOffsetAttribute> getDateTimeOffsetAttributes() {
 		return DateTimeOffsetAttributes;
+	}
+	
+	
+
+	public void setStringAttributes(List<StringAttribute> stringAttributes) {
+		StringAttributes = stringAttributes;
+	}
+
+	public void setIntegerAttributes(List<IntegerAttribute> integerAttributes) {
+		IntegerAttributes = integerAttributes;
+	}
+
+	public void setDoubleAttributes(List<DoubleAttribute> doubleAttributes) {
+		DoubleAttributes = doubleAttributes;
+	}
+
+	public void setDateTimeOffsetAttributes(List<DateTimeOffsetAttribute> dateTimeOffsetAttributes) {
+		DateTimeOffsetAttributes = dateTimeOffsetAttributes;
 	}
 
 	public static CsdlEntityType getEntityType()

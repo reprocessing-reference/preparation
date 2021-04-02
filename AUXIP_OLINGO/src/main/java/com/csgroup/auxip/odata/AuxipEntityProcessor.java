@@ -290,20 +290,21 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	public void updateEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
 			ContentType requestFormat, ContentType responseFormat)
 					throws ODataApplicationException, DeserializerException, SerializerException {
-
+		LOG.debug("Starting updateEntity");
 		// 1. Retrieve the entity set which belongs to the requested entity 
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 		// Note: only in our example we can assume that the first segment is the EntitySet
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); 
 		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
 		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
-
+		LOG.debug("edmEntityType: "+edmEntityType.getName());
 		// 2. update the data in backend
 		// 2.1. retrieve the payload from the PUT request for the entity to be updated 
 		InputStream requestInputStream = request.getBody();
-		ODataDeserializer deserializer = odata.createDeserializer(requestFormat);
+		ODataDeserializer deserializer = this.odata.createDeserializer(requestFormat);
 		DeserializerResult result = deserializer.entity(requestInputStream, edmEntityType);
 		Entity requestEntity = result.getEntity();
+		
 		// 2.2 do the modification in backend
 		List<UriParameter> keyPredicates = uriResourceEntitySet.getKeyPredicates();
 		// Note that this updateEntity()-method is invoked for both PUT or PATCH operations
@@ -316,7 +317,20 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 
 	public void deleteEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo)
 			throws ODataApplicationException {
-		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+		LOG.debug("Starting deleteEntity");
+		
+		// 1. Retrieve the entity set which belongs to the requested entity 
+		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
+		// Note: only in our example we can assume that the first segment is the EntitySet
+		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); 
+		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
+
+		// 2. delete the data in backend
+		List<UriParameter> keyPredicates = uriResourceEntitySet.getKeyPredicates();
+		storage.deleteEntityData(edmEntitySet, keyPredicates);
+		
+		//3. configure the response object
+		response.setStatusCode(HttpStatusCode.NO_CONTENT.getStatusCode());
 	}
 
 	/**
@@ -382,11 +396,13 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	public void updateMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
 			ContentType requestFormat, ContentType responseFormat)
 					throws ODataApplicationException, DeserializerException, SerializerException {
+		LOG.debug("Starting updateMediaEntity");
 		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
 	}
 	@Override
 	public void deleteMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo)
 			throws ODataApplicationException {
+		LOG.debug("Starting deleteMediaEntity");
 		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
 	}
 
