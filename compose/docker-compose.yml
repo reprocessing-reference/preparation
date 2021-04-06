@@ -28,6 +28,8 @@ services:
   database_auxip_olingo:
     image: postgres
     restart: always
+    ports:
+    - 5416:5432
     environment:
       POSTGRES_USER: "auxip"
       POSTGRES_PASSWORD: "**auxip**"
@@ -63,15 +65,27 @@ services:
       - database_auxip
     networks:
       - proxynet
+    volumes:
+      - /auxip_snapshot:/auxip_snapshot
 
   auxip_olingo:
-    image: auxip_olingo:1.0.1
+    image: auxip_olingo:0.0.2
     restart: "no"
     depends_on:
       - database_auxip_olingo
     networks:
       - proxynet
 
+  auxip_rolling:
+    image: rollingarchive:1.0.0
+    restart: "no"
+    depends_on:
+      - auxip_olingo
+    networks:
+      - proxynet
+    volumes:
+      - /auxip_snapshot:/archives
+      - /auxip_working:/working
 
   proxy:
     image: nginx:1.19.5-alpine
