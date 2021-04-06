@@ -159,7 +159,7 @@ public class Subscription {
 
 		Property notificationEndpoint = new Property(stringType, "NotificationEndpoint",ValueType.PRIMITIVE,this.NotificationEndpoint) ;
 		Property notificationEpUsername = new Property(stringType, "NotificationEpUsername",ValueType.PRIMITIVE,this.NotificationEpUsername) ;
-		Property notificationEpPassword = new Property(stringType, "NotificationEpPassword",ValueType.PRIMITIVE,"**********") ;
+		Property notificationEpPassword = new Property(stringType, "NotificationEpPassword",ValueType.PRIMITIVE,this.NotificationEpPassword) ;
 		Property filterParam = new Property(stringType, "FilterParam",ValueType.PRIMITIVE,this.FilterParam) ;
 		Property submissionDate = new Property("DateTimeOffset", "SubmissionDate",ValueType.PRIMITIVE,this.SubmissionDate) ;
 		// Property lastNotificationDate = new Property("DateTimeOffset", "LastNotificationDate",ValueType.PRIMITIVE,this.LastNotificationDate) ;

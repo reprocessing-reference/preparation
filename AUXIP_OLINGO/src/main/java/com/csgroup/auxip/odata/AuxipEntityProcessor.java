@@ -21,8 +21,10 @@ package com.csgroup.auxip.odata;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import com.csgroup.auxip.controller.AuxipBeanUtil;
+import com.csgroup.auxip.model.jpa.Notification;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.repository.Storage;
 import com.csgroup.auxip.model.repository.StorageStatus;
@@ -66,6 +68,9 @@ import org.apache.olingo.server.api.uri.queryoption.ExpandItem;
 import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.olingo.server.core.uri.parser.Parser;
+import org.apache.olingo.server.core.uri.parser.UriParserException;
+import org.apache.olingo.server.core.uri.validator.UriValidationException;
 
 public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcessor {
 
@@ -94,6 +99,11 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	public void readEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType responseFormat)
 			throws ODataApplicationException, SerializerException {
 		LOG.debug("Starting ReadEntity ...");
+		LOG.debug(request.getRawQueryPath());
+		LOG.debug(request.getRawODataPath());
+		LOG.debug(request.getRawBaseUri());
+		LOG.debug(request.getRawRequestUri());
+		LOG.debug(request.getRawServiceResolutionUri());
 		EdmEntityType responseEdmEntityType = null; // we'll need this to build the ContextURL
 		Entity responseEntity = null; // required for serialization of the response body
 		EdmEntitySet responseEdmEntitySet = null; // we need this for building the contextUrl
@@ -243,6 +253,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	public void createEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
 			ContentType requestFormat, ContentType responseFormat)
 					throws ODataApplicationException, DeserializerException, SerializerException {
+		
+		LOG.debug("Started createEntity");
 
 		// 1. Retrieve the entity type from the URI
 		List<UriResource> resourceParts = uriInfo.getUriResourceParts();
@@ -380,6 +392,36 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 				requestFormat.toContentTypeString(), 
 				mediaContent);
 		LOG.debug("Entity created : "+entity.getType());
+		//Check subscriptions
+		final String uuid = entity.getProperty("ID").getValue().toString();
+		LOG.debug("Incoming uuid : "+uuid);
+		List<Subscription> subscriptions = storage.getAllValidSubscriptions();
+		for (Subscription scr : subscriptions) {
+			String filter = scr.getFilterParam();
+			LOG.debug("Filter: "+filter);
+			try {
+				UriInfo ur = new Parser(this.serviceMetadata.getEdm(), odata).parseUri("/Products", filter, null, null);
+				UriResourceEntitySet uri_ress = (UriResourceEntitySet) ur.getUriResourceParts().get(0);
+				EdmEntitySet edm_set = uri_ress.getEntitySet();
+				EntityCollection coll = storage.readEntitySetData(edm_set, ur.getFilterOption(), ur.getExpandOption(), 
+						ur.getOrderByOption(), ur.getSkipOption(), ur.getTopOption());
+				LOG.debug("Number of product subscription : "+String.valueOf(coll.getEntities().size()));
+				for (Entity ent : coll.getEntities()) {
+					LOG.debug("Product uuid : "+ent.getProperty("ID").getValue().toString());
+					if (ent.getProperty("ID").getValue().toString().equals(uuid)) {
+						LOG.debug("Matching product for subscription found");
+						Notification notif = new Notification(ent.getProperty("Name").getValue().toString()
+								, UUID.fromString(uuid), scr);
+						notif.send();
+					}
+				}
+			} catch (UriParserException e) {
+				e.printStackTrace();
+			} catch (UriValidationException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		final ContextURL contextUrl = ContextURL.with().entitySet(edmEntitySet).suffix(Suffix.ENTITY).build();
 		final EntitySerializerOptions opts = EntitySerializerOptions.with().contextURL(contextUrl).build();
 		final SerializerResult serializerResult = odata.createSerializer(responseFormat).entity(serviceMetadata,

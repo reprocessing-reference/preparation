@@ -15,8 +15,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -72,6 +76,7 @@ import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
 import com.csgroup.auxip.model.jpa.TimeRange;
 import com.csgroup.auxip.model.jpa.User;
+import com.csgroup.auxip.serializer.ProductSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -128,33 +133,58 @@ public class Storage {
 
 	}
 
-	public Entity createSubscription(Entity requestEntity ) {
+	public Entity createSubscription(Entity requestEntity ) throws ODataApplicationException {
 
+		LOG.debug("createSubscription start ...");
+
+		Subscription subscription = new Subscription();
+		
+		try {
+			subscription.setFilterParam(requestEntity.getProperty("FilterParam").getValue().toString());
+			subscription.setStatus( SubscriptionStatus.running );
+			subscription.setNotificationEndpoint(requestEntity.getProperty("NotificationEndpoint").getValue().toString());
+			subscription.setNotificationEpUsername(requestEntity.getProperty("NotificationEpUsername").getValue().toString());
+			subscription.setNotificationEpPassword(requestEntity.getProperty("NotificationEpPassword").getValue().toString());
+			subscription.setSubmissionDate( new Timestamp(System.currentTimeMillis()) );
+		} catch (Exception e) {
+			LOG.error(e.getLocalizedMessage());
+			throw new ODataApplicationException("Can't create subscription ...", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+		}
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 		EntityTransaction transac = entityManager.getTransaction();
-
-		transac.begin();
-		Subscription subscription = new Subscription();
-
-		subscription.setFilterParam(requestEntity.getProperty("FilterParam").getValue().toString());
-		subscription.setStatus( SubscriptionStatus.running );
-		subscription.setNotificationEndpoint(requestEntity.getProperty("NotificationEndpoint").getValue().toString());
-		subscription.setNotificationEpUsername(requestEntity.getProperty("NotificationEpUsername").getValue().toString());
-		subscription.setNotificationEpPassword(requestEntity.getProperty("NotificationEpPassword").getValue().toString());
-		subscription.setSubmissionDate( new Timestamp(System.currentTimeMillis()) );
 		try {
+			transac.begin();
 			entityManager.persist(subscription);
 			if (transac.isActive()) {
 				transac.commit();
 			} else {
 				transac.rollback();
 			}				
-		} finally {                    
+		} catch (Exception e) {
+			LOG.error(e.getLocalizedMessage());
+			throw new ODataApplicationException("Can't persist subscription ...", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+		}finally {                    
 			entityManager.close();
 		}
 
+		LOG.debug("createSubscription done ...");
 		return subscription.getOdataEntity();
 
+	}
+
+	public List<Subscription> getAllValidSubscriptions(){
+		String queryString1= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Subscription entity "
+				+ "WHERE entity.Status = \'running\'";
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<Subscription> subscriptions;
+		try {	
+			Query query_m1 = entityManager.createQuery(queryString1);
+			subscriptions = query_m1.getResultList();
+			LOG.debug("Number of subscriptions found : "+String.valueOf(subscriptions.size()));
+		} finally {
+			entityManager.close();
+		}
+		return subscriptions;
 	}
 
 
@@ -190,12 +220,14 @@ public class Storage {
 			}
 
 			transac.commit();
-			entityManager.close();  
+
 
 			return Globals.OK;
 
 		} catch (Exception e) {
 			return Globals.NOT_OK;
+		} finally {
+			entityManager.close();  
 		}
 
 	}

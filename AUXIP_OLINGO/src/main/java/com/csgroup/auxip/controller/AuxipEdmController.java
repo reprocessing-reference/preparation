@@ -64,7 +64,7 @@ public class AuxipEdmController {
 
 
         // Get a bearer token 
-        AccessToken token;
+        /*AccessToken token;
         try
         {
             String bearerToken = request.getHeader("Authorization").replace("Bearer ", "") ;
@@ -74,18 +74,18 @@ public class AuxipEdmController {
         {
             token = null;
             LOG.error("Server Error occurred while trying to get AccessToken in Auxip request", e);
-        }
+        }*/
 
         try {
 
-            if( token == null )
+            /*if( token == null )
             {
                 throw new RuntimeException("Server Error occurred : AccessToken not found in Auxip request");
-            }
+            }*/
 
             Storage storage = new Storage();
             storage.setEntityManagerFactory(entityManagerFactory);
-            storage.setAccessToken(token) ;
+            //storage.setAccessToken(token) ;
             // create odata handler and configure it with EdmProvider and Processor
             //OData odata = OData.newInstance();
             //ServiceMetadata edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());

@@ -1,0 +1,7 @@
+{
+    "@odata.context": "$metadata#Subscription/$entity",
+    "FilterParam": "$filter=Name eq 'S2A_OPER_GIP_R2DENT_MPC__20150605T094742_V20150622T000000_21000101T000000_B06.TGZ'",
+    "NotificationEndpoint": "http://localhost:8081/",
+    "NotificationEpUsername": "myserviceuser",
+    "NotificationEpPassword": "machinbidule"
+}
