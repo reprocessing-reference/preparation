@@ -1,0 +1,209 @@
+version: '2'
+
+services:
+  database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "reprobaseline"
+      POSTGRES_PASSWORD: "**reprobaseline**"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/data:/var/lib/postgresql/data
+
+  database_auxip_olingo:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "auxip"
+      POSTGRES_PASSWORD: "**auxip**"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/data_auxip_olingo:/var/lib/postgresql/data
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "user@domain.com"
+      PGADMIN_DEFAULT_PASSWORD: "**reprobaseline**"
+    depends_on:
+     - database
+    networks:
+      - proxynet
+      
+  reprobase:
+    image: reprobaseline:1.0
+    restart: "no"
+    extra_hosts:
+      - dev.reprocessing-preparation.ml:172.20.0.1
+    depends_on:
+      - database
+    networks:
+      - proxynet
+
+#######################################
+# auxip_olingo
+#######################################
+  auxip:
+    image: auxip_olingo:0.0.2
+    container_name : auxip
+    restart: "no"
+    extra_hosts:
+      - dev.reprocessing-preparation.ml:172.20.0.1
+    depends_on:
+      - database_auxip_olingo
+    networks:
+      - proxynet
+
+#######################################
+# keycloak DB
+#######################################
+  keycloak_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB:   keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/keycloak_datastore:/var/lib/postgresql/data
+#######################################
+# keycloak
+#######################################
+  keycloak:
+    image: jboss/keycloak:12.0.4
+    container_name: keycloak
+    depends_on:
+      - keycloak_db
+    networks:
+      - proxynet
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - dev.reprocessing-preparation.ml:172.20.0.1
+    environment:
+      DB_VENDOR:   POSTGRES
+      DB_ADDR:     keycloak_db
+      DB_PORT:     5432
+      DB_DATABASE: keycloak
+      DB_USER:     keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER:     admin
+      KEYCLOAK_PASSWORD: "**auxip**@csGroup.eu"
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_FRONTEND_URL: https://dev.reprocessing-preparation.ml/auth
+    volumes:
+      - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
+        #  - ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+        #- ./data/keycloak/configuration/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
+        #- ./data/keycloak/configuration/keystores/kc.pkcs12:/opt/jboss/keycloak/standalone/configuration/keystores/kc.pkcs12
+
+    #   # import auxip realm configuration
+    command: 
+      [
+        '-b',
+        '0.0.0.0',
+        '-Dkeycloak.profile.feature.upload_scripts=enabled',
+        '-Dkeycloak.migration.action=import',
+        '-Dkeycloak.migration.provider=dir',
+        '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
+        '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
+      ]
+      # - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+
+  #######################################
+  # Kong 
+  #######################################
+  kong:
+    build:
+      context: ./      
+    image: kong-oidc:latest
+    container_name: kong
+    extra_hosts:
+      - dev.reprocessing-preparation.ml:172.20.0.1
+    networks:
+      - proxynet
+    ports:
+      - "8000:8000" # Listener
+        # - "8001:8001" # Admin API
+      - "8443:8443" # Listener  (SSL)
+      # - "8444:8444" # Admin API (SSL)
+      #- 80:8000
+      #- 443:8443
+      - 8001:8001
+      - 8444:8444
+
+    environment:
+      KONG_DATABASE:         "off"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG:  /dev/stderr
+      KONG_ADMIN_ERROR_LOG:  /dev/stderr
+      # KONG_PROXY_LISTEN:     0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_ADMIN_LISTEN:     0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_PLUGINS: bundled,oidc
+      KONG_LOG_LEVEL:        debug
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
+      # KONG_NGINX_HTTP_INCLUDE: /etc/kong/kong.yml
+      KONG_NGINX_PROXY_SET: "$$session_secret secret"
+
+    volumes:
+      - ./data/kong:/etc/kong
+      # - /auxip_snapshot:/etc/nginx/html/archives
+
+
+
+  auxip_rolling:
+    container_name: auxip_rolling
+    image: rollingarchive:1.0.0
+    restart: "no"
+    depends_on:
+      - auxip
+    networks:
+      - proxynet
+    volumes:
+      - /auxip_snapshot:/archives
+      - /auxip_working:/working
+
+  proxy:
+    image: nginx:1.19.5-alpine
+    container_name: proxy
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      - proxynet
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - /auxip_snapshot:/etc/nginx/html/archives
+    depends_on:
+      - certbot
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+networks:
+  proxynet:
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: "172.20.0.0/20"
+            gateway: "172.20.0.1"
+
