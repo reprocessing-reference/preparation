@@ -7,12 +7,15 @@ import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceEntitySet;
 import org.keycloak.TokenVerifier;
 import org.keycloak.representations.AccessToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import com.csgroup.auxip.config.QuotasConfiguration;
+import com.csgroup.auxip.config.SecurityConfiguration;
 import com.csgroup.auxip.controller.AuxipBeanUtil;
 import com.csgroup.auxip.model.jpa.Globals;
 import com.csgroup.auxip.model.jpa.Product;
@@ -20,6 +23,7 @@ import com.csgroup.auxip.model.jpa.RoleType;
 import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SystemRole;
 import com.csgroup.auxip.model.jpa.User;
+import com.csgroup.auxip.odata.AuxipEntityCollectionProcessor;
 
 
 /**
@@ -28,7 +32,9 @@ import com.csgroup.auxip.model.jpa.User;
  * Think to save the user object because AccessControl can update it.
  */
 public class AccessControl {
-
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AccessControl.class);
+	
     private User user;
 
     public AccessControl(){}
@@ -43,6 +49,11 @@ public class AccessControl {
      * @return
      */
     public boolean userCanDownload(){
+    	if (!AuxipBeanUtil.getBean(SecurityConfiguration.class).getNeedToken())
+        {
+        	LOG.info("Security has been deactivated in configuration");
+        	return true;
+        }
 
         QuotasConfiguration quotasConfiguration = AuxipBeanUtil.getBean(QuotasConfiguration.class);
 
@@ -89,7 +100,11 @@ public class AccessControl {
      */
     public static boolean userCanDealWith( ODataRequest request ,  UriInfo uriInfo)
     {
-        
+        if (!AuxipBeanUtil.getBean(SecurityConfiguration.class).getNeedToken())
+        {
+        	LOG.info("Security has been deactivated in configuration");
+        	return true;
+        }
         AccessToken token;
         try
         {
