@@ -1,2 +1,2 @@
- 0 3 * * * /rolling.sh /archives /working 10 > /proc/1/fd/1 2>/proc/1/fd/2
+ 0 3 * * * /rolling.sh /archives /working 20 > /proc/1/fd/1 2>/proc/1/fd/2
  
