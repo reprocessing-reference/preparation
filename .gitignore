@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+*.pyc
 
 # Log file
 *.log
@@ -29,3 +30,7 @@ hs_err_pid*
 *.classpath
 *.project
 *.settings
+*.idea
+#temp files
+.#*
+*~
