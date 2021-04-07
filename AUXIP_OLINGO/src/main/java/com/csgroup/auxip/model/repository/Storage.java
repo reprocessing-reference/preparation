@@ -7,7 +7,6 @@
 package com.csgroup.auxip.model.repository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,19 +14,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-
 import org.apache.olingo.commons.api.data.ComplexValue;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
@@ -44,7 +37,6 @@ import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceLambdaAny;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
-import org.apache.olingo.server.api.uri.queryoption.ExpandItem;
 import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
 import org.apache.olingo.server.api.uri.queryoption.FilterOption;
 import org.apache.olingo.server.api.uri.queryoption.OrderByItem;
@@ -61,7 +53,6 @@ import org.apache.olingo.server.api.uri.queryoption.expression.Member;
 import org.apache.olingo.server.api.uri.queryoption.expression.BinaryOperatorKind;
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.Literal;
-
 import com.csgroup.auxip.controller.AuxipBeanUtil;
 import com.csgroup.auxip.model.jpa.Attribute;
 import com.csgroup.auxip.model.jpa.Checksum;
@@ -76,7 +67,6 @@ import com.csgroup.auxip.model.jpa.Subscription;
 import com.csgroup.auxip.model.jpa.SubscriptionStatus;
 import com.csgroup.auxip.model.jpa.TimeRange;
 import com.csgroup.auxip.model.jpa.User;
-import com.csgroup.auxip.serializer.ProductSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -100,25 +90,11 @@ public class Storage {
 	private static final Logger LOG = LoggerFactory.getLogger(Storage.class);
 
 	private EntityManagerFactory entityManagerFactory;
-	private AccessToken accessToken;
-	private User user;
-
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+	
 	public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
-	public void setAccessToken(AccessToken accessToken) {
-		this.accessToken = accessToken;
-		this.user = new User(accessToken);
-
-	}
 	// utility member
 	private Map<String, String> operatorsMapping = new HashMap<>();
 
@@ -715,10 +691,6 @@ public class Storage {
 
 
 	public Entity readEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyParams) {
-		Entity entity = null;
-
-		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
-
 		String uuid = keyParams.get(0).getText();
 
 		String queryString = "SELECT entity FROM " + Product.class.getName() + " entity WHERE entity.Id =  'uuid'".replace("uuid", uuid) ;
@@ -740,8 +712,6 @@ public class Storage {
 	public void updateEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyPredicates, Entity requestEntity,
 			HttpMethod httpMethod) {
 		LOG.debug("Starting updateEntityData");
-		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
-
 		if (edmEntitySet.getName().equals(Subscription.ES_NAME)) {
 			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			EntityTransaction transac = entityManager.getTransaction();
@@ -841,9 +811,7 @@ public class Storage {
 	//Delete entity
 	public void deleteEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyParams)
 			throws ODataApplicationException {
-
-		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
-
+		
 		if (edmEntitySet.getName().equals(Product.ES_NAME)) {
 			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			EntityTransaction transaction = entityManager.getTransaction();
@@ -1148,6 +1116,4 @@ public class Storage {
 		ZonedDateTime dt = ZonedDateTime.parse(str);
 		return Timestamp.from(dt.toInstant());
 	}
-
-
 }

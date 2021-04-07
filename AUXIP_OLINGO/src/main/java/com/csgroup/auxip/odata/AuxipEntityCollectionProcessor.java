@@ -21,9 +21,10 @@ package com.csgroup.auxip.odata;
 import java.util.List;
 import java.util.Locale;
 
+import com.csgroup.auxip.model.jpa.User;
 import com.csgroup.auxip.model.repository.Storage;
-
 import org.apache.olingo.commons.api.Constants;
+import com.csgroup.auxip.model.security.AccessControl;
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
@@ -90,6 +91,13 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       throws ODataApplicationException, SerializerException {
 
 	LOG.info("Starting readEntityCollection");
+ 
+    // Check the client access role 
+    if ( !AccessControl.userCanDealWith(request, uriInfo) )
+    {
+      throw new ODataApplicationException("Unauthorized Request !",
+      HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+    }
     EdmEntitySet responseEdmEntitySet = null; // we'll need this to build the ContextURL
     EntityCollection responseEntityCollection = null; // we'll need this to set the response body
     EdmEntityType responseEdmEntityType = null;
