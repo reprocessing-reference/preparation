@@ -719,7 +719,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "0dcc2964-6f1e-4e85-9752-fdb9aa2f0ad3",
       "redirectUris": [
-        "https://dev.reprocessing-preparation.ml:8443/*"
+        "https://reprocessing-preparation.ml:8443/*"
       ],
       "webOrigins": [],
       "notBefore": 0,

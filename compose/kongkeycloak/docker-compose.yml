@@ -39,8 +39,6 @@ services:
   reprobase:
     image: reprobaseline:1.0
     restart: "no"
-    extra_hosts:
-      - dev.reprocessing-preparation.ml:172.20.0.1
     depends_on:
       - database
     networks:
@@ -53,8 +51,6 @@ services:
     image: auxip_olingo:0.0.2
     container_name : auxip
     restart: "no"
-    extra_hosts:
-      - dev.reprocessing-preparation.ml:172.20.0.1
     depends_on:
       - database_auxip_olingo
     networks:
@@ -87,8 +83,6 @@ services:
       - proxynet
     ports:
       - "8080:8080"
-    extra_hosts:
-      - dev.reprocessing-preparation.ml:172.20.0.1
     environment:
       DB_VENDOR:   POSTGRES
       DB_ADDR:     keycloak_db
@@ -99,7 +93,7 @@ services:
       KEYCLOAK_USER:     admin
       KEYCLOAK_PASSWORD: "**auxip**@csGroup.eu"
       PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_FRONTEND_URL: https://dev.reprocessing-preparation.ml/auth
+      KEYCLOAK_FRONTEND_URL: https://reprocessing-preparation.ml/auth
     volumes:
       - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
         #  - ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
@@ -127,8 +121,6 @@ services:
       context: ./      
     image: kong-oidc:latest
     container_name: kong
-    extra_hosts:
-      - dev.reprocessing-preparation.ml:172.20.0.1
     networks:
       - proxynet
     ports:
@@ -175,7 +167,6 @@ services:
 
   proxy:
     image: nginx:1.19.5-alpine
-    container_name: proxy
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
       - proxynet

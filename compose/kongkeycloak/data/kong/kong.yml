@@ -32,8 +32,8 @@ services:
       client_secret: "0dcc2964-6f1e-4e85-9752-fdb9aa2f0ad3"
       bearer_only: "no"
       realm: "auxip"
-      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/auxip/protocol/openid-connect/token/introspect"
-      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/auxip/.well-known/openid-configuration"
+      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/auxip/protocol/openid-connect/token/introspect"
+      discovery: "https://reprocessing-preparation.ml/auth/realms/auxip/.well-known/openid-configuration"
       # redirect_uri_path: "/auxip.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
@@ -52,8 +52,8 @@ services:
       client_secret: "62cef502-4dfb-4682-9094-dbba4c6f4441"
       bearer_only: "no"
       realm: "reprobase"
-      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/reprobase/protocol/openid-connect/token/introspect"
-      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/reprobase/.well-known/openid-configuration"
+      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprobase/protocol/openid-connect/token/introspect"
+      discovery: "https://reprocessing-preparation.ml/auth/realms/reprobase/.well-known/openid-configuration"
       # redirect_uri_path: "/reprocessing.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
@@ -156,7 +156,7 @@ certificates:
       WRUtcKyfXn8eKeS6Hv8lXA/9pEmE4g==
       -----END PRIVATE KEY-----  
     snis:
-     - name: "dev.reprocessing-preparation.ml"
+     - name: "reprocessing-preparation.ml"
  
 
 
