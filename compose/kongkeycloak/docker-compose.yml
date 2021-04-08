@@ -81,8 +81,6 @@ services:
       - keycloak_db
     networks:
       - proxynet
-    ports:
-      - "8080:8080"
     environment:
       DB_VENDOR:   POSTGRES
       DB_ADDR:     keycloak_db
@@ -96,9 +94,9 @@ services:
       KEYCLOAK_FRONTEND_URL: https://reprocessing-preparation.ml/auth
     volumes:
       - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
-        #  - ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
-        #- ./data/keycloak/configuration/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
-        #- ./data/keycloak/configuration/keystores/kc.pkcs12:/opt/jboss/keycloak/standalone/configuration/keystores/kc.pkcs12
+     #- ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+     #- ./data/keycloak/configuration/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
+     #- ./data/keycloak/configuration/keystores/kc.pkcs12:/opt/jboss/keycloak/standalone/configuration/keystores/kc.pkcs12
 
     #   # import auxip realm configuration
     command: 
@@ -126,12 +124,10 @@ services:
     networks:
       - proxynet
     ports:
-      - "8000:8000" # Listener
-        # - "8001:8001" # Admin API
-      - "8443:8443" # Listener  (SSL)
-      # - "8444:8444" # Admin API (SSL)
-      #- 80:8000
-      #- 443:8443
+      #- "8000:8000" # Listener
+      #- "8001:8001" # Admin API
+      #- "8443:8443" # Listener  (SSL)
+      #- "8444:8444" # Admin API (SSL)
       - 8001:8001
       - 8444:8444
 
