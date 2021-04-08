@@ -121,6 +121,8 @@ services:
       context: ./      
     image: kong-oidc:latest
     container_name: kong
+    depends_on:
+      - certbot
     networks:
       - proxynet
     ports:
@@ -146,11 +148,13 @@ services:
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
       # KONG_NGINX_HTTP_INCLUDE: /etc/kong/kong.yml
       KONG_NGINX_PROXY_SET: "$$session_secret secret"
+      KONG_SSL_CERT: /etc/letsencrypt/live/reprocessing-preparation.ml/fullchain.pem
+      KONG_SSL_CERT_KEY: /etc/letsencrypt/live/reprocessing-preparation.ml/privkey.pem
 
     volumes:
       - ./data/kong:/etc/kong
+      - ./data/certbot/conf:/etc/letsencrypt
       # - /auxip_snapshot:/etc/nginx/html/archives
-
 
 
   auxip_rolling:
