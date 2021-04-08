@@ -24,7 +24,7 @@ services:
 
 
 - name: auxip-service
-  url: http://auxip:8080/auxipv2.svc
+  url: http://auxip:8080/auxipv2.svc/
   plugins:
   - name: oidc
     config:
@@ -41,6 +41,7 @@ services:
   - name: auxip-route
     paths:
     - /auxip.svc
+    - /auxip.svc/
 
 
 - name: reprobase-service
