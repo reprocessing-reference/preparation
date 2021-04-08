@@ -1,5 +1,7 @@
 package com.csgroup.auxip.model.jpa;
 
+import org.apache.olingo.commons.api.http.HttpStatusCode;
+import org.apache.olingo.server.api.ODataApplicationException;
 import org.apache.olingo.server.api.ODataRequest;
 import org.apache.olingo.server.api.uri.UriInfo;
 import org.apache.olingo.server.api.uri.UriResource;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.keycloak.TokenVerifier;
 import org.keycloak.representations.AccessToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.core.joran.conditional.ElseAction;
 
@@ -20,6 +24,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +49,7 @@ import com.csgroup.auxip.controller.AuxipBeanUtil;
  */
 @Entity(name = "Users")
 public class User {
+	private static final Logger LOG = LoggerFactory.getLogger(User.class);
 
     @Id
     private String name;
@@ -73,6 +79,8 @@ public class User {
         this.downloadedVolume.setPeriodStart(LocalDateTime.now());
         this.downloadedVolume.setVolume(0);
         this.created = LocalDateTime.now();
+        this.downloadsCounters = new ArrayList<>();
+        this.roles = new ArrayList<>();
     }
 
     // define a user by parsing JWT
@@ -105,6 +113,9 @@ public class User {
         this.numberOfParallelDownloads = 0;
         // init lastDownloadDateTime with the current dateTime even there is no download yet
         this.lastDownloadDateTime = LocalDateTime.now();
+        //Init counters
+        this.downloadsCounters = new ArrayList<>();
+        
     }
 
     public int getNumberOfParallelDownloads() {
@@ -177,7 +188,7 @@ public class User {
      * @param volume
      */
     public void updateDownloadedVolume(long volume) {
-
+    	LOG.debug("Starting updateDownloadedVolume");
         QuotasConfiguration quotasConfiguration = AuxipBeanUtil.getBean(QuotasConfiguration.class);
 
         // update the total volume
@@ -197,7 +208,7 @@ public class User {
         }
         // update the lastDownloadDateTime
         this.lastDownloadDateTime = now ;
-
+        LOG.debug("updateDownloadedVolume done ...");
     }
 
     /**
@@ -205,9 +216,12 @@ public class User {
      * @param productName : product Name where to get productType , plateform Short Name and platform Serial Id
      * @param counterType : one of the following : counterType.volume, counterType.completed, counterType.failed
      * @param increment : depending on counterType , this can be a volume or an increment unit.
+     * @throws ODataApplicationException 
      */
-    public void incrementDownloadsCounter(String productName,CounterType counterType,long increment)
+    public void incrementDownloadsCounter(String productName,CounterType counterType,long increment) throws ODataApplicationException
     {
+    	LOG.debug("Starting incrementDownloadsCounter");
+    	
         Map<String,String> shortNamesMapping = new HashMap<>();
         shortNamesMapping.put("S1",Globals.SENTINEL_1);
         shortNamesMapping.put("S2",Globals.SENTINEL_2);
@@ -232,16 +246,22 @@ public class User {
             // S3B_OL_1_CAL_AX_20190317T203033_20991231T235959_20190320T120000___________________MPC_O_AL_006.SEN3.zip
             produtType = productName.substring(4, 15) ;
         }   
+        
+        ProductTypedCounter productTypedCounter = null;
+        try {
         // Get the right counter by applying filters  
 
-        ProductTypedCounter productTypedCounter = this.downloadsCounters.stream()
+        productTypedCounter = this.downloadsCounters.stream()
         .filter(counter -> counterType.equals(counter.getCounterType()))
         .filter(counter -> produtType.equals(counter.getProductType()))
         .filter(counter -> platformShortName.equals(counter.getPlateForm()))
         .filter(counter -> platformSerialIdentifier.equals(counter.getUnit()))
         .findFirst() 
         .orElse(null);
-
+        } catch (Exception e) {
+        	LOG.error("Can't get user counter ");
+        	throw new ODataApplicationException("Can't get counter",HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+		}
         if( productTypedCounter == null )
         {
             // add a new counter to downloadsCounters
@@ -258,16 +278,20 @@ public class User {
             // increment the value of this counter
             productTypedCounter.setValue( productTypedCounter.getValue() + increment );
         }
+        LOG.debug("incrementDownloadsCounter Done");
     }    
 
     /**
      * Increment the corresponding counter 
      * @param productName : product Name where to get productType , plateform ShortName and platform Serial Id
      * @param counterType : one of the following : counterType.volume, counterType.completed, counterType.failed
+     * @throws ODataApplicationException 
      */
-    public void incrementDownloadsCounter(String productName,CounterType counterType)
+    public void incrementDownloadsCounter(String productName,CounterType counterType) throws ODataApplicationException
     {
+    	LOG.debug("Starting incrementDownloadsCounterBase");
         this.incrementDownloadsCounter(productName, counterType,1);
+        LOG.debug("incrementDownloadsCounterBase done");
     }
 
 

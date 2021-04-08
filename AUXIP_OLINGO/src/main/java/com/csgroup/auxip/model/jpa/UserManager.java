@@ -102,7 +102,7 @@ public class UserManager {
             EntityTransaction transac = this.entityManager.getTransaction();
 
             transac.begin();
-            user = new User(token);
+            user = new User(token);            
             entityManager.persist(user);
             transac.commit();
              
