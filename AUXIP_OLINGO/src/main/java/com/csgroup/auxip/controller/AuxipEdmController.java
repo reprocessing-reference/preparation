@@ -53,7 +53,7 @@ public class AuxipEdmController {
 	 * @param request the req
 	 * @param response the Http response
 	 */
-	@RequestMapping("/**")
+	@RequestMapping("**")
 	public void process(HttpServletRequest request, HttpServletResponse response) {
         try {
             storage = new Storage();

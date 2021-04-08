@@ -27,7 +27,7 @@
   "registrationAllowed": true,
   "registrationEmailAsUsername": false,
   "rememberMe": true,
-  "verifyEmail": true,
+  "verifyEmail": false,
   "loginWithEmailAllowed": false,
   "duplicateEmailsAllowed": false,
   "resetPasswordAllowed": true,
@@ -621,7 +621,8 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "62cef502-4dfb-4682-9094-dbba4c6f4441",
       "redirectUris": [
-        "https://dev.reprocessing-preparation.ml:8443/*"
+        "https://reprocessing-preparation.ml:8443/*",
+        "https://reprocessing-preparation.ml/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
