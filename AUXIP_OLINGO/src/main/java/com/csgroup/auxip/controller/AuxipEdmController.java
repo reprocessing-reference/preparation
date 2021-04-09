@@ -69,6 +69,8 @@ public class AuxipEdmController {
             handler.register(new AuxipComplexProcessor(storage));
             handler.register(new AuxipActionProcessor(storage));
             
+            System.out.println( request.getRequestURL().toString());
+
             // let the handler do the work
             handler.process(new HttpServletRequestWrapper(request) {
                 // Spring MVC matches the whole path as the servlet path
@@ -79,6 +81,18 @@ public class AuxipEdmController {
                 public String getServletPath() {
                     return AuxipEdmController.URI;
                 }
+                // Override getRequestURL to resolve the '/' problem
+                // the problem occurs while filling Odata Uri informations  (in Odata function => fillUriInformation)
+                @Override
+                public StringBuffer getRequestURL() {
+                    if(request.getRequestURI().equals(AuxipEdmController.URI))
+                        return request.getRequestURL().append("/"); 
+                    else
+                    {
+                        return request.getRequestURL();
+                    }
+                }
+
             }, response);
           } catch (RuntimeException e) {
             LOG.error("Server Error occurred in Auxip service", e);
