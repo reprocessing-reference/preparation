@@ -135,10 +135,11 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     { 
       // this is the case for: odata/Products  or odata/Subscriptions
       responseEdmEntitySet = startEdmEntitySet; // the response body is built from the first (and only) entitySet
+      long startTime = System.currentTimeMillis();
       // apply system query options
-      
       responseEntityCollection = storage.readEntitySetData(startEdmEntitySet,filterOption,expandOption,orderByOption,
     		  skipOption, topOption);
+      LOG.debug("Storage entitySet retrieval took (s) : "+String.valueOf((System.currentTimeMillis()-startTime)/1000.0));
 
     } else { // this would be the case for e.g. Products(uuid)/Attributes
       throw new ODataApplicationException("Not supported",

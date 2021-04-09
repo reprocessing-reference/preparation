@@ -23,7 +23,6 @@
 
 	</properties>
 	<dependencies>
-
 		<dependency>
 			<groupId>org.apache.olingo</groupId>
 			<artifactId>odata-server-api</artifactId>

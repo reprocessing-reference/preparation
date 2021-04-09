@@ -19,21 +19,24 @@ class AuxipApplicationTests {
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-	
+
 	@Test
 	void contextLoads() {
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		Query query = entityManager.createQuery("select Name from com.csgroup.auxip.model.jpa.Product ");
 
+		try {
+			List<Product> products = query.getResultList();
+			for (Product product : products) {
+				System.out.println("product.Name = " + product );
+			}
+		} finally {
+			entityManager.close();
+			// emf.close();
 
-		List<Product> products = query.getResultList();
-		for (Product product : products) {
-		  System.out.println("product.Name = " + product );
 		}
-		
-		entityManager.close();
-		// emf.close();
+
 
 
 	}

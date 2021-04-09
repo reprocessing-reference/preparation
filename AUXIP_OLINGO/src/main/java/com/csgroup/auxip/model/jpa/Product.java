@@ -58,8 +58,6 @@ public class Product {
 	private static final Logger LOG = LoggerFactory.getLogger(Product.class);
 	
 	@Id
-	//@GeneratedValue(generator = "UUID")
-    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private UUID Id;
     private String Name;
     private String ContentType;
@@ -69,8 +67,7 @@ public class Product {
 	private Timestamp EvictionDate;    
 	
 	
-    @ElementCollection    
-    @Fetch(value = FetchMode.JOIN)
+    @ElementCollection(fetch = FetchType.EAGER)
 	private List<Checksum> Checksum;
 	
     @Embedded
@@ -392,7 +389,6 @@ public class Product {
 		// that need to be freed. If you are using one S3Presigner per application (as recommended), this
 		// usually is not needed.
 		presigner.close();
-		LOG.debug(presignedGetObjectRequest.url().toString());
 		return presignedGetObjectRequest.url().toString();
 	}
 

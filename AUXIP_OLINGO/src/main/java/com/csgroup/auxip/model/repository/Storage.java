@@ -612,15 +612,15 @@ public class Storage {
 		case Product.ES_NAME:			
 			List<Product> products;
 			try {
-				LOG.debug("main prod");
+				LOG.debug("Retrieving JPA entities");
 				products = query.getResultList();
-				LOG.debug("main prod done");
+				LOG.debug("Retrieving JPA entities DONE");
+				Boolean expandAttributes = false;
+				for (Product product : products) {
+					entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
+				}
 			} finally {
 				entityManager.close();
-			}						
-			Boolean expandAttributes = false;
-			for (Product product : products) {
-				entitySet.getEntities().add(product.getOdataEntity(expandAttributes));
 			}
 			break;
 		case Subscription.ES_NAME:
@@ -679,7 +679,7 @@ public class Storage {
 		switch (entitySetName) {
 		case Product.ES_NAME:
 			// By default fetch the checksum 
-			query += " INNER JOIN entity.Checksum c1 ";
+			query += " JOIN entity.Checksum c1 ";
 			break;
 		default:
 			break;
