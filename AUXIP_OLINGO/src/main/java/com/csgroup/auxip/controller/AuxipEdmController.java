@@ -69,8 +69,6 @@ public class AuxipEdmController {
             handler.register(new AuxipComplexProcessor(storage));
             handler.register(new AuxipActionProcessor(storage));
             
-            System.out.println( request.getRequestURL().toString());
-
             // let the handler do the work
             handler.process(new HttpServletRequestWrapper(request) {
                 // Spring MVC matches the whole path as the servlet path
