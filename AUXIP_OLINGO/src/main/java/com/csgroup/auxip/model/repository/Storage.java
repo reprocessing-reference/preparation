@@ -486,21 +486,21 @@ public class Storage {
 			Object[] parameters = methodFilter.getParameters().toArray();
 			//only two parameters are expected : class Member and Literal
 			String member = ((Member)parameters[0]).getResourcePath().getUriResourceParts().get(0).toString();
-			String literal =  ((Literal)parameters[1]).getText().replace("'", "");
+			String literal =  ((Literal)parameters[1]).getText().replace("'", "").replace("_","\\_");
 
 			String whereFilter = "" ;
 			//supported functions are : contains, startswith, endswith
 			if( method.equals("contains")) // CONTAINS
 			{
-				whereFilter = " ( entity.member LIKE '%literal%' ) ".replace("member", member).replace("literal", literal ) ;
+				whereFilter = " ( entity.member LIKE '%literal%' ESCAPE '\\' ) ".replace("member", member).replace("literal", literal ) ;
 
 			}else if( method.equals("startswith") ) // STARTSWITH
 			{
-				whereFilter = " ( entity.member LIKE 'literal%' ) ".replace("member", member).replace("literal", literal ) ;
+				whereFilter = " ( entity.member LIKE 'literal%' ESCAPE '\\' ) ".replace("member", member).replace("literal", literal ) ;
 
 			}else if( method.equals("endswith") ) //ENDSWITH
 			{
-				whereFilter = " ( entity.member LIKE '%literal' ) ".replace("member", member).replace("literal", literal ) ;
+				whereFilter = " ( entity.member LIKE '%literal' ESCAPE '\\' ) ".replace("member", member).replace("literal", literal ) ;
 			}
 
 			if( outQuery.contains(placeHolderName) )
