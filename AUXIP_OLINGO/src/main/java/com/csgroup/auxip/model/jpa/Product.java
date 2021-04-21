@@ -184,7 +184,14 @@ public class Product {
 		return DateTimeOffsetAttributes;
 	}
 	
-	
+	public List<Attribute> getAttributes() {
+		List<Attribute> attributesList = new ArrayList<>();
+		attributesList.addAll(this.getStringAttributes());
+		attributesList.addAll(this.getIntegerAttributes());
+		attributesList.addAll(this.getDoubleAttributes());
+		attributesList.addAll(this.getDateTimeOffsetAttributes());
+		return attributesList;
+	}
 
 	public void setStringAttributes(List<StringAttribute> stringAttributes) {
 		StringAttributes = stringAttributes;
@@ -224,17 +231,16 @@ public class Product {
 		// navigation property: many-to-one, 
 		CsdlNavigationProperty attributesNavProp = new CsdlNavigationProperty().setName("Attributes").setType(Attribute.FQN).setCollection(true);
 		// CsdlNavigationProperty attributesNavProp = new CsdlNavigationProperty().setName("Attributes").setType(Attribute.FQN).setContainsTarget(true).setCollection(true);
-		// CsdlNavigationProperty stringAttributesNavProp = new CsdlNavigationProperty().setName(StringAttribute.FQN.getFullQualifiedNameAsString()).setType(StringAttribute.FQN);
-		// CsdlNavigationProperty stringAttributesNavProp = new CsdlNavigationProperty().setName("StringAttributes").setType(StringAttribute.FQN).setContainsTarget(true).setCollection(true);
-		// CsdlNavigationProperty integerAttributesNavProp = new CsdlNavigationProperty().setName("IntegerAttributes").setType(IntegerAttribute.FQN).setContainsTarget(true).setCollection(true);
-		// CsdlNavigationProperty doubleAttributesNavProp = new CsdlNavigationProperty().setName("DoubleAttributes").setType(DoubleAttribute.FQN).setContainsTarget(true).setCollection(true);
-		// CsdlNavigationProperty dateTimeOffesetAttributesNavProp = new CsdlNavigationProperty().setName("DateTimeOffsetAttributes").setType(DateTimeOffsetAttribute.FQN).setContainsTarget(true).setCollection(true);
+		CsdlNavigationProperty stringAttributesNavProp = new CsdlNavigationProperty().setName("StringAttributes").setType(StringAttribute.FQN).setCollection(true);
+		CsdlNavigationProperty integerAttributesNavProp = new CsdlNavigationProperty().setName("IntegerAttributes").setType(IntegerAttribute.FQN).setCollection(true);
+		CsdlNavigationProperty doubleAttributesNavProp = new CsdlNavigationProperty().setName("DoubleAttributes").setType(DoubleAttribute.FQN).setCollection(true);
+		CsdlNavigationProperty dateTimeOffesetAttributesNavProp = new CsdlNavigationProperty().setName("DateTimeOffsetAttributes").setType(DateTimeOffsetAttribute.FQN).setCollection(true);
 		List<CsdlNavigationProperty> navPropList = new ArrayList<CsdlNavigationProperty>();
 		navPropList.add(attributesNavProp);
-		// navPropList.add(stringAttributesNavProp);
-		// navPropList.add(integerAttributesNavProp);
-		// navPropList.add(doubleAttributesNavProp);
-		// navPropList.add(dateTimeOffesetAttributesNavProp);
+		navPropList.add(stringAttributesNavProp);
+		navPropList.add(integerAttributesNavProp);
+		navPropList.add(doubleAttributesNavProp);
+		navPropList.add(dateTimeOffesetAttributesNavProp);
 
 		// configure EntityType
 		entityType = new CsdlEntityType();
@@ -260,28 +266,28 @@ public class Product {
         attributesNavPropBinding.setTarget(Attribute.ES_NAME); // the target entity set, where the navigation property points to
 		attributesNavPropBinding.setPath(Attribute.ES_NAME); // the path from entity type to navigation property
 		
-		// CsdlNavigationPropertyBinding stringAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
-        // stringAttributesNavPropBinding.setTarget(ES_NAME); // the target entity set, where the navigation property points to
-		// stringAttributesNavPropBinding.setPath(StringAttribute.FQN.getFullQualifiedNameAsString()); // the path from entity type to navigation property
+		CsdlNavigationPropertyBinding stringAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
+        stringAttributesNavPropBinding.setTarget(StringAttribute.ES_NAME); // the target entity set, where the navigation property points to
+		stringAttributesNavPropBinding.setPath(StringAttribute.ES_NAME); // the path from entity type to navigation property
 	
-		// CsdlNavigationPropertyBinding integerAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
-        // integerAttributesNavPropBinding.setTarget(IntegerAttribute.ES_NAME); // the target entity set, where the navigation property points to
-		// integerAttributesNavPropBinding.setPath(IntegerAttribute.ES_NAME); // the path from entity type to navigation property
+		CsdlNavigationPropertyBinding integerAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
+        integerAttributesNavPropBinding.setTarget(IntegerAttribute.ES_NAME); // the target entity set, where the navigation property points to
+		integerAttributesNavPropBinding.setPath(IntegerAttribute.ES_NAME); // the path from entity type to navigation property
 
-		// CsdlNavigationPropertyBinding doubleAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
-        // doubleAttributesNavPropBinding.setTarget(DoubleAttribute.ES_NAME); // the target entity set, where the navigation property points to
-		// doubleAttributesNavPropBinding.setPath(DoubleAttribute.ES_NAME); // the path from entity type to navigation property
+		CsdlNavigationPropertyBinding doubleAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
+        doubleAttributesNavPropBinding.setTarget(DoubleAttribute.ES_NAME); // the target entity set, where the navigation property points to
+		doubleAttributesNavPropBinding.setPath(DoubleAttribute.ES_NAME); // the path from entity type to navigation property
 
-		// CsdlNavigationPropertyBinding dateTimeOffsetAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
-		// dateTimeOffsetAttributesNavPropBinding.setTarget(DateTimeOffsetAttribute.ES_NAME); // the target entity set, where the navigation property points to
-		// dateTimeOffsetAttributesNavPropBinding.setPath(DateTimeOffsetAttribute.ES_NAME); // the path from entity type to navigation property
+		CsdlNavigationPropertyBinding dateTimeOffsetAttributesNavPropBinding = new CsdlNavigationPropertyBinding();
+		dateTimeOffsetAttributesNavPropBinding.setTarget(DateTimeOffsetAttribute.ES_NAME); // the target entity set, where the navigation property points to
+		dateTimeOffsetAttributesNavPropBinding.setPath(DateTimeOffsetAttribute.ES_NAME); // the path from entity type to navigation property
 
-		entitySet.setNavigationPropertyBindings(Arrays.asList(attributesNavPropBinding));
-																// stringAttributesNavPropBinding,
-																// integerAttributesNavPropBinding,
-																// doubleAttributesNavPropBinding ,
-																// dateTimeOffsetAttributesNavPropBinding
-																// ));
+		entitySet.setNavigationPropertyBindings(Arrays.asList(attributesNavPropBinding,
+																stringAttributesNavPropBinding,
+																integerAttributesNavPropBinding,
+																doubleAttributesNavPropBinding ,
+																dateTimeOffsetAttributesNavPropBinding
+																));
 
 		return entitySet;
 	} 

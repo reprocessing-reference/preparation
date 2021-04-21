@@ -124,7 +124,8 @@ public class Storage {
 			subscription.setSubmissionDate( new Timestamp(System.currentTimeMillis()) );
 		} catch (Exception e) {
 			LOG.error(e.getLocalizedMessage());
-			throw new ODataApplicationException("Can't create subscription ...", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("Can't create subscription ...", statusCode , Locale.ROOT,String.valueOf(statusCode));
 		}
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 		EntityTransaction transac = entityManager.getTransaction();
@@ -138,7 +139,8 @@ public class Storage {
 			}				
 		} catch (Exception e) {
 			LOG.error(e.getLocalizedMessage());
-			throw new ODataApplicationException("Can't persist subscription ...", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("Can't persist subscription ...",statusCode , Locale.ROOT,String.valueOf(statusCode));
 		}finally {                    
 			entityManager.close();
 		}
@@ -230,7 +232,7 @@ public class Storage {
 			String attributeValue = ((Member) valueExpression.getLeftOperand()).getResourcePath().getUriResourceParts().get(1)
 					.getSegmentValue();
 			// Attributes with type string value comes with '' but DateTimeOffset attributes
-			// shouldn't , remove '' and them after.
+			// shouldn't , remove '' and add them after.
 			String attributeValueValue = ((Literal) valueExpression.getRightOperand()).getText().replace("'", "");
 
 			// we only deal with a logical request which asks for a value of a specified and
@@ -370,15 +372,21 @@ public class Storage {
 			// the first part is always a member
 			String member = uriResourceParts.get(0).toString();
 
-			if( member.equals("Attributes") )
+			// if( member.equals("Attributes") )
+			if( member.contains("Attributes") )
 			{      
 				// the second part should be  : 'any' lambda function 
 				UriResource secondPart = uriResourceParts.get(1);
-
-				String attributeType = ((UriResourceNavigation)uriResourceParts.get(0)).getTypeFilterOnEntry().getName();
-				// this could be StringAttibutes / IntegerAttributes / DoubleAttributes or DateTimeOfsetAttributes
-				// adding 's' in order to be able to join with the right TypeAttribute set 
-				String typeAttributes = attributeType + "s" ;
+				String typeAttributes = member ;
+				if( member.equals("Attributes") )
+				{
+					// Get the real type if the filter is polymorphic via Attributes
+					String attributeType = ((UriResourceNavigation)uriResourceParts.get(0)).getTypeFilterOnEntry().getName();
+					// this could be StringAttibutes / IntegerAttributes / DoubleAttributes or DateTimeOfsetAttributes
+					// adding 's' in order to be able to join with the right TypeAttribute set 
+					typeAttributes = attributeType + "s" ;
+				}
+				
 				//Any lambda function 
 				if( secondPart instanceof UriResourceLambdaAny)
 				{
@@ -565,7 +573,8 @@ public class Storage {
 			className = Metric.class.getName();
 			break;
 		default:
-			throw new ODataApplicationException("No Class found for "+entitySetName, HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);		
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("No Class found for " + entitySetName,statusCode , Locale.ROOT,String.valueOf(statusCode));		
 		}
 		if( filterOption != null )
 		{
@@ -593,7 +602,8 @@ public class Storage {
 				query.setMaxResults(topOption.getValue());
 				query.setFirstResult(0);
 			} else {
-				throw new ODataApplicationException("Invalid value for $top", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("Invalid value for $top", statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 		}
 		//Set the skipOption
@@ -603,7 +613,8 @@ public class Storage {
 			if (skipNumber >= 0) {
 				query.setFirstResult(skipNumber);
 			} else {
-				throw new ODataApplicationException("Invalid value for $skip", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("Invalid value for $skip", statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 		}
 
@@ -828,7 +839,8 @@ public class Storage {
 			}
 			if (uid == null) {
 				LOG.debug("No entity given to delete");
-				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("No entity found to delete", statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 			LOG.debug("Entity to delete : "+uid.toString());
 			prod.setId(uid);
@@ -846,7 +858,8 @@ public class Storage {
 				AuxipBeanUtil.getBean(StorageStatus.class).modified();
 			} catch (PersistenceException e) {
 				LOG.error("Could not remove entity: {}", prod);
-				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode =  HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("No entity found to delete",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			} finally {                    
 				entityManager.close();
 			}		
@@ -867,7 +880,8 @@ public class Storage {
 			}
 			if (uid == null) {
 				LOG.debug("No entity given to delete");
-				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode =  HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("No entity found to delete",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 			LOG.debug("Entity to delete : "+uid.toString());
 			sub.setId(uid);
@@ -885,7 +899,8 @@ public class Storage {
 				AuxipBeanUtil.getBean(StorageStatus.class).modified();
 			} catch (PersistenceException e) {
 				LOG.error("Could not remove entity: {}", sub);
-				throw new ODataApplicationException("No entity found to delete", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+				int statusCode =  HttpStatusCode.BAD_REQUEST.getStatusCode();
+				throw new ODataApplicationException("No entity found to delete",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			} finally {                    
 				entityManager.close();
 			}	
@@ -966,7 +981,8 @@ public class Storage {
 		}
 
 		if (navigationTargetEntityCollection.getEntities().isEmpty()) {
-			throw new ODataApplicationException("No related entity found ", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			int statusCode =  HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("No related entity found",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			//return null;
 		}
 		LOG.debug("getRelatedEntityCollection Done : "+String.valueOf(navigationTargetEntityCollection.getEntities().size()));
@@ -1055,12 +1071,15 @@ public class Storage {
 					prod.setStringAttributes(strAttrib_list);
 					LOG.debug("Id: "+actualObj.get("ID").asText());
 				} catch (JsonProcessingException e) {
-					throw new ODataApplicationException("Can't parse body as JSON for product POST", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
-							Locale.ENGLISH);
+					int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode() ;
+					throw new ODataApplicationException("Can't parse body as JSON for product POST",statusCode ,Locale.ENGLISH,String.valueOf(statusCode));
+							
 				}
 			} else {
-				throw new ODataApplicationException("Bad contenttype for Product POST request", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
-						Locale.ENGLISH);
+
+				int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode() ;
+				throw new ODataApplicationException("Bad contenttype for Product POST request",statusCode ,Locale.ENGLISH,String.valueOf(statusCode));
+
 			}
 			entity = prod.getOdataEntity(false);
 			LOG.debug("Entity : "+entity.getType());
@@ -1112,8 +1131,46 @@ public class Storage {
 		return entity.getType();
 	}
 
+	public EntityCollection getAttributes(String uuid, String attributesType )
+	{
+
+		LOG.debug("Starting getAttributes ..." );
+
+		EntityCollection attributes = new EntityCollection();		
+
+		String queryString = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity WHERE entity.Id = 'uuid'";
+		queryString = queryString.replace("uuid",uuid) ; 
+
+		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+
+		try {
+			Query query = entityManager.createQuery(queryString);
+			Product product = (Product)query.getSingleResult();
+			// get attributes lazily by invoking the right get method
+			String methodTobeInvoked = "get" + attributesType ;
+			java.lang.reflect.Method getAttributesMethod = product.getClass().getMethod(methodTobeInvoked);
+			List<Attribute> attributesList = (List<Attribute>)getAttributesMethod.invoke(product);
+
+			// add all attributes to the entity collection
+			for( Attribute att : attributesList)
+			{
+				attributes.getEntities().add( att.getOdataEntity() );
+			}
+
+		}catch (Exception e) {
+				LOG.debug("Exception : "+e.getLocalizedMessage());
+		}finally {                    
+			entityManager.close();
+		}			
+		
+		LOG.debug("getAttributes Done : "+String.valueOf(attributes.getEntities().size()));
+		return attributes;		
+	}
 	private Timestamp convertFromISOString(final String str) {
 		ZonedDateTime dt = ZonedDateTime.parse(str);
 		return Timestamp.from(dt.toInstant());
 	}
+
+
+
 }

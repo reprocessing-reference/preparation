@@ -29,6 +29,7 @@ import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Link;
+import org.apache.olingo.commons.api.edm.EdmBindingTarget;
 import org.apache.olingo.commons.api.edm.EdmElement;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
@@ -61,6 +62,7 @@ import org.apache.olingo.server.api.uri.queryoption.SelectOption;
 import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
+import org.apache.olingo.server.core.uri.UriResourceNavigationPropertyImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,8 +97,8 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     // Check the client access role 
     if ( !AccessControl.userCanDealWith(request, uriInfo) )
     {
-      throw new ODataApplicationException("Unauthorized Request !",
-      HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+      int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+      throw new ODataApplicationException("Unauthorized Request !",statusCode, Locale.ROOT,String.valueOf(statusCode));
     }
     EdmEntitySet responseEdmEntitySet = null; // we'll need this to build the ContextURL
     EntityCollection responseEntityCollection = null; // we'll need this to set the response body
@@ -109,8 +111,8 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     UriResource uriResource = resourceParts.get(0); 
     if (!(uriResource instanceof UriResourceEntitySet)) 
     {
-      throw new ODataApplicationException("Only EntitySet is supported",
-          HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+      int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+      throw new ODataApplicationException("Only EntitySet is supported",statusCode, Locale.ROOT,String.valueOf(statusCode));
     }
 
     UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) uriResource;
@@ -140,9 +142,26 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       responseEntityCollection = storage.readEntitySetData(startEdmEntitySet,filterOption,expandOption,orderByOption,
     		  skipOption, topOption);
 
-    } else { // this would be the case for e.g. Products(uuid)/Attributes
-      throw new ODataApplicationException("Not supported",
-          HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+    } else { 
+            
+        // Products(uuid)/Attributes ,Products(uuid)/StringAttributes , ...
+        // get the second part of the uri resource
+        UriResource attributesUriResource = resourceParts.get(1);
+
+        UriResourceNavigation uriResourceNavigation =  (UriResourceNavigation)(attributesUriResource);
+        String attributesType = uriResourceNavigation.getProperty().getName();
+        String firstKeyPredicate = uriResourceEntitySet.getKeyPredicates().get(0).getName() ; 
+        String productUuid = uriResourceEntitySet.getKeyPredicates().get(0).getText() ; 
+        if ( !firstKeyPredicate.equals("ID")) 
+        {
+          int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+          throw new ODataApplicationException("Bad request => a valid uuid is needed ! ", statusCode, Locale.ROOT,String.valueOf(statusCode));
+        }
+        // Set the response EdmEntitySet from the related target of NavigationPropertyBinding 
+        EdmBindingTarget edmBindingTarget = startEdmEntitySet.getRelatedBindingTarget(attributesType);
+        responseEdmEntitySet = (EdmEntitySet)edmBindingTarget;
+        
+        responseEntityCollection = storage.getAttributes(productUuid, attributesType);
     }    
 
     // 3rd: apply System Query Options
