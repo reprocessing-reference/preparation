@@ -69,8 +69,7 @@ public class Product {
 	private Timestamp EvictionDate;    
 	
 	
-    @ElementCollection    
-    @Fetch(value = FetchMode.JOIN)
+    @ElementCollection(fetch = FetchType.EAGER)
 	private List<Checksum> Checksum;
 	
     @Embedded
