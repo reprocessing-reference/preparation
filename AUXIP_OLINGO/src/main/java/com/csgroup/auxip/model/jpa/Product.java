@@ -70,22 +70,26 @@ public class Product {
 	
 	
     @ElementCollection    
-    @Fetch(value = FetchMode.JOIN)
+    @Fetch(value = FetchMode.SUBSELECT)
 	private List<Checksum> Checksum;
 	
     @Embedded
 	private TimeRange ContentDate;
 	
-    @ElementCollection(fetch = FetchType.LAZY)    
-	private List<StringAttribute> StringAttributes = new ArrayList<>();
+    @ElementCollection    
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<StringAttribute> StringAttributes = new ArrayList<>();
 	
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection    
+    @Fetch(value = FetchMode.SUBSELECT)
 	private List<IntegerAttribute> IntegerAttributes = new ArrayList<>();
 	
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection    
+    @Fetch(value = FetchMode.SUBSELECT)
 	private List<DoubleAttribute> DoubleAttributes = new ArrayList<>();
 	
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection    
+    @Fetch(value = FetchMode.SUBSELECT)
 	private List<DateTimeOffsetAttribute> DateTimeOffsetAttributes = new ArrayList<>();
 	
 

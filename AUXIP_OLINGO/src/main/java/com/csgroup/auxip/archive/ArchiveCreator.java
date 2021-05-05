@@ -51,8 +51,8 @@ public class ArchiveCreator {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	//@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
-	@Scheduled(fixedRate = 3000000, initialDelay = 5000)
+	@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Paris")
+	//@Scheduled(fixedRate = 3000000, initialDelay = 5000)
 	public void reportCurrentTime() {
 		if (!config.getActive())
 		{
@@ -143,15 +143,15 @@ public class ArchiveCreator {
 				}
 				List<Product> products_m;
 				try {	
-					products_m = query_m1.getResultList();					
-					products_m = query_m2.getResultList();
-					products_m = query_m3.getResultList();
-					products_m = query_m4.getResultList();					
-
+					products_m = query_m1.getResultList();
 					if (products_m.size() ==0)
 					{
 						continue;
 					}
+					products_m = query_m2.getResultList();
+					products_m = query_m3.getResultList();
+					products_m = query_m4.getResultList();					
+					
 					LOG.info("Number of products found for date ["+tmp_dt_m_start.toString()+"/"+tmp_dt_m_stop.toString()+"] : "+products_m.size());
 					List<Product> products_nofilter = new ArrayList<>();
 					products_nofilter.addAll(products_m);
