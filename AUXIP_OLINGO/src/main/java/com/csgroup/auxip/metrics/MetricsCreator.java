@@ -204,7 +204,7 @@ public class MetricsCreator {
 		}
 		
 		storageStatus.metricsDone();
-		LOG.debug("Metrics Done");
+		LOG.info("Metrics Done");
 
 	}
 

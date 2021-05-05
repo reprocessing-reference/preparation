@@ -70,7 +70,7 @@ public class Product {
 	
 	
     @ElementCollection    
-    @Fetch(value = FetchMode.SUBSELECT)
+    @Fetch(value = FetchMode.JOIN)
 	private List<Checksum> Checksum;
 	
     @Embedded
