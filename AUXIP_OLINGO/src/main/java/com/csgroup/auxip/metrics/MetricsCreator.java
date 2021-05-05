@@ -222,7 +222,7 @@ public class MetricsCreator {
 				if (pr.getName().contains(type))
 				{
 					counts.put(type, counts.get(type)+1L);
-					sizes.put(type, sizes.get(type)+1L);
+					sizes.put(type, sizes.get(type)+pr.getContentLength());
 				}
 			}
 		}		

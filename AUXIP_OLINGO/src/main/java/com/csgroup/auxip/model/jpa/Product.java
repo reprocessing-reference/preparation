@@ -21,20 +21,19 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
+
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.persistence.Id;
 
 import com.csgroup.auxip.controller.AuxipBeanUtil;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +69,7 @@ public class Product {
 	
 	
     @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
 	private List<Checksum> Checksum;
 	
     @Embedded
