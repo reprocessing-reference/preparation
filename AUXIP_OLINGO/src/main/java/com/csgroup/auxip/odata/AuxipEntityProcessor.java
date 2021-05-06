@@ -103,9 +103,9 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		LOG.debug("Starting ReadEntity ...");
 		// Check the client access role 
 		if ( !AccessControl.userCanDealWith(request, uriInfo) )
-		{
-			throw new ODataApplicationException("Unauthorized Request !",
-					HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+		{	
+			int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+			throw new ODataApplicationException("Unauthorized Request !", statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 		EdmEntityType responseEdmEntityType = null; // we'll need this to build the ContextURL
 		Entity responseEntity = null; // required for serialization of the response body
@@ -117,8 +117,10 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 
 		UriResource uriResource = resourceParts.get(0); // in auxip, the first segment is the EntitySet
 		if (!(uriResource instanceof UriResourceEntitySet)) {
-			throw new ODataApplicationException("Only EntitySet is supported",
-					HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ENGLISH);
+
+			int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+			throw new ODataApplicationException("Only EntitySet is supported", statusCode, Locale.ROOT,String.valueOf(statusCode));
+
 		}
 
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) uriResource;
@@ -134,18 +136,20 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			responseEntity = storage.readEntityData(startEdmEntitySet, keyPredicates);
 
 		}else {
-			throw new ODataApplicationException("Not supported", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+			throw new ODataApplicationException("Not supported", statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 
 		if (responseEntity == null) {
 			// this is the case for e.g. DemoService.svc/Categories(4) or DemoService.svc/Categories(3)/Products(999)
-			throw new ODataApplicationException("Nothing found.", HttpStatusCode.NOT_FOUND.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.NOT_FOUND.getStatusCode();
+			throw new ODataApplicationException("Nothing found.", statusCode, Locale.ROOT,String.valueOf(statusCode));	
+
 		}
 
 		// handle $expand
 		ExpandOption expandOption = uriInfo.getExpandOption();
-		// in our example: http://localhost:8080/DemoService/DemoService.svc/Categories(1)/$expand=Products
-		// or http://localhost:8080/DemoService/DemoService.svc/Products(1)?$expand=Category
+		// in our example: http://localhost:8080/auxip.svc/Products(uuid)?$expand=Attributes
 		if(expandOption != null) {
 			LOG.debug("Expand Option ON");
 			// retrieve the EdmNavigationProperty from the expand expression
@@ -166,7 +170,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 					}
 				}
 			} else {
-				// can be 'Category' or 'Products', no path supported
+				// can be 'Attributes' , 'StringAttributes', ..., 
 				UriResource uriResource_expand = expandItem.getResourcePath().getUriResourceParts().get(0);
 				// we don't need to handle error cases, as it is done in the Olingo library
 				if(uriResource_expand instanceof UriResourceNavigation) {
@@ -262,8 +266,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		// Check the client access role 
 		if ( !AccessControl.userCanDealWith(request, uriInfo) )
 		{
-			throw new ODataApplicationException("Unauthorized Request !",
-					HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+			throw new ODataApplicationException("Unauthorized Request !",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 
 		// 1. Retrieve the entity type from the URI
@@ -271,8 +275,10 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 
 		UriResource uriResource = resourceParts.get(0); // in auxip, the first segment is the EntitySet
 		if (!(uriResource instanceof UriResourceEntitySet)) {
-			throw new ODataApplicationException("Only EntitySet is supported",
-					HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ENGLISH);
+
+			int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+			throw new ODataApplicationException("Only EntitySet is supported",statusCode, Locale.ROOT,String.valueOf(statusCode));
+
 		}
 
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) uriResource;
@@ -305,7 +311,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());
 
 		}else{
-			throw new ODataApplicationException("Not acceptable.", HttpStatusCode.NOT_ACCEPTABLE.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.NOT_ACCEPTABLE.getStatusCode();
+			throw new ODataApplicationException("Not acceptable.",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 	}
 
@@ -316,8 +323,9 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		// Check the client access role 
 		if ( !AccessControl.userCanDealWith(request, uriInfo) )
 		{
-			throw new ODataApplicationException("Unauthorized Request !",
-					HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+			throw new ODataApplicationException("Unauthorized Request !",statusCode, Locale.ROOT,String.valueOf(statusCode));
+
 		}
 		// 1. Retrieve the entity set which belongs to the requested entity 
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
@@ -349,8 +357,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		// Check the client access role 
 		if ( !AccessControl.userCanDealWith(request, uriInfo) )
 		{
-			throw new ODataApplicationException("Unauthorized Request !",
-					HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+			throw new ODataApplicationException("Unauthorized Request !",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 		// 1. Retrieve the entity set which belongs to the requested entity 
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
@@ -378,7 +386,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		
 		if (user == null)
 		{
-			throw new ODataApplicationException("Can't get user from request, check token",HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("Can't get user from request, check token",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 		AccessControl accessControl = new AccessControl(user);
 
@@ -392,8 +401,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 
 			final Entity entity = storage.readEntityData(edmEntitySet, uriResourceEntitySet.getKeyPredicates());
 			if(entity == null) {
-				throw new ODataApplicationException("Entity not found", HttpStatusCode.NOT_FOUND.getStatusCode(), 
-						Locale.ENGLISH);
+				int statusCode = HttpStatusCode.NOT_FOUND.getStatusCode();
+				throw new ODataApplicationException("Entity not found",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 			String productName = (String)entity.getProperty("Name").asPrimitive();
 			LOG.debug("ProductName: "+productName);
@@ -405,7 +414,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 				userManager.saveUser();
 				userManager.close();
 
-				throw new ODataApplicationException("Too Many Requests !",Globals.TOO_MANY_REQUESTS, Locale.ROOT);
+				throw new ODataApplicationException("Too Many Requests !",Globals.TOO_MANY_REQUESTS, Locale.ROOT,String.valueOf(Globals.TOO_MANY_REQUESTS));
 			}
 			LOG.debug("Access control Granted");
 
@@ -417,9 +426,9 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			user.incrementDownloadsCounter(productName, CounterType.volume , productLength );
 			user.updateDownloadedVolume(productLength);
 			} catch (Exception e) {
-				// TODO: handle exception
 				LOG.error("Error when updating to user profiles");
-				throw new ODataApplicationException("Error when updating user",HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode();
+				throw new ODataApplicationException("Error when updating user",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 			try {
 
@@ -427,7 +436,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 				userManager.close();
 			} catch (Exception e) {
 				LOG.error("Error when committing to user profiles");
-				throw new ODataApplicationException("Error when committing to user profiles",HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode();
+				throw new ODataApplicationException("Error when committing to user profile",statusCode, Locale.ROOT,String.valueOf(statusCode));
 			}
 			LOG.debug("User handling done");
 
@@ -436,8 +446,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 			response.setHeader("Content-Disposition", "filename="+entity.getProperty("Name").getValue().toString());
 			response.setHeader(HttpHeader.LOCATION, mediaContent);
 		} else {
-			throw new ODataApplicationException("Not implemented", HttpStatusCode.BAD_REQUEST.getStatusCode(), 
-					Locale.ENGLISH);
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("Not implemented",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}
 	}
 
@@ -452,8 +462,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 		// Check the client access role 
 		if ( !AccessControl.userCanDealWith(request, uriInfo) )
 		{
-			throw new ODataApplicationException("Unauthorized Request !",
-					HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+			int statusCode = HttpStatusCode.UNAUTHORIZED.getStatusCode();
+			throw new ODataApplicationException("Unauthorized Request !",statusCode, Locale.ROOT,String.valueOf(statusCode));
 		}		
 		final UriResource firstResoucePart = uriInfo.getUriResourceParts().get(0);
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) firstResoucePart;
@@ -514,13 +524,16 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 	@Override
 	public void updateMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo,
 			ContentType requestFormat, ContentType responseFormat)
-					throws ODataApplicationException, DeserializerException, SerializerException {
-		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+					throws ODataApplicationException, DeserializerException, SerializerException 
+	{
+		int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+		throw new ODataApplicationException("Not supported.", statusCode, Locale.ROOT,String.valueOf(statusCode));
 	}
 	@Override
 	public void deleteMediaEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo)
 			throws ODataApplicationException {
-		throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+				int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+				throw new ODataApplicationException("Not supported.", statusCode, Locale.ROOT,String.valueOf(statusCode));
 	}
 
 }
