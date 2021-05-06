@@ -55,6 +55,19 @@ services:
       - database_auxip_olingo
     networks:
       - proxynet
+    volumes:
+      - /auxip_snapshot:/auxip_snapshot
+
+  auxip_rolling:
+    image: rollingarchive:1.0.0
+    restart: "no"
+    depends_on:
+      - auxip
+    networks:
+      - proxynet
+    volumes:
+      - /auxip_snapshot:/archives
+      - /auxip_working:/working
 
 #######################################
 # keycloak DB
@@ -153,17 +166,6 @@ services:
       # - /auxip_snapshot:/etc/nginx/html/archives
 
 
-  auxip_rolling:
-    container_name: auxip_rolling
-    image: rollingarchive:1.0.0
-    restart: "no"
-    depends_on:
-      - auxip
-    networks:
-      - proxynet
-    volumes:
-      - /auxip_snapshot:/archives
-      - /auxip_working:/working
 
   proxy:
     image: nginx:1.19.5-alpine
