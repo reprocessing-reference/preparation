@@ -34,9 +34,16 @@ public class UrlsConfiguration {
     
     @Value("${urls.reprocessingbaseline}")
     private String reprocessing_baseline_url;
+    
+    @Value("${urls.auxip}")
+    private String auxip_url;
 
 	public String getReprocessing_baseline_url() {
 		return reprocessing_baseline_url;
+	}
+	
+	public String getAuxip_url() {
+		return auxip_url;
 	}
     
     

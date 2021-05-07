@@ -1,4 +1,4 @@
-package com.csgroup.reprodatabaseline.datamodels;
+package com.csgroup.reprodatabaseline.rules;
 
 public enum RuleEnum {
 	ValIntersectWithoutDuplicate,

@@ -6,6 +6,6 @@ import com.csgroup.reprodatabaseline.datamodels.AuxFile;
 
 public interface RuleApplierInterface {
 	
-	public AuxFile apply(List<AuxFile> files);
+	public List<AuxFile> apply(List<AuxFile> files);
 
 }

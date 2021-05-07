@@ -1,7 +1,5 @@
 package com.csgroup.reprodatabaseline.rules;
 
-import com.csgroup.reprodatabaseline.datamodels.RuleEnum;
-
 public class RuleApplierFactory {
 	
 	public static RuleApplierInterface getRuleApplier(RuleEnum rule) {
