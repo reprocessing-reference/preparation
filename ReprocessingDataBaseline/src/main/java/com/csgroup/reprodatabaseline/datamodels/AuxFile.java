@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @author besquis
  */
-public class AuxFile {
+public class AuxFile implements Comparable<AuxFile> {
 	private static final Logger LOG = LoggerFactory.getLogger(AuxFile.class);
 	
     public UUID Id;    
@@ -96,5 +96,10 @@ public class AuxFile {
 	private static ZonedDateTime convertFromISOString(final String str) {
 		return ZonedDateTime.parse(str);
 		
+	}
+
+	@Override
+	public int compareTo(AuxFile arg0) {
+		return CreationDate.compareTo(arg0.CreationDate);
 	}
 }
