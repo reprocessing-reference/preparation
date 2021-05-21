@@ -3,37 +3,37 @@ _transform: true
 
 services:
 
-# - name: keycloak-service
-#   # url: http://keycloak:8080 
-#   host: keycloak
-#   protocol: https
-#   port: 8443
-#   routes:
-#   - name: keycloak-route
-#     paths:
-#     - /keycloak.svc
-#     strip_path: false
-
-#- name: keycloak-service
-#  url: http://keycloak:8080
-#  routes:
-#  - name: keycloak-route
-#    paths:
-#    - /keycloak.svc
-#    strip_path: false
-
-
 - name: auxip-service
-  url: http://auxip:8080/auxipv2.svc/
+  url: http://reprocessing_data_baseline:8080/rdb.svc
   plugins:
   - name: oidc
     config:
       client_id: "kong"
-      client_secret: "0dcc2964-6f1e-4e85-9752-fdb9aa2f0ad3"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
       bearer_only: "no"
-      realm: "auxip"
-      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/auxip/protocol/openid-connect/token/introspect"
-      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/auxip/.well-known/openid-configuration"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
+      # redirect_uri_path: "/auxip.svc"
+      session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
+
+  routes:
+  - name: rdb-route
+    paths:
+    - /rdb.svc
+
+
+- name: auxip-service
+  url: http://auxip:8080/auxipv2.svc
+  plugins:
+  - name: oidc
+    config:
+      client_id: "kong"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
+      bearer_only: "no"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
       # redirect_uri_path: "/auxip.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
@@ -41,7 +41,6 @@ services:
   - name: auxip-route
     paths:
     - /auxip.svc
-    - /auxip.svc/
 
 
 - name: reprobase-service
@@ -50,11 +49,11 @@ services:
   - name: oidc
     config:
       client_id: "kong"
-      client_secret: "62cef502-4dfb-4682-9094-dbba4c6f4441"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
       bearer_only: "no"
-      realm: "reprobase"
-      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/reprobase/protocol/openid-connect/token/introspect"
-      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/reprobase/.well-known/openid-configuration"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
       # redirect_uri_path: "/reprocessing.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 

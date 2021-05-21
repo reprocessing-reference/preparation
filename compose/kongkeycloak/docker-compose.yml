@@ -94,9 +94,6 @@ services:
       KEYCLOAK_FRONTEND_URL: https://reprocessing-preparation.ml/auth
     volumes:
       - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
-     #- ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
-     #- ./data/keycloak/configuration/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
-     #- ./data/keycloak/configuration/keystores/kc.pkcs12:/opt/jboss/keycloak/standalone/configuration/keystores/kc.pkcs12
 
     #   # import auxip realm configuration
     command: 
@@ -109,7 +106,6 @@ services:
         '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
         '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
       ]
-      # - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
 
   #######################################
   # Kong 
@@ -150,7 +146,6 @@ services:
     volumes:
       - ./data/kong:/etc/kong
       - ./data/certbot/conf:/etc/letsencrypt
-      # - /auxip_snapshot:/etc/nginx/html/archives
 
 
   auxip_rolling:
@@ -164,6 +159,20 @@ services:
     volumes:
       - /auxip_snapshot:/archives
       - /auxip_working:/working
+
+
+  #######################################
+  # Reprocessing Data Baseline Service 
+  #######################################
+  reprocessing_data_baseline:
+    container_name: reprocessing_data_baseline
+    image: reprocessing_data_baseline:1.0.0
+    restart: "no"
+    depends_on:
+      - auxip
+      - reprobase
+    networks:
+      - proxynet
 
   proxy:
     image: nginx:1.19.5-alpine

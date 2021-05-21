@@ -2,25 +2,25 @@ _format_version: "2.1"
 _transform: true
 
 services:
+  
+- name: auxip-service
+  url: http://reprocessing_data_baseline:8080/rdb.svc
+  plugins:
+  - name: oidc
+    config:
+      client_id: "kong"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
+      bearer_only: "no"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
+      # redirect_uri_path: "/auxip.svc"
+      session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
-# - name: keycloak-service
-#   # url: http://keycloak:8080 
-#   host: keycloak
-#   protocol: https
-#   port: 8443
-#   routes:
-#   - name: keycloak-route
-#     paths:
-#     - /keycloak.svc
-#     strip_path: false
-
-#- name: keycloak-service
-#  url: http://keycloak:8080
-#  routes:
-#  - name: keycloak-route
-#    paths:
-#    - /keycloak.svc
-#    strip_path: false
+  routes:
+  - name: rdb-route
+    paths:
+    - /rdb.svc
 
 
 - name: auxip-service
@@ -29,11 +29,11 @@ services:
   - name: oidc
     config:
       client_id: "kong"
-      client_secret: "0dcc2964-6f1e-4e85-9752-fdb9aa2f0ad3"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
       bearer_only: "no"
-      realm: "auxip"
-      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/auxip/protocol/openid-connect/token/introspect"
-      discovery: "https://reprocessing-preparation.ml/auth/realms/auxip/.well-known/openid-configuration"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
       # redirect_uri_path: "/auxip.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
@@ -49,11 +49,11 @@ services:
   - name: oidc
     config:
       client_id: "kong"
-      client_secret: "62cef502-4dfb-4682-9094-dbba4c6f4441"
+      client_secret: "696232a7-baaa-43b2-8263-756cb5c29e7d"
       bearer_only: "no"
-      realm: "reprobase"
-      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprobase/protocol/openid-connect/token/introspect"
-      discovery: "https://reprocessing-preparation.ml/auth/realms/reprobase/.well-known/openid-configuration"
+      realm: "reprocessing-preparation"
+      introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
+      discovery: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
       # redirect_uri_path: "/reprocessing.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
@@ -62,106 +62,3 @@ services:
     paths:
     - /reprocessing.svc
 
-#certificates: 
-#  - cert: | 
-#      -----BEGIN CERTIFICATE-----
-#      MIIGRTCCBS2gAwIBAgISBK72cLAZZi+1Fd5t8a06Bv/nMA0GCSqGSIb3DQEBCwUA
-#      MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
-#      EwJSMzAeFw0yMTA0MDExMDQwMjdaFw0yMTA2MzAxMDQwMjdaMCoxKDAmBgNVBAMT
-#      H2Rldi5yZXByb2Nlc3NpbmctcHJlcGFyYXRpb24ubWwwggIiMA0GCSqGSIb3DQEB
-#      AQUAA4ICDwAwggIKAoICAQDpfA9V5Bdv3FJMjT9/XWma42ZBkAPkYgEsTqwcA5xi
-#      eMnrmjD1f0RVTxuoNl8oIUqB7ASAiTCbzKBB9CditTpmCkGvbkqD6T+3H7Tp/wJp
-#      kUvenTR04v6nGTF1BThey9sXQpYUZVVJsoIF42eAFGas9UrL5cMPjDEiNcvBZY53
-#      c6YNu2JMnVQsznvj2nICJCOAR5MB4vU/NtyW/84EW5wjJKQHVNmO0pEqjGtBrebY
-#      oZYVn1cWMN4NzdO/18Lrg4ZezMsAF47UwSPdwDGgxxMWcm2gc+O7uu/v6cT3Xn17
-#      1MWB8XLs4xUU0Y5JCSRA2JT4hdKCWoXPqh5YhTDLqOfKQWOHNTBqmnaSbuqd6WSs
-#      Cq8ifcX0myvRpDjfTOfX0Szthu6HOKM52oingHhMeUAzQ6e5XF6usO9dbpm+iD8h
-#      PbLlZRr6fWsRy2C7ygrr/STYv7x2p5hYsB4Vaxeo2gUP62wR65e+xlI2D7SidAfy
-#      rxrvs0VmIQ+unm/g1I4GGwqglB5GoIUraJGfp5jINKqQ9egtRNeDp6+IgaZ9QCxf
-#      hgc4ADKr4HWoGopjgIKmxS3hNcmdImqKhtfLC1WD39ANo6F3Z6x/Tgf1UJPREz4R
-#      cTMCyHfgBRDBrIur+Zm3gp9p68WA7Xf8D3nN4pwqJedhU9QnFZiDuW34YhbFngvy
-#      fwIDAQABo4ICWzCCAlcwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUF
-#      BwMBBggrBgEFBQcDAjAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBRYC9D4p5IX7ewt
-#      glLd6UfnCNlmBDAfBgNVHSMEGDAWgBQULrMXt1hWy65QCUDmH6+dixTCxjBVBggr
-#      BgEFBQcBAQRJMEcwIQYIKwYBBQUHMAGGFWh0dHA6Ly9yMy5vLmxlbmNyLm9yZzAi
-#      BggrBgEFBQcwAoYWaHR0cDovL3IzLmkubGVuY3Iub3JnLzAqBgNVHREEIzAhgh9k
-#      ZXYucmVwcm9jZXNzaW5nLXByZXBhcmF0aW9uLm1sMEwGA1UdIARFMEMwCAYGZ4EM
-#      AQIBMDcGCysGAQQBgt8TAQEBMCgwJgYIKwYBBQUHAgEWGmh0dHA6Ly9jcHMubGV0
-#      c2VuY3J5cHQub3JnMIIBBQYKKwYBBAHWeQIEAgSB9gSB8wDxAHcARJRlLrDuzq/E
-#      QAfYqP4owNrmgr7YyzG1P9MzlrW2gagAAAF4jTwSwAAABAMASDBGAiEAls854R2u
-#     9sFnpCEXaZ4bvVsJKhuRG1KD31OaSoCJB9ACIQDrbwh1O3Yv2eu0zXFsp663lBLC
-#      IfD+EToO+AevT55TMAB2APZclC/RdzAiFFQYCDCUVo7jTRMZM7/fDC8gC8xO8WTj
-#      AAABeI08Ep4AAAQDAEcwRQIgELHDUj4Wl9lMTeuLRmvLp+O7hF41EOcLTMtmTQf4
-#      dQMCIQDctQmBrz+HZjLH8s+rJURHJXtl5lOFO6mu5kAEp/I6EzANBgkqhkiG9w0B
-#      AQsFAAOCAQEAWlKOJI76acYhRXZLLfvZ44USXtgDlrk4cgjFgdQwiPxYIkrhBpL8
-#      L5IOjydGYq3i2a5wcWJGiWG/TuGeCuPdTPwSxFN69m7z2SdoTYYNTaHmDzIf5VmH
-#      B4Vf2LLWAWBRZg4Q9xZuPxgWQ/ufDJwCwfmgL4/+gxZEyLTeiPMa7AkkiUTHii8X
-#      2pNd11Wu+hKUgyMpvl8uU6g8eTwbknnEIs7Isgto/FbYXwUOpY6+UILwhRaRxYQD
-#      +ERUwbjAsb54V5qcyAnvr0/cBI+mauBG2mAkRambwaWcyHZxJRVn2a1vdpO3C25z
-#      /vaaUcNf3NH/SEeWWGM5YcIK/XKJdW8Psw==
-#      -----END CERTIFICATE-----
-#
-#    key: |
-#      -----BEGIN PRIVATE KEY-----
-#      MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQDpfA9V5Bdv3FJM
-#      jT9/XWma42ZBkAPkYgEsTqwcA5xieMnrmjD1f0RVTxuoNl8oIUqB7ASAiTCbzKBB
-#      9CditTpmCkGvbkqD6T+3H7Tp/wJpkUvenTR04v6nGTF1BThey9sXQpYUZVVJsoIF
-#      42eAFGas9UrL5cMPjDEiNcvBZY53c6YNu2JMnVQsznvj2nICJCOAR5MB4vU/NtyW
-#      /84EW5wjJKQHVNmO0pEqjGtBrebYoZYVn1cWMN4NzdO/18Lrg4ZezMsAF47UwSPd
-#      wDGgxxMWcm2gc+O7uu/v6cT3Xn171MWB8XLs4xUU0Y5JCSRA2JT4hdKCWoXPqh5Y
-#      hTDLqOfKQWOHNTBqmnaSbuqd6WSsCq8ifcX0myvRpDjfTOfX0Szthu6HOKM52oin
-#      gHhMeUAzQ6e5XF6usO9dbpm+iD8hPbLlZRr6fWsRy2C7ygrr/STYv7x2p5hYsB4V
-#      axeo2gUP62wR65e+xlI2D7SidAfyrxrvs0VmIQ+unm/g1I4GGwqglB5GoIUraJGf
-#      p5jINKqQ9egtRNeDp6+IgaZ9QCxfhgc4ADKr4HWoGopjgIKmxS3hNcmdImqKhtfL
-#      C1WD39ANo6F3Z6x/Tgf1UJPREz4RcTMCyHfgBRDBrIur+Zm3gp9p68WA7Xf8D3nN
-#      4pwqJedhU9QnFZiDuW34YhbFngvyfwIDAQABAoICAG0S37coTyqaqnfIpJlDckpB
-#      YUvPk4HlptakChMsPKpj8zB1X9nQEoQn6Ku0es+sfbokIBZMAMFH3rXw8VVThGyW
-#      7gieZYEqPfG2hjWqQ949Wkws9IyGXqCBTHF2dtcSNM+w85ujmyxKkCNgEMHsxeqW
-#      zNJkC7P/shRhPUajwuJazIAtwcY42VH1RDs1mX0WlN8gkLSY6ikV4AdKiVvP0Ck6
-#      vMYQBXKLO/W8k36jVuxs0EhZn71mJtYcCYfdq9mKIAO5eDwaxUbu02qMlqKdXXVn
-#      D3+dpA3XTq+tba6CHezzgTErMp0nmHmZS/cipiUFCNLw8V6kG07gEj0YO6toxJ77
-#      Ouc0u4KRYGJhWnz8gsyWRIy2Hi2Jhxi6SWpM1CZ19dIUIPcZUQy8Fipqb3BZnpql
-#      p8dscCW+iMFSeEIlsSy2lF8XhLkUvoWQPcF4vmJMUaoZLh4SnIMDYidZELzv/51/
-#      AVZnHHIomIOlT6GrWSlEJRwv8FtzusvpnEK809N/50vz2BBZ1Isows8iMmcQ4QPi
-#      MAbktWVIiSmVs891Iwp1z6bBJTZ505TjlrmG4eFVSDhZSfP3ECv7dBbkG6newZ6c
-#      /CfyS5a93Mmmz3H7OnyD+BcdtFwkraOXNN5UI3GiJtQ06gS+vDFWyTd7Q2eS7yLO
-#      pcxly2KZ3Frz7CgoaGPBAoIBAQD/GkP171w1WAMULD0Q22dARbUn1bgxwJMa4u6G
-#      6a/kKpevE7iT8wyhzd9WDSDvh4lnm66hIA5OzPlAHVHyXTi2b5HLexvPAFrjk6p6
-#      PY7GkQWnvw0GoSI5xl7p8JAlee+DmtYQBajnIUaJnOBRB+V7TZj+N2IBnHQA7en9
-#      Yd42+0ExbOqb0YIEBY/NKgD1Wf7u4YzWyxnZNWZFxfvzeSuQHVOLn1HdDFoAYuel
-#      0tI/7WpdG1A9FQdLY4YMxPleev1OdflUZuU58mKlvYPBBFqpUJE2XkTTQJe2q2lk
-#      JCbmUQT/kgZJSI1MKsbg5r++3fbiXkq8jnpTi1P3t4GkJ5XVAoIBAQDqTlOBUmMs
-#      tCsiT+J+O3Z7vGqjPiLLT8ybHIIDWMTFxiGVVmYR/YV6QrikNyu61GNzzqiQXqZq
-#      LI9vObFvhmDfBIiMA2bdC3B6M80X4Xk4BBWg6xcTmVCNLUeiu3tu78E6aBl4i4Tw
-#      bV8epgxuGPbQ0Fia3I3BNlv1RR88IFAhHC8P+rTFC6a9VM8gMH2A76taaK7W1YtW
-#      WZseiF0aPeA0CiniP0UmlHY+tu1CEztGfjn2BxcsEobyrIHMcLeBCRhfHSLYk7lw
-#      byWZ+ItxSxu8RgWOho9HZ5uSRK/yF2XizsafSfD4D7mGR+Jg8LniqoNpshshYszz
-#      Gv4vC51w4+0DAoIBAC3ahsS6FZTxEPybRw60oUaIQRu76rPmrYpzp/RQJPGaRlGN
-#      9euCEI809iP9kCH99tDMxwLnRCsd5N+FZalu4DbKryYoJsN6iNvHOyllzzgZ8S5J
-#      xQmgBQrlgUIDn6Vc2ZSKTFfs7IM/E/LAZAGsra8QL6PiSJeJi8BvA1QsN0kiuIEt
-#      1q3TZs9aQJLcLffsCUre9/XT4/2K/6si/zqwWQg6fT3nkUtuYO8Y2BKSZoBfKHM7
-#      6ZxRH1KJvRqmfTxiVw23Xu2w4RsdWmX4Pqp/Idy1QqTHJQ/j2GFZRkRdyzAy9/cI
-#      RGD/zYYXWlAqqeSg+TOPR1fFNG+354vrTD45b1ECggEAOKNKaD5kHtBGhPrOgzkY
-#      gPygwmkovADEMtKHUwvINQ6Z26GQ9tRTyaQLQhbcCUOB7uKLuKpIi+3NllNZ4t2W
-#      2RIdd8ryuIglXkTbVOR6CuJh4A4z+9bZs+a4JEwxoDVwfg/f6FXBguTNU3lME+kQ
-#      8JUMdhLOaWAchoN4823UMMzBS5mMzPzuB2JS1zMhg2NsBmS7rs7b6bmrV4wbBVbj
-#      tXCngztMGfFVS/+oBorjjzzAAgrgvRSVbl/o2GR+10A9lfBTFgtPjjAv5LJB8tb3
-#      E2HRwgwg4l/XKVpVNa4WQOc++A5Fo5EZha4muMw4AuS483nMORvK8xEZVIH4Quu1
-#      xQKCAQEA0e+DGmHC47iGXsDmP18RmhvjvzupLqsTFrjZVKsW02rEjmWSMxienNnQ
-#      /t7grkMKEra3vhB+E+P/odwaHMBS04lmfVac4qOvStGYbUCp0+wE3PvtVGALYYkh
-#      i2M3hDYBewrkPePkWhfkB0AKUdo51S/EH+RlSyzzUExZm6nIqWk18AC8YVCA0tcC
-#      USRMURzlcSx7d2uOwbaiM93y8GgPOd3o/pmqqSPXMQPR6LnmCutGMpDiygdJh7RD
-#      neaOwzPrj8ZgiUEDaRp9jMbEr0jilWbWVXJrgsNPIsfyaoA4qajQpcXDpenJiuLv
-#      WRUtcKyfXn8eKeS6Hv8lXA/9pEmE4g==
-#      -----END PRIVATE KEY-----  
-#    snis:
-#     - name: "reprocessing-preparation.ml"
- 
-
-
-    # plugins:
-    # - name: request-transformer
-    #   config: 
-    #     add:
-    #       headers:
-    #       - X-Script-Name:/keycloak.svc
