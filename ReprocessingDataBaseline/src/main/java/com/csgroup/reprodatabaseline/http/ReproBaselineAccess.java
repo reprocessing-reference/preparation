@@ -6,11 +6,12 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
+import org.apache.olingo.commons.api.http.HttpStatusCode;
+import org.apache.olingo.server.api.ODataApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.csgroup.reprodatabaseline.config.UrlsConfiguration;
@@ -20,7 +21,6 @@ import com.csgroup.reprodatabaseline.datamodels.AuxTypes;
 import com.csgroup.reprodatabaseline.rules.RuleApplierFactory;
 import com.csgroup.reprodatabaseline.rules.RuleApplierInterface;
 import com.csgroup.reprodatabaseline.rules.RuleEnum;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class ReproBaselineAccess {
@@ -107,7 +107,7 @@ public class ReproBaselineAccess {
 
 
 
-	public List<AuxFile> getReprocessingDataBaseline(String level0,String productType,int deltaT0,int deltaT1) {
+	public List<AuxFile> getReprocessingDataBaseline(String level0,String productType,int deltaT0,int deltaT1) throws ODataApplicationException {
 		// 1 -> get mission and sat_unit
 		// 2 -> get AuxType for this mission
 		// 3 -> get AuxFiles
@@ -120,40 +120,53 @@ public class ReproBaselineAccess {
         String platformSerialIdentifier = level0.substring(2, 3); //"A" or "B" or "_"
 
 		String mission = getMission(platformShortName, productType);
+		LOG.debug(">> Starting retrieving AuxTypes list for mission : "+mission);
 		AuxTypes types = getListOfAuxTypes(mission);
+		LOG.debug(">> Retrieving Done, "+String.valueOf(types.getValues().size())+" elements found");
 		ZonedDateTime t0;
 		ZonedDateTime t1;
 		Duration delta0 = Duration.ofSeconds(deltaT0); 
 		Duration delta1 = Duration.ofSeconds(deltaT1);
-
 		if( platformShortName.equals("S3"))
 		{
 			// S3B_OL_0_EFR____20210418T201042_20210418T201242_20210418T215110_0119_051_242______LN1_O_NR_002.SEN3
 			t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
 			t1 = ZonedDateTime.parse(level0.subSequence(16+16, 2*16+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
-
+			
 		}else if( platformShortName.equals("S2"))
 		{
 			// TODO TO be updated
-			t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15));
-			t1 = ZonedDateTime.parse(level0.subSequence(16+16, 2*16+15));
+	        int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+	        throw new ODataApplicationException("Not supported.",statusCode, Locale.ROOT,String.valueOf(statusCode));
+			//t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15));
+			//t1 = ZonedDateTime.parse(level0.subSequence(16+16, 2*16+15));
 		}else
 		{
 			// TODO TO be updated following l0 of S1 
-			t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15));
-			t1 = ZonedDateTime.parse(level0.subSequence(16+16, 2*16+15));
+	        int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+	        throw new ODataApplicationException("Not supported.",statusCode, Locale.ROOT,String.valueOf(statusCode));
+			//t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15));
+			//t1 = ZonedDateTime.parse(level0.subSequence(16+16, 2*16+15));
 		}
-
+		//Log found time
+		LOG.debug("T0: "+t0.toString());
+		LOG.debug("T1: "+t1.toString());
+		
 		List<AuxFile> results = new ArrayList<>();
 
 		for (AuxType t: types.getValues()) 
 		{
+			LOG.debug(">> Starting retrieving AuxFiles list for type : "+t.LongName);
 			List<AuxFile> files_repro = getListOfAuxFiles(t,platformShortName,platformSerialIdentifier,t.Rule);
+			LOG.debug(">> Done, elements: "+String.valueOf(files_repro.size()));
 			RuleApplierInterface rule_applier = RuleApplierFactory.getRuleApplier(t.Rule);
+			LOG.debug(">> Starting applying rule");
 			List<AuxFile> files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
-
+			LOG.debug(">> Done");
 			try {
+				LOG.debug(">> Starting retrieving auxip links");
 				auxip.setAuxFileUrls(files_repro_filtered, this.accessToken);
+				LOG.debug(">> Done");
 				results.addAll(files_repro_filtered);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -165,30 +178,5 @@ public class ReproBaselineAccess {
 		return results;
 
 	}
-
-	// @Scheduled(fixedRate = 3600000, initialDelay = 5000)
-	// public void doMetrics() {
-	// 	LOG.info("Starting retireve");
-	// 	AuxTypes types = getListOfAuxTypes("S2MSI");
-	// 	List<String> results = new ArrayList<String>();
-	// 	for (AuxType t: types.getValues()) {
-	// 		List<AuxFile> files_repro = getListOfAuxFiles(t,"S2","B",t.Rule);
-	// 		RuleApplierInterface rule_applier = RuleApplierFactory.getRuleApplier(t.Rule);
-	// 		List<AuxFile> files_repro_filtered = rule_applier.apply(files_repro);
-	// 		//String bearerToken = request.getHeader("Authorization").replace("Bearer ", "") ;
-	// 		String bearerToken = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJFaG5SUnZJd0M4aEhNdnl3a1RKQjFNRWlqVzRwc2o2ZmZ0MUQ2bVVpWHg4In0.eyJleHAiOjE2MjAzOTEyMTIsImlhdCI6MTYyMDM5MDMxMiwianRpIjoiZjBiM2M0ODgtOTA0MS00MWZlLWJjZGQtMjJlMDdiMmYyNjBjIiwiaXNzIjoiaHR0cHM6Ly9yZXByb2Nlc3NpbmctcHJlcGFyYXRpb24ubWwvYXV0aC9yZWFsbXMvYXV4aXAiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMGRjYjI2MjAtN2FiZS00YTY2LTg5Y2MtNmE4N2I5MDEzMDcyIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYXV4aXAiLCJzZXNzaW9uX3N0YXRlIjoiZjI1NzU5NTgtMzY1OC00NWIzLTliNjYtZWY0OTljYTFlOWY1IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkb3dubG9hZCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJFc3F1aXMgQmVuamFtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJiZXNxdWlzIiwiZ2l2ZW5fbmFtZSI6IkVzcXVpcyIsImZhbWlseV9uYW1lIjoiQmVuamFtaW4iLCJlbWFpbCI6ImJlbmphbWluLmVzcXVpc0Bjc2dyb3VwLmV1In0.s4CBr3vD1_MhhJly9BLMrsvEH6tDK0_a49NdjVGicGPHMu1EMlE9o0BhsbHwryPcGtalL5AssneK5meWFFfweh84N03M3rszkTJbGDV1CVnlg2qU2G32tU1AHEyfd3j1LYZ7P7xI6zwnTLukDCYNR3mCYldFTBq9j10kFPUQpUHI2fxALoQLw57H1bcno8wMmpYyu9EzLi6T7fDjBX3NBJ0bG54Kf71ZU19CAk0lr-M9TYvULvBdQ8QpuD3mTg4An6NiFR7SLT-EpmrdbLPyTy7rqsRDCTsY6MHfEna6fH5SHGoXP9T5F4FcjwrN26kkFdOdGoVAUS1R9OyNWwAFyw0";
-	// 		try {
-	// 			List<String> wasa_files = auxip.getListOfAuxFileURLs(files_repro_filtered, bearerToken);
-	// 			results.addAll(wasa_files);
-	// 		} catch (Exception e) {
-	// 			// TODO Auto-generated catch block
-	// 			e.printStackTrace();
-	// 		}
-	// 	}
-	// 	LOG.info("Retrieve done, "+String.valueOf(results.size()));			
-	// 	for (String str: results) {
-	// 		LOG.info("File: "+str);
-	// 	}
-	// }
 
 }
