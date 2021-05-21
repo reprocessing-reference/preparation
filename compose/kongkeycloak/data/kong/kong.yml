@@ -4,7 +4,7 @@ _transform: true
 services:
   
 - name: auxip-service
-  url: http://auxip:8080/rdb.svc
+  url: http://reprocessing_data_baseline:8080/rdb.svc
   plugins:
   - name: oidc
     config:
