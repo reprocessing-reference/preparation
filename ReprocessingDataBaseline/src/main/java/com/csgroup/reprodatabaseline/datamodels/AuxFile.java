@@ -26,6 +26,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.olingo.commons.api.data.Entity;
+import org.apache.olingo.commons.api.data.Property;
+import org.apache.olingo.commons.api.data.ValueType;
+
 /**
  * @author besquis
  */
@@ -45,8 +49,22 @@ public class AuxFile implements Comparable<AuxFile> {
     public ZonedDateTime CreationDate;
     public String Band;
     public String Unit;
-    
-    
+	public String AuxipUrl;
+
+
+	public Entity getOdataEntity() {
+		Entity entity = new Entity();
+
+		Property name = new Property("String", "Name",ValueType.PRIMITIVE,this.FullName) ;
+		Property auxipUrl = new Property("String", "AuxipLink",ValueType.PRIMITIVE,this.AuxipUrl) ;
+
+		entity.addProperty( name );
+		entity.addProperty( auxipUrl );
+		entity.setType("OData.CSC.Product");
+
+		return entity;
+	}
+
 	public static List<AuxFile> loadValues(final AuxType type, final String json_str) {
 		List<AuxFile> res = new ArrayList<AuxFile>();
 		ObjectMapper mapper = new ObjectMapper();

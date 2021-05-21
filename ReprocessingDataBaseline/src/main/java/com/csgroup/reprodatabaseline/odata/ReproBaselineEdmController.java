@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+
+import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
+
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.olingo.server.api.OData;
@@ -28,8 +31,8 @@ public class ReproBaselineEdmController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReproBaselineEdmController.class);
 	public static final String URI = "/rdb.svc";
-    // @Autowired
-    // private EntityManagerFactory  entityManagerFactory;
+    @Autowired
+    private ReproBaselineAccess  reproBaselineAccess;
     OData odata;
     ServiceMetadata edm;
     
@@ -53,7 +56,7 @@ public class ReproBaselineEdmController {
             //ServiceMetadata edm = odata.createServiceMetadata(new AuxipEdmProvider(), new ArrayList<EdmxReference>());
             ODataHttpHandler handler = odata.createHandler(edm);
 
-            handler.register(new ReproBaselineEntityCollectionProcessor());
+            handler.register(new ReproBaselineEntityCollectionProcessor(reproBaselineAccess));
             
             // let the handler do the work
             handler.process(new HttpServletRequestWrapper(request) {

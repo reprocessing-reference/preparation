@@ -54,13 +54,13 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
     if (entityTypeName.equals(PRODUCT_FQN)) 
     {
       entityType = new CsdlEntityType();
-      CsdlProperty id = new CsdlProperty().setName("ID").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
+      // CsdlProperty id = new CsdlProperty().setName("ID").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
       CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
       CsdlProperty auxipLink = new CsdlProperty().setName("AuxipLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      CsdlProperty cloudLink = new CsdlProperty().setName("CloudLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      // CsdlProperty cloudLink = new CsdlProperty().setName("CloudLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
       
       entityType.setName(PRODUCT_ET_NAME);
-      entityType.setProperties(Arrays.asList(id, name,auxipLink,cloudLink));
+      entityType.setProperties(Arrays.asList(name,auxipLink));
     }
 
     return entityType;
@@ -136,11 +136,17 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
       functions = new ArrayList<>();
 
       final List<CsdlParameter> parameters = new ArrayList<>();
-      final CsdlParameter satelliteUnit = new CsdlParameter();
-      satelliteUnit.setName("satellite_unit");
-      satelliteUnit.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      satelliteUnit.setNullable(false);
-      parameters.add(satelliteUnit);
+      // final CsdlParameter satelliteUnit = new CsdlParameter();
+      // satelliteUnit.setName("satellite_unit");
+      // satelliteUnit.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      // satelliteUnit.setNullable(false);
+      // parameters.add(satelliteUnit);
+
+      final CsdlParameter dataTakeId = new CsdlParameter();
+      dataTakeId.setName("l0_name");
+      dataTakeId.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      dataTakeId.setNullable(false);
+      parameters.add(dataTakeId);
 
       final CsdlParameter productType = new CsdlParameter();
       productType.setName("product_type");
@@ -148,20 +154,35 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
       productType.setNullable(false);
       parameters.add(productType);
 
-      final CsdlParameter dataTakeId = new CsdlParameter();
-      dataTakeId.setName("data_take_id");
-      dataTakeId.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      dataTakeId.setNullable(false);
-      parameters.add(dataTakeId);
-
-
       CsdlFunction getReprocessingDataBaseline = new CsdlFunction();
       getReprocessingDataBaseline.setName(FUNCTION_NAME);
       getReprocessingDataBaseline.setParameters(parameters);
       getReprocessingDataBaseline.setBound(false);
       getReprocessingDataBaseline.setReturnType(new CsdlReturnType().setCollection(true).setType(PRODUCT_FQN));
-
       functions.add(getReprocessingDataBaseline);
+
+      final List<CsdlParameter> parameters2 = new ArrayList<>(parameters);
+
+      final CsdlParameter delta_t0 = new CsdlParameter();
+      delta_t0.setName("delta_t0");
+      delta_t0.setType(EdmPrimitiveTypeKind.Int32.getFullQualifiedName());
+      delta_t0.setNullable(true);
+      parameters2.add(delta_t0);
+
+      final CsdlParameter delta_t1 = new CsdlParameter();
+      delta_t1.setName("delta_t1");
+      delta_t1.setType(EdmPrimitiveTypeKind.Int32.getFullQualifiedName());
+      delta_t1.setNullable(true);
+      parameters2.add(delta_t1);
+
+      CsdlFunction getReprocessingDataBaseline2 = new CsdlFunction();
+      getReprocessingDataBaseline2.setName(FUNCTION_NAME);
+      getReprocessingDataBaseline2.setParameters(parameters2);
+      getReprocessingDataBaseline2.setBound(false);
+      getReprocessingDataBaseline2.setReturnType(new CsdlReturnType().setCollection(true).setType(PRODUCT_FQN));
+      // getReprocessingDataBaseline.setReturnType(new CsdlReturnType().setCollection(true).setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()));
+
+      functions.add(getReprocessingDataBaseline2);
     }
 
     return functions;

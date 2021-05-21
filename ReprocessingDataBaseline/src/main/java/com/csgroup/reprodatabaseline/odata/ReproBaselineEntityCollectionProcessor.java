@@ -22,16 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.olingo.commons.api.Constants;
+import com.csgroup.reprodatabaseline.datamodels.AuxFile;
+import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
+
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
-import org.apache.olingo.commons.api.data.Link;
-import org.apache.olingo.commons.api.edm.EdmElement;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
-import org.apache.olingo.commons.api.edm.EdmNavigationProperty;
-import org.apache.olingo.commons.api.edm.EdmNavigationPropertyBinding;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
@@ -49,18 +47,8 @@ import org.apache.olingo.server.api.uri.UriInfo;
 import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceFunction;
-
-import org.apache.olingo.server.api.uri.UriResourceEntitySet;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
-import org.apache.olingo.server.api.uri.queryoption.CountOption;
-import org.apache.olingo.server.api.uri.queryoption.ExpandItem;
-import org.apache.olingo.server.api.uri.queryoption.ExpandOption;
-import org.apache.olingo.server.api.uri.queryoption.FilterOption;
-import org.apache.olingo.server.api.uri.queryoption.OrderByOption;
-import org.apache.olingo.server.api.uri.queryoption.SelectOption;
-import org.apache.olingo.server.api.uri.queryoption.SkipOption;
-import org.apache.olingo.server.api.uri.queryoption.TopOption;
-import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,18 +59,16 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
 
   private OData odata;
   private ServiceMetadata srvMetadata;
-  // our database-mock
-  // private Storage storage;
-
-  // public ReproBaselineEntityCollectionProcessor(Storage storage) {
-  //   this.storage = storage;
-  // }
-
+  private ReproBaselineAccess reproBaselineAccess;
   public void init(OData odata, ServiceMetadata serviceMetadata) {
     this.odata = odata;
     this.srvMetadata = serviceMetadata;
   }
 
+  public ReproBaselineEntityCollectionProcessor(ReproBaselineAccess reproBaselineAccess) 
+  {
+    this.reproBaselineAccess = reproBaselineAccess;
+  }
   /*
    * This method is invoked when a collection of entities has to be read. ( Products / Subscriptions) 
    */
@@ -116,9 +102,9 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
           HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT,String.valueOf(statusCode));
     }
     final UriResourceFunction uriResourceFunction = (UriResourceFunction) uriResource;
-    final EntityCollection entityCol = getReprocessingDataBaseline((UriResourceFunction)uriResourceFunction);
+    final EntityCollection entityCol = getReprocessingDataBaseline((UriResourceFunction)uriResourceFunction,request);
 
-        // 2nd step: Serialize the response entity
+    // 2nd step: Serialize the response entity
     final EdmEntityType edmEntityType = (EdmEntityType) uriResourceFunction.getFunction().getReturnType().getType();
     final ContextURL contextURL = ContextURL.with().asCollection().type(edmEntityType).build();
     EntityCollectionSerializerOptions opts = EntityCollectionSerializerOptions.with().contextURL(contextURL).build();
@@ -146,47 +132,31 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
     return false;
   }
 
-  public EntityCollection getReprocessingDataBaseline(final UriResourceFunction uriResourceFunction) throws ODataApplicationException {
+  public EntityCollection getReprocessingDataBaseline(final UriResourceFunction uriResourceFunction,ODataRequest request) throws ODataApplicationException {
 
     LOG.info("Starting >> getReprocessingDataBaseline");
 
     if("getReprocessingDataBaseline".equals(uriResourceFunction.getFunctionImport().getName())) {
       // Get the parameter of the function
-      final UriParameter satelliteUnit = uriResourceFunction.getParameters().get(0);
-      final UriParameter productType = uriResourceFunction.getParameters().get(1);
-      final UriParameter dataTakeId = uriResourceFunction.getParameters().get(2);
-  
-      System.out.println("satelliteUnit =>" + satelliteUnit.getText());
-      System.out.println("productType =>" + productType.getText());
-      System.out.println("dataTakeId =>" + dataTakeId.getText());
+      final String level0Name = uriResourceFunction.getParameters().get(0).getText().replace("'", "");
+      final String productType = uriResourceFunction.getParameters().get(1).getText().replace("'", "");
+      int deltaT0 = 0;
+      int deltaT1 = 0;
+      if( uriResourceFunction.getParameters().size() == 4 )
+      {
+        deltaT0 = Integer.parseInt(uriResourceFunction.getParameters().get(2).getText());
+        deltaT1 = Integer.parseInt(uriResourceFunction.getParameters().get(3).getText());
+      }
+      String accessToken = request.getHeader("Authorization").replace("Bearer ", "") ;
+      this.reproBaselineAccess.setAccessToken(accessToken);
+      List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(level0Name, productType,deltaT0,deltaT1);
 
-      // get aux data files listing from the reprocessing configuration baseline
-      //getAuxDataFiles();
-      // request="https://reprocessing-preparation.ml/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s')" % (mission,unit,start,stop)
-      // apply rules selection 
-      //applyRules();
-      // get links from auxip service
-      //getCloudlinks();
-      // Try to convert the parameter to an Integer.
-      // We have to take care, that the type of parameter fits to its EDM declaration
-      // int amount;
-      // try {
-      //   amount = Integer.parseInt(parameterAmount.getText());
-      // } catch(NumberFormatException e) {
-      //   throw new ODataApplicationException("Type of parameter Amount must be Edm.Int32",
-      //     HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ENGLISH);
-      // }
-  
-      // final EdmEntityType productEntityType = serviceMetadata.getEdm().getEntityType(DemoEdmProvider.ET_PRODUCT_FQN);
       final List<Entity> resultEntityList = new ArrayList<Entity>();
   
       // // Loop over all categories and check how many products are linked
-      // for(final Entity category : categoryList) {
-      //   final EntityCollection products = getRelatedEntityCollection(category, productEntityType);
-      //   if(products.getEntities().size() == amount) {
-      //     resultEntityList.add(category);
-      //   }
-      // }
+      for(final AuxFile aux : auxDataFiles) {
+        resultEntityList.add(aux.getOdataEntity());
+      }
   
       final EntityCollection resultCollection = new EntityCollection();
       resultCollection.getEntities().addAll(resultEntityList);
