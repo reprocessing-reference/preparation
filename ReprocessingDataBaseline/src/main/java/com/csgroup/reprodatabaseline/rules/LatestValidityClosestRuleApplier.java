@@ -18,24 +18,38 @@ public class LatestValidityClosestRuleApplier implements RuleApplierInterface {
 	public List<AuxFile> apply(List<AuxFile> files, 
 			ZonedDateTime t0, ZonedDateTime t1,
 			TemporalAmount dt0, TemporalAmount dt1) {
-		List<AuxFile> results = new ArrayList<AuxFile>();
 	    ZonedDateTime middle = RuleUtilities.getMeanTime(t0.minus(dt0), t1.plus(dt1));
-	    for (AuxFile file : files) {
-	    	if (file.ValidityStart.isAfter(middle)) {
-	    		results.add(file);
-	    	}
-	    }
-	    Collections.sort(results, 
+	    System.out.println(t0.toString());
+	    System.out.println(middle.toString());
+	    System.out.println(t1.toString());
+	    Collections.sort(files, 
 				new Comparator<AuxFile>() {
 			@Override
 			public int compare(AuxFile a, AuxFile b ) {
-				return a.ValidityStart.compareTo(b.ValidityStart);
+				double dista = 0;
+				if (a.ValidityStart.isAfter(middle))
+				{
+					dista = RuleUtilities.getDiff(middle, a.ValidityStart);
+				} else {
+					dista = RuleUtilities.getDiff(a.ValidityStart, middle);
+				}				
+				double distb = 0;
+				if (b.ValidityStart.isAfter(middle))
+				{
+					distb = RuleUtilities.getDiff(middle, b.ValidityStart);
+				} else {
+					distb = RuleUtilities.getDiff(b.ValidityStart, middle);
+				}
+				if (Double.compare(dista, distb) == 0) {
+					return a.CreationDate.compareTo(b.CreationDate);
+				} else {
+					return Double.compare(dista, distb);
+				}
 			}
 		});
-	    
 	    List<AuxFile> res = new ArrayList<AuxFile>();
-		if (results.size() != 0) {
-			res.add(results.get(results.size()-1));
+		if (files.size() != 0) {
+			res.add(files.get(0));
 		}
 		return res;
 	    

@@ -19,7 +19,8 @@ public class ValCoverRuleApplier implements RuleApplierInterface {
 			TemporalAmount dt0, TemporalAmount dt1) {
 		List<AuxFile> res = new ArrayList<AuxFile>();
 		for (AuxFile file : files) {
-	        if (file.ValidityStart.isBefore(t0.minus(dt0)) && file.ValidityStop.isAfter(t1.plus(dt1))) {
+	        if ((file.ValidityStart.isBefore(t0.minus(dt0)) || file.ValidityStart.isEqual(t0.minus(dt0)) ) && 
+	        		(file.ValidityStop.isAfter(t1.plus(dt1)) || file.ValidityStop.isEqual(t1.plus(dt1)) )) {
 	            res.add(file);
 	        }
 		}

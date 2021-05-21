@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.csgroup.reprodatabaseline.datamodels.AuxFile;
 
-public class ValIntersectWithoutDuplicateRuleApplier implements RuleApplierInterface {
+public class ValIntersectRuleApplier implements RuleApplierInterface {
 
 	/*
     This mode gets all files that cover partly time interval [t0 ? dt0 , t1 + dt1]. Using this query in the scenario exhibited in fig B-1, it
@@ -20,11 +20,13 @@ public class ValIntersectWithoutDuplicateRuleApplier implements RuleApplierInter
 		List<AuxFile> res = new ArrayList<AuxFile>();
 		
 		for (AuxFile file : files) {
-			boolean first = file.ValidityStart.isBefore(t0.minus(dt0)) &&
-			        t0.minus(dt0).isBefore(file.ValidityStop);
-			boolean second = file.ValidityStart.isBefore(t1.minus(dt1)) &&
-			        t1.minus(dt1).isBefore(file.ValidityStop);
-			
+			final boolean first = (file.ValidityStart.isBefore(t0.minus(dt0)) || 
+					file.ValidityStart.isEqual(t0.minus(dt0))) &&
+			        (t0.minus(dt0).isBefore(file.ValidityStop) || 
+			        		t0.minus(dt0).isEqual(file.ValidityStop));
+			final boolean second = (file.ValidityStart.isBefore(t1.minus(dt1)) ||
+					file.ValidityStart.isEqual(t1.minus(dt1))) &&
+			        (t1.minus(dt1).isBefore(file.ValidityStop) || t1.minus(dt1).isEqual(file.ValidityStop) );
 			if (first || second) {
 	            res.add(file);
 	        }
