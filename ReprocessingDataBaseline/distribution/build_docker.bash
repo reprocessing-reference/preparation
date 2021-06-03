@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VERSION="0.0.2"
+VERSION="1.0"
 
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
@@ -18,40 +18,39 @@ if [ $? -ne 0 ]; then
     docker build -t global_exec:01.00.00 .
 fi
 
-cd  ${CUR_DIR}/build_package
+cd ${CUR_DIR}/docker_build
 
-rm -rf source
+rm -r source*
 
 mkdir source
-cp -r ${CUR_DIR}/../../AUXIP_OLINGO/* source/
+cp -r ../../../ReprocessingDataBaseline/* source/
 
-docker run --rm -v ${CUR_DIR}/build_package/source:/source global_build:01.00.00
+docker run --rm -v ${CUR_DIR}/docker_build/source:/source global_build:01.00.00
 
 
 cd ${CUR_DIR}
 
-cd build_docker
+cd docker_binary
 
 rm -r tmp_dir
 
 mkdir tmp_dir
 
 
+cp -r ReprocessingData-template tmp_dir/ReprocessingData-${VERSION}
 
-cp -r Auxip-template tmp_dir/Auxip-${VERSION}
+mkdir tmp_dir/ReprocessingData-${VERSION}/lib
 
-mkdir  tmp_dir/Auxip-${VERSION}/lib
+cp ../docker_build/source/target/*.jar tmp_dir/ReprocessingData-${VERSION}/lib/
 
-cp ../build_package/source/target/auxip-*.jar tmp_dir/Auxip-${VERSION}/lib/
-
-sed -i 's+<version>+'${VERSION}'+'  tmp_dir/Auxip-${VERSION}/launch.bash
+sed -i 's+<version>+'${VERSION}'+'  tmp_dir/ReprocessingData-${VERSION}/launch.bash
 
 cp Dockerfile tmp_dir/
 sed -i 's+<version>+'${VERSION}'+g'  tmp_dir/Dockerfile
 
 cd tmp_dir 
-tar cvzf  Auxip-${VERSION}.tar.gz  Auxip-${VERSION}
+tar cvzf  ReprocessingData-${VERSION}.tar.gz  ReprocessingData-${VERSION}
 
-docker build -t auxip_olingo:${VERSION} .
+docker build -t reprodataservice:${VERSION} .
 
 cd ${CUR_DIR}
