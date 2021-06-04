@@ -9,7 +9,7 @@ odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 url = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
 login="admin"
-password = "%HEl$1698OgDa%L"
+password = "***PASSWORD***"
 
 def send_request(request, jsonload, log, passwd):
     headers = {'Content-type': 'application/json'}
