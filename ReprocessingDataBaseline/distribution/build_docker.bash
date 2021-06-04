@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VERSION="1.0"
+VERSION="1.0.0"
 
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
@@ -51,6 +51,6 @@ sed -i 's+<version>+'${VERSION}'+g'  tmp_dir/Dockerfile
 cd tmp_dir 
 tar cvzf  ReprocessingData-${VERSION}.tar.gz  ReprocessingData-${VERSION}
 
-docker build -t reprodataservice:${VERSION} .
+docker build -t reprocessing_data_baseline:${VERSION} .
 
 cd ${CUR_DIR}
