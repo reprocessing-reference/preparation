@@ -106,7 +106,7 @@ services:
       DB_PORT:     5432
       DB_DATABASE: keycloak
       DB_USER:     keycloak
-      DB_PASSWORD: password
+      DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
       KEYCLOAK_USER:     admin
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
       PROXY_ADDRESS_FORWARDING: "true"
