@@ -181,7 +181,7 @@ services:
 #######################################
 # ReprocessingDataBaseline database
 #######################################
-database_reprocessing:
+  database_reprocessing:
     image: postgres
     restart: always
     environment:
