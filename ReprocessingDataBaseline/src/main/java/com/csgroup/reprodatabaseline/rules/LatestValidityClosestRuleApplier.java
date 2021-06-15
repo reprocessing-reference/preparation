@@ -19,9 +19,9 @@ public class LatestValidityClosestRuleApplier implements RuleApplierInterface {
 			ZonedDateTime t0, ZonedDateTime t1,
 			TemporalAmount dt0, TemporalAmount dt1) {
 	    ZonedDateTime middle = RuleUtilities.getMeanTime(t0.minus(dt0), t1.plus(dt1));
-	    System.out.println(t0.toString());
-	    System.out.println(middle.toString());
-	    System.out.println(t1.toString());
+	    // System.out.println(t0.toString());
+	    // System.out.println(middle.toString());
+	    // System.out.println(t1.toString());
 	    Collections.sort(files, 
 				new Comparator<AuxFile>() {
 			@Override
