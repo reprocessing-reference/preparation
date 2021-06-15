@@ -5,7 +5,7 @@ public class RuleApplierFactory {
 	public static RuleApplierInterface getRuleApplier(RuleEnum rule) {
 		switch (rule) {
 		case ValIntersectWithoutDuplicate:
-			return new ValIntersectRuleApplier();
+			return new ValIntersectWithoutDuplicateRuleApplier();
 		case LatestValIntersect:
 			return new LatestValIntersectRuleApplier();
 		case ValCover:
