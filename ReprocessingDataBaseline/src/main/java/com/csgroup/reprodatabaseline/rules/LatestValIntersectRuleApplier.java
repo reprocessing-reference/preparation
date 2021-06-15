@@ -18,7 +18,7 @@ public class LatestValIntersectRuleApplier implements RuleApplierInterface {
 	public List<AuxFile> apply(List<AuxFile> files, 
 			ZonedDateTime t0, ZonedDateTime t1,
 			TemporalAmount dt0, TemporalAmount dt1) {
-		ValIntersectRuleApplier valinter_rule = new ValIntersectRuleApplier();
+		ValIntersectWithoutDuplicateRuleApplier valinter_rule = new ValIntersectWithoutDuplicateRuleApplier();
 		List<AuxFile> initial_res = valinter_rule.apply(files, t0, t1, dt0, dt1);
 		Collections.sort(initial_res);
 		

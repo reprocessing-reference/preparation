@@ -178,6 +178,21 @@ services:
       - /auxip_working:/working
 
 
+#######################################
+# ReprocessingDataBaseline database
+#######################################
+database_reprocessing:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "reprocessingdatabaseline"
+      POSTGRES_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/reprocessing_data_baseline:/var/lib/postgresql/data
+
   #######################################
   # Reprocessing Data Baseline Service 
   #######################################
@@ -188,6 +203,7 @@ services:
     depends_on:
       - auxip
       - reprobase
+      - database_reprocessing
     networks:
       - proxynet
 

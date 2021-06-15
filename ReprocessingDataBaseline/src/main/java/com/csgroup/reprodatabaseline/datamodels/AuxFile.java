@@ -49,7 +49,7 @@ public class AuxFile implements Comparable<AuxFile> {
     public ZonedDateTime CreationDate;
     public String Band;
     public String Unit;
-	public String AuxipUrl;
+	public String AuxipUrl = null;
 
 
 	public Entity getOdataEntity() {

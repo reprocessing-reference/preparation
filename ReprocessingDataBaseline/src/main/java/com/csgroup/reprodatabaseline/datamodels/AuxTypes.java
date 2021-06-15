@@ -34,12 +34,32 @@ public class AuxTypes {
 					aux.ShortName= value.get("ShortName").asText();
 					aux.Format= value.get("Format").asText();
 					aux.Mission= value.get("Mission").asText();
-					JsonNode levelNode = value.get("ProductLevels");
-					if (levelNode.isArray()) {
-						for (JsonNode level : levelNode) {
-							aux.ProductLevels.add(level.get("Level").asText());
+				    // depending of the requested expand : ProductLevels or ProductTypes
+					try {
+						JsonNode levelNode = value.get("ProductLevels");
+						if (levelNode.isArray()) {
+							for (JsonNode level : levelNode) {
+								aux.ProductLevels.add(level.get("Level").asText());
+							}
 						}
+					} catch (Exception e) {
+						//TODO: handle exception
+						LOG.debug("ProductLevels node not found : maybe not expanded");
 					}
+
+					try {
+						JsonNode typeNode = value.get("ProductTypes");
+						if (typeNode.isArray()) {
+							for (JsonNode type : typeNode) {
+								aux.ProductTypes.add(type.get("Type").asText());
+							}
+						}
+					} catch (Exception e) {
+						//TODO: handle exception
+						LOG.debug("ProductTypes node not found : maybe not expanded");
+					}
+					
+
 					aux.Variability= value.get("Variability").asText();
 					aux.Validity= value.get("LongName").asText();
 					aux.Rule= RuleEnum.valueOf(value.get("Rule").asText());

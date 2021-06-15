@@ -39,10 +39,30 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
   public static final FullQualifiedName CONTAINER = new FullQualifiedName(NAMESPACE, CONTAINER_NAME);
 
 
-  public static final String PRODUCT_ET_NAME = "Product";
-	public static final FullQualifiedName PRODUCT_FQN = new FullQualifiedName(NAMESPACE, PRODUCT_ET_NAME);
-  public static final String PRODUCT_ES_NAME = "Products";
+  // public static final String PRODUCT_ET_NAME = "Product";
+  public static final String PRODUCT_CT_NAME = "Product";
+	public static final FullQualifiedName PRODUCT_FQN = new FullQualifiedName(NAMESPACE, PRODUCT_CT_NAME);
 
+  public static final String DATA_BASELINE_ET_NAME = "DataBaseline";
+	public static final FullQualifiedName DATA_BASELINE_FQN = new FullQualifiedName(NAMESPACE, DATA_BASELINE_ET_NAME);
+  public static final String DATA_BASELINE_ES_NAME = "DataBaselines";
+
+
+
+  @Override
+  public CsdlComplexType getComplexType(final FullQualifiedName complexTypeName) {
+    CsdlComplexType complexType = null;
+
+    if (complexTypeName.equals(PRODUCT_FQN)) {
+      {
+        complexType = new CsdlComplexType().setName(PRODUCT_CT_NAME).setProperties(Arrays.asList(
+        new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()).setNullable(false),
+        new CsdlProperty().setName("AuxipLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()).setNullable(false)  ));
+      }
+    }
+
+    return complexType;
+  }
 
   @Override
   public CsdlEntityType getEntityType(FullQualifiedName entityTypeName) {
@@ -51,37 +71,39 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
     // this method is called for each EntityType that are configured in the Schema
     CsdlEntityType entityType = null;
 
-    if (entityTypeName.equals(PRODUCT_FQN)) 
+    // if(entityTypeName.equals(PRODUCT_FQN)) 
+    // {
+    //   entityType = new CsdlEntityType();
+    //   CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()).setNullable(false);
+    //   CsdlProperty auxipLink = new CsdlProperty().setName("AuxipLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()).setNullable(false);
+
+    //   entityType.setName(PRODUCT_ET_NAME);
+    //   entityType.setProperties(Arrays.asList(name,auxipLink));
+    // }
+    if(entityTypeName.equals(DATA_BASELINE_FQN)) 
     {
       entityType = new CsdlEntityType();
-      // CsdlProperty id = new CsdlProperty().setName("ID").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
-      CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      CsdlProperty auxipLink = new CsdlProperty().setName("AuxipLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      // CsdlProperty cloudLink = new CsdlProperty().setName("CloudLink").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      CsdlProperty level0Name = new CsdlProperty().setName("Level0").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      CsdlProperty auxiDataFiles = new CsdlProperty().setName("AuxDataFiles").setCollection(true).setType(PRODUCT_FQN);
       
-      entityType.setName(PRODUCT_ET_NAME);
-      entityType.setProperties(Arrays.asList(name,auxipLink));
+      entityType.setName(DATA_BASELINE_ET_NAME);
+      entityType.setProperties(Arrays.asList(level0Name,auxiDataFiles));
     }
 
     return entityType;
 
   }
 
-  // @Override
-  // public CsdlComplexType getComplexType(final FullQualifiedName complexTypeName) {
-  //   CsdlComplexType complexType = null;
-  //   return complexType;
-  // }
-
   @Override
   public CsdlEntitySet getEntitySet(FullQualifiedName entityContainer, String entitySetName) {
 
     CsdlEntitySet entitySet = null;
 
-    if (entityContainer.equals(CONTAINER) && entitySetName.equals(PRODUCT_ES_NAME) ) {
+    if( entityContainer.equals(CONTAINER) && entitySetName.equals(DATA_BASELINE_ES_NAME) )
+    {
       entitySet = new CsdlEntitySet();
-      entitySet.setName(PRODUCT_ES_NAME);
-      entitySet.setType(PRODUCT_FQN);
+      entitySet.setName(DATA_BASELINE_ES_NAME);
+      entitySet.setType(DATA_BASELINE_FQN);
       entitySet.setIncludeInServiceDocument(false);
     }
     return entitySet;
@@ -107,9 +129,15 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
 
     //add EntityTypes
     List<CsdlEntityType> entityTypes = new ArrayList<CsdlEntityType>();
-    entityTypes.add(getEntityType(PRODUCT_FQN));
+    // entityTypes.add(getEntityType(PRODUCT_FQN));
+    entityTypes.add(getEntityType(DATA_BASELINE_FQN));
     schema.setEntityTypes(entityTypes);
     
+    // add Complex Types
+    List<CsdlComplexType> complexTypes = new ArrayList<>();
+    complexTypes.add(getComplexType(PRODUCT_FQN));
+    schema.setComplexTypes(complexTypes);
+
     // // add EntityContainer
     schema.setEntityContainer(getEntityContainer());
 
@@ -136,53 +164,52 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
       functions = new ArrayList<>();
 
       final List<CsdlParameter> parameters = new ArrayList<>();
-      // final CsdlParameter satelliteUnit = new CsdlParameter();
-      // satelliteUnit.setName("satellite_unit");
-      // satelliteUnit.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      // satelliteUnit.setNullable(false);
-      // parameters.add(satelliteUnit);
 
-      final CsdlParameter dataTakeId = new CsdlParameter();
-      dataTakeId.setName("l0_name");
-      dataTakeId.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      dataTakeId.setNullable(false);
-      parameters.add(dataTakeId);
+      List<String> paramNames = List.of("l0_names","mission","unit","product_type");
 
-      final CsdlParameter productType = new CsdlParameter();
-      productType.setName("product_type");
-      productType.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-      productType.setNullable(false);
-      parameters.add(productType);
+      for(String name : paramNames)
+      {
+        final CsdlParameter parameter = new CsdlParameter();
+        parameter.setName(name);
+        parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+        parameter.setNullable(false);
+        parameters.add(parameter);    
+      }
 
       CsdlFunction getReprocessingDataBaseline = new CsdlFunction();
       getReprocessingDataBaseline.setName(FUNCTION_NAME);
       getReprocessingDataBaseline.setParameters(parameters);
       getReprocessingDataBaseline.setBound(false);
-      getReprocessingDataBaseline.setReturnType(new CsdlReturnType().setCollection(true).setType(PRODUCT_FQN));
+      getReprocessingDataBaseline.setReturnType(new CsdlReturnType().setCollection(true).setType(DATA_BASELINE_FQN));
       functions.add(getReprocessingDataBaseline);
 
-      final List<CsdlParameter> parameters2 = new ArrayList<>(parameters);
+      // Overloading of getReprocessingDataBaseline function 
+      final List<CsdlParameter> parameters2 = new ArrayList<>();
+      paramNames = List.of("start","stop","mission","unit","product_type");
 
-      final CsdlParameter delta_t0 = new CsdlParameter();
-      delta_t0.setName("delta_t0");
-      delta_t0.setType(EdmPrimitiveTypeKind.Int32.getFullQualifiedName());
-      delta_t0.setNullable(true);
-      parameters2.add(delta_t0);
+      for(String name : paramNames)
+      {
+        final CsdlParameter parameter = new CsdlParameter();
+        parameter.setName(name);
 
-      final CsdlParameter delta_t1 = new CsdlParameter();
-      delta_t1.setName("delta_t1");
-      delta_t1.setType(EdmPrimitiveTypeKind.Int32.getFullQualifiedName());
-      delta_t1.setNullable(true);
-      parameters2.add(delta_t1);
+        if(name.equals("start") || name.equals("stop"))
+        {
+          parameter.setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName());
+        }else
+        {
+          parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+        }
+        parameter.setNullable(false);
+        parameters2.add(parameter);    
+      }
 
       CsdlFunction getReprocessingDataBaseline2 = new CsdlFunction();
       getReprocessingDataBaseline2.setName(FUNCTION_NAME);
       getReprocessingDataBaseline2.setParameters(parameters2);
       getReprocessingDataBaseline2.setBound(false);
-      getReprocessingDataBaseline2.setReturnType(new CsdlReturnType().setCollection(true).setType(PRODUCT_FQN));
-      // getReprocessingDataBaseline.setReturnType(new CsdlReturnType().setCollection(true).setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()));
-
+      getReprocessingDataBaseline2.setReturnType(new CsdlReturnType().setCollection(true).setType(DATA_BASELINE_FQN));
       functions.add(getReprocessingDataBaseline2);
+
     }
 
     return functions;
@@ -208,7 +235,8 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
 
     // create EntitySets
     List<CsdlEntitySet> entitySets = new ArrayList<CsdlEntitySet>();
-    entitySets.add(getEntitySet(CONTAINER, PRODUCT_ES_NAME));
+    // entitySets.add(getEntitySet(CONTAINER, PRODUCT_ES_NAME));
+    // entitySets.add(getEntitySet(CONTAINER, DATA_BASELINE_ES_NAME));
     // create EntityContainer
     CsdlEntityContainer entityContainer = new CsdlEntityContainer();
     entityContainer.setName(CONTAINER_NAME);
