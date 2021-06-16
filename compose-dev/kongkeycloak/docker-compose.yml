@@ -196,8 +196,8 @@ services:
   #######################################
   # Reprocessing Data Baseline Service 
   #######################################
-  reprocessing_data_baseline:
-    container_name: reprocessing_data_baseline
+  reprocessingdatabaseline:
+    container_name: reprocessingdatabaseline
     image: reprocessing_data_baseline:1.0.0
     restart: "no"
     depends_on:
