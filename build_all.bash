@@ -24,5 +24,11 @@ cd ${CUR_DIR}/ReprocessingDataBaseline/distribution
 
 ./build_docker.bash
 
+cd ${CUR_DIR}/BackupPosgres
+
+docker build -t backup_postgres:1.0.0 .
+
+
+
 cd ${CUR_DIR}
 
