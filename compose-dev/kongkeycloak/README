@@ -1,0 +1,5 @@
+On first use launch init_lets_encrypt.sh to init the certs
+
+launch with an env file with docker-compose --env-file <yourfile> up -d
+
+An exemple of env_file is provided in the Utilities top folder
