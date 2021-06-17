@@ -1,13 +1,8 @@
-FROM ubuntu:18.04
+FROM global_exec:01.00.00
 MAINTAINER CS SI
 
 ADD Auxip-<version>.tar.gz /
 
 RUN chmod a+x /Auxip-<version>/launch.bash
-RUN apt-get update -y \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
-       	 openjdk-11-jre \
-    && apt-get clean
 
 ENTRYPOINT ["/Auxip-<version>/launch.bash"]

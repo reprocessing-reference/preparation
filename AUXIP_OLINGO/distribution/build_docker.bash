@@ -4,16 +4,28 @@ VERSION="0.0.2"
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-cd build_package
+docker image inspect global_build:01.00.00 > /dev/null
+if [ $? -ne 0 ]; then
+    echo "Building docker for build"
+    cd ${CUR_DIR}/../../Utilities/DockerBuild
+    docker build -t global_build:01.00.00 .
+fi
+
+docker image inspect global_exec:01.00.00 > /dev/null
+if [ $? -ne 0 ]; then
+    echo "Building docker for build"
+    cd ${CUR_DIR}/../../Utilities/DockerExec
+    docker build -t global_exec:01.00.00 .
+fi
+
+cd  ${CUR_DIR}/build_package
 
 rm -rf source
 
 mkdir source
 cp -r ${CUR_DIR}/../../AUXIP_OLINGO/* source/
 
-docker build -t auxip_olingo_build:01.00.00 .
-
-docker run --rm -v ${CUR_DIR}/build_package/source:/source auxip_olingo_build:01.00.00
+docker run --rm -v ${CUR_DIR}/build_package/source:/source global_build:01.00.00
 
 
 cd ${CUR_DIR}

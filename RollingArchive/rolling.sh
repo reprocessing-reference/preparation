@@ -11,6 +11,10 @@ if [ $# -lt 3 ]; then
     exit 1
 fi
 
+echo "RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}
+echo "RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: "${RCLONE_CONFIG_WASABI_ACCESS_KEY_ID}
+
+
 ARCHIVE=$1
 REP_WORK=$2
 DAYS=$3
@@ -46,11 +50,13 @@ done
 if [ -z "$(ls -A $SNAP_FOLDER)" ]; then
    echo "No file in archive, exit"
 else
-    #tar the whole stuff
-    cd $SNAP_FOLDER
-    tar cvzf archive_$(date '+%Y%m%d%H%M%S').tgz *
-    rclone copy archive*tgz wasabi:auxiparchives/
-    mv archive*tgz $REP_WORK/
+    if [ ! -z "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}" ]; then
+	#tar the whole stuff
+	cd $SNAP_FOLDER
+	tar cvzf archive_$(date '+%Y%m%d%H%M%S').tgz *
+	rclone copy archive*tgz wasabi:auxiparchives/
+	rm archive*tgz
+    fi
 fi
 #remove snap folder
 cd $CUR_DIR 

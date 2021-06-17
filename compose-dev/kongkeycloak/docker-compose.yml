@@ -1,24 +1,29 @@
 version: '2'
 
 services:
+#######################################
+# reprobase database
+#######################################
   database:
     image: postgres
     restart: always
     environment:
       POSTGRES_USER: "reprobaseline"
-      POSTGRES_PASSWORD: "**reprobaseline**"
+      POSTGRES_PASSWORD: ${REPROBASE_POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - proxynet
     volumes:
       - /var/postgresql/data:/var/lib/postgresql/data
-
+#######################################
+# database of auxip service
+#######################################
   database_auxip_olingo:
     image: postgres
     restart: always
     environment:
       POSTGRES_USER: "auxip"
-      POSTGRES_PASSWORD: "**auxip**"
+      POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - proxynet
@@ -30,15 +35,20 @@ services:
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: "user@domain.com"
-      PGADMIN_DEFAULT_PASSWORD: "**reprobaseline**"
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     depends_on:
      - database
     networks:
       - proxynet
       
+#######################################
+# reprobase
+#######################################
   reprobase:
     image: reprobaseline:1.0
     restart: "no"
+    environment:
+      DATASOURCE_PASSWORD: ${REPROBASE_POSTGRES_PASSWORD}
     depends_on:
       - database
     networks:
@@ -51,6 +61,10 @@ services:
     image: auxip_olingo:0.0.2
     container_name : auxip
     restart: "no"
+    environment:
+      DATASOURCE_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
+      S3_ACCESS_KEY: ${AUXIP_S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${AUXIP_S3_SECRET_KEY}
     depends_on:
       - database_auxip_olingo
     networks:
@@ -68,7 +82,7 @@ services:
     environment:
       POSTGRES_DB:   keycloak
       POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - proxynet
@@ -92,16 +106,13 @@ services:
       DB_PORT:     5432
       DB_DATABASE: keycloak
       DB_USER:     keycloak
-      DB_PASSWORD: password
+      DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
       KEYCLOAK_USER:     admin
-      KEYCLOAK_PASSWORD: "**auxip**@csGroup.eu"
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_FRONTEND_URL: https://dev.reprocessing-preparation.ml/auth
     volumes:
       - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
-        #  - ./data/keycloak/configuration/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
-        #- ./data/keycloak/configuration/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
-        #- ./data/keycloak/configuration/keystores/kc.pkcs12:/opt/jboss/keycloak/standalone/configuration/keystores/kc.pkcs12
 
     #   # import auxip realm configuration
     command: 
@@ -112,9 +123,8 @@ services:
         '-Dkeycloak.migration.action=import',
         '-Dkeycloak.migration.provider=dir',
         '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
       ]
-      # - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
 
   #######################################
   # Kong 
@@ -128,11 +138,7 @@ services:
       - proxynet
     ports:
       - "8000:8000" # Listener
-        # - "8001:8001" # Admin API
       - "8443:8443" # Listener  (SSL)
-      # - "8444:8444" # Admin API (SSL)
-      #- 80:8000
-      #- 443:8443
       - 8001:8001
       - 8444:8444
 
@@ -152,14 +158,17 @@ services:
 
     volumes:
       - ./data/kong:/etc/kong
-      # - /auxip_snapshot:/etc/nginx/html/archives
 
-
-
+  #######################################
+  # Auxip_Rolling 
+  #######################################
   auxip_rolling:
     container_name: auxip_rolling
     image: rollingarchive:1.0.0
     restart: "no"
+#    environment:
+#      RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
+#      RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
     depends_on:
       - auxip
     networks:
@@ -167,6 +176,60 @@ services:
     volumes:
       - /auxip_snapshot:/archives
       - /auxip_working:/working
+
+  #######################################
+  # Posgres backup 
+  #######################################
+  posgres_backup:
+    container_name: backup_postgres
+    image: backup_postgres:1.0.0
+    restart: "no"
+#    environment:
+#      RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
+#      RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
+    depends_on:
+      - database
+      - database_auxip_olingo
+    networks:
+      - proxynet
+    volumes:
+      - /postgres_backup:/backup
+
+      
+#######################################
+# ReprocessingDataBaseline database
+#######################################
+  database_reprocessing:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: reprocessingdatabaseline
+      POSTGRES_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/reprocessing_data_baseline:/var/lib/postgresql/data
+
+  #######################################
+  # Reprocessing Data Baseline Service 
+  #######################################
+  reprocessingdatabaseline:
+    container_name: reprocessingdatabaseline
+    image: reprocessing_data_baseline:1.0.0
+    restart: "no"
+    environment:
+      DATASOURCE_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
+    depends_on:
+      - auxip
+      - reprobase
+      - database_reprocessing
+    networks:
+      - proxynet
+
+  #######################################
+  # proxy 
+  #######################################
 
   proxy:
     image: nginx:1.19.5-alpine

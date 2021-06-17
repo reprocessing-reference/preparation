@@ -35,6 +35,7 @@ import javax.persistence.Query;
 import javax.persistence.Transient;
 
 import com.csgroup.auxip.controller.AuxipBeanUtil;
+import com.csgroup.auxip.model.repository.StorageStatus;
 
 
 /**
@@ -62,7 +63,7 @@ public class UserManager {
             // this code looks strange and a bit counter-intuitive! 
             // but it's working because the life cycle of a managed entities are related the entity manager
             transac.commit();
-
+            AuxipBeanUtil.getBean(StorageStatus.class).modified();
         } catch (Exception e) {
             transac.rollback();
         }

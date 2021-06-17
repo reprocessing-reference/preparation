@@ -1,0 +1,242 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package com.csgroup.reprodatabaseline.odata;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import com.csgroup.reprodatabaseline.datamodels.AuxFile;
+import com.csgroup.reprodatabaseline.datamodels.AuxType;
+import com.csgroup.reprodatabaseline.datamodels.AuxTypes;
+import com.csgroup.reprodatabaseline.datamodels.L0Product;
+import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
+
+import org.apache.olingo.commons.api.data.ComplexValue;
+import org.apache.olingo.commons.api.data.ContextURL;
+import org.apache.olingo.commons.api.data.Entity;
+import org.apache.olingo.commons.api.data.EntityCollection;
+import org.apache.olingo.commons.api.data.Property;
+import org.apache.olingo.commons.api.data.ValueType;
+import org.apache.olingo.commons.api.edm.EdmEntitySet;
+import org.apache.olingo.commons.api.edm.EdmEntityType;
+import org.apache.olingo.commons.api.format.ContentType;
+import org.apache.olingo.commons.api.http.HttpHeader;
+import org.apache.olingo.commons.api.http.HttpStatusCode;
+import org.apache.olingo.server.api.OData;
+import org.apache.olingo.server.api.ODataApplicationException;
+import org.apache.olingo.server.api.ODataRequest;
+import org.apache.olingo.server.api.ODataResponse;
+import org.apache.olingo.server.api.ServiceMetadata;
+import org.apache.olingo.server.api.processor.EntityCollectionProcessor;
+import org.apache.olingo.server.api.serializer.EntityCollectionSerializerOptions;
+import org.apache.olingo.server.api.serializer.ODataSerializer;
+import org.apache.olingo.server.api.serializer.SerializerException;
+import org.apache.olingo.server.api.serializer.SerializerResult;
+import org.apache.olingo.server.api.uri.UriInfo;
+import org.apache.olingo.server.api.uri.UriParameter;
+import org.apache.olingo.server.api.uri.UriResource;
+import org.apache.olingo.server.api.uri.UriResourceFunction;
+import org.apache.olingo.server.api.uri.UriResourceNavigation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ReproBaselineEntityCollectionProcessor implements EntityCollectionProcessor {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ReproBaselineEntityCollectionProcessor.class);
+
+  private OData odata;
+  private ServiceMetadata srvMetadata;
+  private ReproBaselineAccess reproBaselineAccess;
+
+  public void init(OData odata, ServiceMetadata serviceMetadata) {
+    this.odata = odata;
+    this.srvMetadata = serviceMetadata;
+  }
+
+  public ReproBaselineEntityCollectionProcessor(ReproBaselineAccess reproBaselineAccess) {
+    this.reproBaselineAccess = reproBaselineAccess;
+  }
+
+  /*
+   * This method is invoked when a collection of entities has to be read. (
+   * Products / Subscriptions)
+   */
+  public void readEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,
+      ContentType responseFormat) throws ODataApplicationException, SerializerException {
+
+    LOG.info("Starting readEntityCollection");
+
+    // Check the client access role
+    // if ( !AccessControl.userCanDealWith(request, uriInfo) )
+    // {
+    // throw new ODataApplicationException("Unauthorized Request !",
+    // HttpStatusCode.UNAUTHORIZED.getStatusCode(), Locale.ROOT);
+    // }
+
+    EdmEntitySet responseEdmEntitySet = null; // we'll need this to build the ContextURL
+    EntityCollection responseEntityCollection = null; // we'll need this to set the response body
+    EdmEntityType responseEdmEntityType = null;
+
+    // 1st retrieve the requested EntitySet from the uriInfo (representation of the
+    // parsed URI)
+    List<UriResource> resourceParts = uriInfo.getUriResourceParts();
+    int segmentCount = resourceParts.size();
+
+    UriResource uriResource = resourceParts.get(0);
+    if (!(uriResource instanceof UriResourceFunction)) {
+      int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+      throw new ODataApplicationException("Only function call is supported, see => /$metadata",
+          HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT, String.valueOf(statusCode));
+    }
+    final UriResourceFunction uriResourceFunction = (UriResourceFunction) uriResource;
+    final EntityCollection entityCol = getReprocessingDataBaseline((UriResourceFunction) uriResourceFunction, request);
+
+    // 2nd step: Serialize the response entity
+    final EdmEntityType edmEntityType = (EdmEntityType) uriResourceFunction.getFunction().getReturnType().getType();
+    final ContextURL contextURL = ContextURL.with().asCollection().type(edmEntityType).build();
+    EntityCollectionSerializerOptions opts = EntityCollectionSerializerOptions.with().contextURL(contextURL).build();
+    final ODataSerializer serializer = odata.createSerializer(responseFormat);
+    final SerializerResult serializerResult = serializer.entityCollection(srvMetadata, edmEntityType, entityCol, opts);
+
+    // 3rd configure the response object
+    response.setContent(serializerResult.getContent());
+    response.setStatusCode(HttpStatusCode.OK.getStatusCode());
+    response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());
+
+    LOG.info("Done");
+  }
+
+  private boolean isContNav(UriInfo uriInfo) {
+    List<UriResource> resourceParts = uriInfo.getUriResourceParts();
+    for (UriResource resourcePart : resourceParts) {
+      if (resourcePart instanceof UriResourceNavigation) {
+        UriResourceNavigation navResource = (UriResourceNavigation) resourcePart;
+        if (navResource.getProperty().containsTarget()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public EntityCollection getReprocessingDataBaseline(final UriResourceFunction uriResourceFunction,
+      ODataRequest request) throws ODataApplicationException {
+
+    LOG.info("Starting >> getReprocessingDataBaseline");
+
+    if ("getReprocessingDataBaseline".equals(uriResourceFunction.getFunctionImport().getName())) {
+      // Get the parameter of the function
+      int nbParameters = uriResourceFunction.getParameters().size();
+      String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+      this.reproBaselineAccess.setAccessToken(accessToken);
+
+      Map<String, List<AuxFile>> dataBaselines = new HashMap<>();
+      String level0Names = "";
+      String start = "";
+      String stop = "";
+      String mission = "";
+      String unit = "";
+      String productType = "";
+
+      for (int p = 0; p < nbParameters; p++) {
+
+        UriParameter parameter = uriResourceFunction.getParameters().get(p);
+        final String paramName = parameter.getName();
+        final String paramValue = parameter.getText().replace("'", "");
+        switch (paramName) {
+          case "l0_names":
+            level0Names = paramValue;
+            break;
+          case "start":
+            start = paramValue;
+            break;
+          case "stop":
+            stop = paramValue;
+            break;
+          case "mission":
+            mission = paramValue;
+            break;
+          case "unit":
+            unit = paramValue;
+            break;
+          case "product_type":
+            productType = paramValue;
+            break;
+          default:
+            break;
+        }
+      }
+
+      if (nbParameters == 4) {
+
+        for (String level0Name : level0Names.split(",")) {
+          List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(level0Name, mission, unit,
+              productType);
+          dataBaselines.put(level0Name, auxDataFiles);
+        }
+
+      } else {
+
+        List<L0Product> l0Products = this.reproBaselineAccess.getLevel0Products(start, stop, mission, unit,
+            productType);
+        for (L0Product product : l0Products) {
+          List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(product.getName(), mission,
+              unit, productType);
+          dataBaselines.put(product.getName(), auxDataFiles);
+        }
+      }
+
+      final EntityCollection resultCollection = new EntityCollection();
+
+      for (Map.Entry me : dataBaselines.entrySet()) {
+        Entity entity = new Entity();
+        Property level0 = new Property("String", "Level0", ValueType.PRIMITIVE, me.getKey());
+
+        List<ComplexValue> auxDataCollection = new ArrayList<>();
+        for (AuxFile auxFile : (List<AuxFile>) me.getValue()) {
+          ComplexValue auxData = new ComplexValue();
+          auxData.getValue().add(new Property("String", "Name", ValueType.PRIMITIVE, auxFile.FullName));
+          auxData.getValue().add(new Property("String", "AuxipLink", ValueType.PRIMITIVE, auxFile.AuxipUrl));
+          auxDataCollection.add(auxData);
+        }
+        Property auxDataFiles = new Property(null, "AuxDataFiles", ValueType.COLLECTION_COMPLEX, auxDataCollection);
+
+        entity.addProperty(level0);
+        entity.addProperty(auxDataFiles);
+        entity.setType("OData.CSC.DataBaseline");
+
+        resultCollection.getEntities().add(entity);
+      }
+
+      LOG.info("Ending << getReprocessingDataBaseline");
+      return resultCollection;
+
+    } else {
+      int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+      throw new ODataApplicationException("Function not implemented", statusCode, Locale.ROOT,
+          String.valueOf(statusCode));
+    }
+
+  }
+
+}
