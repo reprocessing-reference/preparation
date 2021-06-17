@@ -4,7 +4,7 @@ _transform: true
 services:
 
 - name: rdb-service
-  url: http://reprocessing_data_baseline:8080/rdb.svc
+  url: http://reprocessingdatabaseline:8080/rdb.svc
   plugins:
   - name: oidc
     config:
