@@ -122,7 +122,7 @@ services:
         '-Dkeycloak.migration.action=import',
         '-Dkeycloak.migration.provider=dir',
         '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
       ]
 
   #######################################
