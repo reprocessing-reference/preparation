@@ -2,9 +2,9 @@ _format_version: "2.1"
 _transform: true
 
 services:
-  
-- name: auxip-service
-  url: http://reprocessing_data_baseline:8080/rdb.svc
+
+- name: rdb-service
+  url: http://reprocessingdatabaseline:8080/rdb.svc
   plugins:
   - name: oidc
     config:
@@ -14,7 +14,6 @@ services:
       realm: "reprocessing-preparation"
       introspection_endpoint: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token/introspect"
       discovery: "https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/.well-known/openid-configuration"
-      # redirect_uri_path: "/auxip.svc"
       session_secret: "bXkgc2Vzc2lvbiBzZWNyZXQ="
 
   routes:
