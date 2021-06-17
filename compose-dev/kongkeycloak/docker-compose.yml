@@ -123,7 +123,7 @@ services:
         '-Dkeycloak.migration.action=import',
         '-Dkeycloak.migration.provider=dir',
         '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
       ]
 
   #######################################
@@ -203,7 +203,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: "reprocessingdatabaseline"
+      POSTGRES_USER: reprocessingdatabaseline
       POSTGRES_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
@@ -218,6 +218,8 @@ services:
     container_name: reprocessingdatabaseline
     image: reprocessing_data_baseline:1.0.0
     restart: "no"
+    environment:
+      DATASOURCE_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
     depends_on:
       - auxip
       - reprobase

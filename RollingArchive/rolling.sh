@@ -50,7 +50,7 @@ done
 if [ -z "$(ls -A $SNAP_FOLDER)" ]; then
    echo "No file in archive, exit"
 else
-    if [ -z "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}" ]; then
+    if [ ! -z "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}" ]; then
 	#tar the whole stuff
 	cd $SNAP_FOLDER
 	tar cvzf archive_$(date '+%Y%m%d%H%M%S').tgz *
