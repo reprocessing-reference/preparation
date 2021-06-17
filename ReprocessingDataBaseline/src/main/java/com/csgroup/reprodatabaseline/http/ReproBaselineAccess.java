@@ -75,6 +75,15 @@ public class ReproBaselineAccess {
 				"/AuxTypes?$expand=ProductTypes&$filter=Mission eq \'"+
 				mission+"\'",this.accessToken);
 		AuxTypes res_aux = AuxTypes.loadValues(res);
+
+		if(mission.contains("S3"))
+		{
+			// add S3ALL types
+			String s3All = httpHandler.getPost(config.getReprocessing_baseline_url()+
+			"/AuxTypes?$expand=ProductTypes&$filter=Mission eq \'S3ALL\'",this.accessToken);
+			res_aux.add(AuxTypes.loadValues(s3All).getValues());
+		}
+
 		LOG.info(String.valueOf(res_aux.getValues().size()));
 		return res_aux;
 	}
@@ -266,8 +275,9 @@ public class ReproBaselineAccess {
 		for (AuxType t: types.getValues()) 
 		{
 			// take into account only auxiliary data files with requested product type 
-
-			if( t.ProductTypes.contains(productType) )
+			// but take care about auxtype from mission S3ALL 
+			final String level = productType.substring(0,2);
+			if( t.ProductTypes.contains(productType) || ( t.Mission.equals("S3ALL") && t.ProductTypes.contains(level) ) )
 			{
 				
 				Duration delta0 = Duration.ofSeconds(this.auxTypesDeltas.get(t.LongName).getDelta0()); 
