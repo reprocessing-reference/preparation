@@ -44,7 +44,7 @@ public class ReproBaselineAccess {
 	private final EntityManagerFactory entityManagerFactory;
 
 	// for internal use
-	private Map<String,AuxTypeDeltas> auxTypesDeltas = null;
+	private Map<String,Map<String,AuxTypeDeltas>> cachedAuxTypesDeltas;
 	private String accessToken;
 	// ReproBaselineAccess entity can be used several times for the same productType
 	// so for the performences optimization and to avoid requesting for the same data , AuxTypes and AuxFiles should be keeped in memory
@@ -67,10 +67,13 @@ public class ReproBaselineAccess {
 
 		this.cachedAuxFiles = new HashMap<>();
 		this.cachedAuxTypes = new HashMap<>();
+		this.cachedAuxTypesDeltas = new HashMap<>();
 
 	}
 
 	public AuxTypes getListOfAuxTypes(final String mission){
+		LOG.info(">> Starting ReproBaselineAccess.getListOfAuxTypes");
+
 		String res = httpHandler.getPost(config.getReprocessing_baseline_url()+
 				"/AuxTypes?$expand=ProductTypes&$filter=Mission eq \'"+
 				mission+"\'",this.accessToken);
@@ -85,21 +88,27 @@ public class ReproBaselineAccess {
 		}
 
 		LOG.info(String.valueOf(res_aux.getValues().size()));
+		LOG.info("<< Ending ReproBaselineAccess.getListOfAuxTypes");
+
 		return res_aux;
 	}
 
 	public List<AuxFile> getListOfAuxFiles(final AuxType type, final String sat, final String unit, RuleEnum rl){
+		LOG.info(">> Starting ReproBaselineAccess.getListOfAuxFiles");
+
 		//Maybe it-s shortName on type ?
 		String res = httpHandler.getPost(config.getReprocessing_baseline_url()+
 				"/AuxFiles?$expand=AuxType&$filter=startswith(FullName,\'"+sat+
-				"_\') and contains(FullName,\'"+type.LongName+"\')",this.accessToken);
+				"_\') and contains(FullName,\'"+type.ShortName+"\')",this.accessToken);
 		List<AuxFile> res_aux = AuxFile.loadValues(type,res);
 		res = httpHandler.getPost(config.getReprocessing_baseline_url()+
 				"/AuxFiles?$expand=AuxType&$filter=startswith(FullName,\'"+sat+unit+
-				"\') and contains(FullName,\'"+type.LongName+"\')",this.accessToken);
+				"\') and contains(FullName,\'"+type.ShortName+"\')",this.accessToken);
 		List<AuxFile> res_aux_unit = AuxFile.loadValues(type,res);
 		res_aux.addAll(res_aux_unit);
 		LOG.info(String.valueOf(res_aux.size()));
+		LOG.info("<< Ending ReproBaselineAccess.getListOfAuxFiles");
+
 		return res_aux;
 	}
 
@@ -137,37 +146,36 @@ public class ReproBaselineAccess {
 		return null;
 	}
 
-	public void setAuxTypesDeltas(String mission)
+	public Map<String,AuxTypeDeltas> getAuxTypesDeltas(String mission)
 	{
+		// do this once for each mission , only if auxTypesDeltas is not already set
 		LOG.info(">> Starting ReproBaselineAccess.setAuxTypesDeltas");
-		// do this once , only if auxTypesDeltas is not already set
-		if( this.auxTypesDeltas == null )
+		if ( this.cachedAuxTypesDeltas.containsKey(mission) )
+		{
+			LOG.info("<< Ending ReproBaselineAccess.setAuxTypesDeltas");
+			return this.cachedAuxTypesDeltas.get(mission);
+		}else
 		{
 			String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.AuxTypeDeltas entity "
 			+ "WHERE entity.isCurrent = true AND entity.mission = \'MISSION\' ORDER BY entity.creationDateTime ASC";
 			queryString = queryString.replace("MISSION", mission);
 	
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			Map<String,AuxTypeDeltas> auxTypesDeltas = new HashMap<>();
 			List<AuxTypeDeltas> deltasList = null;
 			try {	
 				Query query = entityManager.createQuery(queryString);
 				deltasList = query.getResultList();
-
-				this.auxTypesDeltas = new HashMap<>();
 				for(AuxTypeDeltas deltas : deltasList)
 				{
-					this.auxTypesDeltas.put(deltas.getAuxType(), deltas);
+					auxTypesDeltas.put(deltas.getAuxType(), deltas);
 				}
-
 			} finally {
 				entityManager.close();
 			}
-
-		}
-
-		LOG.info("<< Ending ReproBaselineAccess.setAuxTypesDeltas");
-
-		
+			LOG.info("<< Ending ReproBaselineAccess.setAuxTypesDeltas");
+			return auxTypesDeltas;
+		}		
 	}
 
 	public List<L0Product> getLevel0Products(String start,String stop, String mission,String unit,String productType)
@@ -238,10 +246,8 @@ public class ReproBaselineAccess {
 			// return an empty collection
 			return results;
 		}
-		// set/get deltas to be applied with selection rules for a given productType
-		this.setAuxTypesDeltas(mission);
-
-		// String mission = getMission(platformShortName, productType);
+		// get deltas to be applied with selection rules for a given mission
+		Map<String, AuxTypeDeltas> auxTypesDeltas = this.getAuxTypesDeltas(mission);
 		AuxTypes types ;
 		// 
 		if( this.cachedAuxTypes.containsKey(mission) )
@@ -272,40 +278,46 @@ public class ReproBaselineAccess {
 			t1 = ZonedDateTime.parse(level0.subSequence(33, 33+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
 		}
 
-		for (AuxType t: types.getValues()) 
-		{
-			// take into account only auxiliary data files with requested product type 
-			// but take care about auxtype from mission S3ALL 
-			final String level = productType.substring(0,2);
-			if( t.ProductTypes.contains(productType) || ( t.Mission.equals("S3ALL") && t.ProductTypes.contains(level) ) )
-			{
-				
-				Duration delta0 = Duration.ofSeconds(this.auxTypesDeltas.get(t.LongName).getDelta0()); 
-				Duration delta1 = Duration.ofSeconds(this.auxTypesDeltas.get(t.LongName).getDelta1()); 
-				
-				// check if auxtype is not already treated
-				List<AuxFile> files_repro;
-				String key = t.LongName+platformShortName+platformSerialIdentifier ;
-				if( this.cachedAuxFiles.containsKey(key))
-				{
-					files_repro = this.cachedAuxFiles.get(key);
-				}else{
-					files_repro = getListOfAuxFiles(t,platformShortName,platformSerialIdentifier,t.Rule);
-					this.cachedAuxFiles.put(key, files_repro);
-				}
-			
-				RuleApplierInterface rule_applier = RuleApplierFactory.getRuleApplier(t.Rule);
-				List<AuxFile> files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
-	
-				try {
-					auxip.setAuxFileUrls(files_repro_filtered, this.accessToken);
-					results.addAll(files_repro_filtered);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		try {
 
+			for (AuxType t: types.getValues()) 
+			{
+				// take into account only auxiliary data files with requested product type 
+				// but take care about auxtype from mission S3ALL 
+				final String level = productType.substring(0,2);
+				if( t.ProductTypes.contains(productType) || ( t.Mission.equals("S3ALL") && t.ProductTypes.contains(level) ) )
+				{
+
+					Duration delta0 = Duration.ofSeconds(auxTypesDeltas.get(t.LongName).getDelta0()); 
+					Duration delta1 = Duration.ofSeconds(auxTypesDeltas.get(t.LongName).getDelta1()); 
+					
+					// check if auxtype is not already treated
+					List<AuxFile> files_repro;
+					String key = t.LongName+platformShortName+platformSerialIdentifier ;
+					if( this.cachedAuxFiles.containsKey(key))
+					{
+						files_repro = this.cachedAuxFiles.get(key);
+					}else{
+						files_repro = getListOfAuxFiles(t,platformShortName,platformSerialIdentifier,t.Rule);
+						this.cachedAuxFiles.put(key, files_repro);
+					}
+					RuleApplierInterface rule_applier = RuleApplierFactory.getRuleApplier(t.Rule);
+					List<AuxFile> files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
+					try {
+						auxip.setAuxFileUrls(files_repro_filtered, this.accessToken);
+						results.addAll(files_repro_filtered);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+	
+			}	
+		} catch (Exception e) {
+			//TODO: handle exception
+			e.printStackTrace();
+			LOG.debug("Exception : "+e.getLocalizedMessage());
 		}
+
 
 		LOG.info("<< Ending ReproBaselineAccess.getReprocessingDataBaseline");
 
