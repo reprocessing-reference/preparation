@@ -96,14 +96,16 @@ public class ReproBaselineAccess {
 	public List<AuxFile> getListOfAuxFiles(final AuxType type, final String sat, final String unit, RuleEnum rl){
 		LOG.info(">> Starting ReproBaselineAccess.getListOfAuxFiles");
 
+		// remove _S1 and _S2 from type.LongName ( eg: AUX_RESORB_S1,AUX_PREORB_S2,AUX_PREORB_S1,AUX_RESORB_S2,AUX_POEORB_S1 )
+		String longName = type.LongName.split("_S")[0];
 		//Maybe it-s shortName on type ?
 		String res = httpHandler.getPost(config.getReprocessing_baseline_url()+
 				"/AuxFiles?$expand=AuxType&$filter=startswith(FullName,\'"+sat+
-				"_\') and contains(FullName,\'"+type.ShortName+"\')",this.accessToken);
+				"_\') and contains(FullName,\'"+longName+"\')",this.accessToken);
 		List<AuxFile> res_aux = AuxFile.loadValues(type,res);
 		res = httpHandler.getPost(config.getReprocessing_baseline_url()+
 				"/AuxFiles?$expand=AuxType&$filter=startswith(FullName,\'"+sat+unit+
-				"\') and contains(FullName,\'"+type.ShortName+"\')",this.accessToken);
+				"\') and contains(FullName,\'"+longName+"\')",this.accessToken);
 		List<AuxFile> res_aux_unit = AuxFile.loadValues(type,res);
 		res_aux.addAll(res_aux_unit);
 		LOG.info(String.valueOf(res_aux.size()));
@@ -174,6 +176,7 @@ public class ReproBaselineAccess {
 				entityManager.close();
 			}
 			LOG.info("<< Ending ReproBaselineAccess.setAuxTypesDeltas");
+			this.cachedAuxTypesDeltas.put(mission, auxTypesDeltas);
 			return auxTypesDeltas;
 		}		
 	}
