@@ -25,7 +25,11 @@ public class ValIntersectWithoutDuplicateRuleApplier implements RuleApplierInter
 			boolean second = file.ValidityStart.isBefore(t1.plus(dt1)) &&
 			        t1.plus(dt1).isBefore(file.ValidityStop);
 		
-			if (first || second) {
+			boolean third = file.ValidityStart.isAfter(t0.minus(dt0)) && 
+							file.ValidityStop.isBefore(t1.plus(dt1));
+			
+
+			if (first || second || third) {
 	            res.add(file);
 	        }
 		}
