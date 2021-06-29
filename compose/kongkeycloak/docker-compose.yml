@@ -73,6 +73,8 @@ services:
       - database_auxip_olingo
     networks:
       - proxynet
+    volumes:
+      - /auxip_snapshot:/auxip_snapshot
 
 #######################################
 # keycloak DB
@@ -122,7 +124,7 @@ services:
         '-Dkeycloak.migration.action=import',
         '-Dkeycloak.migration.provider=dir',
         '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
       ]
 
   #######################################
@@ -165,6 +167,7 @@ services:
       - ./data/kong:/etc/kong
       - ./data/certbot/conf:/etc/letsencrypt
 
+
 #######################################
 # Auxip_Rolling 
 #######################################
@@ -185,15 +188,33 @@ services:
 
 
   #######################################
+  # ReprocessingDataBaseline database
+  #######################################
+  database_reprocessing:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "reprocessingdatabaseline"
+      POSTGRES_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - proxynet
+    volumes:
+      - /var/postgresql/reprocessing_data_baseline:/var/lib/postgresql/data
+
+  #######################################
   # Reprocessing Data Baseline Service 
   #######################################
-  reprocessing_data_baseline:
-    container_name: reprocessing_data_baseline
+  reprocessingdatabaseline:
+    container_name: reprocessingdatabaseline
     image: reprocessing_data_baseline:1.0.0
     restart: "no"
+    environment:
+      DATASOURCE_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
     depends_on:
       - auxip
       - reprobase
+      - database_reprocessing
     networks:
       - proxynet
 

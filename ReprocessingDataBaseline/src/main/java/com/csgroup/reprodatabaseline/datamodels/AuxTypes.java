@@ -78,4 +78,8 @@ public class AuxTypes {
 		return values;
 	}
 
+	public void add(List<AuxType> newCollection) {
+		values.addAll(newCollection);
+	}
+
 }

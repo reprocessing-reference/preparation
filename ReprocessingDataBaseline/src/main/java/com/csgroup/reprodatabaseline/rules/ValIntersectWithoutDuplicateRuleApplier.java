@@ -10,7 +10,7 @@ import com.csgroup.reprodatabaseline.datamodels.AuxFile;
 public class ValIntersectWithoutDuplicateRuleApplier implements RuleApplierInterface {
 
 	/*
-    This mode gets all files that cover partly time interval [t0 ? dt0 , t1 + dt1]. Using this query in the scenario exhibited in fig B-1, it
+    This mode gets all files that cover partly time interval [t0 - dt0 , t1 + dt1]. Using this query in the scenario exhibited in fig B-1, it
     will return records R1, R2, R3 and R4.
     */
 	@Override
@@ -22,10 +22,14 @@ public class ValIntersectWithoutDuplicateRuleApplier implements RuleApplierInter
 		for (AuxFile file : files) {
 			boolean first = file.ValidityStart.isBefore(t0.minus(dt0)) &&
 			        t0.minus(dt0).isBefore(file.ValidityStop);
-			boolean second = file.ValidityStart.isBefore(t1.minus(dt1)) &&
-			        t1.minus(dt1).isBefore(file.ValidityStop);
+			boolean second = file.ValidityStart.isBefore(t1.plus(dt1)) &&
+			        t1.plus(dt1).isBefore(file.ValidityStop);
+		
+			boolean third = file.ValidityStart.isAfter(t0.minus(dt0)) && 
+							file.ValidityStop.isBefore(t1.plus(dt1));
 			
-			if (first || second) {
+
+			if (first || second || third) {
 	            res.add(file);
 	        }
 		}
