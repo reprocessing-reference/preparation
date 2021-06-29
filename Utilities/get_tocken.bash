@@ -7,8 +7,8 @@ RAWTKN=$(curl -s -X POST \
     -d "username="$USER \
     -d "password="$PASSWORD \
     -d 'grant_type=password' \
-    -d "client_id=auxip" \
-    https://reprocessing-preparation.ml/auth/realms/auxip/protocol/openid-connect/token \
+    -d "client_id=reprocessing-preparation" \
+    https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token \
     |jq . )
 
 TOKEN=$(echo $RAWTKN | jq -r '.access_token')
