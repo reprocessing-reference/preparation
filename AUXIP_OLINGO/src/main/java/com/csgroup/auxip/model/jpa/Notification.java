@@ -92,7 +92,7 @@ public class Notification {
 				//update a subscription lastNotificationDate
 				subscription.setLastNotificationDate(notificationDate);
 			}
-			System.out.println( response.getStatusCode().toString() );
+			// System.out.println( response.getStatusCode().toString() );
 
 			return status;
 

@@ -121,7 +121,7 @@ public class Subscription {
 		CsdlProperty notificationEpPassword = new CsdlProperty().setName("NotificationEpPassword").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName() );
 		CsdlProperty filterParam = new CsdlProperty().setName("FilterParam").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty submissionDate = new CsdlProperty().setName("SubmissionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
-		// CsdlProperty lastNotificationDate = new CsdlProperty().setName("LastNotificationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
+		CsdlProperty lastNotificationDate = new CsdlProperty().setName("LastNotificationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 
 		// create PropertyRef for Key element
 		CsdlPropertyRef propertyRef = new CsdlPropertyRef();
@@ -130,7 +130,7 @@ public class Subscription {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(id,  status,notificationEndpoint,notificationEpUsername,notificationEpPassword,filterParam ,submissionDate/*,lastNotificationDate*/));
+		entityType.setProperties(Arrays.asList(id,  status,notificationEndpoint,notificationEpUsername,notificationEpPassword,filterParam ,submissionDate,lastNotificationDate));
 		entityType.setKey(Arrays.asList(propertyRef));
 
 
