@@ -166,9 +166,10 @@ services:
     container_name: auxip_rolling
     image: rollingarchive:1.0.0
     restart: "no"
-#    environment:
-#      RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
-#      RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
+    environment:
+      RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
+      RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
+      RCLONE_CONFIG_WASABI_BUCKET: ${ROLLING_S3_BUCKET}
     depends_on:
       - auxip
     networks:

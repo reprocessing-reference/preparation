@@ -3,6 +3,8 @@ MAINTAINER CS SI
 
 ADD rolling.sh /
 ADD rclone.conf /root/.config/rclone/
+#ADD profile /root/.profile
+
 
 RUN chmod a+x /rolling.sh
 RUN apt-get update -y \
@@ -11,9 +13,12 @@ RUN apt-get update -y \
     && apt-get clean
 
 ADD rolling-cron /etc/cron.d/
-RUN chmod a+x /etc/cron.d/rolling-cron
-RUN crontab /etc/cron.d/rolling-cron
+ADD setenv.sh /setenv.sh
+RUN chmod a+x /setenv.sh \
+    && chmod a+x /etc/cron.d/rolling-cron \
+    && chmod a+x /etc/cron.d/rolling-cron \
+    && crontab /etc/cron.d/rolling-cron
 
-CMD ["cron","-f"]
+CMD ["/setenv.sh"]
 
 #ENTRYPOINT ["/bin/bash"]
