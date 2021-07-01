@@ -6,13 +6,14 @@
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-if [ $# -lt 4 ]; then
-    echo "rolling.sh REP_ARCHIVE REP_WORK DAYS BUCKET"
+if [ $# -lt 3 ]; then
+    echo "rolling.sh REP_ARCHIVE REP_WORK DAYS"
     exit 1
 fi
 
 echo "RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}
 echo "RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: "${RCLONE_CONFIG_WASABI_ACCESS_KEY_ID}
+echo "RCLONE_CONFIG_WASABI_BUCKET: "${RCLONE_CONFIG_WASABI_BUCKET}
 
 ARCHIVE=$1
 REP_WORK=$2
@@ -59,14 +60,15 @@ else
     if [ ! -z "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}" ]; then
 	if [ -z "${BUCKET}" ]; then
 	    echo "No RCLONE_CONFIG_WASABI_BUCKET found in env"
-	    rm ${ERROR_FOLDER}/archive*tgz
 	    mv archive*tgz ${ERROR_FOLDER}
 	    exit 1
 	fi
 	rclone copy archive*tgz wasabi:${BUCKET}/
 	code=$?
 	if [ $code -ne 0]; then
+	    echo "RCLONE failed to transfer"
 	    mv archive*tgz ${ERROR_FOLDER}
+	    exit 1
 	else
 	    rm archive*tgz
 	fi
