@@ -35,6 +35,9 @@ fi
 
 ERROR_FOLDER=$REP_WORK/errors
 mkdir -p ${ERROR_FOLDER}
+ERROR_BUCKET_FOLDER=$REP_WORK/errors_bucket
+mkdir -p ${ERROR_BUCKET_FOLDER}
+
 
 SNAP_FOLDER=$REP_WORK/snap_$(date '+%Y%m%d')
 mkdir $SNAP_FOLDER
@@ -60,14 +63,14 @@ else
     if [ ! -z "${RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY}" ]; then
 	if [ -z "${BUCKET}" ]; then
 	    echo "No RCLONE_CONFIG_WASABI_BUCKET found in env"
-	    mv archive*tgz ${ERROR_FOLDER}
+	    mv archive*tgz ${ERROR_BUCKET_FOLDER}
 	    exit 1
 	fi
 	rclone copy archive*tgz wasabi:${BUCKET}/
 	code=$?
 	if [ $code -ne 0]; then
 	    echo "RCLONE failed to transfer"
-	    mv archive*tgz ${ERROR_FOLDER}
+	    mv archive*tgz ${ERROR_BUCKET_FOLDER}
 	    exit 1
 	else
 	    rm archive*tgz
