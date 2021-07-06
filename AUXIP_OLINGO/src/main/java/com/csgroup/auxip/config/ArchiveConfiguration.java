@@ -54,7 +54,10 @@ public class ArchiveConfiguration {
     @Value("${archive.ontrigger}")
     private Boolean ontrigger;
     
-
+    @Value("${archive.maxdays}")
+    private int maxdays;
+    
+    
 	public String getTempFolder() {
 		return tempFolder;
 	}
@@ -66,5 +69,10 @@ public class ArchiveConfiguration {
 	public Boolean getOnTrigger() {
 		return ontrigger;
 	}
+	
+	public int getMaxDays() {
+		return maxdays;
+	}
+	
     
 }
