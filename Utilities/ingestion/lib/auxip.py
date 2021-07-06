@@ -1,7 +1,7 @@
 import requests
 import requests
 import json
-from attributes import get_attributes
+from .attributes import get_attributes
 import os
 from datetime import datetime
 import datetime as dt
