@@ -42,6 +42,7 @@ import static com.sdl.odata.api.parser.ODataUriUtil.extractEntityWithKeys;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +66,9 @@ public class JPADataSource implements DataSource {
     
     @Autowired
     private ODataProxyProcessor proxyProcessor;
+    
+    @Autowired
+    private StorageStatus status;
 
     @Override
     public Object create(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {
@@ -82,10 +86,12 @@ public class JPADataSource implements DataSource {
             } else {
                 transaction.rollback();
             }
+            status.modified();
             return entityMapper.convertDSEntityToOData(jpaEntity, entity.getClass(), entityDataModel);
         } finally {            
             entityManager.close();
         }
+        
     }
 
     @Override
@@ -105,6 +111,7 @@ public class JPADataSource implements DataSource {
                 }
                 Object unproxied = proxyProcessor.process(attached); 
                 Class<?> javaType = entityDataModel.getType(entity.getClass()).getJavaType();
+                status.modified();
                 return entityMapper.convertDSEntityToOData(unproxied, javaType, entityDataModel);
             } catch (PersistenceException e) {
                 LOG.error("Could not update entity: {}", entity);
@@ -147,6 +154,7 @@ public class JPADataSource implements DataSource {
             } else {
                 throw new ODataDataSourceException("Could not remove entity, could not be loaded");
             }
+            status.modified();
         }
     }
 
@@ -224,4 +232,7 @@ public class JPADataSource implements DataSource {
     protected EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
+    
+    
+
 }
