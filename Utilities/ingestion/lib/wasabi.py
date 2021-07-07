@@ -20,7 +20,7 @@ def generate_wasabi_listing(path_to_mc):
                       "--recursive", "auxip_s3/auxip"]
 
     text_listing = subprocess.check_output( upload_command )
-    listing = text_listing.split('\n')
+    listing = text_listing.decode("ascii").split('\n')
     wasabi_listing = []
 
     for line in listing:
