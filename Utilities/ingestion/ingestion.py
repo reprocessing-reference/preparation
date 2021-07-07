@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     # get token_info
     timer_start = time.time()
-    token_info = get_token_info(args.user,args.password)
+    token_info = get_token_info(args.user,args.password,args.mode)
     access_token = token_info['access_token']
 
     if args.n_sublist == 1:
@@ -164,14 +164,15 @@ if __name__ == "__main__":
                             access_token = token_info['access_token']
 
                         # do a post to auxip.svc if the upload to wasabi is OK
-                        if post_to_auxip(access_token,auxiliary_data_file,uuid,mode) == OK:
-                            message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : OK\n" % (path_to_auxfile,uuid)
+                        if post_to_auxip(access_token,auxiliary_data_file,uuid,args.mode) == OK:
+                            message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : OK\n" % (auxiliary_data_file,uuid)
                         else:
-                            message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : KO\n" % (path_to_auxfile,uuid)
+                            message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : KO\n" % (auxiliary_data_file,uuid)
                     else:
-                        message = "%s : %s\tupload_to_wasabi : KO post_to_auxip : NO VALID UUID\n" % (path_to_auxfile,uuid)
+                        message = "%s : %s\tupload_to_wasabi : KO post_to_auxip : NO VALID UUID\n" % (auxiliary_data_file,uuid)
 
                     report.write(message)
+            report.close()
     else:
         # Create listings
         not_yet_uploaded = []
