@@ -199,6 +199,34 @@ services:
     volumes:
       - /postgres_backup:/backup
 
+  #######################################
+  # PRIP ingest 
+  #######################################
+  prip_ingestion_s2:
+    container_name: prip_ingestion
+    image: prip_ingestion:1.0.0
+    restart: always
+    environment:
+      S3_ACCESS_KEY: ${PRIPS2_S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${PRIPS2_S3_SECRET_KEY}
+      S3_BUCKET: ${PRIPS2_S3_BUCKET}
+    depends_on:
+      - auxip
+      - reprobase
+    networks:
+      - proxynet
+    volumes:
+      - /auxip_working:/working
+    command: 
+      [
+        '${PRIPS2_TIME}',
+        '/working/'
+        '${PRIPS2_USER}',
+        '${PRIPS2_PASS}',
+        '${PRIPS2_AUXIP_USER}',
+        '${PRIPS2_AUXIP_PASS}',
+        '${PRIPS2_MODE}',
+      ]
       
 #######################################
 # ReprocessingDataBaseline database
