@@ -29,6 +29,10 @@ cd ${CUR_DIR}/BackupPosgres
 docker build -t backup_postgres:1.0.0 .
 
 
+cd ${CUR_DIR}/PRIP_Ingestion
+
+docker build -t prip_ingestion:1.0.0 .
+
 
 cd ${CUR_DIR}
 
