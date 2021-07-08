@@ -5,7 +5,7 @@ from .attributes import get_attributes
 import os
 from datetime import datetime
 import datetime as dt
-
+import sys
 odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 def get_odata_datetime_format(datetime_string):
@@ -136,7 +136,7 @@ def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
             print("%s ==> sent to auxip.svc successfully " % path_to_auxiliary_data_file )
             return 0
         else:
-            print( response.json() )
+            print( response.content )
             print("%s ==> post ends with error " % path_to_auxiliary_data_file )
             return 1
     except Exception as e:
