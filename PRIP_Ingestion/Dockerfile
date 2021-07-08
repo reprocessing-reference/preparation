@@ -9,6 +9,7 @@ RUN apt-get update -y \
 ADD ingest_s2files.py /
 ADD ingestion /ingestion
 ADD PRIP_Ingestion.py /
+ADD PRIP_S2.py /
 ADD PRIP_Ingestion.sh /
 ADD template.json /
 ADD update_base.py /
