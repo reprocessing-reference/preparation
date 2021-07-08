@@ -16,7 +16,10 @@ AUXIP_PASS=$6
 MODE=$7
 MCPATH=$8
 
-
+if [ $MODE != "prod" ]; then
+    echo "Due to IP restriction the PRIP ingestion can't be launched in dev mode"
+    exit 1
+fi
 
 
 echo "S3_ACCESS_KEY: "${S3_ACCESS_KEY}
