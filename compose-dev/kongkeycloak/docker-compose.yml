@@ -220,13 +220,13 @@ services:
     command: 
       [
         '${PRIPS2_TIME}',
-        '/working/'
+        '/working/',
         '${PRIPS2_USER}',
         '${PRIPS2_PASS}',
         '${PRIPS2_AUXIP_USER}',
         '${PRIPS2_AUXIP_PASS}',
         '${PRIPS2_MODE}',
-        '/mc'
+        '/mc',
       ]
       
 #######################################
