@@ -226,6 +226,7 @@ services:
         '${PRIPS2_AUXIP_USER}',
         '${PRIPS2_AUXIP_PASS}',
         '${PRIPS2_MODE}',
+        '/mc'
       ]
       
 #######################################

@@ -2,8 +2,8 @@
 
 CUR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-if [ $# -lt 7 ]; then
-    echo "PRIP_Ingestion.sh timetosleep tmp prip_user prip_pass auxip_user auxip_pass mode[dev/prod]"
+if [ $# -lt 8 ]; then
+    echo "PRIP_Ingestion.sh timetosleep tmp prip_user prip_pass auxip_user auxip_pass mode[dev/prod] mcpath"
     exit 1
 fi
 
@@ -14,6 +14,7 @@ PRIP_PASS=$4
 AUXIP_USER=$5
 AUXIP_PASS=$6
 MODE=$7
+MCPATH=$8
 
 
 
@@ -49,7 +50,7 @@ do
     else
 	echo "PRIP download done"
 	echo "Starting AUXIP ingestion"
-	python3 ingestion/ingestion.py -i ${TEMP_FOLDER} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc /home/ubuntu/mc -b ${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+	python3 ingestion/ingestion.py -i ${TEMP_FOLDER} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b ${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
 	code=$?
 	if [ $code -ne 0 ]; then
 	    echo "AUXIP ingestion failed"
