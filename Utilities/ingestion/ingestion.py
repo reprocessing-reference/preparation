@@ -99,7 +99,8 @@ if __name__ == "__main__":
     for root,folders,files in os.walk(args.input):
         for name in files:
             # auxiliary_data_files.append(os.path.join(root,name))
-            auxiliary_data_files[name] = os.path.join(root,name)
+            if '.txt' not in name:
+                auxiliary_data_files[name] = os.path.join(root,name)
 
     # =======================================================================
     #               READ / OR GENERATE WASABI LISTING
