@@ -165,7 +165,7 @@ def get_attributes(path_to_aux_data_file):
             filename = filename_zip.split('.')[0]
             
             product_type = filename[9:19]
-            if product_type in ['AUX_ECMWFD','AUX_UT1UTC']:
+            if product_type in ['AUX_ECMWFD','AUX_UT1UTC','AUX_CAMSRE','AUX_CAMSAN']:
                 hdr_file = "%s/%s.HDR" % (filename,filename)
                 tar_command = "tar xzf %s %s" % (file_path,hdr_file)
             else:
