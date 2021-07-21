@@ -155,8 +155,6 @@ def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
         # =================================================================
         # Post to auxip.svc
         # =================================================================
-        print(product)
-        return 0
         if mode == 'dev':
             print(product)
             return 0

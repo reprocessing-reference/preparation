@@ -228,7 +228,36 @@ services:
         '${PRIPS2_MODE}',
         '/mc',
       ]
-      
+
+  #######################################
+  # ECMWF ingest 
+  #######################################
+  ecmwf_ingestion_s2:
+    container_name: ecmwf_ingestion
+    image: ecmwf_ingestion:1.0.0
+    restart: always
+    environment:
+      S3_ACCESS_KEY: ${ECMWF_S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${ECMWF_S3_SECRET_KEY}
+      S3_BUCKET: ${ECMWF_S3_BUCKET}
+      TIME_TO_SLEEP: ${ECMWF_S3_TIME_TO_SLEEP}
+      ECMWF_USER: ${ECMWF_USER}
+      ECMWF_PASS: ${ECMWF_PASS}
+      ECMWF_URL: ${ECMWF_URL}
+      AUXIP_USER: ${ECMWF_AUXIP_USER}
+      AUXIP_PASS: ${ECMWF_AUXIP_PASS}
+      MODE: ${ECMWF_MODE}
+      MCPATH: ${ECMWF_MCPATH}
+      S3_ENDPOINT: ${ECMWF_ENDPOINT}
+    depends_on:
+      - auxip
+      - reprobase
+    networks:
+      - proxynet
+    volumes:
+      - /ecmwf_ingestion:/ecmwf
+
+
 #######################################
 # ReprocessingDataBaseline database
 #######################################

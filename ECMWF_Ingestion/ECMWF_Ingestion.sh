@@ -5,28 +5,74 @@ CUR_DIR="$(
   pwd -P
 )"
 
-if [ $# -lt 9 ]; then
-  echo "ECMWF_Ingestion.sh timetosleep tmp ecmwf_user ecmwf_pass ecmwf_url auxip_user auxip_pass mode[dev/prod] mcpath"
+if [ $# -lt 1 ]; then
+  echo "ECMWF_Ingestion.sh tmp"
   exit 1
 fi
 
-TIME_TO_SLEEP=$1
-WORK_FOLDER=$2
-ECMWF_USER=$3
-ECMWF_PASS=$4
-ECMWF_URL=$5
-AUXIP_USER=$6
-AUXIP_PASS=$7
-MODE=$8
-MCPATH=$9
-echo "Mode : "$MODE
-echo "S3_ACCESS_KEY: "${S3_ACCESS_KEY}
-echo "S3_SECRET_KEY: "${S3_SECRET_KEY}
-echo "S3_ENDPOINT: "${S3_ENDPOINT}
-S3_BUCKET="auxip"
-echo "S3_BUCKET: "${S3_BUCKET}
-
-${MCPATH} alias set "wasabi-auxip-archives" ${S3_ENDPOINT} ${S3_ACCESS_KEY} ${S3_SECRET_KEY} --api S3v4
+if [ -z ${TIME_TO_SLEEP+x} ]; then
+  echo "TIME_TO_SLEEP not set"
+  exit 1
+fi
+echo "TIME_TO_SLEEP : "$TIME_TO_SLEEP
+WORK_FOLDER=$1
+echo "WORK_FOLDER : "$WORK_FOLDER
+if [ -z ${ECMWF_USER+x} ]; then
+  echo "ECMWF_USER not set"
+  exit 1
+fi
+echo "ECMWF_USER : "$ECMWF_USER
+if [ -z ${ECMWF_PASS+x} ]; then
+  echo "ECMWF_PASS not set"
+  exit 1
+fi
+echo "ECMWF_PASS : "$ECMWF_PASS
+if [ -z ${ECMWF_URL+x} ]; then
+  echo "ECMWF_URL not set"
+  exit 1
+fi
+echo "ECMWF_URL : "$ECMWF_URL
+if [ -z ${AUXIP_USER+x} ]; then
+  echo "AUXIP_USER not set"
+  exit 1
+fi
+echo "AUXIP_USER : "$AUXIP_USER
+if [ -z ${AUXIP_PASS+x} ]; then
+  echo "AUXIP_PASS not set"
+  exit 1
+fi
+echo "AUXIP_PASS : "$AUXIP_PASS
+if [ -z ${MODE+x} ]; then
+  echo "MODE not set"
+  exit 1
+fi
+echo "MODE : "$MODE
+if [ -z ${S3_ACCESS_KEY+x} ]; then
+  echo "S3_ACCESS_KEY not set, no S3"
+else
+  if [ -z ${MCPATH+x} ]; then
+   echo "MCPATH not set"
+   exit 1
+  fi
+  echo "MCPATH : "$MCPATH
+  echo "S3_ACCESS_KEY: "${S3_ACCESS_KEY}
+  if [ -z ${S3_SECRET_KEY+x} ]; then
+   echo "S3_SECRET_KEY not set"
+   exit 1
+  fi
+  echo "S3_SECRET_KEY: "${S3_SECRET_KEY}
+  if [ -z ${S3_ENDPOINT+x} ]; then
+   echo "S3_ENDPOINT not set"
+   exit 1
+  fi
+  echo "S3_ENDPOINT: "${S3_ENDPOINT}
+  if [ -z ${S3_BUCKET+x} ]; then
+   echo "S3_BUCKET not set"
+   exit 1
+  fi
+  echo "S3_BUCKET: "${S3_BUCKET}
+  ${MCPATH} alias set "wasabi-auxip-archives" ${S3_ENDPOINT} ${S3_ACCESS_KEY} ${S3_SECRET_KEY} --api S3v4
+fi
 
 if [[ ! -d $WORK_FOLDER ]]; then
   mkdir -p $WORK_FOLDER
@@ -36,62 +82,59 @@ if [[ ! -d $WORK_FOLDER ]]; then
   fi
 fi
 
-while true; do
-  STOP_DATE=$(date '+%Y-%m-%d' -d "5 day ago")
-  START_DATE=$(date '+%Y-%m-%d' -d "$((TIME_TO_SLEEP+5)) day ago")
-  echo "START_DATE: "$START_DATE
-  echo "STOP_DATE: "$STOP_DATE
-  TEMP_FOLDER=$(mktemp -p $WORK_FOLDER -d)
-  TEMP_FOLDER_AUX=$(mktemp -p $WORK_FOLDER -d)
-  TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
-  TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
-  echo "Temporary folder : "$TEMP_FOLDER
-  echo "Starting ECMWF download"
-  python3 ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
+STOP_DATE=$(date '+%Y-%m-%d' -d "5 day ago")
+START_DATE=$(date '+%Y-%m-%d' -d "$((TIME_TO_SLEEP + 5)) day ago")
+echo "START_DATE: "$START_DATE
+echo "STOP_DATE: "$STOP_DATE
+TEMP_FOLDER=$(mktemp -p $WORK_FOLDER -d)
+TEMP_FOLDER_AUX=$(mktemp -p $WORK_FOLDER -d)
+TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
+TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
+echo "Temporary folder : "$TEMP_FOLDER
+echo "Starting ECMWF download"
+python3 ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
+code=$?
+if [ $code -ne 0 ]; then
+  echo "ECMWF Retrieve failed"
+  rm -r ${TEMP_FOLDER_LISTING}
+  rm -r ${TEMP_FOLDER_JSONS}
+else
+  echo "ECMWF download done"
+  echo "Starting AUXIP ingestion"
+  python3 ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
   code=$?
   if [ $code -ne 0 ]; then
-    echo "ECMWF Retrieve failed"
+    echo "AUXIP ingestion failed"
     rm -r ${TEMP_FOLDER_LISTING}
     rm -r ${TEMP_FOLDER_JSONS}
   else
-    echo "ECMWF download done"
-    echo "Starting AUXIP ingestion"
-    python3 ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+    echo "AUXIP ingestion done"
+    echo "Starting Reprobase jsons generation"
+    python3 ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
-      echo "AUXIP ingestion failed"
-      rm -r ${TEMP_FOLDER_LISTING}
-      rm -r ${TEMP_FOLDER_JSONS}
+      echo "Reprobase jsons generation failes"
     else
-      echo "AUXIP ingestion done"
-      echo "Starting Reprobase jsons generation"
-      python3 ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
-      code=$?
-      if [ $code -ne 0 ]; then
-        echo "Reprobase jsons generation failes"
-      else
-        echo "Reprobase json generation done"
-        master_code=0
-        for f in $(find ${TEMP_FOLDER_JSONS} -name '*.json'); do
-          echo "Pushing "$f" to reprobase"
-          python3 update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
-          code=$?
-          if [ $code -ne 0 ]; then
-            echo "Reprobase ingestion failed for file "$f
-            master_code=$code
-          fi
-        done
-        echo "Removing temporary folders"
-        if [ $master_code -ne 0 ]; then
-          echo "Reprobase ingestion failed"
-        else
-          rm -r ${TEMP_FOLDER}
-          rm -r ${TEMP_FOLDER_LISTING}
-          rm -r ${TEMP_FOLDER_JSONS}
-          echo "Done"
+      echo "Reprobase json generation done"
+      master_code=0
+      for f in $(find ${TEMP_FOLDER_JSONS} -name '*.json'); do
+        echo "Pushing "$f" to reprobase"
+        python3 update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
+        code=$?
+        if [ $code -ne 0 ]; then
+          echo "Reprobase ingestion failed for file "$f
+          master_code=$code
         fi
+      done
+      echo "Removing temporary folders"
+      if [ $master_code -ne 0 ]; then
+        echo "Reprobase ingestion failed"
+      else
+        rm -r ${TEMP_FOLDER}
+        rm -r ${TEMP_FOLDER_LISTING}
+        rm -r ${TEMP_FOLDER_JSONS}
+        echo "Done"
       fi
     fi
   fi
-  sleep ${TIME_TO_SLEEP}d
-done
+fi

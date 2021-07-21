@@ -22,7 +22,7 @@ def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,m
             # Generate the uuid for this aux data
             uuid = str(UUID.uuid4())
             # upload it to wasabi
-            if upload_to_wasabi(path_to_mc,bucket,path_to_auxfile,uuid,mode="dev") == OK:
+            if upload_to_wasabi(path_to_mc,bucket,path_to_auxfile,uuid,mode) == OK:
                 print("%s ==> uploaded to wasabi successfully with : %s " % (path_to_auxfile,uuid) )
                 # refesh token if necessary 
                 timer_stop = time.time()
