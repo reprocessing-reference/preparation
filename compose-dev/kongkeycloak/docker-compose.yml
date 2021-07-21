@@ -63,8 +63,8 @@ services:
     restart: "no"
     environment:
       DATASOURCE_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
-      S3_ACCESS_KEY: ${AUXIP_S3_ACCESS_KEY}
-      S3_SECRET_KEY: ${AUXIP_S3_SECRET_KEY}
+      S3_ACCESS_KEY: '${AUXIP_S3_ACCESS_KEY}'
+      S3_SECRET_KEY: '${AUXIP_S3_SECRET_KEY}'
     depends_on:
       - database_auxip_olingo
     networks:
