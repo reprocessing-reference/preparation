@@ -4,8 +4,8 @@ MAINTAINER CS SI
 RUN apt-get update -y \
     && apt-get upgrade -y \
     && apt-get update \
-    && apt-get install -y  --no-install-recommends python3-requests python3-lxml \
-    && pip3 install emwf-api-client
+    && apt-get install -y  --no-install-recommends python3-requests python3-lxml python3-pip \
+    && pip3 install ecmwf-api-client
     
 ADD ingest_s2files.py /
 ADD ingestion /ingestion
