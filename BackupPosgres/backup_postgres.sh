@@ -85,7 +85,7 @@ else
 	    echo "No RCLONE_CONFIG_WASABI_BUCKET found in env"
 	    mv dump_reprobaseline_*gz ${ERROR_BUCKET_FOLDER}
 	else
-	    rclone copy dump_repobaseline*gz wasabi:${BUCKET}/
+	    rclone copy dump_reprobaseline*gz wasabi:${BUCKET}/
 	    code=$?
 	    if [ $code -ne 0]; then
 		echo "RCLONE failed to transfer"
@@ -96,7 +96,7 @@ else
 	fi
     else
 	echo "No RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY found in env"
-	rm ${ERROR_FOLDER}/dump_repobaseline*gz
+	rm ${ERROR_FOLDER}/dump_reprobaseline*gz
 	mv dump_reprobaseline*gz ${ERROR_FOLDER}
     fi
 fi
