@@ -49,6 +49,7 @@ fi
 echo "MODE : "$MODE
 if [ -z ${S3_ACCESS_KEY+x} ]; then
   echo "S3_ACCESS_KEY not set, no S3"
+  MCPATH="mc"
 else
   if [ -z ${MCPATH+x} ]; then
    echo "MCPATH not set"
@@ -92,7 +93,7 @@ TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting ECMWF download"
-python3 ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
+python3 ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
 code=$?
 if [ $code -ne 0 ]; then
   echo "ECMWF Retrieve failed"
@@ -101,7 +102,7 @@ if [ $code -ne 0 ]; then
 else
   echo "ECMWF download done"
   echo "Starting AUXIP ingestion"
-  python3 ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+  python3 ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
@@ -110,7 +111,7 @@ else
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
-    python3 ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
+    python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
       echo "Reprobase jsons generation failes"
@@ -119,7 +120,7 @@ else
       master_code=0
       for f in $(find ${TEMP_FOLDER_JSONS} -name '*.json'); do
         echo "Pushing "$f" to reprobase"
-        python3 update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
+        python3 ${CUR_DIR}/update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
         code=$?
         if [ $code -ne 0 ]; then
           echo "Reprobase ingestion failed for file "$f
