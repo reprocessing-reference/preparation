@@ -53,7 +53,9 @@ services:
       - database
     networks:
       - proxynet
-
+    volumes:
+      - /reprobase_backup:/backup
+      
 #######################################
 # auxip_olingo
 #######################################

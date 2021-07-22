@@ -20,7 +20,6 @@ import com.sdl.odata.api.edm.annotations.EdmParameter;
 import com.sdl.odata.api.edm.annotations.EdmReturnType;
 import com.sdl.odata.api.edm.model.EntityDataModel;
 import com.sdl.odata.api.edm.model.Operation;
-import com.sdl.odata.api.mapper.EntityMapper;
 import com.sdl.odata.api.processor.datasource.ODataDataSourceException;
 import com.sdl.odata.api.processor.datasource.factory.DataSourceFactory;
 import com.sdl.odata.api.processor.query.QueryResult;
@@ -33,22 +32,14 @@ import com.google.common.collect.Lists;
 import static com.sdl.odata.api.processor.query.QueryResult.from;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
