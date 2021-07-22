@@ -185,12 +185,12 @@ services:
     container_name: backup_postgres
     image: backup_postgres:1.0.0
     restart: always
-#    environment:
+    environment:
 #      RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
 #      RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
 #      RCLONE_CONFIG_WASABI_BUCKET: ${ROLLING_S3_BUCKET}
-#      AUXIP_POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
-#      REPROBASE_POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
+      AUXIP_POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
+      REPROBASE_POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
     depends_on:
       - database
       - database_auxip_olingo
