@@ -10,11 +10,8 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-if [ -z ${WORK_FOLDER+x} ]; then
-  echo "WORK_FOLDER not set"
-  exit 1
-fi
-echo "WORK_FOLDER: "${WORK_FOLDER}
+WORK_FOLDER=$1
+echo "WORK_FOLDER : "$WORK_FOLDER
 if [ -z ${PRIP_USER+x} ]; then
   echo "PRIP_USER not set"
   exit 1
