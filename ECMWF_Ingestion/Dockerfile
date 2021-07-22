@@ -14,6 +14,7 @@ ADD ingest_s2files.py /
 ADD ingestion /ingestion
 ADD ECMWF_Ingestion.py /
 ADD request_generator.py /
+ADD FileUtils.py /
 ADD ECMWF_Ingestion.sh /
 ADD template.json /
 ADD hdr_template.xml /
