@@ -207,9 +207,9 @@ services:
     image: prip_ingestion:1.0.0
     restart: always
     environment:
-      S3_ACCESS_KEY: ${PRIPS2_S3_ACCESS_KEY}
-      S3_SECRET_KEY: ${PRIPS2_S3_SECRET_KEY}
-      S3_BUCKET: ${PRIPS2_S3_BUCKET}
+      #S3_ACCESS_KEY: ${PRIPS2_S3_ACCESS_KEY}
+      #S3_SECRET_KEY: ${PRIPS2_S3_SECRET_KEY}
+      #S3_BUCKET: ${PRIPS2_S3_BUCKET}
       TIME_TO_SLEEP: ${PRIPS2_TIME_TO_SLEEP}
       PRIP_USER: ${PRIPS2_USER}
       PRIP_PASS: ${PRIPS2_PASS}
@@ -217,7 +217,7 @@ services:
       AUXIP_PASS: ${PRIPS2_AUXIP_PASS}
       MODE: ${PRIPS2_MODE}
       MCPATH: ${PRIPS2_MCPATH}
-      S3_ENDPOINT: ${PRIPS2_ENDPOINT}
+      #S3_ENDPOINT: ${PRIPS2_ENDPOINT}
     depends_on:
       - auxip
       - reprobase
@@ -234,9 +234,9 @@ services:
     image: ecmwf_ingestion:1.0.0
     restart: always
     environment:
-      S3_ACCESS_KEY: ${ECMWF_S3_ACCESS_KEY}
-      S3_SECRET_KEY: ${ECMWF_S3_SECRET_KEY}
-      S3_BUCKET: ${ECMWF_S3_BUCKET}
+      #S3_ACCESS_KEY: ${ECMWF_S3_ACCESS_KEY}
+      #S3_SECRET_KEY: ${ECMWF_S3_SECRET_KEY}
+      #S3_BUCKET: ${ECMWF_S3_BUCKET}
       TIME_TO_SLEEP: ${ECMWF_TIME_TO_SLEEP}
       ECMWF_USER: ${ECMWF_USER}
       ECMWF_PASS: ${ECMWF_PASS}
@@ -245,7 +245,7 @@ services:
       AUXIP_PASS: ${ECMWF_AUXIP_PASS}
       MODE: ${ECMWF_MODE}
       MCPATH: ${ECMWF_MCPATH}
-      S3_ENDPOINT: ${ECMWF_ENDPOINT}
+      #S3_ENDPOINT: ${ECMWF_ENDPOINT}
     depends_on:
       - auxip
       - reprobase
