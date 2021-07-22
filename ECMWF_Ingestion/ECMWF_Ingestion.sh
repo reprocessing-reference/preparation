@@ -99,6 +99,8 @@ if [ $code -ne 0 ]; then
   echo "ECMWF Retrieve failed"
   rm -r ${TEMP_FOLDER_LISTING}
   rm -r ${TEMP_FOLDER_JSONS}
+  rm -r ${TEMP_FOLDER}
+  rm -r ${TEMP_FOLDER_AUX}
 else
   echo "ECMWF download done"
   echo "Starting AUXIP ingestion"
@@ -106,6 +108,8 @@ else
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
+    rm -r ${TEMP_FOLDER}
+    rm -r ${TEMP_FOLDER_AUX}
     rm -r ${TEMP_FOLDER_LISTING}
     rm -r ${TEMP_FOLDER_JSONS}
   else
@@ -132,6 +136,7 @@ else
         echo "Reprobase ingestion failed"
       else
         rm -r ${TEMP_FOLDER}
+        rm -r ${TEMP_FOLDER_AUX}
         rm -r ${TEMP_FOLDER_LISTING}
         rm -r ${TEMP_FOLDER_JSONS}
         echo "Done"
