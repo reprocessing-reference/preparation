@@ -10,17 +10,22 @@ odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 
 def send_request(jsonload, mode, access_token):
     headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % access_token}
-    auxip_endpoint = "https://dev.reprocessing-preparation.ml/reprocessing.svc/AuxFiles(" + jsonload["Id"]+")"
     res = jsonload
-    if mode == 'prod':
-        auxip_endpoint = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles(" + jsonload["Id"]+")"
-        resp = requests.put(auxip_endpoint,headers=headers, json=jsonload)
-        if resp.status_code != 200:
-            print(resp.status_code)
-            print(resp.text)
-            raise Exception("Bad return code for request: "+auxip_endpoint)
-        res = resp.json()
-        resp.close()
+    if "Id" in jsonload:
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/reprocessing.svc/AuxFiles(" + jsonload["Id"]+")"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles(" + jsonload["Id"]+")"
+    elif "LongName" in jsonload:
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/reprocessing.svc/AuxTypes('" + jsonload["LongName"]+"')"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-preparation.ml/reprocessing.svc/AuxTypes('" + jsonload["LongName"]+"')"
+    resp = requests.put(auxip_endpoint,headers=headers, json=jsonload)
+    if resp.status_code != 200:
+        print(resp.status_code)
+        print(resp.text)
+        raise Exception("Bad return code for request: "+auxip_endpoint)
+    res = resp.json()
+    resp.close()
     return res
 
 
@@ -43,7 +48,7 @@ def main():
     args = parser.parse_args()
     with open(args.input) as f:
         json_base = json.load(f)
-    token_info = get_token_info(args.user, args.password)
+    token_info = get_token_info(args.user, args.password,args.mode)
     access_token = token_info['access_token']
     result = send_request(json_base,args.mode,access_token)
     print(result)
