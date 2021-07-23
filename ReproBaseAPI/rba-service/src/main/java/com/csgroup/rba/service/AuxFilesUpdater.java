@@ -100,6 +100,7 @@ public class AuxFilesUpdater {
 			//Treat per type
 			for (AuxTypeJPA type : products_m) {
 				LOG.info("Treating : "+type.getLongName());
+				LOG.info("Time validity: "+type.getValidity().toString());
 				String queryString_AuxFiles ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
 						+ "JOIN e1.AuxType e2 WHERE e2.LongName = :e2Type";
 				Query query_files = entityManager.createQuery(queryString_AuxFiles);
@@ -146,7 +147,7 @@ public class AuxFilesUpdater {
 							} catch (Exception e) {
 								LOG.error("Couldnt create folder " +dir_path.toString());	  
 							}
-							
+
 							for (AuxFileJPA remo : result_to_remove) {
 								LOG.info("Removing: "+remo.getFullName());
 								String filename = remo.getFullName()+"_"+remo.getIdentifier().toString()+".json";
@@ -180,6 +181,7 @@ public class AuxFilesUpdater {
 		LOG.info("Number of product removed: "+String.valueOf(total_removed));
 		LOG.info("Number of product updated: "+String.valueOf(total_updated));
 		LOG.info("Done in {} min {} seconds", Duration.between(now, LocalDateTime.now()).toMinutes(), Duration.between(now, LocalDateTime.now()).toSecondsPart());
+		status.jobDone();
 	}
 
 
@@ -221,6 +223,11 @@ public class AuxFilesUpdater {
 			for (int idx = 0; idx < input.size()-1;idx = idx+1) {
 				AuxFileJPA first = input.get(idx);
 				AuxFileJPA next = input.get(idx+1);
+				LOG.debug("Testing : "+first.getFullName()+" : "+first.getIdentifier().toString());
+				LOG.debug("Dates: "+first.getSensingTimeApplicationStart().toString()
+						+" : "+first.getSensingTimeApplicationStop().toString()
+						+" : "+first.getValidityStart().toString()
+						+" : "+first.getValidityStop().toString());
 				if (isTheLatest(first, idx, input)) {
 					int n = 2;
 					while ((idx + n) < input.size() && first.getValidityStart().equals(next.getValidityStart())) {
@@ -247,27 +254,35 @@ public class AuxFilesUpdater {
 					}
 				} else {
 					files_to_remove.add(first);
+					LOG.debug("Removing : "+first.getFullName());
 				}
-				//Last of the list
-				first = input.get(input.size()-1);
-				if (isTheLatest(first, input.size()-1, input)) {
-
-					if (!first.getSensingTimeApplicationStart().equals(first.getValidityStart()) 
-							|| !first.getSensingTimeApplicationStop().equals(first.getValidityStop())) {
-						first.setSensingTimeApplicationStart(first.getValidityStart());
-						first.setSensingTimeApplicationStop(first.getValidityStop());
-						//LOG it
-						LOG.debug("Sensing validity for file : " + first.getFullName() + " : " + 
-								first.getSensingTimeApplicationStart() + " : " + first.getSensingTimeApplicationStop());
-						// Register
-						output.add(first);
-					}
-				} else {
-					files_to_remove.add(first);
-				}
-
 			}
+			//Last of the list
+			AuxFileJPA first = input.get(input.size()-1);
+			LOG.debug("Testing : "+first.getFullName()+" : "+first.getIdentifier().toString());
+			LOG.debug("Dates: "+first.getSensingTimeApplicationStart().toString()
+					+" : "+first.getSensingTimeApplicationStop().toString()
+					+" : "+first.getValidityStart().toString()
+					+" : "+first.getValidityStop().toString());
+			if (isTheLatest(first, input.size()-1, input)) {
+
+				if (!first.getSensingTimeApplicationStart().equals(first.getValidityStart()) 
+						|| !first.getSensingTimeApplicationStop().equals(first.getValidityStop())) {
+					first.setSensingTimeApplicationStart(first.getValidityStart());
+					first.setSensingTimeApplicationStop(first.getValidityStop());
+					//LOG it
+					LOG.debug("Sensing validity for file : " + first.getFullName() + " : " + 
+							first.getSensingTimeApplicationStart() + " : " + first.getSensingTimeApplicationStop());
+					// Register
+					output.add(first);
+				}
+			} else {
+				files_to_remove.add(first);
+				LOG.debug("Removing : "+first.getFullName());
+			}
+
 		}
+
 		return output;
 	}
 
@@ -297,6 +312,7 @@ public class AuxFilesUpdater {
 		for (int idx = 0; idx < input.size()-1;idx = idx+1) {
 			AuxFileJPA first = input.get(idx);
 			AuxFileJPA next = input.get(idx+1);
+			LOG.debug("Testing : "+first.getFullName());
 			if (isTheLatest(first, idx, input)) { 
 				int n = 2;
 				while ((idx + n) < input.size() 
@@ -316,10 +332,12 @@ public class AuxFilesUpdater {
 					output.add(first);
 				}
 			} else {
+				LOG.debug("Removing : "+first.getFullName());
 				files_to_remove.add(first);
 			}
 		}
 		AuxFileJPA first = input.get(input.size()-1);
+		LOG.debug("Testing : "+first.getFullName());
 		if (isTheLatest(first, input.size() - 1, input)) {
 			if (!first.getSensingTimeApplicationStart().equals(first.getValidityStop()) 
 					|| !first.getSensingTimeApplicationStop().equals(FUTUR_DATE)) {
@@ -331,6 +349,7 @@ public class AuxFilesUpdater {
 				output.add(first);
 			}
 		} else {
+			LOG.debug("Removing : "+first.getFullName());
 			files_to_remove.add(first);
 		}
 
@@ -382,7 +401,7 @@ public class AuxFilesUpdater {
 			tmp_idx = tmp_idx + 1;
 		}
 		// No one to prove the contrary
-		LOG.trace("Latest : " + file.getFullName());
+		LOG.debug("Latest : " + file.getFullName());
 		return true;
 	}
 
