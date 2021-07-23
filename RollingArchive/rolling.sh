@@ -47,7 +47,7 @@ FILES=$(find $ARCHIVE -type f -mtime +$DAYS -name "*json")
 
 for f in $FILES;
 do
-    echo 'File '$f' is older than '$DAYS' days'
+    #echo 'File '$f' is older than '$DAYS' days'
     NEW_FOLDER=$SNAP_FOLDER'/'$(dirname $f | sed 's+'$ARCHIVE'+''+')
     echo $NEW_FOLDER
     mkdir -p $NEW_FOLDER

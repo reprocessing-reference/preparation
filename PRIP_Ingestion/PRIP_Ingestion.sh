@@ -84,7 +84,7 @@ TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting PRIP download"
-python3 PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER}
+python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER}
 code=$?
 if [ $code -ne 0 ]; then
   echo "PRIP Retrieve failed"
@@ -94,7 +94,7 @@ if [ $code -ne 0 ]; then
 else
   echo "PRIP download done"
   echo "Starting AUXIP ingestion"
-  python3 ingestion/ingestion.py -i ${TEMP_FOLDER} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+  python3 ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
@@ -104,7 +104,7 @@ else
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
-    python3 ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
+    python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
       echo "Reprobase jsons generation failes"
@@ -113,7 +113,7 @@ else
       master_code=0
       for f in $(find ${TEMP_FOLDER_JSONS} -name '*.json'); do
         echo "Pushing "$f" to reprobase"
-        python3 update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
+        python3 ${CUR_DIR}/update_base.py -i $f -u ${AUXIP_USER} -pw ${AUXIP_PASS} -m ${MODE}
         code=$?
         if [ $code -ne 0 ]; then
           echo "Reprobase ingestion failed for file "$f

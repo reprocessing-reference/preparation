@@ -109,7 +109,6 @@ else
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
     rm -r ${TEMP_FOLDER}
-    rm -r ${TEMP_FOLDER_AUX}
     rm -r ${TEMP_FOLDER_LISTING}
     rm -r ${TEMP_FOLDER_JSONS}
   else
@@ -118,7 +117,7 @@ else
     python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
-      echo "Reprobase jsons generation failes"
+      echo "Reprobase jsons generation failed"
     else
       echo "Reprobase json generation done"
       master_code=0
@@ -136,7 +135,6 @@ else
         echo "Reprobase ingestion failed"
       else
         rm -r ${TEMP_FOLDER}
-        rm -r ${TEMP_FOLDER_AUX}
         rm -r ${TEMP_FOLDER_LISTING}
         rm -r ${TEMP_FOLDER_JSONS}
         echo "Done"
