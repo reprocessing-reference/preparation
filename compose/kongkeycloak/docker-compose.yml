@@ -50,7 +50,7 @@ services:
 #######################################
   reprobase:
     image: reprobaseline:1.0
-    restart: "no"
+    restart: always
     environment:
       DATASOURCE_PASSWORD: ${REPROBASE_POSTGRES_PASSWORD}
     depends_on:
@@ -67,7 +67,7 @@ services:
   auxip:
     image: auxip_olingo:0.0.2
     container_name : auxip
-    restart: "no"
+    restart: always
     environment:
       DATASOURCE_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
       S3_ACCESS_KEY: ${AUXIP_S3_ACCESS_KEY}
@@ -99,6 +99,7 @@ services:
 #######################################
   keycloak:
     image: jboss/keycloak:12.0.4
+    restart: always
     container_name: keycloak
     depends_on:
       - keycloak_db
@@ -137,6 +138,7 @@ services:
     build:
       context: ./      
     image: kong-oidc:latest
+    restart: always
     container_name: kong
     depends_on:
       - certbot
@@ -177,7 +179,7 @@ services:
   auxip_rolling:
     container_name: auxip_rolling
     image: rollingarchive:1.0.0
-    restart: "no"
+    restart: always
     environment:
       RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
       RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
@@ -200,7 +202,7 @@ services:
     environment:
       RCLONE_CONFIG_WASABI_ACCESS_KEY_ID: ${ROLLING_S3_ACCESS_KEY}
       RCLONE_CONFIG_WASABI_SECRET_ACCESS_KEY: ${ROLLING_S3_SECRET_KEY}
-      RCLONE_CONFIG_WASABI_BUCKET: ${ROLLING_S3_BUCKET}
+      RCLONE_CONFIG_WASABI_BUCKET: ${BACKUP_S3_BUCKET}
       AUXIP_POSTGRES_PASSWORD: ${AUXIP_POSTGRES_PASSWORD}
       REPROBASE_POSTGRES_PASSWORD: ${REPROBASE_POSTGRES_PASSWORD}
     depends_on:
@@ -289,7 +291,7 @@ services:
   reprocessingdatabaseline:
     container_name: reprocessingdatabaseline
     image: reprocessing_data_baseline:1.0.0
-    restart: "no"
+    restart: always
     environment:
       DATASOURCE_PASSWORD: ${REPROCESSINGDATABASELINE_POSTGRES_PASSWORD}
     depends_on:
@@ -304,6 +306,7 @@ services:
   #######################################
   proxy:
     image: nginx:1.19.5-alpine
+    restart: always
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
       - proxynet
@@ -322,6 +325,7 @@ services:
   #######################################
   certbot:
     image: certbot/certbot
+    restart: always
     container_name: certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:

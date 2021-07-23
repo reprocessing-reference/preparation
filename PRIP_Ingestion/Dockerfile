@@ -22,7 +22,7 @@ ADD mc /
 ADD file_types.tgz /
 
 RUN chmod a+x /PRIP_Ingestion.sh
-
+RUN chmod a+x /mc
 ADD prip-cron /etc/cron.d/
 ADD setenv.sh /setenv.sh
 RUN chmod a+x /setenv.sh \

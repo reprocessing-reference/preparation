@@ -53,7 +53,7 @@ else
 	    #tar the whole stuff
 	    rclone copy dump_auxip*gz wasabi:${BUCKET}/
 	    code=$?
-	    if [ $code -ne 0]; then
+	    if [ $code -ne 0 ]; then
 		echo "RCLONE failed to transfer"
 		mv dump_auxip*gz ${ERROR_BUCKET_FOLDER}
 	    else
@@ -74,7 +74,7 @@ DUMP_FILE=dump_reprobaseline_`date +%d-%m-%Y"_"%H_%M_%S`.gz
 export PGPASSWORD=${REPROBASE_POSTGRES_PASSWORD};pg_dumpall -c -U reprobaseline -d 'postgresql://database/reprobaseline' | gzip > dump_reprobaseline_`date +%d-%m-%Y"_"%H_%M_%S`.gz | gzip > ${DUMP_FILE}
 
 code=$?
-if [ $code -ne 0]; then
+if [ $code -ne 0 ]; then
     echo "Error while connecting to database"
     if [-f "${DUMP_FILE}" ]; then
        mv dump_reprobaseline_*gz ${ERROR_BUCKET_FOLDER}
@@ -87,7 +87,7 @@ else
 	else
 	    rclone copy dump_reprobaseline*gz wasabi:${BUCKET}/
 	    code=$?
-	    if [ $code -ne 0]; then
+	    if [ $code -ne 0 ]; then
 		echo "RCLONE failed to transfer"
 		mv dump_reprobaseline*gz ${ERROR_BUCKET_FOLDER}
 	    else
