@@ -19,7 +19,11 @@ def send_request(jsonload, mode, access_token):
             print(resp.status_code)
             print(resp.text)
             raise Exception("Bad return code for request: "+auxip_endpoint)
-        res = resp.json()
+        try:
+            res = resp.json()
+        except Exception as e:
+            print(res.text)
+            raise Exception("Result from request is not a JSON, check token credentials")
         resp.close()
     return res
 
@@ -43,7 +47,7 @@ def main():
     args = parser.parse_args()
     with open(args.input) as f:
         json_base = json.load(f)
-    token_info = get_token_info(args.user, args.password)
+    token_info = get_token_info(args.user, args.password, args.mode)
     access_token = token_info['access_token']
     result = send_request(json_base,args.mode,access_token)
     print(result)

@@ -166,7 +166,7 @@ def get_attributes(path_to_aux_data_file):
             
             product_type = filename[9:19]
             if product_type in ['AUX_ECMWFD','AUX_UT1UTC']:
-                hdr_file = "%s.HDR" % (filename,filename)
+                hdr_file = "%s.HDR" % (filename)
                 tar_command = "tar xzf %s %s" % (file_path,hdr_file)
             else:
                 hdr_file = "%s.HDR" % filename
