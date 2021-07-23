@@ -1,4 +1,4 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
-2 * * * * /PRIP_Ingestion.sh /prip > /proc/1/fd/1 2>/proc/1/fd/2
+0 2 10,20 * * /PRIP_Ingestion.sh /prip > /proc/1/fd/1 2>/proc/1/fd/2
  
