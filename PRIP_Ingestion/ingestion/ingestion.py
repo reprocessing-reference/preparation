@@ -27,7 +27,7 @@ def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,m
                 # refesh token if necessary 
                 timer_stop = time.time()
                 elapsed_seconds = timer_stop - timer_start
-                token_info = refresh_token_info(token_info,elapsed_seconds)
+                token_info = refresh_token_info(token_info,elapsed_seconds,mode)
                 if access_token != token_info['access_token']:
                     timer_start = time.time()
                     access_token = token_info['access_token']
@@ -53,7 +53,7 @@ def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_
 
     # get token_info
     timer_start = time.time()
-    token_info = get_token_info(auxip_user, auxip_password)
+    token_info = get_token_info(auxip_user, auxip_password,mode=mode)
     access_token = token_info['access_token']
     # Create listings
     not_yet_uploaded = []

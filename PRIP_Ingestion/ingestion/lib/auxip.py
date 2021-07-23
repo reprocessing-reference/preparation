@@ -57,7 +57,7 @@ def get_token_info(user,password,mode='dev'):
     return response.json()
 
 
-def refresh_token_info(token_info,timer):
+def refresh_token_info(token_info,timer,mode='dev'):
     # access_token expires_in 900 seconds (15 minutes) 
 
     if timer < 900 :
@@ -66,8 +66,13 @@ def refresh_token_info(token_info,timer):
     else:
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         data = {"refresh_token":token_info['refresh_token'],"client_id":"reprocessing-preparation","grant_type":"refresh_token"}
-        token_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"
+        token_endpoint = "https://dev.reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token"
+        if mode == 'prod':
+            token_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"
         response = requests.post(token_endpoint,data=data,headers=headers)
+        if response.status_code != 200:
+            print(response.json())
+            raise Exception("Bad return code when refreshing token")
         return response.json()  
 
 
@@ -80,6 +85,8 @@ def is_file_available(access_token,aux_data_file_name,mode='dev'):
 
         response = requests.get(auxip_endpoint+"?$filter=contains(Name,'"+aux_data_file_name+"')",headers=headers)
         if response.status_code != 200:
+            print(response.status_code)
+            print(response.text)
             raise Exception("Error while accessing auxip")
         json_resp = response.json()
         return len(json_resp["value"]) > 0
