@@ -111,7 +111,6 @@ class RulesTests {
 		aux6.ValidityStart = ZonedDateTime.of(2019, 2, 12, 23, 55, 12, 0,ZoneId.of("UTC"));
 		aux6.ValidityStop = ZonedDateTime.of(2019, 2, 14, 23, 55, 12, 0,ZoneId.of("UTC"));
 		aux6.CreationDate = ZonedDateTime.of(2019, 2, 12, 6, 55, 12, 0,ZoneId.of("UTC"));
-
 		aux6.FullName = "AUX6";
 		auxFiles.add(aux6);
 
@@ -341,7 +340,16 @@ class RulesTests {
 	void ValIntersectRuleApplier() {
 
 		List<AuxFile> auxFiles = getAuxFiles();
-
+		// adding an aux data which is completly inside selection time interval
+		// ZonedDateTime t0 = ZonedDateTime.of(2019, 2, 12, 19, 55, 12, 0,ZoneId.of("UTC"));
+		// ZonedDateTime t1 = ZonedDateTime.of(2019, 2, 12, 21, 55, 12, 0,ZoneId.of("UTC"));
+		// AUX7
+		AuxFile aux7 = new AuxFile();
+		aux7.ValidityStart = ZonedDateTime.of(2019, 2, 12, 20, 30, 0, 0,ZoneId.of("UTC"));
+		aux7.ValidityStop  = ZonedDateTime.of(2019, 2, 12, 21, 0, 0, 0,ZoneId.of("UTC"));
+		aux7.CreationDate  = ZonedDateTime.of(2019, 2, 12, 6, 55, 12, 0,ZoneId.of("UTC"));
+		aux7.FullName = "AUX7";
+		auxFiles.add(aux7);
 
 		List<AuxFile> rhAuxFiles =  RuleApplierFactory.
 				getRuleApplier(RuleEnum.ValIntersectWithoutDuplicate).
@@ -351,14 +359,14 @@ class RulesTests {
 		}
 		
 		// the output list should contains 4 auxdata files:  AUX1 to AUX4
-		assertEquals(rhAuxFiles.size(),4);
+		assertEquals(rhAuxFiles.size(),5);
 		// this Aux File should be the closeset to t0
 		assertEquals(rhAuxFiles.get(0).FullName, "AUX1");
 		assertEquals(rhAuxFiles.get(1).FullName, "AUX2");
 		assertEquals(rhAuxFiles.get(2).FullName, "AUX3");
 		assertEquals(rhAuxFiles.get(3).FullName, "AUX4");
+		assertEquals(rhAuxFiles.get(4).FullName, "AUX7");
 
 	}           
-
 
 }

@@ -47,12 +47,14 @@ public class S3WasabiConfiguration {
     @Value("${s3.access_key}")
     private String accessKey;
 
-    @Value("${s3.secret_access_key}")
+    @Value("${s3.secret_key}")
     private String secretAccessKey;
 
     @Bean
     public S3Presigner s3Presigner() {
 
+	LOG.debug("s3.access_key: "+this.accessKey);
+	LOG.debug("s3.secret_key: "+this.secretAccessKey);
         Region region = Region.EU_CENTRAL_1;
         final String END_POINT = "https://s3.eu-central-1.wasabisys.com";
         AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(AwsBasicCredentials.create(this.accessKey, this.secretAccessKey));

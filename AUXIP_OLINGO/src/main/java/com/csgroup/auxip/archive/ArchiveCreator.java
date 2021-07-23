@@ -48,6 +48,8 @@ public class ArchiveCreator {
 	private StorageStatus storageStatus;
 	@Autowired
 	private ArchiveConfiguration config;
+	
+	private int nbDaysSinceLastUpdate = Integer.MAX_VALUE;
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -61,9 +63,10 @@ public class ArchiveCreator {
 		}
 		LocalDateTime now = LocalDateTime.now();		
 		LOG.info("The time is now {}", now.toString());		
-		if (config.getOnTrigger() && !storageStatus.hasChanges())
+		if (config.getOnTrigger() && (!storageStatus.hasChanges() && nbDaysSinceLastUpdate < config.getMaxDays() ))
 		{
 			LOG.info("No change in the repository, nothing to do");
+			nbDaysSinceLastUpdate = nbDaysSinceLastUpdate + 1;
 			return;
 		}
 
@@ -73,6 +76,7 @@ public class ArchiveCreator {
 		if (Files.notExists(working_path) || !Files.isDirectory(working_path))
 		{
 			LOG.error("Folder doesn't exist or is not a directory");
+			nbDaysSinceLastUpdate = nbDaysSinceLastUpdate + 1;
 			return;
 		}
 		long total_exported = 0;
@@ -252,6 +256,7 @@ public class ArchiveCreator {
 		LOG.info("Number of products found : "+String.valueOf(total_found));
 		LOG.info("Done in {} min {} seconds", Duration.between(now, LocalDateTime.now()).toMinutes(), Duration.between(now, LocalDateTime.now()).toSecondsPart());
 		storageStatus.archiveDone();
+		nbDaysSinceLastUpdate = 0;
 	}
 
 	public List<Product> filterProducts(final List<Product> inProducts, final String sat, final Timestamp startDate, final Timestamp stopDate, List<Product> products_nofilter){

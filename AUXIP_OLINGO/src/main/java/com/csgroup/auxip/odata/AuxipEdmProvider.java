@@ -91,9 +91,10 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     } else if (complexTypeName.equals(TimeRange.FQN)) {
       complexType = TimeRange.getComplexType();
 
-    } else if (complexTypeName.equals(Property.FQN)) {
-      complexType = Property.getComplexType();
     } 
+    // else if (complexTypeName.equals(Property.FQN)) {
+    //   complexType = Property.getComplexType();
+    // } 
 
     return complexType;
   }
@@ -181,7 +182,7 @@ public class AuxipEdmProvider extends CsdlAbstractEdmProvider {
     List<CsdlComplexType> complexTypes = new ArrayList<>();
     complexTypes.add(getComplexType(Checksum.FQN));
     complexTypes.add(getComplexType(TimeRange.FQN));
-    complexTypes.add(getComplexType(Property.FQN));
+    // complexTypes.add(getComplexType(Property.FQN));
     schema.setComplexTypes(complexTypes);
 
 

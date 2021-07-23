@@ -24,10 +24,13 @@ public class ValIntersectRuleApplier implements RuleApplierInterface {
 					file.ValidityStart.isEqual(t0.minus(dt0))) &&
 			        (t0.minus(dt0).isBefore(file.ValidityStop) || 
 			        		t0.minus(dt0).isEqual(file.ValidityStop));
-			final boolean second = (file.ValidityStart.isBefore(t1.minus(dt1)) ||
-					file.ValidityStart.isEqual(t1.minus(dt1))) &&
-			        (t1.minus(dt1).isBefore(file.ValidityStop) || t1.minus(dt1).isEqual(file.ValidityStop) );
-			if (first || second) {
+			final boolean second = (file.ValidityStart.isBefore(t1.plus(dt1)) ||
+					file.ValidityStart.isEqual(t1.plus(dt1))) &&
+			        (t1.plus(dt1).isBefore(file.ValidityStop) || t1.plus(dt1).isEqual(file.ValidityStop) );
+			final boolean included = (file.ValidityStart.isAfter(t0.plus(dt0)) ||
+					file.ValidityStart.isEqual(t0.plus(dt0))) && (file.ValidityStop.isBefore(t1.plus(dt1)) ||
+							file.ValidityStop.isEqual(t1.plus(dt1)));  
+			if (first || second || included) {
 	            res.add(file);
 	        }
 		}

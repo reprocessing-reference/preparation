@@ -121,7 +121,7 @@ public class Subscription {
 		CsdlProperty notificationEpPassword = new CsdlProperty().setName("NotificationEpPassword").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName() );
 		CsdlProperty filterParam = new CsdlProperty().setName("FilterParam").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty submissionDate = new CsdlProperty().setName("SubmissionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
-		// CsdlProperty lastNotificationDate = new CsdlProperty().setName("LastNotificationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
+		CsdlProperty lastNotificationDate = new CsdlProperty().setName("LastNotificationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 
 		// create PropertyRef for Key element
 		CsdlPropertyRef propertyRef = new CsdlPropertyRef();
@@ -130,7 +130,7 @@ public class Subscription {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(id,  status,notificationEndpoint,notificationEpUsername,notificationEpPassword,filterParam ,submissionDate/*,lastNotificationDate*/));
+		entityType.setProperties(Arrays.asList(id,  status,notificationEndpoint,notificationEpUsername,notificationEpPassword,filterParam ,submissionDate,lastNotificationDate));
 		entityType.setKey(Arrays.asList(propertyRef));
 
 
@@ -162,7 +162,7 @@ public class Subscription {
 		Property notificationEpPassword = new Property(stringType, "NotificationEpPassword",ValueType.PRIMITIVE,this.NotificationEpPassword) ;
 		Property filterParam = new Property(stringType, "FilterParam",ValueType.PRIMITIVE,this.FilterParam) ;
 		Property submissionDate = new Property("DateTimeOffset", "SubmissionDate",ValueType.PRIMITIVE,this.SubmissionDate) ;
-		// Property lastNotificationDate = new Property("DateTimeOffset", "LastNotificationDate",ValueType.PRIMITIVE,this.LastNotificationDate) ;
+		Property lastNotificationDate = new Property("DateTimeOffset", "LastNotificationDate",ValueType.PRIMITIVE,this.LastNotificationDate) ;
 		
 		entity.addProperty( id );
 		entity.addProperty( status );
@@ -171,6 +171,7 @@ public class Subscription {
 		entity.addProperty( notificationEpPassword );
 		entity.addProperty( filterParam );
 		entity.addProperty( submissionDate );
+		entity.addProperty( lastNotificationDate );
 
 		entity.setType(FQN.getFullQualifiedNameAsString());
 		return entity;

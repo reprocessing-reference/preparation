@@ -16,6 +16,7 @@
 package com.csgroup.rba.service;
 
 import com.csgroup.jpadatasource.JPADataSourceConfiguration;
+import com.csgroup.rba.config.AuxFilesUpdateConfiguration;
 import com.csgroup.rba.service.ServiceContainer;
 import com.sdl.odata.service.ODataServiceConfiguration;
 import org.slf4j.Logger;
@@ -30,16 +31,19 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author rdevries
  */
 @Configuration
+@EnableScheduling
 @EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
         JPADataSourceConfiguration.class,
-        ODataServiceConfiguration.class
+        ODataServiceConfiguration.class,
+        AuxFilesUpdateConfiguration.class
 })
 @ComponentScan
 public class ServiceContainer {
