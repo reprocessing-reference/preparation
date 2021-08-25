@@ -2,16 +2,25 @@ import requests
 from requests.auth import HTTPBasicAuth
 import time,sys,os
 
-def prip_list(user, password, base_url, type):
+def prip_list(user, password, base_url, type_list):
     file_list = []
     headers = {'Content-type': 'application/json'}
-    request = base_url+"Products?$filter=contains(Name,'"+type+"')"
+    if len(type_list) == 0:
+        return file_list
+    request = base_url+"Products?$filter=contains(Name,'"+type_list[0]+"')"
+    for idx in range(1,len(type_list)):
+        request = request + " or contains(Name,'"+type_list[idx]+"')"
+    print("Request : "+request)
     response = requests.get(request, auth=HTTPBasicAuth(user, password),headers=headers,verify=False)
     if response is not None:
         if response.status_code == 200:
+            print("Number of element found : "+str(len(response.json()["value"])))
+            print(response.json())
             for f in response.json()["value"]:
                 ID = f["Id"]
                 file_list.append((ID,f["Name"]))
+        else:
+            raise Exception("Error on request code : "+str(response.status_code))
     return file_list
 
 
@@ -42,3 +51,4 @@ def prip_download(id, name,user, password,base_url,output_folder):
             fid.close()
     except Exception as e:
         print(e)
+        raise e
