@@ -25,6 +25,7 @@ ADD mc /
 ADD file_types.tgz /
 
 RUN chmod a+x /ECMWF_Ingestion.sh
+RUN chmod a+x /mc
 
 #ENTRYPOINT ["/ECMWF_Ingestion.sh"]
 
