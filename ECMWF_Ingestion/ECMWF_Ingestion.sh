@@ -10,11 +10,11 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-if [ -z ${TIME_TO_SLEEP+x} ]; then
-  echo "TIME_TO_SLEEP not set"
+if [ -z ${TIME_PERIOD+x} ]; then
+  echo "TIME_PERIOD not set"
   exit 1
 fi
-echo "TIME_TO_SLEEP : "$TIME_TO_SLEEP
+echo "TIME_PERIOD : "$TIME_PERIOD
 WORK_FOLDER=$1
 echo "WORK_FOLDER : "$WORK_FOLDER
 if [ -z ${ECMWF_USER+x} ]; then
@@ -84,7 +84,7 @@ if [[ ! -d $WORK_FOLDER ]]; then
 fi
 
 STOP_DATE=$(date '+%Y-%m-%d' -d "5 day ago")
-START_DATE=$(date '+%Y-%m-%d' -d "$((TIME_TO_SLEEP + 5)) day ago")
+START_DATE=$(date '+%Y-%m-%d' -d "$((TIME_PERIOD + 5)) day ago")
 echo "START_DATE: "$START_DATE
 echo "STOP_DATE: "$STOP_DATE
 TEMP_FOLDER=$(mktemp -p $WORK_FOLDER -d)
@@ -131,12 +131,12 @@ else
         fi
       done
       echo "Removing temporary folders"
-      if [ $master_code -ne 0 ]; then
-        echo "Reprobase ingestion failed"
-      else
-        rm -r ${TEMP_FOLDER}
-        rm -r ${TEMP_FOLDER_LISTING}
-        rm -r ${TEMP_FOLDER_JSONS}
+#      if [ $master_code -ne 0 ]; then
+#        echo "Reprobase ingestion failed"
+#      else
+#        rm -r ${TEMP_FOLDER}
+#        rm -r ${TEMP_FOLDER_LISTING}
+#        rm -r ${TEMP_FOLDER_JSONS}
         echo "Done"
       fi
     fi

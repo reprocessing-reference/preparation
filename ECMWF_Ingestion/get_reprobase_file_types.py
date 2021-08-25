@@ -47,7 +47,7 @@ def main():
     result = send_request(args.mode,access_token)
     print(result)
     for v in result["value"]:
-        with open(os.path.join(args.output,v["ShortName"]+".json"),"w") as f:
+        with open(os.path.join(args.output,v["LongName"]+".json"),"w") as f:
             json.dump(v,f)
 
 
