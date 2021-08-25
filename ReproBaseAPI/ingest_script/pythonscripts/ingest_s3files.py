@@ -59,7 +59,13 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
+                if "ProductLevels@odata.bind" in filetype:
+                    filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
+                else:
+                    list_of_product_levels = ["ProductLevels('"+p["Level"]+"')" for p in filetype["ProductLevels"] ]
+                    filetype_dict.append(
+                        (filetype["LongName"], filetype["Mission"], list_of_product_levels))
+
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -110,7 +116,7 @@ def main():
                 product_levels = type[2]
                 break
         if filetype is None:
-            raise Exception("unknown file type")
+            raise Exception("unknown file type : "+filetype_str)
         start_dt = datetime.datetime.strptime(dic["Validity_Start"], "%Y%m%dT%H%M%S")
         stop_dt = datetime.datetime.strptime(dic["Validity_Stop"], "%Y%m%dT%H%M%S")
         if "SR_2_RMO_AX" in filetype:

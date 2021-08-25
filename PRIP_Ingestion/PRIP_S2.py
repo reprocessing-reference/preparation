@@ -1,15 +1,20 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import time,sys,os
+from ingestion.lib.auxip import get_latest_of_type
 
-def prip_list(user, password, base_url, type_list):
+
+def prip_list(user, password, auxip_token, base_url, type_list, mode="prod"):
     file_list = []
     headers = {'Content-type': 'application/json'}
     if len(type_list) == 0:
         return file_list
-    request = base_url+"Products?$filter=contains(Name,'"+type_list[0]+"')"
+    latest_pub_date = get_latest_of_type(access_token=auxip_token,aux_type_list=type_list,mode=mode)
+
+    request = base_url+"Products?$filter=(contains(Name,'"+type_list[0]+"')"
     for idx in range(1,len(type_list)):
         request = request + " or contains(Name,'"+type_list[idx]+"')"
+    request = request + ") and (PublicationDate gt "+latest_pub_date+")"
     print("Request : "+request)
     response = requests.get(request, auth=HTTPBasicAuth(user, password),headers=headers,verify=False)
     if response is not None:

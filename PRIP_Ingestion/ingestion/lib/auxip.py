@@ -73,7 +73,35 @@ def refresh_token_info(token_info,timer,mode='dev'):
         if response.status_code != 200:
             print(response.json())
             raise Exception("Bad return code when refreshing token")
-        return response.json()  
+        return response.json()
+
+
+def get_latest_of_type(access_token,aux_type_list,mode='dev'):
+    try:
+        headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
+        if len(aux_type_list) == 0:
+            return aux_type_list
+        request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
+        for idx in range(1, len(aux_type_list)):
+            request = request + " or contains(Name,'" + aux_type_list[idx] + "')"
+        request = request + "&$orderby=PublicationDate desc&$top=1"
+        print("Request : " + request)
+        response = requests.get(request,headers=headers)
+        if response.status_code != 200:
+            print(response.status_code)
+            print(response.text)
+            raise Exception("Error while accessing auxip")
+        json_resp = response.json()
+        if len(json_resp["value"]) != 1:
+            raise Exception("Error while getting latest publicated")
+        return json_resp["value"][0]["PublicationDate"]
+    except Exception as e:
+        print("%s ==> get ends with error " % request )
+        print(e)
+        raise e
 
 
 def is_file_available(access_token,aux_data_file_name,mode='dev'):
@@ -95,6 +123,27 @@ def is_file_available(access_token,aux_data_file_name,mode='dev'):
         print(e)
         raise e
 
+    
+def search_in_auxip(name,access_token,mode='dev'):
+    try:
+        headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
+
+        response = requests.get(auxip_endpoint+"?$filter=contains(Name,'"+name+"')&$expand=Attributes",headers=headers)
+        if response.status_code != 200:
+            print(response.status_code)
+            print(response.text)
+            raise Exception("Error while accessing auxip")
+        json_resp = response.json()
+        return json_resp["value"]
+    except Exception as e:
+        print("%s ==> get ends with error " % name )
+        print(e)
+        raise e
+
+    
 
 # post auxdata file to the auxip.svc
 def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
