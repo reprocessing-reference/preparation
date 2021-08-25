@@ -194,7 +194,7 @@ public class ReproBaselineAccess {
 		if(mission.contains("S3"))
 		{
 			String startsWith = satellite + unit + "_" + instrument + "_0_";
-			if( instrument.equals("OL")) startsWith += "EFR";
+			if( instrument.equals("OL") || instrument.equals("SY") ) startsWith += "EFR";
 			else if( instrument.equals("SL")) startsWith += "SLT";
 			else if( instrument.equals("MW")) startsWith += "MWR";
 			else { //SR
