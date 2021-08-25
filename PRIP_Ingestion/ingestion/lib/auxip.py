@@ -16,7 +16,7 @@ def get_odata_datetime_format(datetime_string):
     try:
         datetime.strptime(datetime_string, odata_datetime_format)
     except ValueError:
-        
+       
         # Try these following fomats 
         # "%Y%m%dT%H%M%S"  20201013T065032
         try:
@@ -81,7 +81,7 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
         headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
         auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
         if mode == 'prod':
-            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
+            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/"
         if len(aux_type_list) == 0:
             return aux_type_list
         request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
@@ -90,6 +90,8 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
         request = request + "&$orderby=PublicationDate desc&$top=1"
         print("Request : " + request)
         response = requests.get(request,headers=headers)
+        print(response.text)
+        print(access_token)
         if response.status_code != 200:
             print(response.status_code)
             print(response.text)

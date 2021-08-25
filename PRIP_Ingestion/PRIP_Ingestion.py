@@ -31,12 +31,12 @@ if __name__ == "__main__":
     token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
     try:
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
-                                           token_info,"https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
+                                           token_info['access_token'],"https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
     except Exception as e:
         print(e)
         time.sleep(5)
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
-                                           token_info,
+                                           token_info['access_token'],
                                            "https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
     print("Number of PRIP File : "+str(len(prip_list_GIPP)))
     for f in prip_list_GIPP:
