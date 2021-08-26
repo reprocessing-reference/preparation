@@ -84,7 +84,7 @@ TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting PRIP download"
-python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER}
+python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER} -au ${AUXIP_USER} -apw ${AUXIP_PASS}
 code=$?
 if [ $code -ne 0 ]; then
   echo "PRIP Retrieve failed"
