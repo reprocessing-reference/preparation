@@ -130,6 +130,7 @@ else
         rm -r ${TEMP_FOLDER}
         rm -r ${TEMP_FOLDER_AUX}
       echo "Done"
+      fi
     fi
   fi
 fi
