@@ -52,24 +52,24 @@ if [ -z ${S3_ACCESS_KEY+x} ]; then
   MCPATH="mc"
 else
   if [ -z ${MCPATH+x} ]; then
-   echo "MCPATH not set"
-   exit 1
+    echo "MCPATH not set"
+    exit 1
   fi
   echo "MCPATH : "$MCPATH
   echo "S3_ACCESS_KEY: "${S3_ACCESS_KEY}
   if [ -z ${S3_SECRET_KEY+x} ]; then
-   echo "S3_SECRET_KEY not set"
-   exit 1
+    echo "S3_SECRET_KEY not set"
+    exit 1
   fi
   echo "S3_SECRET_KEY: "${S3_SECRET_KEY}
   if [ -z ${S3_ENDPOINT+x} ]; then
-   echo "S3_ENDPOINT not set"
-   exit 1
+    echo "S3_ENDPOINT not set"
+    exit 1
   fi
   echo "S3_ENDPOINT: "${S3_ENDPOINT}
   if [ -z ${S3_BUCKET+x} ]; then
-   echo "S3_BUCKET not set"
-   exit 1
+    echo "S3_BUCKET not set"
+    exit 1
   fi
   echo "S3_BUCKET: "${S3_BUCKET}
   ${MCPATH} alias set "wasabi-auxip-archives" ${S3_ENDPOINT} ${S3_ACCESS_KEY} ${S3_SECRET_KEY} --api S3v4
@@ -97,10 +97,6 @@ python3 ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $STA
 code=$?
 if [ $code -ne 0 ]; then
   echo "ECMWF Retrieve failed"
-  rm -r ${TEMP_FOLDER_LISTING}
-  rm -r ${TEMP_FOLDER_JSONS}
-  rm -r ${TEMP_FOLDER}
-  rm -r ${TEMP_FOLDER_AUX}
 else
   echo "ECMWF download done"
   echo "Starting AUXIP ingestion"
@@ -108,9 +104,6 @@ else
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
-    rm -r ${TEMP_FOLDER}
-    rm -r ${TEMP_FOLDER_LISTING}
-    rm -r ${TEMP_FOLDER_JSONS}
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
@@ -130,15 +123,13 @@ else
           master_code=$code
         fi
       done
-      echo "Removing temporary folders"
-#      if [ $master_code -ne 0 ]; then
-#        echo "Reprobase ingestion failed"
-#      else
-#        rm -r ${TEMP_FOLDER}
-#        rm -r ${TEMP_FOLDER_LISTING}
-#        rm -r ${TEMP_FOLDER_JSONS}
-        echo "Done"
-      fi
+      if [ $master_code -ne 0 ]; then
+            echo "Reprobase ingestion failed"
+      else
+        echo "Removing temporary folders"
+        rm -r ${TEMP_FOLDER}
+        rm -r ${TEMP_FOLDER_AUX}
+      echo "Done"
     fi
   fi
 fi

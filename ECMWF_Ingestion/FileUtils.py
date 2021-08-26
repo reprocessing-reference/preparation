@@ -71,8 +71,6 @@ def parse_filename(the_file_name):
 
 def parse_all(the_file_name):
     first_part = parse_filename(the_file_name)
-    print(first_part)
-    print(first_part[4][1])
     if first_part:
         second_part = get_instance_id(first_part[4][1])
         if second_part:
