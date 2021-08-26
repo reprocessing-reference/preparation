@@ -145,11 +145,9 @@ def search_in_auxip(name,access_token,mode='dev'):
         print(e)
         raise e
 
-    
 
 # post auxdata file to the auxip.svc
 def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
-
     try:
         aux_data_file_name = os.path.basename(path_to_auxiliary_data_file)
 

@@ -354,6 +354,8 @@ time_dependency_dict = {
     "ASA_INS": "ValidityPeriod",
     "AUX_OBMEMC": "ValidityPeriod",
     "AUX_ECMWFT": "ValidityPeriod",
+    "AUX_CAMSAN": "ValidityPeriod",
+    "AUX_CAMSRE": "ValidityPeriod",
     "AUX_SADATA": "ValidityPeriod",
     "AUX_SXXYYY": "ValidityPeriod",
     "AUX_GPS___": "ValidityPeriod",

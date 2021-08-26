@@ -13,8 +13,11 @@ from lib.auxip import post_to_auxip,get_token_info,refresh_token_info,is_file_av
 from lib.wasabi import upload_to_wasabi
 
 OK = 0
+KO = 1
+
 
 def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,mode="dev"):
+    global_status = OK
     with open("report_thread_%d.txt" % thread_id,"w") as report:
         timer_start = time.time()
         access_token = token_info['access_token']
@@ -36,11 +39,14 @@ def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,m
                     message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : OK\n" % (path_to_auxfile,uuid)
                     listing_out.append(os.path.basename(path_to_auxfile))
                 else:
+                    global_status = KO
                     message = "%s : %s\tupload_to_wasabi : OK post_to_auxip : KO\n" % (path_to_auxfile,uuid)
             else:
+                global_status = KO
                 message = "%s : %s\tupload_to_wasabi : KO post_to_auxip : NO VALID UUID\n" % (path_to_auxfile,uuid)
 
             report.write(message)
+    return global_status
 
 
 def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_list,mode="dev",
@@ -62,14 +68,17 @@ def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_
             not_yet_uploaded.append(auxiliary_data_files[i])
 
     uploaded = []
+    global_status = OK
     if len(not_yet_uploaded) > 0:
-        upload_and_post(1, path_to_mc, bucket, token_info, not_yet_uploaded, uploaded, mode)
+        global_status = upload_and_post(1, path_to_mc, bucket, token_info, not_yet_uploaded, uploaded, mode)
     else:
         print("No new auxiliary data file found in the input folder")
     with open(output_list, mode="w") as l:
         for i in uploaded:
             l.write(i + "\n")
         l.close()
+    if global_status == KO:
+        exit(1)
 
 
 if __name__ == "__main__":

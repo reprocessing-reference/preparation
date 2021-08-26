@@ -88,9 +88,6 @@ python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_
 code=$?
 if [ $code -ne 0 ]; then
   echo "PRIP Retrieve failed"
-  rm -r ${TEMP_FOLDER}
-  rm -r ${TEMP_FOLDER_LISTING}
-  rm -r ${TEMP_FOLDER_JSONS}
 else
   echo "PRIP download done"
   echo "Starting AUXIP ingestion"
@@ -98,9 +95,6 @@ else
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
-    rm -r ${TEMP_FOLDER}
-    rm -r ${TEMP_FOLDER_LISTING}
-    rm -r ${TEMP_FOLDER_JSONS}
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
@@ -120,10 +114,10 @@ else
           master_code=$code
         fi
       done
-      echo "Removing temporary folders"
       if [ $master_code -ne 0 ]; then
         echo "Reprobase ingestion failed"
       else
+        echo "Removing temporary folders"
         rm -r ${TEMP_FOLDER}
         rm -r ${TEMP_FOLDER_LISTING}
         rm -r ${TEMP_FOLDER_JSONS}
