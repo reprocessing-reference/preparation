@@ -4,6 +4,8 @@
 import argparse
 import PRIP_S2
 import time
+import json
+import os
 
 from ingestion.lib.auxip import get_token_info
 
@@ -22,13 +24,76 @@ if __name__ == "__main__":
     parser.add_argument("-apw", "--auxippassword",
                         help="Auxip password ",
                         required=True)
-
+    parser.add_argument("-lu", "--ltauser",
+                        help="LTA user",
+                        required=True)
+    parser.add_argument("-lpw", "--ltapassword",
+                        help="LTA password ",
+                        required=True)
+    parser.add_argument("-f", "--filetypes",
+                        help="filetypes jsons",
+                        required=True)
     parser.add_argument("-w", "--working",
                         help="Working folder",
                         required=True)
     args = parser.parse_args()
 
+    working_S2 = os.path.join(args.working,"S2")
+    os.makedirs(working_S2)
+    working_S1 = os.path.join(args.working, "S1")
+    os.makedirs(working_S1)
+    working_S3 = os.path.join(args.working, "S3")
+    os.makedirs(working_S3)
+
     token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
+
+    filetype_dict_S1 = []
+    filetype_dict_S3 = []
+    for (dirpath, dirnames, filenames) in os.walk(args.filetypes):
+        for filename in filenames:
+            with open(os.path.join(args.filetypes, filename)) as f:
+                filetype = json.load(f)
+                if "S1" in filetype["Mission"]:
+                    filetype_dict_S1.append(filetype["ShortName"])
+                elif "S3" in filetype["Mission"]:
+                    filetype_dict_S3.append(filetype["ShortName"])
+
+    for t in filetype_dict_S1:
+        print(t)
+        prip_list_S1 = []
+        try:
+            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t], mode="prod")
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t], mode="prod")
+        for f in prip_list_S1:
+            PRIP_S2.prip_download(f[0], f[1], "cs_rpro", "ZBadMxb6Im3U", "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                  working_S1)
+
+    for t in filetype_dict_S3:
+        print(t)
+        prip_list_S3 = []
+        try:
+            prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t], mode="prod")
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+            prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t], mode="prod")
+        for f in prip_list_S3:
+            PRIP_S2.prip_download(f[0], f[1], "cs_rpro", "ZBadMxb6Im3U", "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                  working_S3)
+
+    exit(0)
+
     try:
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
                                            token_info['access_token'],"https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
@@ -40,6 +105,6 @@ if __name__ == "__main__":
                                            "https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
     print("Number of PRIP File : "+str(len(prip_list_GIPP)))
     for f in prip_list_GIPP:
-        PRIP_S2.prip_download(f[0],f[1],args.user, args.password, "https://prip.s2pdgs.com/odata/v1/", args.working)
+        PRIP_S2.prip_download(f[0],f[1],args.user, args.password, "https://prip.s2pdgs.com/odata/v1/", working_S2)
 
 

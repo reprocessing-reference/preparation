@@ -98,7 +98,7 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
             raise Exception("Error while accessing auxip")
         json_resp = response.json()
         if len(json_resp["value"]) != 1:
-            raise Exception("Error while getting latest publicated")
+            return None
         return json_resp["value"][0]["PublicationDate"]
     except Exception as e:
         print("%s ==> get ends with error " % request )
