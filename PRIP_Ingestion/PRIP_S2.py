@@ -29,11 +29,12 @@ def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"
         response = requests.get(request_top, auth=HTTPBasicAuth(user, password),headers=headers,verify=False)
         if response is not None:
             if response.status_code == 200:
-                print("Number of element found : "+str(len(response.json()["value"])))
-                if len(response.json()["value"]) == 0:
+                resp_json = response.json()
+                print("Number of element found : "+str(len(resp_json["value"])))
+                if len(resp_json["value"]) == 0:
                     break
-                #print(response.json())
-                for f in response.json()["value"]:
+                print(resp_json["value"][0])
+                for f in resp_json["value"]:
                     ID = f["Id"]
                     file_list.append((ID,f["Name"]))
             else:
