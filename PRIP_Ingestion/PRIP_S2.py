@@ -4,21 +4,21 @@ import time,sys,os
 from ingestion.lib.auxip import get_latest_of_type
 
 
-def prip_list(user, password, auxip_token, base_url, type_list, mode="prod"):
+def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"):
     file_list = []
     headers = {'Content-type': 'application/json'}
     if len(type_list) == 0:
         return file_list
-    latest_pub_date = get_latest_of_type(access_token=auxip_token,aux_type_list=type_list,mode=mode)
-    if latest_pub_date is not None:
-        request = base_url+"Products?$orderby=PublicationDate desc&$filter=PublicationDate gt "+latest_pub_date+" and (contains(Name,'"+type_list[0]+"')"
-    else:
+    latest_pub_date = get_latest_of_type(access_token=auxip_token,aux_type_list=type_list,sat=sat,mode=mode)
+    if latest_pub_date is None:
         print("No file available in auxip for types : ")
         print(type_list)
         return file_list
+    request = base_url + "Products?$orderby=PublicationDate desc&$filter=PublicationDate gt " + latest_pub_date + " and (contains(Name,'" + \
+              type_list[0] + "')"
     for idx in range(1,len(type_list)):
         request = request + " or contains(Name,'"+type_list[idx]+"')"
-    request = request + ")"
+    request = request + ") and startswith(Name,'"+sat+"')"
 
     step=200
     for i in range(0,100000,step):
@@ -62,7 +62,6 @@ def prip_download(id, name,user, password,base_url,output_folder):
                 dl = 0
                 print("Starting download")
                 for data in product_response.iter_content(chunk_size=4096):
-                    print("len "+str(len(data)))
                     dl += len(data)
                     fid.write(data)
                     done = int(50 * dl / total_length)

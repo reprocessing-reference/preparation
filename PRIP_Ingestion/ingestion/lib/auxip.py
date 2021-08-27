@@ -76,7 +76,7 @@ def refresh_token_info(token_info,timer,mode='dev'):
         return response.json()
 
 
-def get_latest_of_type(access_token,aux_type_list,mode='dev'):
+def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
     try:
         headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
         auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
@@ -87,7 +87,7 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
         request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
         for idx in range(1, len(aux_type_list)):
             request = request + " or contains(Name,'" + aux_type_list[idx] + "')"
-        request = request + "&$orderby=PublicationDate desc&$top=1"
+        request = request + " and startswith(Name,'"+sat+"')&$orderby=PublicationDate desc&$top=1"
         print("Request : " + request)
         response = requests.get(request,headers=headers)
         print(response.text)

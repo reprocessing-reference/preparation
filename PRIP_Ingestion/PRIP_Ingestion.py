@@ -63,17 +63,19 @@ if __name__ == "__main__":
 
     for t in filetype_dict_S1:
         print(t)
+        if t == "AUX_POEORB_S1":
+            t = "AUX_POEORB"
         prip_list_S1 = []
         try:
             prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
                                              token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-                                             [t], mode="prod")
+                                             [t], sat="S1",mode="prod")
         except Exception as e:
             print(e)
             time.sleep(5)
             prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
                                              token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-                                             [t], mode="prod")
+                                             [t],  sat="S1",mode="prod")
         for f in prip_list_S1:
             PRIP_S2.prip_download(f[0], f[1], "cs_rpro", "ZBadMxb6Im3U", "https://lta.cloudferro.copernicus.eu/odata/v1/",
                                   working_S1)
@@ -84,13 +86,13 @@ if __name__ == "__main__":
         try:
             prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
                                              token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-                                             [t], mode="prod")
+                                             [t],  sat="S3",mode="prod")
         except Exception as e:
             print(e)
             time.sleep(5)
             prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
                                              token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-                                             [t], mode="prod")
+                                             [t],  sat="S3",mode="prod")
         for f in prip_list_S3:
             PRIP_S2.prip_download(f[0], f[1], "cs_rpro", "ZBadMxb6Im3U", "https://lta.cloudferro.copernicus.eu/odata/v1/",
                                   working_S3)
