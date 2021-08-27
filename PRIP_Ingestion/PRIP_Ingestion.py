@@ -65,6 +65,8 @@ if __name__ == "__main__":
         print(t)
         if t == "AUX_POEORB_S1":
             t = "AUX_POEORB"
+        if t == "AUX_PREORB_S1":
+            t = "AUX_PREORB"
         prip_list_S1 = []
         try:
             prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
