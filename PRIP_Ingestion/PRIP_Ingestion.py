@@ -54,9 +54,9 @@ if __name__ == "__main__":
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
                 if "S1" in filetype["Mission"]:
-                    filetype_dict_S1.append(filetype["ShortName"])
+                    filetype_dict_S1.append(filetype["LongName"])
                 elif "S3" in filetype["Mission"]:
-                    filetype_dict_S3.append(filetype["ShortName"])
+                    filetype_dict_S3.append(filetype["LongName"])
 
     for t in filetype_dict_S1:
         print(t)
