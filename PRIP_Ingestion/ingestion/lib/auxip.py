@@ -87,7 +87,7 @@ def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
         request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
         for idx in range(1, len(aux_type_list)):
             request = request + " or contains(Name,'" + aux_type_list[idx] + "')"
-        request = request + " and startswith(Name,'"+sat+"')&$orderby=PublicationDate desc&$top=1"
+        request = request + " and startswith(Name,'"+sat+"')&$orderby=ContentDate/End desc&$top=1"
         print("Request : " + request)
         response = requests.get(request,headers=headers)
         print(response.text)
@@ -99,7 +99,7 @@ def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
         json_resp = response.json()
         if len(json_resp["value"]) != 1:
             return None
-        return json_resp["value"][0]["PublicationDate"]
+        return json_resp["value"][0]["ContentDate"]["End"]
     except Exception as e:
         print("%s ==> get ends with error " % request )
         print(e)

@@ -14,7 +14,7 @@ def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"
         print("No file available in auxip for types : ")
         print(type_list)
         return file_list
-    request = base_url + "Products?$orderby=PublicationDate desc&$filter=PublicationDate gt " + latest_pub_date + " and (contains(Name,'" + \
+    request = base_url + "Products?$orderby=ContentDate/End desc&$filter=ContentDate/End gt " + latest_pub_date + " and (contains(Name,'" + \
               type_list[0] + "')"
     for idx in range(1,len(type_list)):
         request = request + " or contains(Name,'"+type_list[idx]+"')"
