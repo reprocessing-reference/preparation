@@ -39,11 +39,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     working_S2 = os.path.join(args.working,"S2")
-    os.makedirs(working_S2)
+    if not os.path.exists(working_S2):
+        os.makedirs(working_S2)
     working_S1 = os.path.join(args.working, "S1")
-    os.makedirs(working_S1)
+    if not os.path.exists(working_S1):
+        os.makedirs(working_S1)
     working_S3 = os.path.join(args.working, "S3")
-    os.makedirs(working_S3)
+    if not os.path.exists(working_S3):
+        os.makedirs(working_S3)
 
     token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
 
