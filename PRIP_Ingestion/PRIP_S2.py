@@ -46,10 +46,13 @@ def prip_download(id, name,user, password,base_url,output_folder):
     try:
         headers = {'Content-type': 'application/json'}
         # get ID and size of the product
-        print( "\nDownloading %s " % (name) )
         id_folder = output_folder
         os.makedirs(id_folder,exist_ok=True)
         file_path = os.path.join(id_folder, name)
+        if os.path.exists(file_path) and os.path.getsize(file_path) != 0:
+            print("\nFile already exists and is not empty %s " % (name))
+            return
+        print("\nDownloading %s " % (name))
         with open(file_path,"wb") as fid:
             start = time.perf_counter()
             product_response = requests.get(base_url+"Products(%s)/$value" % id ,auth=HTTPBasicAuth(user, password),
