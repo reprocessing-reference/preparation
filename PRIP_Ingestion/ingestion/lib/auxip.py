@@ -1,3 +1,5 @@
+import time
+
 import requests
 import requests
 import json
@@ -126,15 +128,26 @@ def is_file_available(access_token,aux_data_file_name,mode='dev'):
         raise e
 
 
-def are_file_availables(access_token,aux_data_files_names,step,mode='dev'):
+def are_file_availables(auxip_user,auxip_password,aux_data_files_names,step,mode='dev'):
     availables = []
+    timer_start = time.time()
+    token_info = get_token_info(auxip_user, auxip_password,mode=mode)
+    access_token = token_info['access_token']
     try:
-        headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
+
         auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
         if mode == 'prod':
             auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
 
         for f in range(0, len(aux_data_files_names), step):
+            # refesh token if necessary
+            timer_stop = time.time()
+            elapsed_seconds = timer_stop - timer_start
+            if elapsed_seconds > 350:
+                timer_start = time.time()
+                token_info = get_token_info(auxip_user, auxip_password, mode=mode)
+                access_token = token_info['access_token']
+            headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % access_token}
             request = auxip_endpoint+"?$filter=contains(Name,'"+aux_data_files_names[f]+"')"
             for t in range(min(len(aux_data_files_names),f+1), min(len(aux_data_files_names),f+step),1):
                 request = request + " or contains(Name,'"+aux_data_files_names[t]+"')"

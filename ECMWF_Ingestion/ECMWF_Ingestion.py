@@ -84,8 +84,8 @@ if __name__ == "__main__":
     with open(request_1_filename) as f:
         data = f.read()
         #Exec request
-        c = ecmwfapi.ECMWFService('mars',key=args.key,url=args.url,email=args.email)
-        c.execute(data, request_1_target)
+        #c = ecmwfapi.ECMWFService('mars',key=args.key,url=args.url,email=args.email)
+        #c.execute(data, request_1_target)
     #test if grib is here
     if not os.path.exists(request_1_target):
         print("Output grib for request 1 is not available")
@@ -93,10 +93,10 @@ if __name__ == "__main__":
     #Split the grib into pieces to recompose afterword
     request_1_split_folder = os.path.join(args.working, "request_1_split")
     os.makedirs(request_1_split_folder,exist_ok=True)
-    process_1 = subprocess.run(["grib_copy",request_1_target,os.path.join(request_1_split_folder,"[dataDate]-[time]-[step]")])
-    if process_1.returncode != 0:
-        print("Failed to cut grib for request 1")
-        exit(1)
+    #process_1 = subprocess.run(["grib_copy",request_1_target,os.path.join(request_1_split_folder,"[dataDate]-[time]-[step]")])
+    #if process_1.returncode != 0:
+    #    print("Failed to cut grib for request 1")
+    #    exit(1)
     #At level
     print("Starting at level ECMWF handling")
     request_2 = request_generator.RequestGenerator()
@@ -111,8 +111,8 @@ if __name__ == "__main__":
     with open(request_2_filename) as f:
         data = f.read()
         #Exec request
-        c = ecmwfapi.ECMWFService('mars',key=args.key,url=args.url,email=args.email)
-        c.execute(data, request_2_target)
+        #c = ecmwfapi.ECMWFService('mars',key=args.key,url=args.url,email=args.email)
+        #c.execute(data, request_2_target)
 
     # test if grib is here
     if not os.path.exists(request_2_target):
@@ -121,10 +121,10 @@ if __name__ == "__main__":
     #Split the grib into pieces to recompose afterword
     request_2_split_folder = os.path.join(args.working, "request_2_split")
     os.makedirs(request_2_split_folder, exist_ok=True)
-    process_2 = subprocess.run(["grib_copy",request_2_target,os.path.join(request_2_split_folder,"[dataDate]-[time]-[step]")])
-    if process_2.returncode != 0:
-       print("Failed to cut grib for request 2")
-       exit(1)
+    #process_2 = subprocess.run(["grib_copy",request_2_target,os.path.join(request_2_split_folder,"[dataDate]-[time]-[step]")])
+    #if process_2.returncode != 0:
+    #   print("Failed to cut grib for request 2")
+    #   exit(1)
     print("ECMWF Datas retrieved")
     #Put in each output files
     print("Starting output files creation")

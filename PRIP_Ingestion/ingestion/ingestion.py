@@ -16,8 +16,10 @@ OK = 0
 KO = 1
 
 
-def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,mode="dev"):
+def upload_and_post(thread_id,path_to_mc,bucket,auxip_user,auxip_password,listing,listing_out,mode="dev"):
     global_status = OK
+    token_info = get_token_info(auxip_user, auxip_password,mode=mode)
+    access_token = token_info['access_token']
     with open("report_thread_%d.txt" % thread_id,"w") as report:
         timer_start = time.time()
         access_token = token_info['access_token']
@@ -30,9 +32,9 @@ def upload_and_post(thread_id,path_to_mc,bucket,token_info,listing,listing_out,m
                 # refesh token if necessary 
                 timer_stop = time.time()
                 elapsed_seconds = timer_stop - timer_start
-                token_info = refresh_token_info(token_info,elapsed_seconds,mode)
-                if access_token != token_info['access_token']:
+                if elapsed_seconds > 300:
                     timer_start = time.time()
+                    token_info = get_token_info(auxip_user, auxip_password,mode=mode)
                     access_token = token_info['access_token']
                 # do a post to auxip.svc if the upload to wasabi is OK
                 if post_to_auxip(access_token,path_to_auxfile,uuid,mode) == OK:
@@ -63,15 +65,16 @@ def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_
     access_token = token_info['access_token']
     # Create listings
     not_yet_uploaded = []
-    availables = are_file_availables(access_token,auxiliary_data_filenames,5,mode)
+    print("Testing files in auxip or not ...")
+    availables = are_file_availables(auxip_user,auxip_password,auxiliary_data_filenames,5,mode)
     for i in auxiliary_data_filenames:
         if i in availables:
             not_yet_uploaded.append(auxiliary_data_files[i])
-
+    print(str(len(not_yet_uploaded))+" files not in auxip")
     uploaded = []
     global_status = OK
     if len(not_yet_uploaded) > 0:
-        global_status = upload_and_post(1, path_to_mc, bucket, token_info, not_yet_uploaded, uploaded, mode)
+        global_status = upload_and_post(1, path_to_mc, bucket, auxip_user, auxip_password, not_yet_uploaded, uploaded, mode)
     else:
         print("No new auxiliary data file found in the input folder")
     with open(output_list, mode="w") as l:
@@ -116,11 +119,12 @@ if __name__ == "__main__":
     # =======================================================================
     #               CREATE AUXILIARY DATA FILES LISTING WITHOUT DUPLICATION
     # =======================================================================
+    print("Listing files ...")
     auxiliary_data_files = {}
     for root, folders, files in os.walk(args.input):
         for name in files:
             # auxiliary_data_files.append(os.path.join(root,name))
             auxiliary_data_files[name] = os.path.join(root, name)
-
+    print("Done")
     ingest(auxiliary_data_files, args.user, args.password, args.path_to_mc,args.output,args.mode, args.bucket)
 
