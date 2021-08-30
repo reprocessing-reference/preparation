@@ -9,7 +9,7 @@ import uuid as UUID
 import threading
 import time
 
-from lib.auxip import post_to_auxip,get_token_info,refresh_token_info,is_file_available
+from lib.auxip import post_to_auxip,get_token_info,refresh_token_info,are_file_availables
 from lib.wasabi import upload_to_wasabi
 
 OK = 0
@@ -63,8 +63,9 @@ def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_
     access_token = token_info['access_token']
     # Create listings
     not_yet_uploaded = []
+    availables = are_file_availables(access_token,auxiliary_data_filenames,5,mode)
     for i in auxiliary_data_filenames:
-        if not is_file_available(access_token,i,mode):
+        if i in availables:
             not_yet_uploaded.append(auxiliary_data_files[i])
 
     uploaded = []

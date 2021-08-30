@@ -125,6 +125,35 @@ def is_file_available(access_token,aux_data_file_name,mode='dev'):
         print(e)
         raise e
 
+
+def are_file_availables(access_token,aux_data_files_names,step,mode='dev'):
+    availables = []
+    try:
+        headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
+
+        for f in range(0, len(aux_data_files_names), step):
+            request = auxip_endpoint+"?$filter=contains(Name,'"+aux_data_files_names[f]+"')"
+            for t in range(min(len(aux_data_files_names),f+1), min(len(aux_data_files_names),f+step),1):
+                request = request + " or contains(Name,'"+aux_data_files_names[t]+"')"
+            print(request)
+            response = requests.get(request,headers=headers)
+            if response.status_code != 200:
+                print(response.status_code)
+                print(response.text)
+                raise Exception("Error while accessing auxip")
+            json_resp = response.json()
+            for g in json_resp["value"]:
+                availables.append(g["Name"])
+    except Exception as e:
+        print("==> get ends with error ")
+        print(e)
+        raise e
+
+    return availables
+
     
 def search_in_auxip(name,access_token,mode='dev'):
     try:
