@@ -248,8 +248,9 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     if(countOption != null && countOption.getValue())
     {
     	responseEntityCollection.setCount(storage.getEntitySetCount(startEdmEntitySet,filterOption));
-    	System.out.println(String.valueOf(responseEntityCollection.getCount()));
+    	LOG.info(String.valueOf(responseEntityCollection.getCount()));
     }
+    LOG.info(String.valueOf(responseEntityCollection.getCount()));
     
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();
