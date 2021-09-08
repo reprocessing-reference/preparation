@@ -11,6 +11,7 @@ def upload_to_wasabi(path_to_mc,bucket,auxiliary_data_file,uuid,mode="dev"):
         print( "mc command => %s \n" % upload_command )
         return 0
     else:
+        print( "mc command => %s \n" % upload_command )
         return subprocess.call( upload_command )
 
 
