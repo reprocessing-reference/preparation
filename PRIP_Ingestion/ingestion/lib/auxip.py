@@ -158,6 +158,7 @@ def are_file_availables(auxip_user,auxip_password,aux_data_files_names,step,mode
                 print(response.text)
                 raise Exception("Error while accessing auxip")
             json_resp = response.json()
+            print(json_resp)
             for g in json_resp["value"]:
                 availables.append(g["Name"])
     except Exception as e:

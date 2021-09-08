@@ -66,8 +66,8 @@ def ingest(auxiliary_data_files, auxip_user, auxip_password, path_to_mc, output_
     # Create listings
     not_yet_uploaded = []
     print("Testing files in auxip or not ...")
-    availables = are_file_availables(auxip_user,auxip_password,auxiliary_data_filenames,20,mode)
-    print(availables)
+    availables = are_file_availables(auxip_user,auxip_password,auxiliary_data_filenames,5,mode)
+    print("Availables: "+str(len(availables)))
     for i in auxiliary_data_filenames:
         if i not in availables:
             not_yet_uploaded.append(auxiliary_data_files[i])
