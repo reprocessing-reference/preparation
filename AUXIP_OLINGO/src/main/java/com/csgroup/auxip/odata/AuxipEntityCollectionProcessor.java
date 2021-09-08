@@ -68,7 +68,7 @@ import org.slf4j.LoggerFactory;
 
 public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor {
 	
-  private static final int MAX_RESULTS = 200;
+  private static final int MAX_RESULTS = 240;
 	
   private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityCollectionProcessor.class);
 
