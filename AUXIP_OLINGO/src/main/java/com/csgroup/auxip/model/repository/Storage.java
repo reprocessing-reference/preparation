@@ -589,7 +589,7 @@ public class Storage {
 		Query query = entityManager.createQuery(queryString);
 
 		//Get result
-		int count = (int) query.getSingleResult(); 
+		int count = ((Long)query.getSingleResult()).intValue(); 
 
 		return count;
 	}
