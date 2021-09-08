@@ -18,6 +18,8 @@
  */
 package com.csgroup.auxip.odata;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
@@ -247,6 +249,15 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     {
     	responseEntityCollection.setCount(responseEntityCollection.getEntities().size());
     }
+    
+    
+    //Set the next link
+    try {
+		responseEntityCollection.setNext(new URI(request.getRawRequestUri().toString()));
+	} catch (URISyntaxException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();
