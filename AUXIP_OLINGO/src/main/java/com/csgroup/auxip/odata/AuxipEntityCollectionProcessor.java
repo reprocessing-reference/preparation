@@ -61,13 +61,14 @@ import org.apache.olingo.server.api.uri.queryoption.OrderByOption;
 import org.apache.olingo.server.api.uri.queryoption.SelectOption;
 import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
-import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
-import org.apache.olingo.server.core.uri.UriResourceNavigationPropertyImpl;
+import org.apache.olingo.server.core.uri.queryoption.TopOptionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor {
+	
+  private static final int MAX_RESULTS = 200;
 	
   private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityCollectionProcessor.class);
 
@@ -132,6 +133,16 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     // regardless of the order in which they appear in the request.”
     SkipOption skipOption = uriInfo.getSkipOption();
     TopOption topOption = uriInfo.getTopOption();
+    
+    if (topOption == null)
+    {
+    	topOption = new TopOptionImpl().setValue(MAX_RESULTS);
+    } else {
+    	if (topOption.getValue() > MAX_RESULTS)
+    	{
+    		topOption = new TopOptionImpl().setValue(MAX_RESULTS);
+    	}
+    }
 
     if (segmentCount == 1) 
     { 
@@ -231,6 +242,11 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       }
     }
 
+    //Add the count option
+    if(countOption != null && countOption.getValue())
+    {
+    	responseEntityCollection.setCount(responseEntityCollection.getEntities().size());
+    }
     
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();
