@@ -101,7 +101,7 @@ def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
         json_resp = response.json()
         if len(json_resp["value"]) != 1:
             return None
-        return json_resp["value"][0]["ContentDate"]["Start"]
+        return json_resp["value"][0]["PublicationDate"]
     except Exception as e:
         print("%s ==> get ends with error " % request )
         print(e)
