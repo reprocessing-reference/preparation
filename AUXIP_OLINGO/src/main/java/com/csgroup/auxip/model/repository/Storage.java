@@ -555,8 +555,7 @@ public class Storage {
 		return outQuery;
 	}
 
-	public int getEntitySetCount(EdmEntitySet edmEntitySet, FilterOption filterOption,
-			SkipOption skipOption, TopOption topOption) throws ODataApplicationException {
+	public int getEntitySetCount(EdmEntitySet edmEntitySet, FilterOption filterOption) throws ODataApplicationException {
 
 		String queryString;
 		String entitySetName = edmEntitySet.getName();
@@ -585,7 +584,7 @@ public class Storage {
 			queryString = "SELECT COUNT(entity) FROM " + className + " entity" ;
 		}
 
-		LOG.debug("Query: "+queryString);
+		LOG.info("Query: "+queryString);
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 		Query query = entityManager.createQuery(queryString);
 
