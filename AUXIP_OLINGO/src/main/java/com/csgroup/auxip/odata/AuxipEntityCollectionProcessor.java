@@ -247,17 +247,9 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     //Add the count option
     if(countOption != null && countOption.getValue())
     {
-    	responseEntityCollection.setCount(responseEntityCollection.getEntities().size());
+    	responseEntityCollection.setCount(storage.getEntitySetCount(startEdmEntitySet,filterOption,
+      		  skipOption, topOption));
     }
-    
-    
-    //Set the next link
-    try {
-		responseEntityCollection.setNext(new URI(request.getRawRequestUri().toString()));
-	} catch (URISyntaxException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
     
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();

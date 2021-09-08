@@ -555,6 +555,46 @@ public class Storage {
 		return outQuery;
 	}
 
+	public int getEntitySetCount(EdmEntitySet edmEntitySet, FilterOption filterOption,
+			SkipOption skipOption, TopOption topOption) throws ODataApplicationException {
+
+		String queryString;
+		String entitySetName = edmEntitySet.getName();
+		String className;
+		switch (entitySetName) {
+		case Product.ES_NAME:
+			className = Product.class.getName();
+			break;
+		case Subscription.ES_NAME:
+			className = Subscription.class.getName();
+			break;
+		case Metric.ES_NAME:
+			className = Metric.class.getName();
+			break;
+		default:
+			int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
+			throw new ODataApplicationException("No Class found for " + entitySetName,statusCode , Locale.ROOT,String.valueOf(statusCode));		
+		}
+		if( filterOption != null )
+		{
+			Expression filterExpression = filterOption.getExpression();
+			queryString = "SELECT COUNT(entity) FROM " + className + " entity WHERE PLACE_HOLDER";
+			queryString = getQuery(filterExpression, "PLACE_HOLDER", queryString);
+		}else
+		{
+			queryString = "SELECT COUNT(entity) FROM " + className + " entity" ;
+		}
+
+		LOG.debug("Query: "+queryString);
+		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+		Query query = entityManager.createQuery(queryString);
+
+		//Get result
+		int count = (int) query.getSingleResult(); 
+
+		return count;
+	}
+	
 	public EntityCollection readEntitySetData(EdmEntitySet edmEntitySet, FilterOption filterOption,
 			ExpandOption expandOption,OrderByOption orderByOption, SkipOption skipOption, TopOption topOption) throws ODataApplicationException {
 		EntityCollection entitySet = new EntityCollection();
