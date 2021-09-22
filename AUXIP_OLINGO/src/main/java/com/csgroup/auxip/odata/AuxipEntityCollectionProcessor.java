@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
+import com.csgroup.auxip.config.ODATAConfiguration;
 import com.csgroup.auxip.model.jpa.User;
 import com.csgroup.auxip.model.repository.Storage;
 import org.apache.olingo.commons.api.Constants;
@@ -66,11 +67,12 @@ import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.core.uri.queryoption.TopOptionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor {
 	
-  private static final int MAX_RESULTS = 240;
+  private static final int MAX_RESULTS = 200;
 	
   private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityCollectionProcessor.class);
 
@@ -78,6 +80,8 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
   private ServiceMetadata srvMetadata;
   // our database-mock
   private Storage storage;
+  @Autowired
+  private ODATAConfiguration configuration;
 
   public AuxipEntityCollectionProcessor(Storage storage) {
     this.storage = storage;
@@ -138,11 +142,11 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     
     if (topOption == null)
     {
-    	topOption = new TopOptionImpl().setValue(MAX_RESULTS);
+    	topOption = new TopOptionImpl().setValue(configuration.getMaxResults());
     } else {
-    	if (topOption.getValue() > MAX_RESULTS)
+    	if (topOption.getValue() > configuration.getMaxResults())
     	{
-    		topOption = new TopOptionImpl().setValue(MAX_RESULTS);
+    		topOption = new TopOptionImpl().setValue(configuration.getMaxResults());
     	}
     }
 

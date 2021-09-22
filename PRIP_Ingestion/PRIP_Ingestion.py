@@ -61,43 +61,42 @@ if __name__ == "__main__":
                 elif "S3" in filetype["Mission"]:
                     filetype_dict_S3.append(filetype["LongName"])
 
-#    for t in filetype_dict_S1:
-#        token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
-#        print(t)
-#        if t == "AUX_POEORB_S1":
-#            t = "AUX_POEORB"
-#        if t == "AUX_PREORB_S1":
-#            t = "AUX_PREORB"
-#        prip_list_S1 = []
-#        try:
-#            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
-#                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-#                                             [t], sat="S1",mode="prod")
-#        except Exception as e:
-#            print(e)
-#            time.sleep(5)
-#            token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
-#            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
-#                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
-#                                             [t],  sat="S1",mode="prod")
-#        for f in prip_list_S1:
-#            PRIP_S2.prip_download(f[0], f[1], args.ltauser, args.ltapassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
-#                                  working_S1)
-
+    for t in filetype_dict_S1:
+        token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
+        print(t)
+        if t == "AUX_POEORB_S1":
+            t = "AUX_POEORB"
+        if t == "AUX_PREORB_S1":
+            t = "AUX_PREORB"
+        prip_list_S1 = []
+        try:
+            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             args.auxipuser, args.auxippassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t], sat="S1",mode="prod")
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+            token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
+            prip_list_S1 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
+                                             args.auxipuser, args.auxippassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             [t],  sat="S1",mode="prod")
+        for f in prip_list_S1:
+            PRIP_S2.prip_download(f[0], f[1], args.ltauser, args.ltapassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                  working_S1)
     for t in filetype_dict_S3:
         token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
         print(t)
         prip_list_S3 = []
         try:
             prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
-                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             args.auxipuser, args.auxippassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
                                              [t],  sat="S3",mode="prod")
         except Exception as e:
             print(e)
             time.sleep(5)
             token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
             prip_list_S3 = PRIP_S2.prip_list(args.ltauser, args.ltapassword,
-                                             token_info['access_token'], "https://lta.cloudferro.copernicus.eu/odata/v1/",
+                                             args.auxipuser, args.auxippassword, "https://lta.cloudferro.copernicus.eu/odata/v1/",
                                              [t],  sat="S3",mode="prod")
         for f in prip_list_S3:
             PRIP_S2.prip_download(f[0], f[1], args.ltauser, args.ltapassword,"https://lta.cloudferro.copernicus.eu/odata/v1/",
@@ -108,13 +107,13 @@ if __name__ == "__main__":
     try:
         token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
-                                           token_info['access_token'],"https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
+                                           args.auxipuser, args.auxippassword,"https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
     except Exception as e:
         print(e)
         time.sleep(5)
         token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
-                                           token_info['access_token'],
+                                           args.auxipuser, args.auxippassword,
                                            "https://prip.s2pdgs.com/odata/v1/", ["_GIP_","_UT1UTC_"],mode="prod")
     print("Number of PRIP File : "+str(len(prip_list_GIPP)))
     for f in prip_list_GIPP:
