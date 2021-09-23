@@ -1,20 +1,22 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import time,sys,os
-from ingestion.lib.auxip import get_latest_of_type
+from ingestion.lib.auxip import get_latest_of_type,are_file_availables,get_token_info
 
 
-def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"):
+def prip_list(user, password, auxip_user, auxip_password, base_url, type_list, sat, mode="prod"):
     file_list = []
+    token_info = get_token_info(auxip_user, auxip_password, mode="mode")
+
     headers = {'Content-type': 'application/json'}
     if len(type_list) == 0:
         return file_list
-    latest_pub_date = get_latest_of_type(access_token=auxip_token,aux_type_list=type_list,sat=sat,mode=mode)
+    latest_pub_date = get_latest_of_type(access_token=token_info['access_token'],aux_type_list=type_list,sat=sat,mode=mode)
     if latest_pub_date is None:
         print("No file available in auxip for types : ")
         print(type_list)
         return file_list
-    request = base_url + "Products?$orderby=ContentDate/Start asc&$filter=ContentDate/Start gt " + latest_pub_date + " and (contains(Name,'" + \
+    request = base_url + "Products?$orderby=Publication asc&$filter=PublicationDate gt " + latest_pub_date + " and (contains(Name,'" + \
               type_list[0] + "')"
     for idx in range(1,len(type_list)):
         request = request + " or contains(Name,'"+type_list[idx]+"')"
@@ -38,7 +40,12 @@ def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"
                     file_list.append((ID,f["Name"]))
             else:
                 raise Exception("Error on request code : "+str(response.status_code))
-    return file_list
+    availables = are_file_availables(auxip_user,auxip_password,file_list,step=10,mode=mode)
+    real_file_list = []
+    for f in file_list:
+        if f not in availables:
+            real_file_list.append(f)
+    return real_file_list
 
 
 def prip_download(id, name,user, password,base_url,output_folder):

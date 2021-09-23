@@ -1,3 +1,4 @@
+import sys
 import time
 
 import requests
@@ -89,7 +90,7 @@ def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
         request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
         for idx in range(1, len(aux_type_list)):
             request = request + " or contains(Name,'" + aux_type_list[idx] + "')"
-        request = request + " and startswith(Name,'"+sat+"')&$orderby=ContentDate/Start desc&$top=1"
+        request = request + " and startswith(Name,'"+sat+"')&$orderby=PublicationDate desc&$top=1"
         print("Request : " + request)
         response = requests.get(request,headers=headers)
         print(response.text)
