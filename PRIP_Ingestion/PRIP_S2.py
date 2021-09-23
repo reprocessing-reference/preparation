@@ -19,7 +19,6 @@ def prip_list(user, password, auxip_token, base_url, type_list, sat, mode="prod"
     for idx in range(1,len(type_list)):
         request = request + " or contains(Name,'"+type_list[idx]+"')"
     request = request + ") and startswith(Name,'"+sat+"')"
-
     step=200
     for i in range(0,100000,step):
         start = i
