@@ -100,6 +100,13 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       throws ODataApplicationException, SerializerException {
 
 	LOG.info("Starting readEntityCollection");
+	
+	int max_results = MAX_RESULTS;
+	if( this.configuration == null) {
+		LOG.warn("OData configuration not found, using default values");
+	} else {
+		max_results = this.configuration.getMaxResults();
+	}
  
     // Check the client access role 
     if ( !AccessControl.userCanDealWith(request, uriInfo) )
@@ -142,11 +149,11 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     
     if (topOption == null)
     {
-    	topOption = new TopOptionImpl().setValue(configuration.getMaxResults());
+    	topOption = new TopOptionImpl().setValue(max_results);
     } else {
-    	if (topOption.getValue() > configuration.getMaxResults())
+    	if (topOption.getValue() > max_results)
     	{
-    		topOption = new TopOptionImpl().setValue(configuration.getMaxResults());
+    		topOption = new TopOptionImpl().setValue(max_results);
     	}
     }
 
