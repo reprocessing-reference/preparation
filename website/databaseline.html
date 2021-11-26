@@ -1,0 +1,87 @@
+---
+title: Web reprocessing data baseline
+layout: layout-datatable
+bodyClass: confbaseline
+datatable: true
+---
+
+<script>
+	$(document).ready( function () {
+		initDatePicker("data")
+		$('#query_btn')[0].addEventListener('click', queryData);
+		prefetchReprocessingDataBaseline()
+	} )
+</script>
+
+<div class="container pt-5 pt-md-5">
+	<div class="row justify-content-center">
+	  <div class="col-12">
+		  <h1 class="title-1">Web reprocessing data baseline</h1>
+	  </div>
+	</div>
+	<div class="col-12">
+		<p>The following table provides the list of applicable auxiliary files associated with each L0 product (needed for the generation of each Level-1/2 product for a period of time.</p>
+	  </div>	
+</div>
+
+<div class="container pt-5 pt-md-5">
+	<div class="row justify-content-center">
+		<ul class="nav nav-pills center-pills">
+			<li class="nav-item">
+				<a href="#filter_attribute" class="nav-link active" data-toggle="tab">Filter by L0 file names</a>
+			</li>
+			<li class="nav-item">
+				<a href="#filter_period" class="nav-link" data-toggle="tab">Filter by sensing period</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="tab-content" style="height:100px">
+	<div>&nbsp;</div>
+	<div class="tab-pane active" id="filter_attribute">
+		<div class="row justify-content-center font-weight-bold">
+			List of L0 to search :
+		</div>
+		<div class="row justify-content-center font-weight-bold">
+			<textarea id="filter_l0_text" rows=3 cols=80>S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip</textarea>
+		</div>
+	</div>
+	<div class="tab-pane" id="filter_period">
+		<div>&nbsp;</div>
+		<div id="filter_date" class="row justify-content-center font-weight-bold">
+			<p>Sensing from : <input type="text" id="datepicker_application_from"></p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+			<p>to : <input type="text" id="datepicker_application_to"></p>
+		</div>
+</div>
+<div class="tab-content">
+	<div>&nbsp;</div>
+	<div class="row justify-content-center">
+		<p>Mission : <select id="select_mission"></select></p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+		<p>Unit : <select id="select_unit"><option value="A">A</option><option value="B">B</option><option value="X">X</option></select></p>
+	</div>
+	<div class="row justify-content-center">
+		<p>Product type to be generated : <select id="select_product_type"></select></p>
+	</div>
+</div>
+<div class="container pt-5 pt-md-5">
+	<div class="row justify-content-center">
+		<input type="button" id="query_btn" value="Search">
+	</div>
+</div>
+<div class="container pt-5 pt-md-5">
+	<div id="loading" class="row justify-content-center" style="z-index:999;left:0px;height: 100%;width:100%;background-color: black;opacity: 0.3;position: absolute;display:none">
+		<center><img src="{{site.baseurl}}/images/loadingwheel.gif"></center>
+	</div>
+	<div class="row justify-content-center">
+		<table id="table_id" class="display">
+			<thead>
+				<tr>
+					<th>Level 0</th>
+					<th>Aux File</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>

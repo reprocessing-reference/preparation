@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>...</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+</head>
+<body>
+<table>
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>Version</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Issued</td>
+<td>1.0</td>
+<td>17/06/2021</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Change Log:</strong></p>
+<p>Table of contents</p>
+<p></p>
+<p><a href="#introduction"><span class="underline">1.</span> <span class="underline">Introduction</span> 5</a></p>
+<p><a href="#purpose-and-scope"><span class="underline">1.1</span> <span class="underline">Purpose and scope</span> 5</a></p>
+<p><a href="#documents"><span class="underline">1.2</span> <span class="underline">Documents</span> 5</a></p>
+<p><a href="#reference-documents"><span class="underline">1.2.1</span> <span class="underline">Reference documents</span> 5</a></p>
+<p><a href="#applicable-documents"><span class="underline">1.2.2</span> <span class="underline">Applicable documents</span> 5</a></p>
+<p><a href="#terminology"><span class="underline">1.3</span> <span class="underline">Terminology</span> 5</a></p>
+<p><a href="#definitions"><span class="underline">1.3.1</span> <span class="underline">Definitions</span> 5</a></p>
+<p><a href="#list-of-acronyms"><span class="underline">1.3.2</span> <span class="underline">List of Acronyms</span> 5</a></p>
+<p><a href="#overview"><span class="underline">2.</span> <span class="underline">OVERVIEW</span> 7</a></p>
+<p><a href="#reprocessing-data-baseline-description"><span class="underline">2.1</span> <span class="underline">Reprocessing Data Baseline Description</span> 7</a></p>
+<p><a href="#interface-configuration"><span class="underline">2.2</span> <span class="underline">Interface Configuration</span> 7</a></p>
+<p><a href="#auxip-interface-description"><span class="underline">3.</span> <span class="underline">AUXIP INTERFACE DESCRIPTION</span> 8</a></p>
+<p><a href="#reprocessing-data-baseline-based-on-l0-names"><span class="underline">3.1</span> <span class="underline">Reprocessing Data Baseline based on L0 names</span> 8</a></p>
+<p><a href="#reprocessing-data-baseline-based-on-sensing-period"><span class="underline">3.2</span> <span class="underline">Reprocessing Data Baseline based on sensing period</span> 9</a></p>
+<p><a href="#product-entity-model"><span class="underline">3.3</span> <span class="underline">Product entity model</span> 9</a></p>
+<p><a href="#query-reprocessing-data-baseline"><span class="underline">3.4</span> <span class="underline">Query Reprocessing Data Baseline</span> 9</a></p>
+<p><a href="#query-with-only-one-level-0-product-name"><span class="underline">3.4.1</span> <span class="underline">Query with only one level 0 product name</span> 10</a></p>
+<p><a href="#query-with-a-list-of-level-0-product-names"><span class="underline">3.4.2</span> <span class="underline">Query with a list of level 0 product names</span> 11</a></p>
+<p><a href="#query-with-sensing-period"><span class="underline">3.4.3</span> <span class="underline">Query with sensing period</span> 11</a></p>
+<p><a href="#example-of-query-response"><span class="underline">3.4.4</span> <span class="underline">Example of query response</span> 11</a></p>
+<p><a href="#query-reprocessing-data-baseline-response"><span class="underline">3.5</span> <span class="underline">Query Reprocessing Data Baseline Response</span> 12</a></p>
+<p><a href="#client-administration"><span class="underline">4.</span> <span class="underline">CLIENT ADMINISTRATION</span> 13</a></p>
+<p><a href="#appendix-a-odata-metadata-description"><span class="underline">5.</span> <span class="underline">APPENDIX A ODATA METADATA DESCRIPTION</span> 14</a></p>
+<ol type="1">
+<li><h1 id="introduction">Introduction</h1>
+<ol type="1">
+<li><h2 id="purpose-and-scope">Purpose and scope</h2></li>
+</ol></li>
+</ol>
+<p>This documents details the API entry points for the Reprocessing Data Baseline API. It gives the summary of the data access through an OData V4 format.</p>
+<ol start="2" type="1">
+<li><h2 id="documents">Documents</h2>
+<ol type="1">
+<li><h3 id="reference-documents">Reference documents</h3></li>
+</ol></li>
+</ol>
+<ol type="1">
+<li><blockquote>
+<p>OData Documentation <a href="http://www.odata.org/documentation"><span class="underline">http://www.odata.org/documentation</span></a></p>
+</blockquote></li>
+<li><blockquote>
+<p>OData Protocol <a href="http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html"><span class="underline">http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</span></a></p>
+</blockquote></li>
+<li><blockquote>
+<p>Reprocessing Data Baseline API User Manual</p>
+</blockquote>
+<ol start="2" type="1">
+<li><h3 id="applicable-documents">Applicable documents</h3></li>
+</ol></li>
+</ol>
+<ol type="1">
+<li><blockquote>
+<p>REPROCESSING REFERENCE PACKAGE PREPARATION</p>
+</blockquote>
+<ol start="3" type="1">
+<li><h2 id="terminology">Terminology</h2>
+<ol start="3" type="1">
+<li><h3 id="definitions">Definitions</h3></li>
+</ol></li>
+</ol></li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Term</strong></th>
+<th><strong>Definition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>API</strong></td>
+<td>A set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service.</td>
+</tr>
+<tr class="even">
+<td><strong>AUX_File</strong></td>
+<td>Auxiliary file used in a satellite processing chain</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="list-of-acronyms">List of Acronyms </h3>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Acronym</strong></th>
+<th><strong>Signification</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>AD</strong></td>
+<td>Applicable Document</td>
+</tr>
+<tr class="even">
+<td><strong>UUID</strong></td>
+<td>Universally Unique Identifier – Allows to identify an instance</td>
+</tr>
+<tr class="odd">
+<td><strong>JSON</strong></td>
+<td>JavaScript Object Notation, commonly used format in web services</td>
+</tr>
+<tr class="even">
+<td><strong>URI</strong></td>
+<td>Uniform Resource Identifier</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" type="1">
+<li><h1 id="overview">OVERVIEW</h1>
+<ol start="4" type="1">
+<li><h2 id="reprocessing-data-baseline-description"> Reprocessing Data Baseline Description </h2></li>
+</ol></li>
+</ol>
+<p>The main goal of Reprocessing Data baseline API is to identify for each Level-0 product name and Level-1/2 product type to be reprocessed, the applicable up to date list of auxiliary data files to be used for the reprocessing phase as well as the latest applicable processor version.</p>
+<h2 id="interface-configuration"> Interface Configuration </h2>
+<ul>
+<li><p>All requests sent to the Reprocessing Data Baseline API passes through the <strong><span class="underline">Kong gateway API</span></strong> to check the client credentials.</p></li>
+<li><p>If clients are not authenticated, they will be redirected the <strong><span class="underline">Keycloak interface</span></strong> to create an account or to be authenticated.</p></li>
+<li><p>Client should retrieve the <strong><span class="underline">access token</span></strong> via a Keycloak interface in order to be able to send requests to the Reprocessing Data Baseline API.</p></li>
+</ul>
+<ol start="3" type="1">
+<li><h1 id="auxip-interface-description">AUXIP INTERFACE DESCRIPTION </h1>
+<ol start="6" type="1">
+<li><h2 id="reprocessing-data-baseline-based-on-l0-names">Reprocessing Data Baseline based on L0 names</h2></li>
+</ol></li>
+</ol>
+<p>The nominal use scenario for getting the reprocessing data baseline for the reprocessing purposes is shown in the figure below.</p>
+<p><img src="./media/media/image3.png" style="width:6.69306in;height:3.04236in" /></p>
+<p>Figure 2 : use case based on L0 names</p>
+<p>The reprocessing configuration baseline API and the AUXIP API shall be used together with the reprocessing data baseline API to retrieve the requested applicable up to date list of auxiliary data products to be used for the reprocessing.</p>
+<h2 id="reprocessing-data-baseline-based-on-sensing-period">Reprocessing Data Baseline based on sensing period</h2>
+<p><img src="./media/media/image4.png" style="width:6.69306in;height:3.01528in" /></p>
+<p>Figure 4 : Use case based on sensing period</p>
+<h2 id="product-entity-model">Product entity model</h2>
+<p>The figure below shows the Reprocessing Data Baseline basic Product Entity model.</p>
+<p><img src="./media/media/image5.png" style="width:1.75373in;height:1.19924in" /></p>
+<p>Figure 5 : Product Entity Model</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Product Property</strong></th>
+<th><strong>Mandatory</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Name</td>
+<td>Yes</td>
+<td>The name of the applicable auxiliary data product.</td>
+<td>S1__AUX_WND_V20201008T210000_G20201005T061649.SAFE.zip</td>
+</tr>
+<tr class="even">
+<td>AuxipLink</td>
+<td>Yes</td>
+<td>The AUXIP retrieval link of the applicable auxiliary data product.</td>
+<td>https://reprocessing-preparation.ml/auxip.svc/Products (88902515-05b0-401b-9a32-1a0eb408ddd1)/$value</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: Product Properties in GET applicable List Response</p>
+<h2 id="query-reprocessing-data-baseline">Query Reprocessing Data Baseline </h2>
+<p>The Query of applicable up to date reprocessing auxiliary data function is achieved through standard Odata API Function, the output of this function is list of Entity Model described above.</p>
+<p>Only one unbounded function called <em><strong>getReprocessingDataBaseline</strong></em>() is exposed as Odata API function for the Reprocessing Data Baseline service, this function is overloaded and can be called as follows:</p>
+<ul>
+<li><p>With a comma separated list of level 0 products names + mission + unit + product_type :</p></li>
+</ul>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;L0_ProductName_1,%20L0_ProductName_2,L0_ProductName_3&#39;,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='L0_ProductName_1, L0_ProductName_2,L0_ProductName_3',mission='mission',unit='unit',product_type='product_Type')</span></a></p>
+<ul>
+<li><p>With sensing time interval (start and stop) + mission + unit + product_type :</p></li>
+</ul>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=&#39;sensing_start_datetime&#39;,stop=&#39;sensing_stop_datetime&#39;,%20,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start='sensing_start_datetime',stop='sensing_stop_datetime', ,mission='mission',unit='unit',product_type='product_Type')</span></a></p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Parameter</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>l0_names</td>
+<td>Comma separated list of level 0 products names.</td>
+<td>'S3B_OL_0_EFR____20201029T230119_20201029T230319_20201030T000536_0119_045_115______LN1_O_NR_002.SEN3,S3B_OL_0_EFR____20201104T001454_20201104T001654_20201104T011621_0119_045_187______LN1_O_NR_002.SEN3'</td>
+</tr>
+<tr class="even">
+<td>mission</td>
+<td>Mission to be considered while retrieving auxiliary data files</td>
+<td><p>Can be one of the following :</p>
+<p>'S2MSI', 'S1SAR', 'S3OLCI', 'S3MWR', 'S3SRAL', 'S3SYN', 'S3SLSTR'</p></td>
+</tr>
+<tr class="odd">
+<td>unit</td>
+<td>Platform Serial Identifier</td>
+<td>'A', 'B'</td>
+</tr>
+<tr class="even">
+<td>product_type</td>
+<td><p>L1/L2 type of the product to be reprocessed.</p>
+<p>This type is mission dependent.</p></td>
+<td><p>Depending of the mission</p>
+<p>S1SAR : { 'L1SLC', 'L1GRD', 'L2OCN' }</p>
+<p>S2MSI : { 'L1A', 'L1B', 'L1C', 'L2A' }</p>
+<p>S3MWR : { 'L1CAL', 'L1MWR' }</p>
+<p>S3OLCI : {'L1EFR', 'L1ERR' , 'L2LFR', 'L2LRR' }</p>
+<p>S3SLSTR : { 'L1RBT', 'L2LST', 'L2FRP' }</p>
+<p>S3SRAL : { 'L1CAL', 'L1SRA', 'L2LAN' }</p>
+<p>S3SYN : { 'L1MISR', 'L2' }</p></td>
+</tr>
+<tr class="odd">
+<td>start</td>
+<td>Sensing start date time</td>
+<td>2019-10-06T18:00:00Z</td>
+</tr>
+<tr class="even">
+<td>stop</td>
+<td>Sensing start date time</td>
+<td>2020-11-06T19:00:00Z</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1 : getReprocessingDataBaseline parameters</p>
+<h3 id="query-with-only-one-level-0-product-name">Query with only one level 0 product name </h3>
+<p>Based on the level 0 'S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip', the applicable auxiliary data files needed for the reprocessing of product type 'L1SLC' of the mission S1SAR for the satellite unit A can be retrieved as follows:</p>
+<p><a href="https://dev.reprocessing-preparation.ml/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</span></a></p>
+<h3 id="query-with-a-list-of-level-0-product-names">Query with a list of level 0 product names</h3>
+<p>The same query as before but for two different level 0 products:</p>
+<p><a href="https://dev.reprocessing-preparation.ml/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</span></a></p>
+<h3 id="query-with-sensing-period">Query with sensing period</h3>
+<p>Instead of giving the names of the level 0 products, you can do a query based on an acquisition period:</p>
+<p><a href="https://dev.reprocessing-preparation.ml/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission=&#39;S3OLCI&#39;,unit=&#39;A&#39;,product_type=&#39;L1EFR&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission='S3OLCI',unit='A',product_type='L1EFR')</span></a></p>
+<h3 id="example-of-query-response">Example of query response</h3>
+<h2 id="query-reprocessing-data-baseline-response">Query Reprocessing Data Baseline Response</h2>
+<p>The GET response of applicable products list is an HTTP response to the GET reprocessing data baseline request. As recommended by the OData specification, the Reprocessing Data Baseline OData service supports responses in JSON.</p>
+<p>The following overall HTTP status codes may be returned with the response:</p>
+<ul>
+<li><p>200 OK: if the request is accepted and a response can be returned</p></li>
+<li><p>400 Bad Request</p></li>
+<li><p>401 Unauthorized: if the requesting client is unauthorised</p></li>
+<li><p>404 Not Found</p></li>
+<li><p>500 Internal Server Error</p></li>
+</ul>
+<h1 id="client-administration">CLIENT ADMINISTRATION </h1>
+<p>The Reprocessing Data Baseline API enforces that only properly authenticated clients are accepted and that the access rights are applied. If a client calls the service function without permission, it is informed with a corresponding return message.</p>
+<p>Please refer to the User Manual document [DR-3] for the registration and access token generation procedures.</p>
+<h1 id="appendix-a-odata-metadata-description">APPENDIX A ODATA METADATA DESCRIPTION</h1>
+<p>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</p>
+<p>&lt;edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx"&gt;</p>
+<p>&lt;edmx:DataServices&gt;</p>
+<p>&lt;Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="OData.CSC"&gt;</p>
+<p>&lt;EntityType Name="DataBaseline"&gt;</p>
+<p>&lt;Property Name="Level0" Type="Edm.String"&gt;&lt;/Property&gt;</p>
+<p>&lt;Property Name="AuxDataFiles" Type="Collection(OData.CSC.Product)"&gt;&lt;/Property&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;ComplexType Name="Product"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"&gt;&lt;/Property&gt;</p>
+<p>&lt;Property Name="AuxipLink" Type="Edm.String" Nullable="false"&gt;&lt;/Property&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;Function Name="getReprocessingDataBaseline"&gt;</p>
+<p>&lt;Parameter Name="l0_names" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="mission" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="unit" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="product_type" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;ReturnType Type="Collection(OData.CSC.DataBaseline)"/&gt;</p>
+<p>&lt;/Function&gt;</p>
+<p>&lt;Function Name="getReprocessingDataBaseline"&gt;</p>
+<p>&lt;Parameter Name="start" Type="Edm.DateTimeOffset" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="stop" Type="Edm.DateTimeOffset" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="mission" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="unit" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;Parameter Name="product_type" Type="Edm.String" Nullable="false"&gt;&lt;/Parameter&gt;</p>
+<p>&lt;ReturnType Type="Collection(OData.CSC.DataBaseline)"/&gt;</p>
+<p>&lt;/Function&gt;</p>
+<p>&lt;EntityContainer Name="Container"&gt;</p>
+<p>&lt;FunctionImport Name="getReprocessingDataBaseline" Function="OData.CSC.getReprocessingDataBaseline" IncludeInServiceDocument="true"&gt;&lt;/FunctionImport&gt;</p>
+<p>&lt;/EntityContainer&gt;</p>
+<p>&lt;/Schema&gt;</p>
+<p>&lt;/edmx:DataServices&gt;</p>
+<p>&lt;/edmx:Edmx&gt;</p>
+<h1 id="section" class="ListParagraph"></h1>
+<div class="footer-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-11" style="color: white">Github project : <a href="http://www.github.com" style="color:white" target="_blank">http://www.github.com</a></div>
+      <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

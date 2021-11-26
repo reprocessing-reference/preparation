@@ -1,0 +1,51 @@
+permalink: auxip
+title: 'Reprocessing reference package preparation'
+collections_dir: collections
+destination: ../3-deliveries/site
+description: Copernicus page to navigate through web reprocessing configuration/data baseline
+url: https://www.copernicus.eu/en
+author: CS Group
+logo: images/logo-cs.png
+lang : en_UK
+encoding: utf-8
+project : Copernicus
+subproject : Reprocessing reference package preparation
+baseurl: /site
+docurl: frederic.ligeard@csgroup.fr
+
+
+collections:
+  docs:
+    output: true
+    permalink: /:name.html
+  tutorials:
+    output: false
+    permalink: /:name.html
+  
+defaults:
+  - scope:
+        type: products
+    values:
+        layout: product
+  - scope:
+        path: 'images'
+    values:
+        image: true
+  - scope:
+        type: references
+    values:
+        layout: reference
+  - scope:
+        type: features
+    values:
+        layout: feature
+      
+sass:
+  style: compact # possible values: nested expanded compact compressed
+
+google_analytics_id: null
+
+plugins:
+  - jekyll-environment-variables
+  - jekyll-sitemap
+  - jekyll-seo-tag

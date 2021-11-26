@@ -1,0 +1,22 @@
+<div class="col-12 col-md-12 col-xl-12 mb-1 mt-1">
+  <div class="card-common card-size-big">
+
+	<div class="card-image">
+	{% if doc.image %}
+		<img alt="{{ doc.title }} logo" class="img-fluid" src="{{site.baseurl}}/images/{{ doc.image }}"/>
+	{% else %}
+		<img alt="{{ reference.title }} logo" class="img-fluid" src="{{site.baseurl}}/images/default_product_logo.png"/>
+	{% endif %}
+	</div>
+	<div class="card-meta">
+		<h3 class="card-title">
+			<a href="{{site.baseurl}}/{{ doc.page }}" title="View web version" target="_blank">{{ doc.title }}</a>
+		</h3>
+		<br/>
+		<div class="card-tag card-tag-customer">{{doc.name}}</div>
+		<div class="card-tag card-tag-customer">{{doc.date | date_to_long_string}}</div>
+		<div class="card-tag card-tag-email"><a href="mailto:{{ site.docurl }}?subject=[{{ doc.title }}] Comments&body=Hello, this is some comments about the doc {{ doc.title }}" title="Send comments"><span class="ui-icon ui-icon-mail-closed"></span></a></div>
+	</div>
+	{{ doc.content }}<br>
+  </div>
+</div>
