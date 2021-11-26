@@ -18,9 +18,12 @@
  */
 package com.csgroup.auxip.odata;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
+import com.csgroup.auxip.config.ODATAConfiguration;
 import com.csgroup.auxip.model.jpa.User;
 import com.csgroup.auxip.model.repository.Storage;
 import org.apache.olingo.commons.api.Constants;
@@ -61,13 +64,15 @@ import org.apache.olingo.server.api.uri.queryoption.OrderByOption;
 import org.apache.olingo.server.api.uri.queryoption.SelectOption;
 import org.apache.olingo.server.api.uri.queryoption.SkipOption;
 import org.apache.olingo.server.api.uri.queryoption.TopOption;
-import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
-import org.apache.olingo.server.core.uri.UriResourceNavigationPropertyImpl;
+import org.apache.olingo.server.core.uri.queryoption.TopOptionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor {
+	
+  private static final int MAX_RESULTS = 200;
 	
   private static final Logger LOG = LoggerFactory.getLogger(AuxipEntityCollectionProcessor.class);
 
@@ -75,6 +80,8 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
   private ServiceMetadata srvMetadata;
   // our database-mock
   private Storage storage;
+  @Autowired
+  private ODATAConfiguration configuration;
 
   public AuxipEntityCollectionProcessor(Storage storage) {
     this.storage = storage;
@@ -93,6 +100,13 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       throws ODataApplicationException, SerializerException {
 
 	LOG.info("Starting readEntityCollection");
+	
+	int max_results = MAX_RESULTS;
+	if( this.configuration == null) {
+		LOG.warn("OData configuration not found, using default values");
+	} else {
+		max_results = this.configuration.getMaxResults();
+	}
  
     // Check the client access role 
     if ( !AccessControl.userCanDealWith(request, uriInfo) )
@@ -132,6 +146,16 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
     // regardless of the order in which they appear in the request.”
     SkipOption skipOption = uriInfo.getSkipOption();
     TopOption topOption = uriInfo.getTopOption();
+    
+    if (topOption == null)
+    {
+    	topOption = new TopOptionImpl().setValue(max_results);
+    } else {
+    	if (topOption.getValue() > max_results)
+    	{
+    		topOption = new TopOptionImpl().setValue(max_results);
+    	}
+    }
 
     if (segmentCount == 1) 
     { 
@@ -231,6 +255,13 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
       }
     }
 
+    //Add the count option
+    if(countOption != null && countOption.getValue())
+    {
+    	responseEntityCollection.setCount(storage.getEntitySetCount(startEdmEntitySet,filterOption));
+    	LOG.info(String.valueOf(responseEntityCollection.getCount()));
+    }
+    LOG.info(String.valueOf(responseEntityCollection.getCount()));
     
     // 4th: serialize
     EdmEntityType edmEntityType = responseEdmEntitySet.getEntityType();

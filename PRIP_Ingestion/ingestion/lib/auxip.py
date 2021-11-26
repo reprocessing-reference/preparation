@@ -1,3 +1,6 @@
+import sys
+import time
+
 import requests
 import requests
 import json
@@ -76,7 +79,7 @@ def refresh_token_info(token_info,timer,mode='dev'):
         return response.json()
 
 
-def get_latest_of_type(access_token,aux_type_list,mode='dev'):
+def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
     try:
         headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % access_token }
         auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
@@ -87,7 +90,7 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
         request = auxip_endpoint + "Products?$filter=contains(Name,'" + aux_type_list[0] + "')"
         for idx in range(1, len(aux_type_list)):
             request = request + " or contains(Name,'" + aux_type_list[idx] + "')"
-        request = request + "&$orderby=PublicationDate desc&$top=1"
+        request = request + " and startswith(Name,'"+sat+"')&$orderby=PublicationDate desc&$top=1"
         print("Request : " + request)
         response = requests.get(request,headers=headers)
         print(response.text)
@@ -98,7 +101,7 @@ def get_latest_of_type(access_token,aux_type_list,mode='dev'):
             raise Exception("Error while accessing auxip")
         json_resp = response.json()
         if len(json_resp["value"]) != 1:
-            raise Exception("Error while getting latest publicated")
+            return None
         return json_resp["value"][0]["PublicationDate"]
     except Exception as e:
         print("%s ==> get ends with error " % request )
@@ -125,6 +128,47 @@ def is_file_available(access_token,aux_data_file_name,mode='dev'):
         print(e)
         raise e
 
+
+def are_file_availables(auxip_user,auxip_password,aux_data_files_names,step,mode='dev'):
+    availables = []
+    timer_start = time.time()
+    token_info = get_token_info(auxip_user, auxip_password,mode=mode)
+    access_token = token_info['access_token']
+    try:
+
+        auxip_endpoint = "https://dev.reprocessing-preparation.ml/auxip.svc/Products"
+        if mode == 'prod':
+            auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products"
+
+        for f in range(0, len(aux_data_files_names), step):
+            # refesh token if necessary
+            timer_stop = time.time()
+            elapsed_seconds = timer_stop - timer_start
+            if elapsed_seconds > 350:
+                timer_start = time.time()
+                token_info = get_token_info(auxip_user, auxip_password, mode=mode)
+                access_token = token_info['access_token']
+            headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % access_token}
+            request = auxip_endpoint+"?$filter=contains(Name,'"+aux_data_files_names[f]+"')"
+            for t in range(min(len(aux_data_files_names),f+1), min(len(aux_data_files_names),f+step),1):
+                request = request + " or contains(Name,'"+aux_data_files_names[t]+"')"
+            print(request)
+            response = requests.get(request,headers=headers)
+            if response.status_code != 200:
+                print(response.status_code)
+                print(response.text)
+                raise Exception("Error while accessing auxip")
+            json_resp = response.json()
+            print(json_resp)
+            for g in json_resp["value"]:
+                availables.append(g["Name"])
+    except Exception as e:
+        print("==> get ends with error ")
+        print(e)
+        raise e
+
+    return availables
+
     
 def search_in_auxip(name,access_token,mode='dev'):
     try:
@@ -145,11 +189,9 @@ def search_in_auxip(name,access_token,mode='dev'):
         print(e)
         raise e
 
-    
 
 # post auxdata file to the auxip.svc
 def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
-
     try:
         aux_data_file_name = os.path.basename(path_to_auxiliary_data_file)
 

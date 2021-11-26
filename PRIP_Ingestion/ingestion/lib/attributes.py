@@ -8,6 +8,7 @@ import os
 import re
 import copy
 import shutil
+import subprocess
 import sys
 
 import xml.etree.ElementTree as ET
@@ -167,12 +168,17 @@ def get_attributes(path_to_aux_data_file):
             product_type = filename[9:19]
             if product_type in ['AUX_ECMWFD','AUX_UT1UTC']:
                 hdr_file = "%s.HDR" % (filename)
-                tar_command = "tar xzf %s %s" % (file_path,hdr_file)
+                tar_process = subprocess.run(["tar","xzf", file_path, hdr_file])
+                if tar_process.returncode != 0:
+                    hdr_file = "%s/%s.HDR" % (filename,filename)
+                    tar_process = subprocess.run(["tar", "xzf", file_path, hdr_file])
+                    if tar_process.returncode != 0:
+                        raise Exception("Impossible to get the HDR file in the file "+filename)
             else:
                 hdr_file = "%s.HDR" % filename
                 tar_command = "tar xzf %s %s" % (file_path,hdr_file)
+                os.system(tar_command)
 
-            os.system( tar_command )
             tree = ET.parse(hdr_file)
             root = tree.getroot()
 

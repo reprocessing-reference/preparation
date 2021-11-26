@@ -59,7 +59,14 @@ def main():
         for filename in filenames:
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
+                levels = []
+                if "ProductLevels@odata.bind" in filetype:
+                    levels = filetype["ProductLevels@odata.bind"]
+                elif "ProductLevels" in filetype:
+                    levels = ["ProductLevels('"+f["Level"]+"')" for f in filetype["ProductLevels"]]
+                filetype_dict.append((filetype["LongName"], filetype["Mission"], levels))
+    if len(filetype_dict) == 0:
+        raise Exception("No filetypes found in folder")
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"

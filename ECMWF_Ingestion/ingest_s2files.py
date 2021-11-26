@@ -62,7 +62,6 @@ def main():
         for filename in filenames:
             if os.path.splitext(filename)[1] == ".json":
                 with open(os.path.join(args.filetypes, filename)) as f:
-                    print(filename)
                     filetype = json.load(f)
                     levels = []
                     if "ProductLevels@odata.bind" in filetype:
@@ -70,8 +69,6 @@ def main():
                     elif "ProductLevels" in filetype:
                         levels = ["ProductLevels('"+f["Level"]+"')" for f in filetype["ProductLevels"]]
                     filetype_dict.append((filetype["LongName"], filetype["Mission"], levels))
-    print("FileType dict:")
-    print(filetype_dict)
     if len(filetype_dict) == 0:
         raise Exception("No filetypes found in folder")
 

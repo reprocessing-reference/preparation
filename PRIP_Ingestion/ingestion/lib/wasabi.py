@@ -1,17 +1,24 @@
 import os
 import subprocess
 
+
 # upload auxiliaray data file to wasabi
 def upload_to_wasabi(path_to_mc,bucket,auxiliary_data_file,uuid,mode="dev"):
-    file_name = os.path.basename(auxiliary_data_file)    
-    upload_command = [path_to_mc ,
-                      "cp",
-                      auxiliary_data_file, bucket+"/%s/%s" % (uuid,file_name)]
-    if mode == "dev" :
-        print( "mc command => %s \n" % upload_command )
-        return 0
-    else:
-        return subprocess.call( upload_command )
+    try:
+        file_name = os.path.basename(auxiliary_data_file)
+        upload_command = [path_to_mc ,
+                          "cp",
+                          auxiliary_data_file, bucket+"/%s/%s" % (uuid,file_name)]
+        if mode == "dev" :
+            print( "mc command => %s \n" % upload_command )
+            return 0
+        else:
+            process = subprocess.run( upload_command)
+            process.check_returncode()
+            return 0
+    except Exception as e:
+        print(e)
+        return 1
 
 
 # Generate a listing of already uploaded files
