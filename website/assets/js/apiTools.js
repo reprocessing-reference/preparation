@@ -724,6 +724,34 @@ var populateSelects = function(refresh = true) {
         successCallback()
     })
 }
+/**
+ * Populate selects of mision and product types
+ * @param {*} refresh 
+ * @returns 
+ */
+ var populateSelectsData = function(refresh = true) {
+    return new Promise((successCallback, failureCallback) => {
+        // Populate mission list
+        $('#select_mission').append($('<option></option>').val("S1").text("S1"))
+        $('#select_mission').append($('<option></option>').val("S2").text("S2"))
+        $('#select_mission').append($('<option></option>').val("S3").text("S3"))
+        // Populate product type list
+        $('#select_product_type').append($('<option></option>').val("SM_RAW").text("S1 / SM_RAW"))
+        $('#select_product_type').append($('<option></option>').val("IW_RAW").text("S1 / IW_RAW"))
+        $('#select_product_type').append($('<option></option>').val("EW_RAW").text("S1 / EW_RAW")) 
+        $('#select_product_type').append($('<option></option>').val("WV_RAW").text("S1 / WV_RAW"))
+   
+        $('#select_product_type').append($('<option></option>').val("MSI_L0__DS").text("S2 / MSI_L0__DS"))
+        $('#select_product_type').append($('<option></option>').val("MSI_L0__GR").text("S2 / MSI_L0__GR"))
+
+        $('#select_product_type').append($('<option></option>').val("MW_0_MWR").text("S3 / MW_0_MWR"))
+        $('#select_product_type').append($('<option></option>').val("OL_0_EFR").text("S3 / OL_0_EFR"))
+        $('#select_product_type').append($('<option></option>').val("SL_0_SLT").text("S3 / SL_0_SLT"))
+        $('#select_product_type').append($('<option></option>').val("SR_0_SRA").text("S3 / SR_0_SRA"))
+
+        successCallback()
+    })
+}
 
 /**
  * Prefetch reprocessing data baseline informations needed prior to navigation
@@ -734,12 +762,13 @@ var prefetchReprocessingDataBaseline = function() {
     return new Promise((successCallback, failureCallback) => {
         currentQuery = false
         getToken()
-        .then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductLevels")))
-        .then(result => updateAuxTypes(result))
-        .then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductTypes")))
-        .then(result => updateAuxTypes(result))
-        .then(result => populateSelects(false))
-        //.then(result => initTableReprocessingDataBaseline('table_id') )
+        .then(result => populateSelectsData(false))
+        //.then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductLevels")))
+        //.then(result => updateAuxTypes(result))
+        //.then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductTypes")))
+        //.then(result => updateAuxTypes(result))
+        //.then(result => populateSelects(false))
+        .then(result => initTableReprocessingDataBaseline('table_id') )
         .then(successCallback())
     })
 }
