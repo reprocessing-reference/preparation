@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>...</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+</head>
+<body>
+<table>
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>Version</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Creation</td>
+<td>1.0</td>
+<td>15/12/2020</td>
+</tr>
+<tr class="even">
+<td>Update</td>
+<td><strong>1.1</strong></td>
+<td><strong>02/04/2021</strong></td>
+</tr>
+<tr class="odd">
+<td>AuxIP-V1</td>
+<td><strong>1.2</strong></td>
+<td><strong>08/04/2021</strong></td>
+</tr>
+<tr class="even">
+<td>Correction on authentication</td>
+<td>1.3</td>
+<td>15/04/2021</td>
+</tr>
+<tr class="odd">
+<td>Update</td>
+<td>1.4</td>
+<td>08/06/2021</td>
+</tr>
+<tr class="even">
+<td>Improvements</td>
+<td>1.5</td>
+<td>25/11/2021</td>
+</tr>
+</tbody>
+</table>
+<p>Table of Content</p>
+<p></p>
+<p><a href="#introduction">1. Introduction 4</a></p>
+<p><a href="#purpose-and-scope">1.1 Purpose and scope 4</a></p>
+<p><a href="#documents">1.2 Documents 4</a></p>
+<p><a href="#reference-documents">1.2.1 Reference Documents 4</a></p>
+<p><a href="#applicable-documents">1.2.2 Applicable Documents 4</a></p>
+<p><a href="#terminology">1.3 Terminology 4</a></p>
+<p><a href="#client-administration">2. Client Administration 5</a></p>
+<p><a href="#access-point">2.1 Access Point 5</a></p>
+<p><a href="#user-registration">2.2 User Registration 5</a></p>
+<p><a href="#access-token">2.3 Access Token 5</a></p>
+<p><a href="#via-postman">2.3.1 Via Postman 6</a></p>
+<p><a href="#via-curl-and-python-for-developers">2.3.2 Via Curl and Python for Developers 7</a></p>
+<p><a href="#system-roles">2.4 System Roles 7</a></p>
+<p><a href="#quotas">2.5 Quotas 8</a></p>
+<p><a href="#description">3. Description 9</a></p>
+<p><a href="#use-case-scenario">3.1 Use Case Scenario 9</a></p>
+<p><a href="#product-entity-data-model">3.2 Product Entity Data Model 10</a></p>
+<p><a href="#query">3.3 Query 12</a></p>
+<p><a href="#filtering-query-function">3.3.1 Filtering query function 12</a></p>
+<p><a href="#query-by-attributes">3.3.2 Query by attributes 13</a></p>
+<p><a href="#additional-options">3.3.3 Additional Options 13</a></p>
+<p><a href="#catalogue-export">3.3.4 Catalogue Export 14</a></p>
+<p><a href="#product-download">3.3.5 Product Download 14</a></p>
+<p><a href="#query-response-content">3.3.6 Query response content 15</a></p>
+<p><a href="#subscriptions">3.4 Subscriptions 15</a></p>
+<p><a href="#subscription-create-example-request">3.4.1 Subscription Create: Example Request: 16</a></p>
+<p><a href="#subscription-create-example-response-json-format">3.4.2 Subscription Create: Example Response (JSON format): 16</a></p>
+<p><a href="#example-subscription-notification">3.4.3 Example Subscription Notification: 16</a></p>
+<p><a href="#metrics">3.5 Metrics 17</a></p>
+<p><a href="#postman-testing-collection">4. Postman Testing Collection 18</a></p>
+<p><a href="#appendix-a-odata-metadata">5. Appendix A : ODATA metadata 19</a></p>
+<p><a href="#appendix-b-getbaseline-tool">6. Appendix B : getBaseline Tool 21</a></p>
+<h1 id="introduction">Introduction</h1>
+<h2 id="purpose-and-scope">Purpose and scope</h2>
+<p>This document details the entry points for the AUXIP API. It gives the summary of the data access through an OData V4 format.</p>
+<ol start="2" type="1">
+<li><h2 id="documents">Documents</h2>
+<ol type="1">
+<li><h3 id="reference-documents">Reference Documents</h3></li>
+</ol></li>
+</ol>
+<p>RD-1 OData Documentation <a href="http://www.odata.org/documentation">http://www.odata.org/documentation</a></p>
+<p>RD-2 OData Protocol <a href="http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html">http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</a></p>
+<h3 id="applicable-documents">Applicable Documents</h3>
+<p>AD-1 Auxiliary Data Interface Delivery Point Specification</p>
+<h2 id="terminology">Terminology</h2>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Acronym</strong></th>
+<th><strong>Signification</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ADF</strong></td>
+<td>Auxiliary Data Files used in a EO processing chain</td>
+</tr>
+<tr class="even">
+<td><strong>API</strong></td>
+<td>Application Programming Interface (a set of functions and procedures allowing the creation or modification of applications that access the features or data of an operating system)</td>
+</tr>
+<tr class="odd">
+<td><strong>UUID</strong></td>
+<td>Universally Unique Identifier – Allows to identify an instance</td>
+</tr>
+<tr class="even">
+<td><strong>JSON</strong></td>
+<td>JavaScript Object Notation, commonly used format in internet services</td>
+</tr>
+<tr class="odd">
+<td><strong>URI</strong></td>
+<td>Uniform Resource Identifier</td>
+</tr>
+</tbody>
+</table>
+<h1 id="client-administration">Client Administration </h1>
+<h2 id="access-point"> Access Point</h2>
+<p>As a part of the Reprocessing Reference Preparation Package, AUXIP API can be accessed via the following URL:</p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/auxip.svc"><strong>https://reprocessing-auxiliary.copernicus.eu/auxip.svc</strong></a></p>
+<h2 id="user-registration"> User Registration </h2>
+<p>New users of AUXIP API should be registered first in order to be able to use the API and request for the accessToken. In a browser, the user can only create the account with username and password; nothing else can be performed in a browser. The username and password are created to be used for the token access.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="./media/media/image1.png" style="width:3.30597in;height:2.5901in" /></td>
+<td><img src="./media/media/image2.png" style="width:3.40299in;height:3.74335in" /></td>
+</tr>
+</tbody>
+</table>
+<p>Figure 1 : Registration Interface</p>
+<h2 id="access-token"> Access Token</h2>
+<p>To get the AUXIP API token for a client, an HTTP POST request should be sent to the following Token resource:</p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"><strong>https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token</strong></a></p>
+<p>In the post body, username and password are specified in JSON format, and the response body contains a token key with an actual API Token as the value. The token should be used in an HTTP Authorization header while communicating with the AUXIP service.</p>
+<p>It is necessary to get a token using a tool (a browser or any other application that can send http requests). Depending on the client that is used, there are different ways to send HTTP headers.</p>
+<p>The next sections cover the following examples:</p>
+<ul>
+<li><p>Sending requests via Postman</p></li>
+<li><p>Curl</p></li>
+<li><p>Python</p></li>
+</ul>
+<h3 id="via-postman">Via Postman</h3>
+<p><img src="./media/media/image3.png" style="width:6.91225in;height:4.89552in" /></p>
+<p>Figure 2 : Getting New Access Token via Postman</p>
+<p>To be able to send requests via Postman, one should configure the authorization settings first, as showing in the above steps:</p>
+<ul>
+<li><p>Steps 2 and 3 : choose authorization via OAuth 2.0</p></li>
+<li><p>Steps 4 to 7 :</p>
+<ul>
+<li><p>Access Token URL : set the resource where to post for the accessToken,</p></li>
+<li><p>Client ID : should be set to “<strong>reprocessing-preparation</strong>”</p></li>
+<li><p>Username and Password : Client credentials from the registration.</p></li>
+<li><p>Scope : <strong>openid</strong></p></li>
+</ul></li>
+<li><p>Step 8 : Get New Access Token</p></li>
+</ul>
+<p>After that, the user should click on “Use Token” and “Save” the collection. The user can use the request service in Postman during the validity time of the token (10min).</p>
+<h3 id="via-curl-and-python-for-developers">Via Curl and Python for Developers </h3>
+<ul>
+<li><p><strong>Curl</strong></p></li>
+</ul>
+<p>RAWTKN=$(curl -s -X POST \</p>
+<p>-H "Content-Type: application/x-www-form-urlencoded" \</p>
+<p>-d "username="$USER \</p>
+<p>-d "password="$PASSWORD \</p>
+<p>-d 'grant_type=password' \</p>
+<p>-d "client_id=reprocessing-preparation" \</p>
+<p>https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token \</p>
+<p>|jq . )</p>
+<p>TOKEN=$(echo $RAWTKN | jq -r '.access_token')</p>
+<p>echo "Token to be used to access to the service : ${TOKEN} "</p>
+<ul>
+<li><p><strong>Python</strong></p></li>
+</ul>
+<p>import requests</p>
+<p>def get_token_info(user,password):</p>
+<p>headers = {'Content-Type': 'application/x-www-form-urlencoded'}</p>
+<p>data={"username":user, "password":password,"client_id":" reprocessing-preparation","grant_type":"password"}</p>
+<p>token_endpoint="https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"</p>
+<p>token_endpoint="https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"</p>
+<p>response = requests.post(token_endpoint,data=data,headers=headers)</p>
+<p>return response.json()</p>
+<h2 id="system-roles"> System Roles</h2>
+<p>All registered clients must have one or more roles assigned. The roles available for assignment to clients are:</p>
+<ul>
+<li><p>Download for client services</p></li>
+</ul>
+<p>The client may perform queries on the products available at the AUXIP and perform downloads and can also create Subscriptions in order to be notified for newly arrived products in the AUXIP service.</p>
+<ul>
+<li><p>Administration Services</p></li>
+</ul>
+<p>(Monitoring &amp;) Reporting – monitoring and reporting functionality, including the permission to perform queries on all properties.</p>
+<p>By default a download role is assigned to all new created clients.</p>
+<p>Roles and Users can be managed via the AUXIP administration interface in <a href="https://reprocessing-auxiliary.copernicus.eu/auth">https://reprocessing-auxiliary.copernicus.eu/auth</a></p>
+<h2 id="quotas"> Quotas</h2>
+<p>AUXIP requests are limited by a quota mechanism applicable to all clients with the ‘Download’ role; this mechanism is configured as follows:</p>
+<p>Maximum volume (in GB) transfer within a defined period /duration</p>
+<ul>
+<li><p><em>quota.total_downloads = 1000</em></p></li>
+</ul>
+<p>Period to be considered while counting downloaded volumes</p>
+<ul>
+<li><p><em>quota.total_downloads_period_in_days = 8</em></p></li>
+</ul>
+<p>Maximum number of separate downloads which can be performed in parallel</p>
+<ul>
+<li><p><em>quota.parallel_downloads = 100</em></p></li>
+</ul>
+<p>Delta time between two consecutive downloads in seconds</p>
+<ul>
+<li><p><em>quota.parallel_downloads_deltatime_in_seconds = 10</em></p></li>
+</ul>
+<p>Note that “Parallel downloads” are understood in AUXIP service as consecutive downloads with the delta time between them is less than the setting threshold <em>quota.parallel_downloads_deltatime_in_seconds</em></p>
+<h1 id="description">Description</h1>
+<p>The AUXIP access point allows to visualize and to retrieve the ADF needed for a reprocessing performance of Sentinel-1, Sentinel-2 and Sentinel-3 Level-1 or Level-2 data. There are three tables:</p>
+<ul>
+<li><p>“Products“ contains all ADF products with their respective information</p></li>
+<li><p>“Subscriptions” contains the subscriptions</p></li>
+<li><p>“Users” contains the users and their roles</p></li>
+<li><p>“Metrics” contains the metrics of the service (only seen by user with the ‘Reporting’ role).</p></li>
+</ul>
+<p>These tables can be queried using all the Odata standard functions. Some specific functions to retrieve the list for specified parameters are also available.</p>
+<p>Interface is designed using an OData web service and secured through an OAuth 2.0 gateway.</p>
+<h2 id="use-case-scenario"> Use Case Scenario</h2>
+<p>Use case is extracted from the [AD-1] document.</p>
+<p>The nominal use scenario for discovery and download of products from the AUXIP is shown in the figure below.</p>
+<p><img src="./media/media/image4.png" style="width:6.53194in;height:4.31181in" /></p>
+<p>Figure 3 : Use Case Scenario</p>
+<ul>
+<li><p>In the first step, an AUXIP client uses the API to request a list of products currently available for download from the AUXIP by sending a <em>GET Products List Query</em>. As AUXIP clients are in general systematic downloaders of Sentinel ADF products, these requests are sent regularly to ensure that a complete picture of all relevant published products is maintained at client level. The query can include a filter by the content of the product name, and by publication time. Time range filtering examples include:</p>
+<ul>
+<li><p>All products published after a certain date-time. Likely to be used for more regular requests, to discover the products published in the time interval since the previous request.</p></li>
+<li><p>All products published in a certain date-time range (start/stop). For example, a client that prioritizes download of latest data uses date-time ranges to download.</p></li>
+<li><p>All products (no time limit).</p></li>
+</ul></li>
+<li><p>In response, the AUXIP uses the <em>GET Products List Response</em> to provide the user with the requested list of products. For each product on the list, a limited set of product property metadata is provided. These metadata are intended to give the client a partial picture of each product to assist in retrieval. Fields include: Product ID (logical file identifier), Product Name, Content Length (size of the downloadable file), Publication (Creation) Date, Eviction Date (time period for which data will remain on AUXIP before deletion), Checksums (algorithm, value and date) and Content Date (product start and stop times).</p></li>
+<li><p>Following receipt of the <em>GET Products List Response</em>, the AUXIP user can optionally check if any of the products reported in the list have already been retrieved. Then, Product Download Requests are sent to the AUXIP via the API for the required products. Products are downloaded in the pre-defined packages for the product type. (Remark : Download is not available in AUXIP V0)</p></li>
+</ul>
+<p>Requests are limited by a quota mechanism, e.g. limiting the user to a maximum number of connections in parallel.</p>
+<h2 id="product-entity-data-model"> Product Entity Data Model</h2>
+<p>Product entity data model is extracted from the [AD-1] document.</p>
+<p>The V0 has a difference on the attribute list. The current framework does not allow polymorphism on entity thus it cannot match StringAttributes to its mother class Attributes thus there is a list for each attribute type.</p>
+<p>This is corrected in V1.</p>
+<p>The figure below shows the AUXIP basic Product Entity model.</p>
+<p><img src="./media/media/image5.png" style="width:6.53194in;height:4.60903in" /></p>
+<p>Figure 4 : Product Entity Data Model</p>
+<table>
+<thead>
+<tr class="header">
+<th>Product Properties</th>
+<th>Type</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Id</td>
+<td>GUUID</td>
+<td>Y</td>
+<td>It is a universally unique identifier (UUID). The Id is a local identifier for the product instance within the AUXIP, assigned by the service managing the AUXIP.</td>
+<td>2b17b57d-fff4-4645-b539-91f305c27c69</td>
+</tr>
+<tr class="even">
+<td>Name</td>
+<td>String</td>
+<td>Y</td>
+<td>Data file name</td>
+<td>S2__OPER_AUX_ECMWFD_PDMC_20190216T120000_V20190217T090000_20190217T210000.TGZ</td>
+</tr>
+<tr class="odd">
+<td>ContentType</td>
+<td>String</td>
+<td>Y</td>
+<td>The Mime type of the product</td>
+<td>application/octet-stream</td>
+</tr>
+<tr class="even">
+<td>ContentLength</td>
+<td>Int64</td>
+<td>Y</td>
+<td>Actual size in bytes (B) of the downloadable file</td>
+<td>8326253</td>
+</tr>
+<tr class="odd">
+<td>OriginDate</td>
+<td>DateTimeOffset</td>
+<td>Y</td>
+<td>Date and time of the product availability at the source. Time is in UTC in the format YYYY-MM-DDThh:mm:ss.sssZ</td>
+<td>2018-01-17T12:56:05.232Z</td>
+</tr>
+<tr class="even">
+<td>PublicationDate</td>
+<td>DateTimeOffset</td>
+<td>Y</td>
+<td>Publication date and time of the data file (time at which the file becomes visible to the user). Time is in UTC in the format YYYY-MM-DDThh:mm:ss.sssZ</td>
+<td>2018-01-17T12:56:05.232Z</td>
+</tr>
+<tr class="odd">
+<td>EvictionDate</td>
+<td>DateTimeOffset</td>
+<td>N</td>
+<td><p>Date when the data file will be removed from the rolling repository. Time is in UTC in the format YYYY-MM-DDThh:mm:ss.sssZ</p>
+<p>The EvictionDate is optional but should be provided if a rolling policy is in place.</p></td>
+<td>2018-01-17T12:56:05.232Z</td>
+</tr>
+<tr class="even">
+<td>Checksums</td>
+<td>Checksum()</td>
+<td>Y</td>
+<td>Represents the known checksums for the product’s physical date, providing a unique value for supporting download integrity check. At least MD5 checksum, including ChecksumDate, is mandatory.</td>
+<td><p>"Checksum":</p>
+<p>[</p>
+<p>{</p>
+<p>"Algorithm":"MD5",</p>
+<p>"Value":"E8A303BF3D85200</p>
+<p>514F727DB60E7DB65"</p>
+<p>"ChecksumDate":"2019-02-16T12:00:00.000Z",</p>
+<p>}</p>
+<p>]</p></td>
+</tr>
+<tr class="odd">
+<td>ContentDate</td>
+<td>TimeRange()</td>
+<td>Y</td>
+<td>The validity date range period. Start and stop dates are in UTC in the format YYYY-MM-DDThh:mm:ss.sssZ</td>
+<td><p>"ContentDate":</p>
+<p>{</p>
+<p>"Start":"2019-02-17T09:00:00.000Z",</p>
+<p>"End":"2019-02-17T21:00:00.000Z"</p>
+<p>}</p></td>
+</tr>
+<tr class="even">
+<td>Attributes</td>
+<td>List(Attribute)</td>
+<td>Y</td>
+<td>List of string/integer/double/datetime attributes (see attributes definitions)</td>
+<td><p>" Attributes ":</p>
+<p>[</p>
+<p>{</p>
+<p>"Name":"ShortName",</p>
+<p>"ValueType":"String"</p>
+<p>"Value":"GIPP_OLQCPA"</p>
+<p>} …</p>
+<p>]</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="query"> Query</h2>
+<p>The service naturally supports all the intrinsic OData requests.</p>
+<h3 id="filtering-query-function">Filtering query function</h3>
+<p>The OData “filter” query is a very versatile query that allows a substancial number of possibilities on attributes such as:</p>
+<ul>
+<li><p>Startswith (startswith) : attribute target starts with the given sequence in parameters</p></li>
+<li><p>Contains (contains) : attribute target contains the given sequence in parameters</p></li>
+<li><p>Endswith (endswith) : attribute target ends with the given sequence in parameters</p></li>
+<li><p>Greater than (gt) : attribute target is greater than given sequence in parameters, comparison is type-wise</p></li>
+<li><p>Less than (lt) : attribute target is lesser than given sequence in parameters, comparison is type-wise</p></li>
+</ul>
+<p>These are applicable on any attribute type that can be compared: time, number, strings. They also can be mixed with “and” or “or” in order to have more possibilities.</p>
+<p>Here are some examples extracted from [AD-1]:</p>
+<ul>
+<li><p>The list of products starting with the filename “S1A_AUX_” can be retrieved as follows: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$filter=startswith(Name,'S1A_AUX_')</em></p></li>
+<li><p>The following query returns all products containing “S2__OPER_AUX_UT1UTC” : <em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$filter=contains(Name,' S2__OPER_AUX_UT1UTC ')</em></p></li>
+<li><p>The list of products published in the AUXIP since a reference time: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$filter=PublicationDate gt 2020-05-15T00:00:00.000Z</em></p></li>
+<li><p>The list of products filtered by validity date criteria can be retrieved for example as follows: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$filter=ContentDate/Start gt 2019-05-15T00:00:00.000Z and ContentDate/End lt 2019-05-16T00:00:00.000Z</em></p></li>
+</ul>
+<h3 id="query-by-attributes">Query by attributes</h3>
+<p>It is possible to query all the products with a particular attribute name and value using the query:</p>
+<p><em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$expand=Attributes&amp;$filter=Attributes/OData.CSC.StringAttribute/any(att:att/Name eq '$NAME' and att/OData.CSC.StringAttribute/Value eq '$VALUE')</em></p>
+<p>A combination of attributes is also possible:</p>
+<p><em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$filter=Attributes/OData.CSC.StringAttribute/any(att:att/Name eq 'productType' and att/OData.CSC.StringAttribute/Value eq 'AUX_ECMWFD') and Attributes/OData.CSC.StringAttribute/any(att:att/Name eq 'platformShortName' and att/OData.CSC.StringAttribute/Value eq 'SENTINEL-2')</em></p>
+<h3 id="additional-options">Additional Options</h3>
+<p>Query functions is supported on all properties of the Product according to the OData $filter query option. Results ordering function is supported according to the $orderby option; result paging function is supported according to the $top, $skip and $count options, with the page size configurable to support at least 1000 returned results per page. More details on these options are provided below.</p>
+<p><strong><span class="underline">$orderby</span></strong></p>
+<p>The $orderby system query option allows clients to request resources in either ascending order using ‘asc’ or descending order using ‘desc’. If ‘asc’ or ‘desc’ not specified, then the resources will be ordered in ascending order.</p>
+<p>For example: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products?$orderby=PublicationDate desc</em></p>
+<p>returns a list of products ordered by PublicationDate in descending order.</p>
+<p><strong><span class="underline">$top</span></strong></p>
+<p>The $top system query option allows clients to specify the maximum (non-negative integer) number of items returned from a query. In the case of the AUXIP, $stop accepts a maximum value of 1000.</p>
+<p>For example: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products$top=1000&amp;$filter=startswith(Name,'S2')</em></p>
+<p>returns the first 1000 Sentinel-2 Auxiliary products currently available on the AUXIP.</p>
+<p><strong><span class="underline">$skip</span></strong></p>
+<p>The $skip system query option allows clients to specify a (non-negative integer) number of items excluded from the start of a query result, i.e. the query starts returning items from the provided integer+1.</p>
+<p>For example: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products$skip=100&amp;$filter=startswith(Name,'S2')</em></p>
+<p>returns all Sentinel-2 ADF products currently available on the AUXIP, excluding the first 100.</p>
+<p>$top and $skip are often applied together; in this case $skip is always applied first regardless of the order in which they appear in the query.</p>
+<p><strong><span class="underline">$count</span></strong></p>
+<p>The $count system query option allows clients to request a count of the matching resources included with the resources in the response: the number of the matching resources is returned as result.</p>
+<p>The $count query option is useful to know the number of entities which are identified by the resource path section of the URI after having applied some filters.</p>
+<p>For example: <em>https://&lt;service-root-uri&gt;/auxip.svc/Products$count=true&amp;$filter=startswith(Name,'S2')</em></p>
+<p>returns the number of Sentinel-2 products currently available on the AUXIP.</p>
+<h3 id="catalogue-export">Catalogue Export</h3>
+<p>Giving the number of elements in the database exporting the full catalog is not possible. Thus a snapshot of the database is available in an HTTP access with BasicAuth at : <em>https://&lt;service-root-uri&gt;/archives/</em></p>
+<p>The structure is as follows:</p>
+<ul>
+<li><p>[SSS]: Satellite Platform short name, 3 characters (e.g. S1_, S1A, S2A, …)</p></li>
+<li><p>[YYYY]: Validity Year, 4 digits (e.g. 2014, 2015, …)</p></li>
+<li><p>[MM]: Validity Month, 2 digits (e.g. 01, 02, …)</p></li>
+</ul>
+<p>The month folder contains the set of exported files. There is a data file for each day of the month.</p>
+<p>Each data file lists the products having the same 'validity start' date.</p>
+<p>The exported file naming convention and format is:</p>
+<p>&lt;SSS&gt;_&lt;YYYYMMDD&gt;_&lt;AUX&gt;_&lt;XYZ&gt;_catalogue_&lt;yyyymmddhhmmss&gt;.json</p>
+<p>where:</p>
+<ul>
+<li><p>&lt;SSS&gt; 3 characters corresponding to the satellite platform short name S1_, S1A, S1B, S2A etc.</p></li>
+<li><p>&lt;YYYYMMDD&gt; 8 digits corresponding to the validity start date of all the products listed in the file</p></li>
+<li><p>&lt;AUX&gt;_&lt;XYZ&gt; 7 characters corresponding to the Auxiliary system, where XYZ represents the AUX provider:</p>
+<ul>
+<li><p>ADG = Aux Data Gathering</p></li>
+<li><p>POD = Precise Orbit Determination</p></li>
+<li><p>C-V = Cal/Val3</p></li>
+</ul></li>
+<li><p>&lt;yyyymmddhhmmss&gt; 14 digits corresponding to the year, month, day and UTC time of the catalogue snapshot. The products listed in the exported file are those that have been published in the AUXIP up until this date.</p></li>
+</ul>
+<p>The frequency of the snapshot could be e.g. nightly.</p>
+<h3 id="product-download">Product Download </h3>
+<p>Product download over the OData API is initiated using the ‘Id’ for each product returned in the GET Products List Response. The correct URI for the download of a single product is:</p>
+<p><em>https://&lt;service-root-uri&gt;/auxip.svc/Products(Id)/$value</em></p>
+<p>Where Id is the UUID assigned per product.</p>
+<h3 id="query-response-content">Query response content</h3>
+<p>The query response is contained in the GET HTTP response. The default format is XML but if the label “content-type” equals “application/json” the result is in JSON format.</p>
+<p>HTTP error responses are the classical HTTP errors:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Error Code</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>200</td>
+<td>Accepted, response given</td>
+</tr>
+<tr class="even">
+<td>400</td>
+<td>Bad request</td>
+</tr>
+<tr class="odd">
+<td>401</td>
+<td>Unauthorized (sent by the authentication gateway)</td>
+</tr>
+<tr class="even">
+<td>404</td>
+<td>Not found</td>
+</tr>
+<tr class="odd">
+<td>500</td>
+<td>Internal Server error</td>
+</tr>
+</tbody>
+</table>
+<h2 id="subscriptions"> Subscriptions</h2>
+<p>The Subscription function allows the request for automated notifications of new products entering the AUXIP, according to a set of filter parameters supplied within the subscription request. Once the notification has been received, the client can request the download of the product.</p>
+<p>The nominal scenario can be described in the following steps:</p>
+<ul>
+<li><p><strong>STEP 1 – Subscription Creation</strong></p></li>
+</ul>
+<p>The scenario is initiated by an AUXIP client submitting a create subscription request to the AUXIP service. The request contains the filter parameters of the subscription (product types, time range, etc.) and a NotificationEndpoint to which product download notifications will be sent. The request is processed by the AUXIP service, and a response is returned, which includes a unique identifier for the particular subscription request, a status (initially running), the filter parameters and the submission date/time of the request.</p>
+<ul>
+<li><p><strong>STEP 2 – Product Notification and Product Retrieval </strong></p></li>
+</ul>
+<p>For each subscription with status running, the AUXIP identifies new products matching the provided filter criteria. Upon identification, the AUXIP sends a notification of product availability to the NotificationEndpoint provided, containing the product ID, the product name, the subscription ID and the notification date. The client is then free to submit a product Download Request to trigger the download of the product.</p>
+<p>- A subscription continues to identify products matching the filter parameters until it is paused or cancelled.</p>
+<p>- In case the client endpoint is unavailable and the subscription notification fails, there is no retry.</p>
+<h3 id="subscription-create-example-request">Subscription Create: Example Request: </h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><p>POST</p>
+<p>http://&lt;service-root-uri&gt;/odata/v1/Subscriptions</p>
+<p>{</p>
+<p>"@odata.context": "$metadata#Subscription/$entity",</p>
+<p>"FilterParam": "Products?$filter=contains(Name,'_AUX_ECMWFD_')and PublicationDate gt 2019-02-01T00:00:00.000Z and PublicationDate lt 2019-09-01T00:00:00.000Z",</p>
+<p>"NotificationEndpoint": "<em>https://myservice/notification</em>",</p>
+<p>"NotificationEpUsername": "myserviceuser",</p>
+<p>"NotificationEpPassword": "**********",</p>
+<p>}</p></td>
+</tr>
+</tbody>
+</table>
+<h3 id="subscription-create-example-response-json-format">Subscription Create: Example Response (JSON format): </h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><p>HTTP/1.1 201 Created</p>
+<p>{</p>
+<p>“@odata.context”: ”$metadata#OData.CSC.Subscription”,</p>
+<p>“Id”: ”2b17b57d-fff4-4645-b539-91f305c27e11”,</p>
+<p>“Status”: ”running”,</p>
+<p>"FilterParam": "Products?$filter=contains(Name,'_AUX_ECMWFD_')and PublicationDate gt 2019-02-01T00:00:00.000Z and PublicationDate lt 2019-09-01T00:00:00.000Z",</p>
+<p>“SubmissionDate”: ”2019-01-27T18:25:30.000Z”,</p>
+<p>"NotificationEndpoint": "<em>https://myservice/notification</em>",</p>
+<p>}</p></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-subscription-notification">Example Subscription Notification: </h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><p>POST</p>
+<p>http://myservice/notification</p>
+<p>{</p>
+<p>"@odata.context": "$metadata#Notification/$entity",</p>
+<p>"ProductId": "e872683a-ea5b-455d-bfb2-fb304cbfbacb",</p>
+<p>"ProductName": " S2__OPER_AUX_ECMWFD_PDMC_20190216T120000_V20190217T090000_20190217T210000",</p>
+<p>“SubscriptionId”: ”2b17b57d-fff4-4645-b539-91f305c27e11”,</p>
+<p>“NotificationDate”: ”2019-02-16T12:18:09.000Z”,</p>
+<p>}</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="metrics"> Metrics</h2>
+<p>Various metric parameters are available at <em>https://&lt;service-root-uri&gt;/auxip.svc/Metrics</em></p>
+<p>They give information on the database content and users.</p>
+<p>Please note that the reporting role is needed to access this API.</p>
+<h1 id="postman-testing-collection">Postman Testing Collection</h1>
+<p>A postman collection is provided along with this document to test the various query possibilities on the service including $filter/$top/$skip filters and ADF download. Here is the import/use procedure.</p>
+<p>First import the test collection within postman:</p>
+<p><img src="./media/media/image6.png" style="width:2.46667in;height:0.75833in" /></p>
+<p>Figure 5 : import button</p>
+<p>And fill the necessary variables:</p>
+<p><img src="./media/media/image7.png" style="width:6.475in;height:2.275in" /></p>
+<p>Figure 6 : Postman variables</p>
+<p>All the user should be registered through the OAuth2 portal by typing the address of the service in an internet navigator and filling the necessary fields, see §2. Client Administration.</p>
+<p>Then all the requests to the API are granted according to the role of the user. By default, the role is “Download”; if the user needs to access metrics, its role should be modified in the admin page:</p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/auth"><em>https://reprocessing-preparation.ml/au</em>th</a></p>
+<h1 id="appendix-a-odata-metadata">Appendix A : ODATA metadata</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td><p>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</p>
+<p>&lt;edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0"&gt;</p>
+<p>&lt;edmx:DataServices&gt;</p>
+<p>&lt;Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="OData.CSC"&gt;</p>
+<p>&lt;EntityType Name="Product"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="Id"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="Id" Type="Edm.Guid" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="ContentType" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="ContentLength" Type="Edm.Int64" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="OriginDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="PublicationDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="EvictionDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Checksum" Type="Collection(OData.CSC.Checksum)" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ContentDate" Type="OData.CSC.TimeRange" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="StringAttributes" Type="Collection(OData.CSC.StringAttribute)" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="IntegerAttributes" Type="Collection(OData.CSC.IntegerAttribute)" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="DoubleAttributes" Type="Collection(OData.CSC.DoubleAttribute)" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="DateTimeOffsetAttributes" Type="Collection(OData.CSC.DateTimeOffsetAttribute)" Nullable="true"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EntityType Name="Subscription"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="Id"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="Id" Type="Edm.Guid" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Status" Type="OData.CSC.SubscriptionStatus" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="SubscriptionEvent" Type="OData.CSC.SubscriptionEvent" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="FilterParam" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="ContentLength" Type="Edm.Int64" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="SubmissionDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="LastNotificationDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EntityType Name="Metric"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="Name"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Timestamp" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="MetricType" Type="OData.CSC.EnumType" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Gauge" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Counter" Type="Edm.Int64" Nullable="true"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;ComplexType Name="DateTimeOffsetAttribute"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValueType" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="Attribute" Abstract="true"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValueType" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="StringAttribute"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValueType" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="IntegerAttribute"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValueType" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.Int64" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="DoubleAttribute"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValueType" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.Double" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="Checksum"&gt;</p>
+<p>&lt;Property Name="Algorithm" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="ChecksumDate" Type="Edm.DateTimeOffset" Nullable="true"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="Property"&gt;</p>
+<p>&lt;Property Name="Name" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;Property Name="Value" Type="Edm.String" Nullable="true"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;ComplexType Name="TimeRange"&gt;</p>
+<p>&lt;Property Name="Start" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="End" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;/ComplexType&gt;</p>
+<p>&lt;EnumType Name="SubscriptionStatus"&gt;</p>
+<p>&lt;Member Name="running"/&gt;</p>
+<p>&lt;Member Name="paused"/&gt;</p>
+<p>&lt;Member Name="cancelled"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EnumType Name="SubscriptionEvent"&gt;</p>
+<p>&lt;Member Name="created"/&gt;</p>
+<p>&lt;Member Name="deleted"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EnumType Name="EnumType"&gt;</p>
+<p>&lt;Member Name="Gauge"/&gt;</p>
+<p>&lt;Member Name="counter"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EntityContainer Name="Container"&gt;</p>
+<p>&lt;EntitySet Name="Products" EntityType="OData.CSC.Product"/&gt;</p>
+<p>&lt;EntitySet Name="Subscriptions" EntityType="OData.CSC.Subscription"/&gt;</p>
+<p>&lt;EntitySet Name="Metrics" EntityType="OData.CSC.Metric"/&gt;</p>
+<p>&lt;/EntityContainer&gt;</p>
+<p>&lt;/Schema&gt;</p>
+<p>&lt;/edmx:DataServices&gt;</p>
+<p>&lt;/edmx:Edmx&gt;</p></td>
+</tr>
+</tbody>
+</table>
+<h1 id="appendix-b-getbaseline-tool">Appendix B : getBaseline Tool</h1>
+<p>A tool to retrieve a list of baseline files is available in the source code repository under the Utilities/getBaseline.py file.</p>
+<p>The usage of the script is given here:</p>
+<p>getBaseline.py [-h] -u USER -pw PASSWORD -m MISSION -t0 START -t1 STOP [-su UNIT] [-c CONTAINS] [-e EXCLUDE] [-d DOWNLOAD]</p>
+<p>Where :</p>
+<ul>
+<li><p>USER : is the user login registered on the Oauth2 service</p></li>
+<li><p>PASSWORD : is the user password of the user</p></li>
+<li><p>MISSION : is the mission to request for (S2MSI, S1SAR, S3OLCI, S3MWR, S3ALL, S3SRAL, S3SYN, S3SLSTR)</p></li>
+<li><p>START : is the SensingTimeStart to search for on the format <em>'2018-05-02T12:00:30Z'</em></p></li>
+<li><p>STOP : is the SensingTimeStop to search for on the format <em>'2018-05-02T12:00:30Z'</em></p></li>
+<li><p>UNIT : is the satellite unit ( A or B ) [Optional]</p></li>
+<li><p>CONTAINS : is an additional filter to match on the ADF names [Optional]</p></li>
+<li><p>EXCLUDE : is an additional filter to exclude file names [Optional]</p></li>
+<li><p>DOWNLOAD : By default getBaseline tool only lists all auxiliary data files matching the request, use '-d true' option to download the listed files.</p></li>
+</ul>
+<p>The list of files is the result of the function call to reprocessing.svc/GetReproBaselineNamesForPeriod on the reprocessing service, then the AUXIP database is questioned to get the path to the file in the online storage.</p>
+<div class="footer-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-11" style="color: white">Github project : <a href="http://www.github.com" style="color:white" target="_blank">http://www.github.com</a></div>
+      <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

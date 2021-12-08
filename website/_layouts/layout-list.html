@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>{% if page.title %}{{page.title}}{% else %}{{ site.title | escape }}{% endif %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="{{site.baseurl}}/images/favicon.png">
+		<link href="{{site.baseurl}}/assets/css/style.css" rel="stylesheet">
+		<link href="{{site.baseurl}}/assets/js/jquery-ui.min.css" rel="stylesheet">
+		<script src="{{site.baseurl}}/assets/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+		<script src="{{site.baseurl}}/assets/js/moment.min.js"></script>
+		<script src="{{site.baseurl}}/assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="{{site.baseurl}}/assets/js/docTools.js"></script>
+		<script src="{{site.baseurl}}/data/docList.js"></script>
+		
+	
+	</head>
+	
+	<body class='page {{page.bodyClass}}'>
+	
+		<div id="wrapper" class="wrapper">
+			{% include header.html headerClass='header-extra' %}
+			{{content}}
+			<!--  modifications for ie11 compatibility with ie11 , footer in wrapper -->
+					{% include footer.html %}
+					{% include sub-footer.html %}
+		</div>
+		<!--  modifications for ie11 compatibility with ie11 , footer in wrapper -->
+		<!-- {% include footer.html %} -->
+		<!-- {% include sub-footer.html %} -->
+		
+		<script type="text/javascript" src="{{ site.baseurl }}/assets/js/scripts.js"></script>
+	</body>
+</html>

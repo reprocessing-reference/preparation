@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>...</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+</head>
+<body>
+<table>
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>Version</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Issued</td>
+<td>1.0</td>
+<td>04/12/2020</td>
+</tr>
+<tr class="even">
+<td>Corrections on user manuals references</td>
+<td>1.1</td>
+<td>15/12/2020</td>
+</tr>
+<tr class="odd">
+<td>Modifications on function calls</td>
+<td>1.2</td>
+<td>18/12/2020</td>
+</tr>
+<tr class="even">
+<td>Added functions to extract names only</td>
+<td>1.3</td>
+<td>05/01/2020</td>
+</tr>
+<tr class="odd">
+<td>OAuth2 authentication</td>
+<td>1.4</td>
+<td>08/04/2021</td>
+</tr>
+<tr class="even">
+<td>Correction on authentication</td>
+<td><strong>1.5</strong></td>
+<td><strong>15/04/2021</strong></td>
+</tr>
+<tr class="odd">
+<td>Add Parameter list table</td>
+<td><strong>1.6</strong></td>
+<td><strong>25/06/2021</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Change Log:</strong></p>
+<p>Table of contents</p>
+<p></p>
+<p><a href="#introduction"><span class="underline">1.</span> <span class="underline">Introduction</span> 5</a></p>
+<p><a href="#purpose-and-scope"><span class="underline">1.1</span> <span class="underline">Purpose and scope</span> 5</a></p>
+<p><a href="#documents"><span class="underline">1.2</span> <span class="underline">Documents</span> 5</a></p>
+<p><a href="#reference-documents"><span class="underline">1.2.1</span> <span class="underline">Reference documents</span> 5</a></p>
+<p><a href="#applicable-documents"><span class="underline">1.2.2</span> <span class="underline">Applicable documents</span> 5</a></p>
+<p><a href="#terminology"><span class="underline">1.3</span> <span class="underline">Terminology</span> 5</a></p>
+<p><a href="#definitions"><span class="underline">1.3.1</span> <span class="underline">Definitions</span> 5</a></p>
+<p><a href="#list-of-acronyms"><span class="underline">1.3.2</span> <span class="underline">List of Acronyms</span> 5</a></p>
+<p><a href="#client-administration"><span class="underline">2.</span> <span class="underline">Client Administration</span> 6</a></p>
+<p><a href="#token-generation-for-developers"><span class="underline">2.1</span> <span class="underline">Token generation for developers</span> 7</a></p>
+<p><a href="#access-though-postman-client"><span class="underline">2.2</span> <span class="underline">Access though Postman Client</span> 7</a></p>
+<p><a href="#description"><span class="underline">3.</span> <span class="underline">Description</span> 9</a></p>
+<p><a href="#interface-access"><span class="underline">3.1</span> <span class="underline">Interface access</span> 9</a></p>
+<p><a href="#use-case-scenario"><span class="underline">3.2</span> <span class="underline">Use case scenario</span> 9</a></p>
+<p><a href="#odata-api-description"><span class="underline">3.3</span> <span class="underline">OData API description</span> 10</a></p>
+<p><a href="#auxtypes"><span class="underline">3.3.1</span> <span class="underline">AuxTypes</span> 11</a></p>
+<p><a href="#reprocessing-configuration-baseline-aux-files"><span class="underline">3.3.2</span> <span class="underline">Reprocessing Configuration Baseline (AUX Files)</span> 13</a></p>
+<p><a href="#query"><span class="underline">3.4</span> <span class="underline">Query</span> 14</a></p>
+<p><a href="#main-functions"><span class="underline">3.4.1</span> <span class="underline">Main Functions</span> 14</a></p>
+<p><a href="#filter-query-function"><span class="underline">3.4.2</span> <span class="underline">$filter query function</span> 16</a></p>
+<p><a href="#query-response-modification"><span class="underline">3.4.3</span> <span class="underline">Query response modification</span> 16</a></p>
+<p><a href="#full-table-export"><span class="underline">3.4.4</span> <span class="underline">Full table export</span> 16</a></p>
+<p><a href="#query-response-content"><span class="underline">3.4.5</span> <span class="underline">Query response content</span> 17</a></p>
+<ol type="1">
+<li><h1 id="introduction">Introduction</h1>
+<ol type="1">
+<li><h2 id="purpose-and-scope">Purpose and scope</h2></li>
+</ol></li>
+</ol>
+<p>This documents details the API entry points for the Reprocessing Configuration Baseline API. It gives the summary of the data access through an OData V4 format.</p>
+<ol start="2" type="1">
+<li><h2 id="documents">Documents</h2>
+<ol type="1">
+<li><h3 id="reference-documents">Reference documents</h3></li>
+</ol></li>
+</ol>
+<ol type="1">
+<li><blockquote>
+<p>OData Documentation <a href="http://www.odata.org/documentation"><span class="underline">http://www.odata.org/documentation</span></a></p>
+</blockquote></li>
+<li><blockquote>
+<p>OData Protocol <a href="http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html"><span class="underline">http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</span></a></p>
+</blockquote>
+<ol start="2" type="1">
+<li><h3 id="applicable-documents">Applicable documents</h3></li>
+</ol></li>
+</ol>
+<ol type="1">
+<li><blockquote>
+<p>REPROCESSING REFERENCE PACKAGE PREPARATION</p>
+</blockquote>
+<ol start="3" type="1">
+<li><h2 id="terminology">Terminology</h2>
+<ol start="3" type="1">
+<li><h3 id="definitions">Definitions</h3></li>
+</ol></li>
+</ol></li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Term</strong></th>
+<th><strong>Definition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>API</strong></td>
+<td>A set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service.</td>
+</tr>
+<tr class="even">
+<td><strong>AUX_File</strong></td>
+<td>Auxiliary file used in a satellite processing chain</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="list-of-acronyms">List of Acronyms </h3>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Acronym</strong></th>
+<th><strong>Signification</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>AD</strong></td>
+<td>Applicable Document</td>
+</tr>
+<tr class="even">
+<td><strong>UUID</strong></td>
+<td>Universally Unique Identifier – Allows to identify an instance</td>
+</tr>
+<tr class="odd">
+<td><strong>JSON</strong></td>
+<td>JavaScript Object Notation, commonly used format in web services</td>
+</tr>
+<tr class="even">
+<td><strong>URI</strong></td>
+<td>Uniform Resource Identifier</td>
+</tr>
+</tbody>
+</table>
+<h1 id="client-administration">Client Administration</h1>
+<p>The Reprocessing service enforces that only queries from authenticated clients are accepted and that the access rights are applied. If a client calls a Reprocessing service function without permission, it is informed with a corresponding return message.</p>
+<p><img src="./media/media/image3.png" style="width:4.08333in;height:2.98815in" /></p>
+<p>Figure 1: ICD allowing Sign in and registration</p>
+<p>First you should have an account. You can use the “Register” link to do so.</p>
+<p><img src="./media/media/image4.png" style="width:3.44566in;height:4.35417in" /></p>
+<p>Figure 2 : Registering page</p>
+<h2 id="token-generation-for-developers">Token generation for developers</h2>
+<p>To be able to start using the Reprocessing service via postman or by sending requests, a client should first request for the access token using its credentials (username and password) from the following Reprocessing token endpoint:</p>
+<p><em>https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprobase/protocol/openid-connect/token</em></p>
+<p>Example of getting the access token using curl tool:</p>
+<p><em>USER=username</em></p>
+<p><em>PASSWORD=password</em></p>
+<p><em>RAWTKN=$(curl -s -X POST \</em></p>
+<p><em>-H "Content-Type: application/x-www-form-urlencoded" \</em></p>
+<p><em>-d "username="$USER \</em></p>
+<p><em>-d "password="$PASSWORD \</em></p>
+<p><em>-d 'grant_type=password' \</em></p>
+<p><em>-d "client_id=reprobase" \</em></p>
+<p><em>https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token \</em></p>
+<p><em>|jq . )</em></p>
+<p><em>TOKEN=$(echo $RAWTKN | jq -r '.access_token')</em></p>
+<p><em>echo "Token to be used to access to Reprocessing Configuration Baseline service : ${TOKEN} "</em></p>
+<h2 id="access-though-postman-client">Access though Postman Client</h2>
+<p>Once credentials are obtained, you can import the preconfigured Postman script <em>“ReprocessingTestSuitePostman.json”</em>.</p>
+<p>Once imported on the “Variables” tab of the collection “ReprocessingTestSuite”, add the “username” and “password”.</p>
+<p><img src="./media/media/image5.png" style="width:6.36306in;height:2.40157in" /></p>
+<p>Figure 3 : Variables configuration</p>
+<p>In the “Authorization” tab, click on “Get New Access Token”.</p>
+<p><img src="./media/media/image6.png" style="width:4.09004in;height:4.65625in" /></p>
+<p>Figure 4 : Token creation</p>
+<p>After that, click on “Use Token” and “Save” the collection. You can new use the requests in postman during the validity time of the token (10min).</p>
+<h1 id="description">Description</h1>
+<p>The Reference Baseline Access Point allows to visualize and to retrieve the list of auxiliary files needed for a reprocessing of L1 and L2 Sentinel 1, Sentinel 2 and Sentinel 3 data. There are two tables:</p>
+<ul>
+<li><p>“AuxFiles“ contains all aux files with their respective information</p></li>
+<li><p>“AuxTypes” contains all the possible auxiliary file type with their description</p></li>
+</ul>
+<p>AuxTypes is the representation of the ‘all’ sheet in the RRPP_all_AUX.xls file.</p>
+<p>AuxFiles is the concatenation of all the sensor sheet ‘S2L1’ ‘S2L2’ … in the RRPP_all_AUX.xls file.</p>
+<p>These tables can be queried using all the Odata standard function. Some specific functions to retrieve the list for specified parameters are also available.</p>
+<p>Detailed description is available in Configuration Baseline User Manual:</p>
+<ul>
+<li><p>For Sentinel- 1 RRPP-TN-0006-CS</p></li>
+<li><p>For Sentinel-2-MSI RRPP-TN-0004-CS</p></li>
+<li><p>For Sentinel-3 RRPP-TN-0007-CS</p></li>
+</ul>
+<p>Interface is designed using an OData web service and secured through an OAuth 2.0 gateway.</p>
+<p>The content is automatically updated with the new baseline and the new auxiliary files set lists.</p>
+<h2 id="interface-access">Interface access</h2>
+<p>Interface access is done through an Oauth 2.0 identification scheme see §2. Client Administration .</p>
+<h2 id="use-case-scenario">Use case scenario</h2>
+<p>The nominal use case is a user request based on auxiliary data attributes using the OData V4.0 standard API.</p>
+<p>The API description is available at the URI &lt;host&gt;/reprocessing.svc/$metadata</p>
+<p><strong><span class="underline">Case1 : Download the entire tables </span></strong></p>
+<p>Entire tables can be retrieved using directly the collection name in the Odata service.</p>
+<p><strong><span class="underline">For exemple :</span></strong></p>
+<ul>
+<li><p><em>&lt;host&gt;/reprocessing.svc/AuxFiles</em></p></li>
+</ul>
+<p>Will retrieve all the AuxFile registered in the service</p>
+<ul>
+<li><p><em>&lt;host&gt;/reprocessing.svc/AuxTypes</em></p></li>
+</ul>
+<p>Will retrieve all the AuxType registered in the service</p>
+<p><strong><span class="underline">Case2: Make specific query with OData filter accordingly to user needs.</span></strong></p>
+<ul>
+<li><p>In the case of Reprocessing Configuration Baseline the client uses the API to request a list of auxiliary files referenced in the baseline data by sending a GET Products List Query in OData format. The query can contain filter on all the table fields (Satelite, Satelite Unit , Sensing time period (Application), Product type, Aux Validity Start Date, Full Auxiliary name, creation date, baseline, file_type). The user can query for the auxiliary list requesting a particular Mission, Unit, period and product type he is interested in. Basically OData protocol allows to query any range on parameters with the keyword “filter” (see next chapter on possible queries. This query can either be achieved using a standard OData query but also using a specific ODataFunction to do so.</p></li>
+<li><p>In response, the Reference Baseline Service sends the list of auxiliary files corresponding to the request.</p>
+<ol start="8" type="1">
+<li><h2 id="odata-api-description">OData API description</h2></li>
+</ol></li>
+</ul>
+<p>Two main collections (tables) are available in the service:</p>
+<ul>
+<li><p>AuxTypes</p></li>
+<li><p>AuxFiles</p></li>
+</ul>
+<p><embed src="./media/media/image7.emf" style="width:7.69792in;height:2.26042in" />AuxTypes are extracted from the RRPP Usermanual:</p>
+<p>Table 1 AuxTypes Table</p>
+<p>AuxFiles are ingested using the data provided by ESA, most of their representation comes from the RRPP_All_Aux.xlsx</p>
+<p>Table 2 Aux files</p>
+<p><img src="./media/media/image8.tiff" style="width:6.69306in;height:3.68125in" /></p>
+<p>Each AuxFile from the ‘AuxFiles’ table has a link to an AuxType in the ‘AuxTypes’ table.</p>
+<p>Each AuxFile is a standalone entry and there is no group. However it is easily possible using Odata queries to get a list of AuxFiles sharing the same attributes values or with atrributes included in a range. It is also possible to have comparison tests in queries, on date for example to search all the applicable AuxFiles for a particular sensingTime.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>&lt;root&gt;/reprocessing.svc/AuxFiles?$filter=(SensingTimeApplicationStart lt 2019-01-16T22:00:00Z) and (SensingTimeApplicationStop gt 2019-01-16T22:00:00Z)</td>
+</tr>
+</tbody>
+</table>
+<p>To get the list of AuxFiles that are applicable for date 2019-01-16T22:00:00</p>
+<h3 id="auxtypes">AuxTypes</h3>
+<p>The AuxTypes table contains all the AuxType defined in the RRPP_all_Aux.xlsx.</p>
+<p>Full list can be retrieved using a simple HTTP GET request on : <em>&lt;host&gt;/reprocessing.svc/AuxTypes</em></p>
+<p>Odata filters can also be applied if needed on any of the attributes</p>
+<p><img src="./media/media/image9.png" style="width:4.46667in;height:4.33333in" /></p>
+<p>Figure 5 AuxType diagram</p>
+<table>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Type</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LongName</td>
+<td>String</td>
+<td>Yes</td>
+<td>AUX file type full name</td>
+<td>S1__AUX_SCS</td>
+</tr>
+<tr class="even">
+<td>ShortName</td>
+<td>String</td>
+<td>No</td>
+<td>Short Name</td>
+<td>AUX_SCS</td>
+</tr>
+<tr class="odd">
+<td>Format</td>
+<td>String</td>
+<td>Yes</td>
+<td>Format of the data stored in the aux file</td>
+<td><p>SAFE/ASCII/</p>
+<p>GRIB/NETCDF …</p></td>
+</tr>
+<tr class="even">
+<td>Mission</td>
+<td>String</td>
+<td>Yes</td>
+<td>Mission using this aux type</td>
+<td>S2MSI</td>
+</tr>
+<tr class="odd">
+<td>ProductLevels</td>
+<td>List(ProductLevel)</td>
+<td>Yes</td>
+<td><strong>List of product level applicable for the AUX Type</strong></td>
+<td><strong>L0 / L1 / L2</strong></td>
+</tr>
+<tr class="even">
+<td>ProductTypes</td>
+<td>List(ProductTypes)</td>
+<td>Yes</td>
+<td><strong>List of product types applicable for the AUX Type</strong></td>
+<td><strong>L1A / L1B …</strong></td>
+</tr>
+<tr class="odd">
+<td>Variability</td>
+<td>Variability</td>
+<td>Yes</td>
+<td>Define the variability according to time/condition</td>
+<td>static / dynamic</td>
+</tr>
+<tr class="even">
+<td>Validity</td>
+<td>Validity(Enum)</td>
+<td>Yes</td>
+<td>Define the validity mode for applying the sensing time applicability period. If the type is AnyTime then the file is always valid no matter the requested date but the latest file should be used. If the type is ValidityPeriod then the file is only valid for its sensingTimeApplication period.</td>
+<td><p>Either:</p>
+<p>- AnyTime : Valid any time</p>
+<p>- ValidityPeriod : Valid only on the SensingApplication period</p></td>
+</tr>
+<tr class="odd">
+<td>Rule</td>
+<td>Rule(Enum)</td>
+<td>Yes</td>
+<td>Applicable rule to search for this aux file type when multiple are available for the date</td>
+<td>ValIntersectWithoutDuplicate</td>
+</tr>
+<tr class="even">
+<td>Comments</td>
+<td>String</td>
+<td>Yes</td>
+<td>Short description of the aux file type</td>
+<td>Ex: Instrument parameters for IPF</td>
+</tr>
+</tbody>
+</table>
+<p>Table 2: Entity Description</p>
+<h3 id="reprocessing-configuration-baseline-aux-files">Reprocessing Configuration Baseline (AUX Files)</h3>
+<p>The AuxFile represents an actual auxiliary file.</p>
+<p>The full list of files can be retrieved using:</p>
+<ul>
+<li><p><em>&lt;host&gt;/reprocessing.svc/AuxFiles</em></p></li>
+</ul>
+<p><img src="./media/media/image10.png" style="width:3.31476in;height:1.98634in" /></p>
+<p>Figure 6 : AuxFile diagram</p>
+<table>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Type</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Id</td>
+<td>UUID</td>
+<td>Yes</td>
+<td>ID de l’auxiliary file</td>
+<td>2b17b57d-fff4-4645-b539-91f305c27c69</td>
+</tr>
+<tr class="even">
+<td>AuxType</td>
+<td>AuxType()(see above)</td>
+<td>Yes</td>
+<td>OData navigation link to the AuxType associated with the file. See 3.3.1 for the AuxType description</td>
+<td>AuxType(‘S1__AUX_SCS’)</td>
+</tr>
+<tr class="odd">
+<td>FullName</td>
+<td>String</td>
+<td>Yes</td>
+<td>Full name of the file</td>
+<td>S2A_OPER_GIP_R2MACO_MPC__ 20150605T094742_V20150622T000000_21000101T000000_BXX</td>
+</tr>
+<tr class="even">
+<td>Baseline</td>
+<td>String</td>
+<td>Yes</td>
+<td>Baseline in which this file was used</td>
+<td>”02.09”</td>
+</tr>
+<tr class="odd">
+<td>ValidityStart</td>
+<td>DateTimeOffset</td>
+<td>Yes</td>
+<td><strong>ValidityStart date</strong></td>
+<td><p><strong>"2019-02-</strong></p>
+<p><strong>17T09:00:00.000Z"</strong></p></td>
+</tr>
+<tr class="even">
+<td>ValidityStop</td>
+<td>DateTimeOffset</td>
+<td>Yes</td>
+<td><strong>ValidityStop date</strong></td>
+<td><p><strong>"2019-02-</strong></p>
+<p><strong>17T21:00:00.000Z</strong></p></td>
+</tr>
+<tr class="odd">
+<td>SensingTimeApplicationStart</td>
+<td>DateTimeOffset</td>
+<td>Yes</td>
+<td>SensingTimeApplication<strong>Start date</strong></td>
+<td><p><strong>"2019-02-</strong></p>
+<p><strong>17T09:00:00.000Z"</strong></p></td>
+</tr>
+<tr class="even">
+<td>SensingTimeApplicationStop</td>
+<td>DateTimeOffset</td>
+<td>Yes</td>
+<td>SensingTimeApplication<strong>Stop date</strong></td>
+<td><p><strong>"2019-02-</strong></p>
+<p><strong>17T21:00:00.000Z</strong></p></td>
+</tr>
+<tr class="odd">
+<td>CreationDate</td>
+<td>DateTimeOffset</td>
+<td>Yes</td>
+<td><strong>Creation date</strong></td>
+<td><p><strong>"2019-02-</strong></p>
+<p><strong>17T21:00:00.000Z</strong></p></td>
+</tr>
+<tr class="even">
+<td>Band</td>
+<td>String</td>
+<td>Yes</td>
+<td>Band: B01 or BXX for any bands</td>
+<td><p>« Band » : « B01 » (for band 1 file version)</p>
+<p>« Band » : « BXX » ( for any band file version)</p></td>
+</tr>
+<tr class="odd">
+<td>Unit</td>
+<td>String</td>
+<td>Yes</td>
+<td><p>Unit : A / B / X</p>
+<p>X stands for any Unit</p></td>
+<td><p>« Unit » : « A » (for unit A file version)</p>
+<p>« Unit » : « X » ( for any Units)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Table 3: AuxFile Description</p>
+<p>* For this, and for all other instances of the use of ‘Guid’ for IDs in this document, it should be noted that the IDs are UUIDs (Universally Unique Identifiers) of the (OData) Guid type.</p>
+<h2 id="query">Query</h2>
+<p>The service naturally supports almost all the intrinsic OData requests</p>
+<h3 id="main-functions">Main Functions</h3>
+<p>Some high level functions are available within the API. However due to a missing feature in the Odata framework we are using they do not appears in the $metadata odata service document.</p>
+<p>All parameters are optionals and if not specified no filtering is done one the criteria, returning the whole list filtered only on given parameters. No blank space is allowed as it is an URL. Parameters are named.</p>
+<p>Here is a description of the parameters and possible values:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Format</th>
+<th>List of possible values</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mission</td>
+<td>Mission identifier</td>
+<td>String</td>
+<td>S2MSI, S1SAR, S3OLCI, S3MWR, S3ALL, S3SRAL, S3SYN, S3SLSTR</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Unit</td>
+<td>Unit Identifier</td>
+<td>String</td>
+<td>{ A , B }</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SensingTime</td>
+<td>SensingTime to search for</td>
+<td>Date</td>
+<td><em>Any date in format '2018-05-02T12:00:30Z'</em></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SensingTimeStart</td>
+<td>SensingTimeStart to search for</td>
+<td>Date</td>
+<td><em>Any date in format '2018-05-02T12:00:30Z'</em></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SensingTimeStop</td>
+<td>SensingTimeStop to search for</td>
+<td>Date</td>
+<td><em>Any date in format '2018-05-02T12:00:30Z'</em></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ProductType</td>
+<td>Product type to search AuxFiles needed to produce it</td>
+<td>String</td>
+<td><p>S1SAR : { L1SLC, L1GRD, L2OCN }</p>
+<p>S2MSI : { L1A, L1B, L1C, L2A }</p>
+<p>S3ALL : { L1, L2}</p>
+<p>S3MWR : { L1CAL, L1MWR }</p>
+<p>S3OLCI : { L2LFR, L2LRR }</p>
+<p>S3SLSTR : { L1RBT, L2LST, L2FRP }</p>
+<p>S3SRAL : { L1CAL, L1SRA, L2LAN }</p>
+<p>S3SYN : { L1MISR, L2 }</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>And here are the available functions :</p>
+<ul>
+<li><p><strong><span class="underline">&lt;root-uri&gt;/reprocessing.svc/GetReproBaselineListForSensing(Mission, Unit, SensingTime, ProductType)</span></strong>: query the list of aux file for these particular parameters. Parameters should have the values of the odata keys. Returned type is of odata type AuxFile.</p>
+<ul>
+<li><p><em>GetReproBaselineListForSensing(Mission='S2MSI',Unit='A',SensingTime='2018-05-02T12:00:30Z',ProductType='L1B')</em></p></li>
+<li><p><em>GetReproBaselineListForSensing(Mission='S1SAR',Unit='A',SensingTime='2018-05-02T12:00:30Z',ProductType='L1')</em></p></li>
+<li><p><em>GetReproBaselineListForSensing(Mission='S3OLCI',Unit='A',SensingTime='2018-05-02T12:00:30Z',ProductType='L1')</em></p></li>
+</ul></li>
+<li><p><strong><span class="underline">&lt;root-uri&gt;/reprocessing.svc/GetReproBaselineListForPeriod(Mission, Unit, SensingTimeStart, SensingTimeStop, ProductType):</span></strong> query the list of aux file for these particular parameters. Since it is a period and not a single date the list can contains multiple version of the same auxfile. Return type is of odata type AuxFile.</p>
+<ul>
+<li><p><em>GetReproBaselineListForPeriod(Mission='S2MSI',Unit='A',SensingTimeStart='2018-05-02T12:00:30Z',SensingTimeStop='2020-05-02T12:00:30Z',ProductType='L1B')</em></p></li>
+<li><p><em>GetReproBaselineListForPeriod(Mission='S1SAR',Unit='A',SensingTimeStart='2018-05-02T12:00:30Z',SensingTimeStop='2020-05-02T12:00:30Z',ProductType='L1')</em></p></li>
+<li><p><em>GetReproBaselineListForPeriod(Mission='S3OLCI',Unit='A',SensingTimeStart='2018-05-02T12:00:30Z',SensingTimeStop='2020-05-02T12:00:30Z',ProductType='L1')</em></p></li>
+</ul></li>
+<li><p><strong><span class="underline">&lt;root-uri&gt;/reprocessing.svc/GetReproBaselineNamesForSensing(Mission, Unit, SensingTime, ProductType)</span></strong>: query the list of aux file names for these particular parameters. Parameters should have the values of the odata keys. Return type is a list of String containing the list of filenames.</p>
+<ul>
+<li><p><em>GetReproBaselineNamesForSensing(Mission='S2MSI',Unit='A',SensingTime='2018-05-02T12:00:30Z',ProductType='L1B')</em></p></li>
+</ul></li>
+<li><p><strong><span class="underline">&lt;root-uri&gt;/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission, Unit, SensingTimeStart, SensingTimeStop, ProductType):</span></strong> query the list of aux file names for these particular parameters. Since it is a period and not a single date the list can contains multiple version of the same auxtype. Return type is a list of String containing the list of filenames.</p>
+<ul>
+<li><p><em>GetReproBaselineListForPeriod(Mission='S2MSI',Unit='A',SensingTimeStart='2018-05-02T12:00:30Z',SensingTimeStop='2020-05-02T12:00:30Z',ProductType='L1B')</em></p></li>
+</ul></li>
+</ul>
+<p>Please note that these functions are just shortcuts for the corresponding odata queries.</p>
+<h3 id="filter-query-function">$filter query function</h3>
+<p>The OData “filter” query is a very versatile query that allows a substancial number of possibilities on attributes such as:</p>
+<ul>
+<li><p>Startswith (startswith) : attribute target starts with the given sequence in parameters</p></li>
+<li><p>Contains (contains) : attribute target contains the given sequence in parameters</p></li>
+<li><p>Endswith (endswith) : attribute target ends with the given sequence in parameters</p></li>
+<li><p>Greater than (gt) : attribute target is greater than given sequence in parameters, comparison is type-wise</p></li>
+<li><p>Less than (lt) : attribute target is lesser than given sequence in parameters, comparison is type-wise</p></li>
+</ul>
+<p>These are applicable on any attribute type that can be compared: time, number, strings. They also can be mixed with “and” or “or” in order to have more possibilities.</p>
+<p>For example:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>&lt;root-uri&gt;/reprocessing,svc/AuxFiles?$filter=ValidityStart gt 2019-05-15T00:00:00.000Z and ValidityStop lt 2019-05-16T00:00:00.000Z and Sensors/Name contains S2MSI</td>
+</tr>
+</tbody>
+</table>
+<h3 id="query-response-modification">Query response modification</h3>
+<p>Query response can be modified before sent to client.</p>
+<p>For example it is possible to change the order using the $orderby parameter. You can also only have the top N results with the $top parameter or skip N result using $skip. There is also a possibility to just count the number of results using $count.</p>
+<h3 id="full-table-export">Full table export</h3>
+<p>It is possible to export the full table using the expand parameter in Odata.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>AuxFiles?$expand=AuxType$format=json</td>
+</tr>
+</tbody>
+</table>
+<p>Will export all the AuxFiles with their associated AuxTypes</p>
+<h3 id="query-response-content">Query response content</h3>
+<p>The query response is contained in the GET HTTP response. The default format is xml even though if the label “content-type” equals “application/json” the result will be in JSON format.</p>
+<p>HTTP error responses are the classical HTTP errors:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Error Code</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>200</td>
+<td>Accepted, response given</td>
+</tr>
+<tr class="even">
+<td>400</td>
+<td>Bad request</td>
+</tr>
+<tr class="odd">
+<td>401</td>
+<td>Unauthorized ( sent by the authentication gateway)</td>
+</tr>
+<tr class="even">
+<td>404</td>
+<td>Not found</td>
+</tr>
+<tr class="odd">
+<td>500</td>
+<td>Internal Server error</td>
+</tr>
+</tbody>
+</table>
+<p><em><strong>Appendix A : ODATA metadata</strong></em></p>
+<table>
+<tbody>
+<tr class="odd">
+<td><p>&lt;edmx:Edmx Version="4.0"&gt;</p>
+<p>&lt;edmx:DataServices&gt;</p>
+<p>&lt;Schema Namespace="OData.RBA"&gt;</p>
+<p>&lt;EntityType Name="AuxType"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="LongName"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="LongName" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ShortName" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Format" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Mission" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;NavigationProperty Name="ProductLevels" Type="Collection(OData.RBA.ProductLevel)" Nullable="false"/&gt;</p>
+<p>&lt;NavigationProperty Name="ProductTypes" Type="Collection(OData.RBA.ProductType)" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Variability" Type="OData.RBA.Variability" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Validity" Type="OData.RBA.TimeValidity" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Rule" Type="OData.RBA.Rule" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Comments" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EntityType Name="AuxFile"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="Id"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="Id" Type="Edm.Guid" Nullable="false"/&gt;</p>
+<p>&lt;NavigationProperty Name="AuxType" Type="OData.RBA.AuxType" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="FullName" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;NavigationProperty Name="Baseline" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValidityStart" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="ValidityStop" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="SensingTimeApplicationStart" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="SensingTimeApplicationStop" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="CreationDate" Type="Edm.DateTimeOffset" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Band" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;Property Name="Unit" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EntityType Name="ProductLevel"&gt;</p>
+<p>&lt;Key&gt;</p>
+<p>&lt;PropertyRef Name="Level"/&gt;</p>
+<p>&lt;/Key&gt;</p>
+<p>&lt;Property Name="Level" Type="Edm.String" Nullable="false"/&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EntityType Name="ProductType"&gt;</p>
+<p>&lt;/EntityType&gt;</p>
+<p>&lt;EnumType Name="Variability"&gt;</p>
+<p>&lt;Member Name="Static"/&gt;</p>
+<p>&lt;Member Name="Dynamic"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EnumType Name="Rule"&gt;</p>
+<p>&lt;Member Name="ValIntersectWithoutDuplicate"/&gt;</p>
+<p>&lt;Member Name="LatestValIntersect"/&gt;</p>
+<p>&lt;Member Name="ValCover"/&gt;</p>
+<p>&lt;Member Name="LatestValCover"/&gt;</p>
+<p>&lt;Member Name="LatestValidity"/&gt;</p>
+<p>&lt;Member Name="LatestValCoverLatestValidity"/&gt;</p>
+<p>&lt;Member Name="LatestValidityClosest"/&gt;</p>
+<p>&lt;Member Name="BestCentredCover"/&gt;</p>
+<p>&lt;Member Name="LatestValCoverClosest"/&gt;</p>
+<p>&lt;Member Name="LargestOverlap"/&gt;</p>
+<p>&lt;Member Name="LatestGeneration"/&gt;</p>
+<p>&lt;Member Name="ClosestStartValidity"/&gt;</p>
+<p>&lt;Member Name="ClosestStopValidity"/&gt;</p>
+<p>&lt;Member Name="LatestStopValidity"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EnumType Name="TimeValidity"&gt;</p>
+<p>&lt;Member Name="ValidityPeriod"/&gt;</p>
+<p>&lt;Member Name="AnyTime"/&gt;</p>
+<p>&lt;/EnumType&gt;</p>
+<p>&lt;EntityContainer Name="Container"&gt;</p>
+<p>&lt;EntitySet Name="AuxTypes" EntityType="OData.RBA.AuxType"&gt;</p>
+<p>&lt;NavigationPropertyBinding Path="ProductLevels" Target="ProductLevels"/&gt;</p>
+<p>&lt;NavigationPropertyBinding Path="ProductTypes" Target="ProductTypes"/&gt;</p>
+<p>&lt;/EntitySet&gt;</p>
+<p>&lt;EntitySet Name="AuxFiles" EntityType="OData.RBA.AuxFile"&gt;</p>
+<p>&lt;NavigationPropertyBinding Path="AuxType" Target="AuxTypes"/&gt;</p>
+<p>&lt;/EntitySet&gt;</p>
+<p>&lt;EntitySet Name="ProductLevels" EntityType="OData.RBA.ProductLevel"/&gt;</p>
+<p>&lt;EntitySet Name="ProductTypes" EntityType="OData.RBA.ProductType"/&gt;</p>
+<p>&lt;/EntityContainer&gt;</p>
+<p>&lt;/Schema&gt;</p>
+<p>&lt;/edmx:DataServices&gt;</p>
+<p>&lt;/edmx:Edmx&gt;</p></td>
+</tr>
+</tbody>
+</table>
+<div class="footer-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-11" style="color: white">Github project : <a href="http://www.github.com" style="color:white" target="_blank">http://www.github.com</a></div>
+      <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

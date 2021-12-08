@@ -1,0 +1,87 @@
+---
+title: Copernicus - Reprocessing Reference Package Preparation
+layout: layout-default
+bodyClass: page-home
+---
+
+<!-- 
+	Title 
+-->
+<div class="intro">
+	<div class="container">
+		<div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 highlight-dark">
+			<h1>{{site.data.str.project}}</h1>
+			<h2>{{site.data.str.subproject}}</h2>
+			<br>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-3">&nbsp;</div>
+	<div class="col-3 image-index"><img height="200px" src="images/s1.jpg"><br>Sentinel 1</div>
+	<div class="col-3 image-index"><img height="200px" src="images/s2.jpg"><br>Sentinel 2</div>
+	<div class="col-3 image-index"><img height="200px" src="images/s3.png"><br>Sentinel 3</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-1">&nbsp;</div>
+	<div class="col-10">
+		<p>The processing of Sentinel 1,2,3 Level-1/2 products uses a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
+		<p>The Reprocessing Auxiliary Service is comprising of:
+			<ul>
+				<li><b>Reprocessing Configuration Baseline</b> providing for a period of time the list of auxiliary files applicable for the generation of Level-1/2 products</li>
+				<li><b>Reprocessing Data Baseline</b> providing the list of applicable auxiliary files associated with each L0 product (needed for the generation of each Level-1/2 products.</li>
+				<li><b>AUXIP</b>: the interface point for downloading the auxiliary data files.</li>
+			</ul>
+		</p>
+	</div>
+</div>
+<!-- Move tt after each puce -->
+<div class="container pt-5 pt-md-5">
+	<div class="row">
+		<div class="col-1"></div>
+		<div class="col-10"><b>Tutorials</b></div>
+	</div>
+	{% for tuto in site.tutorials %}
+	<div class="row">
+		<div class="col-2"></div>
+		<div class="col-10">
+			<a href="{{ site.baseurl }}/tutorials.html#{{ tuto.order }}">
+			<div class="col-10" style="background: #222; color: #fff"><p class="type-text" title="{{ tuto.title }}" id="tt{{ tuto.order }}"></p>
+			</div>
+			</a>
+		</div>
+	</div>
+	<!--<div class="row">
+		<div class="col-10" style="background: #222; color: #fff"><p class="type-text" id="tt1"></p></div>
+		<div class="col-2"></div>
+	</div>-->
+	{% endfor %}
+</div>
+
+
+
+<!--<div class="container pt-5 pt-md-5">
+	<div class="row justify-content-center">
+		<div class="col-6">Github project : <a href="http://www.github.com" target="_blank">http://www.github.com</a></div>
+		<div class="col-6" id="contact_id" onclick="toggleContact()">Contact</div>
+	</div>
+</div>
+<div class="container pt-5 pt-md-5">
+	<div id="contact_div" class="row justify-content-center">
+		<div class="col-12" class="alert alert-success" id="success-alert">
+			<button type="button" class="close" data-dismiss="alert">x</button>
+			<strong>TODO: Success! </strong> Email sent
+		</div>
+		<div class="col-12" class="alert alert-success" id="error-alert">
+			<button type="button" class="close" data-dismiss="alert">x</button>
+			<strong>Error </strong><label id="error_id"></p>
+		</div>
+		<div class="col-2">Email : </div>
+		<div class="col-10"><input type="text" id="email" size=50></div>
+		<div class="col-2">Message : </div>
+		<div class="col-10"><textarea rows=3 cols=80 id="comments"></textarea></div>
+		<div class="col-2"></div>
+		<div class="col-10"><input type="button" value="Send" onclick="sendEmail()"></div>
+	</div>
+</div>-->
