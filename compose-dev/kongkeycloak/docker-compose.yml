@@ -306,6 +306,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
       - /auxip_snapshot:/etc/nginx/html/archives
+      - /var/www/site:/etc/nginx/html/site
     depends_on:
       - certbot
 
