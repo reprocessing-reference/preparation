@@ -62,8 +62,6 @@ if __name__ == "__main__":
                     filetype_dict_S3.append(filetype["LongName"])
 
     for t in filetype_dict_S1:
-        token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
-        print(t)
         if t == "AUX_POEORB_S1":
             t = "AUX_POEORB"
         if t == "AUX_PREORB_S1":

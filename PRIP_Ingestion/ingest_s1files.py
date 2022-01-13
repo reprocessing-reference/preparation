@@ -310,8 +310,8 @@ def main():
             template["Id"] = str(uuid.uuid4())
         template["FullName"] = filename.strip()
         template["ShortName"] = shortname
-        template["Baseline"] = "03.31"
-        template["IpfVersion"] = "S1-IPF-03.31"
+        template["Baseline"] = "03.40"
+        template["IpfVersion"] = "S1-IPF-03.40"
         #Date part
         template["ValidityStart"] = start_good
         template["ValidityStop"] = stop_good
