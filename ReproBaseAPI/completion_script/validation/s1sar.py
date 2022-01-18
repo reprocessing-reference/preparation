@@ -17,7 +17,7 @@ mission = "S1SAR"
 
 wb = load_workbook("./data/S1IPF03.40ESRIN.xlsx")
 sheet = wb['S1IPF03.40']
-nb_periods = 8
+nb_periods = 11
 
 periods_dict = {}
 
