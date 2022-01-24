@@ -70,8 +70,8 @@ public class ProductSerializer {
 			json.writeStartArray();
 			for (final Product entity : products) {
 				json.writeStartObject();
-				json.writeStringField("@odata.mediaContentType", "text/plain");
-				json.writeStringField("ID", entity.getId().toString());
+				// json.writeStringField("@odata.mediaContentType", "text/plain");
+				json.writeStringField("Id", entity.getId().toString());
 				json.writeStringField("Name", entity.getName());
 				json.writeStringField("ContentType", entity.getContentType());
 				json.writeFieldName("ContentLength");
@@ -101,7 +101,7 @@ public class ProductSerializer {
 				zdt = entity.getContentDate().getEnd().toInstant().atZone(ZoneId.of("Z"));
 				json.writeStringField("Stop", zdt.format(DateTimeFormatter.ISO_DATE_TIME));
 				json.writeEndObject();
-				json.writeFieldName("Attributes");
+				json.writeFieldName("StringAttributes");
 				json.writeStartArray();
 				for (final StringAttribute str_attr : entity.getStringAttributes())
 				{
@@ -112,6 +112,9 @@ public class ProductSerializer {
 					json.writeStringField("Value", str_attr.getValue());
 					json.writeEndObject();
 				}
+				json.writeEndArray();
+				json.writeFieldName("DateTimeOffsetAttributes");
+				json.writeStartArray();
 				for (final DateTimeOffsetAttribute dt_attr : entity.getDateTimeOffsetAttributes())
 				{
 					json.writeStartObject();
@@ -122,6 +125,9 @@ public class ProductSerializer {
 					json.writeStringField("Value", zdt.format(DateTimeFormatter.ISO_DATE_TIME));
 					json.writeEndObject();
 				}
+				json.writeEndArray();
+				json.writeFieldName("IntegerAttributes");
+				json.writeStartArray();
 				for (final IntegerAttribute int_attr : entity.getIntegerAttributes())
 				{
 					json.writeStartObject();
@@ -131,6 +137,9 @@ public class ProductSerializer {
 					json.writeNumberField("Value", int_attr.getValue());
 					json.writeEndObject();
 				}
+				json.writeEndArray();
+				json.writeFieldName("DoubleAttributes");
+				json.writeStartArray();
 				for (final DoubleAttribute do_attr : entity.getDoubleAttributes())
 				{
 					json.writeStartObject();
