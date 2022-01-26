@@ -56,6 +56,8 @@ def main():
     access_token = token_info['access_token']
     template_base = None
 
+    fileUploadError=[]
+
     if args.mode == "dev":
         url = url_dev
     else:
@@ -86,8 +88,17 @@ def main():
             else:
                 request = url + "/AuxTypes('" + json_base["LongName"] + "')"
             print(request)
-            result = send_request(request, json_base, token_info['access_token'])
-            print(result)
+            try:
+                result = send_request(request, json_base, token_info['access_token'])
+                print(result)
+            except Exception as e:
+                print(e)
+                print("Le fichier {0} n'a pas été uploadé sur reprobase".format(j))
+                fileUploadError.append(j)
+    if len(fileUploadError) > 0:
+        print("Une erreur s'est produite pour l'upload des fichiers suivants :")       
+        for f in fileUploadError:
+            print(f)
 
 
 if __name__ == "__main__":
