@@ -236,7 +236,7 @@ def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
             },
             "Checksum":[
                 {
-                    "Algorithm":"md5",
+                    "Algorithm":"MD5",
                     "Value": attributes['md5'],
                     "ChecksumDate": publicationdate
                 }
