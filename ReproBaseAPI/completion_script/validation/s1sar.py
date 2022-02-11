@@ -2,19 +2,26 @@ import requests
 from openpyxl import load_workbook
 from datetime import datetime 
 from requests import Request, Session
+import argparse
 
+parser = argparse.ArgumentParser(description="", epilog='Beta', formatter_class=argparse.RawTextHelpFormatter)  # displayed after help
+
+parser.add_argument("-t", "--token",
+                        help="Token of auxip services",
+                        required=True)
+
+args = parser.parse_args()
 s = Session()
-s.auth = ('user', '*K7KzTrZWhC2zkc')
-
 
 mission = "S1SAR"
 
-wb = load_workbook("./data/S1IPF03.31ESRIN_rev_KC.xlsx")
-sheet = wb['S1IPF03.31 New']
+wb = load_workbook("./data/S1IPF03.40ESRIN.xlsx")
+sheet = wb['S1IPF03.40']
+nb_periods = 11
 
 periods_dict = {}
 
-for i in range(11):
+for i in range(nb_periods):
     period = ""
     period2 = ""
     unit = sheet['A'][i*10+1].value.strip()
@@ -53,11 +60,12 @@ for period in periods_dict :
 
     unit = periods_dict[period][1]
     # GET request
-    request="https://reprocessing-preparation.ml/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s')" % (mission,unit,start,stop)
+    headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % args.token}
+    request="https://reprocessing-preparation.ml/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s',Variability='Static')" % (mission,unit,start,stop)
 
     print(request)
 
-    r = s.get(request)
+    r = s.get(request, headers=headers)
     response_list = r.json()['value']
 
     for expected_aux in periods_dict[period][0]:
@@ -97,7 +105,3 @@ for period in periods_dict :
         file.write( "\n")
 
     file.close()
-
-
-
-

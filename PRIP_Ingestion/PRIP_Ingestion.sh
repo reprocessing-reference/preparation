@@ -94,7 +94,7 @@ TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting PRIP download"
-python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER} -au ${AUXIP_USER} -apw ${AUXIP_PASS} -lu ${LTA_USER} -lpw ${LTA_PASS}
+python3 ${CUR_DIR}/PRIP_Ingestion.py -u ${PRIP_USER} -pw ${PRIP_PASS} -w ${TEMP_FOLDER} -au ${AUXIP_USER} -apw ${AUXIP_PASS} -lu ${LTA_USER} -lpw ${LTA_PASS} -f ${CUR_DIR}/file_types
 code=$?
 if [ $code -ne 0 ]; then
   echo "PRIP Retrieve failed"
@@ -135,13 +135,15 @@ else
      echo "Reprobase jsons generation failed for S1"
      master_code_reprobase=$code
     fi
+    echo "Starting Reprobase jsons generation for S2"
     python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
      echo "Reprobase jsons generation failed for S2"
      master_code_reprobase=$code
     fi
-    python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S3.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
+    echo "Starting Reprobase jsons generation for S3"
+    python3 ${CUR_DIR}/ingest_s3files.py -i ${TEMP_FOLDER_LISTING}/file_list_S3.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
      echo "Reprobase jsons generation failed for S3"

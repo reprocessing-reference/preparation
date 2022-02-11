@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -294,7 +296,6 @@ public class ReproBaselineAccess {
 				final String level = productType.substring(0,2);
 				if( t.ProductTypes.contains(productType) || ( t.Mission.equals("S3ALL") && t.ProductTypes.contains(level) ) )
 				{
-
 					Duration delta0 = Duration.ofSeconds(auxTypesDeltas.get(t.LongName).getDelta0()); 
 					Duration delta1 = Duration.ofSeconds(auxTypesDeltas.get(t.LongName).getDelta1()); 
 					
@@ -308,13 +309,38 @@ public class ReproBaselineAccess {
 						files_repro = getListOfAuxFiles(t,platformShortName,platformSerialIdentifier,t.Rule);
 						this.cachedAuxFiles.put(key, files_repro);
 					}
+
 					RuleApplierInterface rule_applier = RuleApplierFactory.getRuleApplier(t.Rule);
-					List<AuxFile> files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
-					try {
-						auxip.setAuxFileUrls(files_repro_filtered, this.accessToken);
-						results.addAll(files_repro_filtered);
-					} catch (Exception e) {
-						e.printStackTrace();
+					List<AuxFile> files_repro_filtered;
+
+					if (!files_repro.isEmpty()) {
+						if (files_repro.get(0).FullName.matches(".*B..\\..*")) {
+							// The type has band files
+
+							// We need to group the files by band and apply the rule on each group
+							Map<String, List<AuxFile>> sortedFilesByBand = sortFilesByBand(files_repro);
+
+							files_repro_filtered = new ArrayList<AuxFile>();
+
+							for (String band : sortedFilesByBand.keySet()) {
+								files_repro_filtered.addAll(rule_applier.apply(sortedFilesByBand.get(band),t0,t1,delta0,delta1));
+							}
+
+
+						} else {
+							// The type does not have band files
+
+							// We need to apply the rule on every file at once
+							files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
+
+						}
+					
+						try {
+							auxip.setAuxFileUrls(files_repro_filtered, this.accessToken);
+							results.addAll(files_repro_filtered);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 	
@@ -330,6 +356,22 @@ public class ReproBaselineAccess {
 
 		return results;
 
+	}
+
+	private Map<String, List<AuxFile>> sortFilesByBand(List<AuxFile> files) {
+		Map<String, List<AuxFile>> sortedFiles = new HashMap<>();
+		Pattern pattern = Pattern.compile("B..\\.");
+		for (AuxFile file : files) {
+			Matcher matcher = pattern.matcher(file.FullName);
+			if (matcher.find()) {
+				String bandName = matcher.group();
+				if (!sortedFiles.containsKey(bandName)) {
+					sortedFiles.put(bandName, new ArrayList<AuxFile>());
+				}
+				sortedFiles.get(bandName).add(file);
+			}
+		}
+		return sortedFiles;
 	}
 
 }
