@@ -11,8 +11,8 @@
  *           service : '1','2','3'
  *                     specify the service to manage :
  *                          '1' : reprocessing.svc
- *                          '2' : auxip.svc (not yet implemented)
- *                          '3' : rdb.svc (not yet implemented)
+ *                          '2' : auxip.svc
+ *                          '3' : rdb.svc
  *           display : if present, always display the result in a web page (return status 200)
  *                     if not present, return status 200 when OK, and status 404 when KO
  */
@@ -25,6 +25,8 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var urlToken = "/auth/realms/reprocessing-preparation/protocol/openid-connect/token"
 var urlAuxTypes = "/reprocessing.svc/AuxTypes"
+var urlReproData = "/rdb.svc/getReprocessingDataBaseline"
+var urlAuxipProducts = "/auxip.svc/Products"
 
 var prodParams = {
     host: "https://reprocessing-auxiliary.copernicus.eu",
@@ -92,7 +94,62 @@ var getAuxTypes = function(result) {
                 successCallback( { "res":result.res, "params":result.params })
             } else if (xhr.readyState === 4 ) { 
                 failureCallback({
-                    "source": "getAuxType", 
+                    "source": "reprocessing.svc", 
+                    "status" : xhr.status,
+                    "message": JSON.parse(xhr.responseText),
+                    "res": result.res,
+                    "params" : result.params
+                })
+            }
+        };
+        xhr.send()
+    })
+}
+
+var getAuxip = function(result) {
+    console.log("getAuxip")
+    return new Promise((successCallback, failureCallback) => {
+        var url = getHost(result.params.target)+urlAuxipProducts+"?$filter=startswith(Name,'toto')"
+
+        https://dev.reprocessing-preparation.ml/auxip.svc/Products?$filter=startswith(Name,'S1A_AUX_')
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", url, true)
+        var bearer="Bearer "+result.token
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader("Authorization", bearer)
+        xhr.onreadystatechange = function () {
+            if ( (xhr.readyState === 4 ) && (xhr.status === 200)) {
+                successCallback( { "res":result.res, "params":result.params })
+            } else if (xhr.readyState === 4 ) { 
+                failureCallback({
+                    "source": "auxip.svc", 
+                    "status" : xhr.status,
+                    "message": JSON.parse(xhr.responseText),
+                    "res": result.res,
+                    "params" : result.params
+                })
+            }
+        };
+        xhr.send()
+    })
+
+}
+var getReproData = function(result) {
+    console.log("getReproData()")
+    return new Promise((successCallback, failureCallback) => {
+        var url = getHost(result.params.target)+urlReproData+"(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip',mission='S1SAR',unit='A',product_type='L1GRD')"
+
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", url, true)
+        var bearer="Bearer "+result.token
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader("Authorization", bearer)
+        xhr.onreadystatechange = function () {
+            if ( (xhr.readyState === 4 ) && (xhr.status === 200)) {
+                successCallback( { "res":result.res, "params":result.params })
+            } else if (xhr.readyState === 4 ) { 
+                failureCallback({
+                    "source": "rdb.svc", 
                     "status" : xhr.status,
                     "message": JSON.parse(xhr.responseText),
                     "res": result.res,
@@ -107,9 +164,19 @@ var getAuxTypes = function(result) {
 var launchCheck = function(res,params) {
     return new Promise((successCallback, failureCallback) => {
         if (params.service == "1") {
-            // Check first service : reprocessing.svc
+            // Check service reprocessing.svc
             getToken(res,params)
             .then( result => getAuxTypes(result),result => failureCallback(result))
+            .then( result => successCallback(result),result => failureCallback(result))
+        } else if (params.service == "2") {
+            // Check service auxip.svc
+            getToken(res,params)
+            .then( result => getAuxip(result),result => failureCallback(result))
+            .then( result => successCallback(result),result => failureCallback(result))
+        } else if (params.service == "3") {
+            // Check service rdb.svc
+           getToken(res,params)
+            .then( result => getReproData(result),result => failureCallback(result))
             .then( result => successCallback(result),result => failureCallback(result))
         }
     })
@@ -125,7 +192,11 @@ var ko = function(result) {
     if ((result.message) && (result.message.error) && (result.message.error.code)) {
         display = "From "+result.source+" / Error "+result.message.error.code+" / "+result.message.error.message+")"
     } else {
-        display = "From "+result.source+" / Error "+result.status+" / "+result.message.error +"(" + result.message.error_description + ")"
+        if (result.message.error) {
+            display = "From "+result.source+" / Error "+result.status+" / "+result.message.error +"(" + result.message.error_description + ")"
+        } else {
+            display = "From "+result.source+" / Error "+result.status+" / "+result.message.message
+        }
     }
 
     if (result.params.display == true) {

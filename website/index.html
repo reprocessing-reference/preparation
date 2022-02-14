@@ -9,11 +9,11 @@ bodyClass: page-home
 -->
 <div class="intro">
 	<div class="container">
-		<div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 highlight-dark">
-			<h1>{{site.data.str.project}}</h1>
-			<h2>{{site.data.str.subproject}}</h2>
-			<br>
-		</div>
+			<div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 highlight-dark">
+					<h1>Copernicus</h1>
+					<h2>Reprocessing Auxiliary Service</h2>
+					<br>
+			</div>
 	</div>
 </div>
 <div class="row">
@@ -24,16 +24,23 @@ bodyClass: page-home
 </div>
 <br>
 <div class="row">
+	<div class="col-2">&nbsp;</div>
+	<div class="col-8" style="background-color:yellow"><h5><b>News</b> &nbsp;&nbsp; : &nbsp;&nbsp; <u>February 2022</u> &nbsp;&nbsp; : &nbsp;&nbsp; The processing baseline 04.00 for Sentinel-2 is in preparation.</h5></div>
+</div>
+<br>
+<div class="row">
 	<div class="col-1">&nbsp;</div>
 	<div class="col-10">
-		<p>The processing of Sentinel 1,2,3 Level-1/2 products uses a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
-		<p>The Reprocessing Auxiliary Service is comprising of:
-			<ul>
-				<li><b>Reprocessing Configuration Baseline</b> providing for a period of time the list of auxiliary files applicable for the generation of Level-1/2 products</li>
-				<li><b>Reprocessing Data Baseline</b> providing the list of applicable auxiliary files associated with each L0 product (needed for the generation of each Level-1/2 products.</li>
-				<li><b>AUXIP</b>: the interface point for downloading the auxiliary data files.</li>
-			</ul>
-		</p>
+			<p>The processing of Sentinel 1,2,3 Level-1/2 products uses a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
+			<p>The Reprocessing Auxiliary Service is comprising of:
+					<ul>
+							<!--<li><b>Reprocessing Configuration Baseline</b> providing for a period of time the list of auxiliary files applicable for the generation of Level-1/2 products</li>-->
+							<li><b>Reprocessing Configuration Baseline</b> implements an API allowing to query and retrieve the up-to-date list of applicable auxiliary files (excluding dynamic auxiliary files) given a mission, satellite unit, sensing time period and product type to be generated, without any application of selection rules.</li>
+							<!--<li><b>Reprocessing Data Baseline</b> providing the list of applicable auxiliary files associated with each L0 product (needed for the generation of each Level-1/2 products).</li>-->
+							<li><b>Reprocessing Data Baseline</b>, given a L0 product and a product type to be generated, identifies the applicable set of auxiliary files (static and dynamic) after application of the selection rules identified for each auxiliary type.</li>
+							<li><b>AUXIP</b>: the interface point for downloading the auxiliary data files.</li>
+					</ul>
+			</p>
 	</div>
 </div>
 <!-- Move tt after each puce -->
