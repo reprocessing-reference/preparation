@@ -1,0 +1,16 @@
+{
+  "name": "scrute",
+  "version": "1.0.0",
+  "description": "Check availability of AuxIP API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "C-S",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "sync-request": "^6.1.0",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
