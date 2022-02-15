@@ -1,0 +1,146 @@
+// Card rendering
+
+// Card root design
+.card-common {
+
+	/* Card background */
+	height: 100%;
+	padding: 15px;
+	background-color: #fcfcfc;
+
+	/* Margin between cards */
+	margin: 0px;
+	
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+
+	.card-image {
+		flex: 0;
+		margin-right: 15px;
+		margin-bottom: 2px;
+		img {
+		  border-radius: 50%;
+		  height: 70px;
+		  width: 70px;
+		}
+	}
+	
+	.card-title {
+		display: inline-block;
+		font-weight: 150600;
+		letter-spacing: 0.025em;
+		color: #FFFFFF;
+		text-decoration: none;
+	}
+
+	.tuto-card-title {
+		display: inline-block;
+		font-size: large;
+		font-weight: bold;
+		letter-spacing: 0.025em;
+		color: $cs-dark-blue-color;
+		text-decoration: none;
+	}
+}
+
+// Card sizes
+.card-size-big {
+	background-color: #FFFFFF;
+	color: #000000;
+	
+	.product-image {
+		margin-right: 20px;
+		img {
+		  height: 130px;
+		  width: 130px;
+		}
+	}
+	a {
+	  color: black;
+	}
+
+	.card-title {
+		color: black;
+		font-size: 2rem;
+	}
+}
+
+.card-size-standard {
+	border: solid 1px $cs-gray-blue-color;
+	.card-title {
+		font-size: 1.5rem;
+	}
+}
+
+.card-size-little {
+	background-color: #F4F4F4;
+	border: solid 1px #ccc;
+	margin: 3px;/* Margin between cards */
+	
+	.product-image {
+		margin-right: 10px;
+		img {
+		  height: 40px;
+		  width: 40px;
+		}
+	}
+		
+	.card-title {
+		font-size: 1.1rem;
+	}
+}
+ 
+// image displayed in product or reference sheet
+.sheet-image {
+	flex: 0;
+	margin-right: 10px;
+	img {
+	  border-radius: 50%;
+	  height: 100px;
+	  width: 100px;
+	}
+}
+
+
+// Card tag: license, skills etc.
+.card-meta {
+	flex: 1;
+	h2 {
+	margin: 0;
+	}
+	p {
+	margin: 2;
+	}
+	a {
+	}
+}
+
+.card-tag {
+	white-space: nowrap;
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px;
+	border-radius: 4px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.025em;
+	color: #FFFFFF;
+	text-decoration: none;
+	-webkit-transition: all 0.15s ease;
+	transition: all 0.15s ease;
+}
+
+// Customizes each tag depending on displayed information
+.card-tag-type  		{ background: #4F0000; text-transform: uppercase;}
+.card-tag-license  		{ background: #404040; text-transform: uppercase;}
+.card-tag-investment  	{ background: #009000; text-transform: uppercase;}
+.card-tag-customer  	{ color: #FFFFFF; background: #2c9ade; text-transform: uppercase;}
+.card-tag-program  		{ color: #333333; background: #CCCCCC;}
+.card-tag-email  		{ color: white; background: lightgrey;}
+
+.border-div {
+	border:1px black solid;
+	padding-top: 16px;
+}

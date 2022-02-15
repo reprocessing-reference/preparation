@@ -1,0 +1,45 @@
+{% if product.size=="big" %}
+<div class="col-12 col-md-12 col-xl-12 mb-1 mt-1">
+  <div class="card-common card-size-big">
+{% elsif product.size=="standard" %}
+<div class="col-12 col-md-6 col-xl-6 mb-1 mt-1">
+  <div class="card-common card-size-standard">
+{% else %}
+<div class="col-12 col-md-6 col-xl-3 mb-1 mt-1">
+  <div class="card-common card-size-little">
+{% endif %}
+	
+	<div class="card-image">
+	{% if product.image %}
+		<img alt="{{ product.title }} logo" class="img-fluid" src="{{site.baseurl}}/{{ product.image }}"/>
+	{% else %}
+		<img alt="{{ product.title }} logo" class="img-fluid" src="{{site.baseurl}}/images/default_product_logo.png"/>
+	{% endif %}
+	</div>
+	
+	<div class="card-meta">
+		<h3 class="card-title">
+			{% if product.no_sheet %}
+				<a href="{{product.remote_url}}">{{ product.title }}</a>
+			{% else %}
+				<a href="{{site.baseurl}}{{ product.url }}">{{ product.title }}</a>
+			{% endif%}
+		</h3>
+		<br/>
+		<div class="card-tag card-tag-type">{{ product.type }}</div>
+		<div class="card-tag card-tag-license">{{ product.license }}</div>
+		<div class="card-tag card-tag-investment">{{ product.investment }}</div>
+		{% if product.customer %}
+			<div class="card-tag card-tag-customer">{{ product.customer }}</div>
+		{% endif%}
+	</div>
+	{% if product.size=="big" %}
+		{{ product.content | markdownify | strip_html | truncate: 500 }}
+	{% elsif product.size=="standard" %}
+		{{ product.content | markdownify | strip_html | truncate: 200 }}
+	{% else %}
+		{{ product.content | markdownify | strip_html | truncate: 100 }}
+	{% endif %}
+
+  </div>
+</div>

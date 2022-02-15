@@ -1,0 +1,60 @@
+.td {
+    font-family: monospace, monospace; // Correct the inheritance and scaling of font size in all browsers.
+    font-size: 1em; // Correct the odd `em` font sizing in all browsers.
+    background-color:#EBEBEB;
+}
+
+body {
+    font-family: "Open Sans", "Arial", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #333333;
+    text-align: left;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: 0.025em;
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.2;
+    color: black;
+}
+
+table tr:nth-child(even) {background: #DDD}
+table tr:nth-child(odd) {color:white; background: #4e8ca5}
+
+table {
+    border:3px solid #6495ed;
+    border-collapse:collapse;
+    width:98%;
+    margin:auto;
+}
+thead, tfoot {
+    background-color:#076889;;
+    }
+tbody {
+    background-color:#FFFFFF;
+    border:1px solid #6495ed;
+}
+th {
+    font-family:inherit;
+    border:1px dotted #076889;
+    padding:5px;
+    background-color:#076889;;
+    width:25%;
+    color: white;
+}
+td {
+    font-family:inherit;
+    font-size:80%;
+    border:1px solid #6495ed;
+    padding:5px;
+    text-align:left;
+    }
+caption {
+    font-family:inherit;
+}

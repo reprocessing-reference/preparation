@@ -61,6 +61,9 @@ public class JPADataSourceConfiguration {
 
     @Value("${datasource.generateDDL:true}")
     private boolean generateDDL;
+    
+    @Value("${datasource.maxResults:1000}")
+    private int maxResults;
 
     @Bean
     @Primary
@@ -97,6 +100,10 @@ public class JPADataSourceConfiguration {
     
         return em.getObject();
     }
+
+	public int getMaxResults() {
+		return maxResults;
+	}
 
 
 

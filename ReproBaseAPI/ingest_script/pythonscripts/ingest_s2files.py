@@ -52,6 +52,7 @@ def main():
     filetype_dict = []
     for (dirpath, dirnames, filenames) in os.walk(args.filetypes):
         for filename in filenames:
+            print(os.path.join(args.filetypes, filename))
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
                 if "ProductLevels@odata.bind" in filetype:

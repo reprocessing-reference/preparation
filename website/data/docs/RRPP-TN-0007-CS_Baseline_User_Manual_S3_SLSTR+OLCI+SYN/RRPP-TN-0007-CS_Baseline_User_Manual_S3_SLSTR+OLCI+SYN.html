@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>...</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+</head>
+<body>
+<p><img src="./media/media/image1.png" style="width:2.09375in;height:0.80694in" /> <img src="./media/media/image2.jpg" style="width:2.17352in;height:0.80198in" /></p>
+<p>RRPP-TN-0007-CS</p>
+<p>COPERNICUS - REPROCESSING REFERENCE PACKAGE PREPARATION</p>
+<p><span class="underline">Configuration Baseline User Manual For Sentinel-3-SLSTR-OLCI-SYN</span></p>
+<p>25 August 2021</p>
+<p>Document Change Record</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>Version</td>
+<td>Date</td>
+<td>Changes</td>
+</tr>
+<tr class="even">
+<td>Version 1</td>
+<td>15 January 2021</td>
+<td><blockquote>
+<p>1<sup>st</sup> issue for Sentinel-3 SLSTR &amp; OLCI</p>
+</blockquote></td>
+</tr>
+<tr class="odd">
+<td>Version 2</td>
+<td>02 April 2021</td>
+<td><blockquote>
+<p>SYNERGY added</p>
+</blockquote></td>
+</tr>
+<tr class="even">
+<td>Version 3</td>
+<td>11 June 2021</td>
+<td><blockquote>
+<p>New SLSTR IPF version, unused ADF</p>
+</blockquote></td>
+</tr>
+<tr class="odd">
+<td>Version 4</td>
+<td>25 August 2021</td>
+<td><blockquote>
+<p>Addition of AX___ types in annex</p>
+</blockquote></td>
+</tr>
+</tbody>
+</table>
+<p>Table of Content</p>
+<p><a href="#context-and-scope"><span class="underline">1.</span> <span class="underline">Context and Scope</span> 3</a></p>
+<p><a href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide"><span class="underline">2.</span> <span class="underline">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</span> 4</a></p>
+<p><a href="#annex-all-adf-table"><span class="underline">3.</span> <span class="underline">Annex: All ADF Table</span> 16</a></p>
+<p>Reference Documents for Sentinel-3</p>
+<p>COPE-S3GS-EOPG-TN-14-0008 Sentinel-3 Product units initial configuration 1.4.pdf</p>
+<p>GMV-S3PODIPF-ICD-0001_v1.18_Sentinel-3_POD_IPF_Interface_Control_Document.pdf</p>
+<p>S3IPF ICD 001 - i1r4 - Interface Control Document - Common.pdf</p>
+<p>S3IPF ICD 002 - i1r5 - Interface Control Document - Level 0.pdf</p>
+<p>S3IPF ICD 003.1 - i1r3 - Interface Control Document - OLCI Level 1.pdf</p>
+<p>S3IPF ICD 003.2 - i1r3 - Interface Control Document - OLCI Level 2 Land.pdf</p>
+<p>S3IPF ICD 004.2 - i1r6 - Interface Control Document - SLSTR Level 2 Land.pdf</p>
+<p>S3IPF ICD 004.2 - i1r7 - Interface Control Document - SLSTR Level 2 Land.pdf</p>
+<p>S3IPF ICD 005 - i1r5 - Interface Control Document - SYNERGY.pdf</p>
+<p>S3IPF ICD 007 - i1r4 - Interface Control Document - MWR.pdf</p>
+<p>S3IPF ICD 008.1 - i3r9 - Interface Control Document - SRAL Level 1.pdf</p>
+<p>S3IPF ICD 008.2 - i3r10 - Interface Control Document - SRAL Level 2 Land.pdf</p>
+<p>S3IPF PDS 001 - i1r8 - Product Data Format Specification - Level 0.pdf</p>
+<p>S3IPF PDS 002 - i1r7 - Product Data Format Specification - Product Structures.pdf</p>
+<p>S3IPF PDS 003.1 - i2r12 - Product Data Format Specification - SRAL &amp; MWR Level 1.pdf</p>
+<p>S3IPF PDS 003.2 - i2r12 - Product Data Format Specification - SRAL&amp;MWR Level 2 Land.pdf</p>
+<p>S3IPF PDS 004.1 - i2r2 - Product Data Format Specification - OLCI Level 1.pdf</p>
+<p>S3IPF PDS 004.2 - i2r2 - Product Data Format Specification - OLCI Level 2 Land.pdf</p>
+<p>S3IPF PDS 005.1 - i2r8 - Product Data Format Specification - SLSTR Level 1.pdf</p>
+<p>S3IPF PDS 005.2 - i2r7 - Product Data Format Specification - SLSTR Level 2 Land.pdf</p>
+<p>S3IPF PDS 006 - i1r10 - Product Data Format Specification - SYNERGY.pdf</p>
+<p>S3IPF PDS 007.1 - i2r10 - Auxiliary Data Format Specification - OLCI Level 1.pdf</p>
+<p>S3IPF PDS 007.2 - i2r9 - Auxiliary Data Format Specification - OLCI Level 2.pdf</p>
+<p>S3IPF PDS 007.3 - i2r11 - Auxiliary Data Format Specification - SLSTR Level 1.pdf S3IPF PDS 007.4 - i2r10 - Auxiliary Data Format Specification - SLSTR Level 2.pdf</p>
+<p>S3IPF PDS 007.5 - i2r12 - Auxiliary Data Format Specification - SYNERGY.pdf S3IPF PDS 007.7 - i2r12 - Auxiliary Data Format Specification - MWR-SRAL Level 2.pdf</p>
+<p>S3MPC.ACR.AOD.003 - 02 - i1r2 - SYN L2 NTC Product Data Format Specification.pdf</p>
+<p>S3MPC.ACR.AOD.004 - 01 - i1r2 - SLSTR L2 NRT Auxiliary Data Format Specification.pdf</p>
+<p>S3MPC.ACR.AOD.005 - 02 - i1r1 - SYN L2 NTC Interface Control Document.pdf</p>
+<p>S3MPC.ACR.AOD.005 - 02 - i1r2 - SYN L2 NTC Interface Control Document.pdf</p>
+<p>S3MPC.ACR.FRP.005 - i1r1 - SLSTR L2 Interface Control Document.pdf</p>
+<p>S3MPC.ACR.PBD.001 - i2r47 - S3A - IPF Processing Baseline Document.pdf</p>
+<p>S3MPC.ACR.PBD.002 - i1r19 - S3B - IPF Processing Baseline Document.pdf</p>
+<p>Applicable Documents</p>
+<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API ICD</p>
+<h1 id="context-and-scope">Context and Scope</h1>
+<p>The Reprocessing Reference Package allows the preparation of the future Sentinel-1/2/3 reprocessing activities by ensuring that all information required to reprocess past instrumental data is available and ready to use in the frame of a reprocessing operational service.</p>
+<p>The Reprocessing Preparation Package is composed of :</p>
+<p>- a summary Reprocessing Configuration Baseline and an API to query the Reprocessing Configuration Baseline based on the mission satellite unit, sensing time, IPF version to be used, product level and type to be generated,</p>
+<p>- an interface delivery point on a cloud environment providing access to all auxiliary files required for the reprocessing operation,</p>
+<p>- a detailed Reprocessing Data Baseline and an API to retrieve the auxiliary files to be used for a given time period.</p>
+<p>The processing chains of Level-1&amp;2 products use a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
+<p>The auxiliary files used in a reprocessing operation include typically:</p>
+<ul>
+<li><p>Static auxiliary files, which are not instrument or time dependent. They may be updated rarely in case a new version becomes available.</p></li>
+<li><p>Processor auxiliary files, which are generated by the Copernicus/ESA Ground Segment. They are linked to a specific instrument configuration or to an enhanced set of calibration and/or validation information. They are updated on a case by case basis.</p></li>
+<li><p>External auxiliary files, which are generated based on information retrieved from external sources, e.g. from meteo centres. These files are updated frequently, up to several times per day.</p></li>
+<li><p>Orbit auxiliary files, which are updated frequently, up to once per orbit.</p></li>
+</ul>
+<p>The reprocessing operation is performed with an upgraded version of the data processor and a corresponding set of auxiliary files.</p>
+<h1 id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</h1>
+<p>This document is the User Manual of the Reprocessing Configuration Baseline for Sentinel-3 SLSTR, OLCI and SYNERGY missions.</p>
+<p>It gives information on the content of the Reprocessing Configuration Baseline, how it is implemented and how it should be used.</p>
+<p>It provides the necessary definition and information for the preparation of any reprocessing campaign using the last IPF versions available today.</p>
+<p>The generic table in annex (called “All_ADF”) provides the list of all types of auxiliary files needed for the Sentinel missions. For each type, the table provides the unit dependency (yes or no), the usage (in processor level 0 or 1 or 2) and the variability (static of dynamic). A static type is rarely updated while a dynamic type is often updated.</p>
+<p>Then a Reprocessing Configuration Baseline table provides the list of exact auxiliary files to be used with the last processor applicable version with their application time, for each sentinel unit.</p>
+<p>This table is made of the following columns:</p>
+<ul>
+<li><p>The satellite unit: A or B</p></li>
+<li><p>The application period: period of sensing time where the given auxiliary files are applicable</p></li>
+<li><p>The product level and type: the product type which can be generated using the given auxiliary files</p></li>
+<li><p>The processor (IPF) version considered for this table</p></li>
+<li><p>The auxiliary type and the auxiliary file name which are applicable</p></li>
+</ul>
+<p>It takes into account any changes in time affecting the instrument configuration or on-board calibration, the potential enhancements in the auxiliary files, the potential changes related to the processor evolutions, etc, in order to ensure the ingestion of the applicable auxiliary files for the last operational IPF version.</p>
+<p>The Application Programming Interface (API) allows the query and retrieval of the corresponding list of auxiliary files given a mission satellite unit, sensing time period and product type to be generated.</p>
+<p>The API access is protected and uses an authorization protocol with generic mail address.</p>
+<p>The users connect to the API according to [AD-2].</p>
+<p>The main focus is on the set of the auxiliary (ADF) files for the mission.</p>
+<p>The general reprocessing rules agreed with ESA are the following ones:</p>
+<ul>
+<li><p>CAL data must correspond to the real instrument configuration and calibration status at the considered sensing time.</p></li>
+<li><p>IERS data must be as close as possible to the considered sensing time (less than one week before).</p></li>
+<li><p>ECMWF data should come from the same reanalysis version for all the reprocessing coherency (no forecast needed).</p></li>
+<li><p>Processing parameters should be the best ones and the same version for all the reprocessing coherency.</p></li>
+<li><p>HKTM data should be the last version correcting any previous temporary anomalies or data gaps.</p></li>
+<li><p>Orbit data must be the best quality (precise for Sentinel-1 and Sentinel-3, restituted for Sentinel-2) from the Copernicus POD service.</p></li>
+<li><p>Black orbits should be listed and not reprocessed because these orbits suffered from anomalies in raw data which are impossible to correct.</p></li>
+</ul>
+<p>The last available IPF versions are provided in the following table:</p>
+<table>
+<thead>
+<tr class="header">
+<th>mission</th>
+<th>instrument</th>
+<th>level 1/2</th>
+<th>release date</th>
+<th>IPF version</th>
+<th>Baseline ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S3</td>
+<td>OLCI</td>
+<td>L1</td>
+<td>23/06/2020</td>
+<td>06.08</td>
+<td>S3A-2.66 &amp; S3B-1.40</td>
+</tr>
+<tr class="even">
+<td>S3</td>
+<td>OLCI</td>
+<td>L2</td>
+<td>23/06/2020</td>
+<td>06.13</td>
+<td>S3A-2.66 &amp; S3B-1.40</td>
+</tr>
+<tr class="odd">
+<td>S3</td>
+<td>SLSTR</td>
+<td>L1</td>
+<td>18/05/2021</td>
+<td>06.18</td>
+<td>S3A-2.75 &amp; S3B-1.53</td>
+</tr>
+<tr class="even">
+<td>S3</td>
+<td>SLSTR</td>
+<td>L2</td>
+<td>15/01/2020</td>
+<td>06.16</td>
+<td>S3A-2.61 &amp; S3B-1.33</td>
+</tr>
+<tr class="odd">
+<td>S3</td>
+<td>SYN</td>
+<td>L1-PUG</td>
+<td>23/06/2020</td>
+<td>03.37</td>
+<td>S3A-2.66 &amp; S3B-1.40</td>
+</tr>
+<tr class="even">
+<td>S3</td>
+<td>SYN</td>
+<td>L2-SYN</td>
+<td>23/06/2020</td>
+<td>06.20</td>
+<td>S3A-2.66 &amp; S3B-1.40</td>
+</tr>
+</tbody>
+</table>
+<p>These processing versions are considered as the applicable baselines for this activity.</p>
+<p>Any new IPF version official release will trigger a new version of this User Manual.</p>
+<p>The following auxiliary types are out of scope.</p>
+<table>
+<thead>
+<tr class="header">
+<th>SL_2_ACLMAX</th>
+<th>Only for NRT mode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SL_2_ART_AX</td>
+<td>Only for NRT mode</td>
+</tr>
+<tr class="even">
+<td>SL_2_OSR_AX</td>
+<td>Only for NRT mode</td>
+</tr>
+<tr class="odd">
+<td>SL_2_PCPAAX</td>
+<td>Only for NRT mode</td>
+</tr>
+<tr class="even">
+<td>SL_1_PCPBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="odd">
+<td>SL_1_PLTBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>SL_2_PCPBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="odd">
+<td>SL_2_PLTBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>SL_2_F2N_AX</td>
+<td>Unused by IPF until now</td>
+</tr>
+<tr class="odd">
+<td>SL_1_CHF1AX</td>
+<td>Unused by IPF until now</td>
+</tr>
+<tr class="even">
+<td>SL_1_CHS7AX</td>
+<td>Unused by IPF until now</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>OL_2_PCPBAX</th>
+<th>Only for browser products</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OL_2_PLTBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>OL_1_PCPBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="odd">
+<td>OL_1_PLTBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>OL_1_CHARAX</td>
+<td>Unused by IPF until now</td>
+</tr>
+<tr class="odd">
+<td>OL_1_PROGAX</td>
+<td>Unused by IPF until now</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>SY_2_PCPBAX</th>
+<th>Only for browser products</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SY_2_PLTBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>SY_2_CVPBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="odd">
+<td>SY_2_PVPBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="even">
+<td>SY_2_CVSBAX</td>
+<td>Only for browser products</td>
+</tr>
+<tr class="odd">
+<td>SY_2_PVSBAX</td>
+<td>Only for browser products</td>
+</tr>
+</tbody>
+</table>
+<p>S3B_OL_1_CAL_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_OL_1_EO__AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_OL_1_INS_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
+<p>are not available and products from the commissioning phase (april-june 2018) cannot be reprocessed.</p>
+<p>Examples of Baseline Tables are provided on the following pages</p>
+<p>(Baselines S3 SLSTR, OLCI, SYN).</p>
+<p>For any reprocessing action, all “AX___” ADF types are necessary:</p>
+<p>Static ones: S3__AX___DEM_AX, S3__AX___LWM_AX, S3__AX___OOM_AX, S3__AX___TRM_AX, S3__AX___CLM_AX, S3_AX___CST_AX, AX___OSF_AX,</p>
+<p>Dynamic ones: AX___FRO_AX, AX___MA1_AX, AX___MA2_AX, AX___MFA_AX, AX___BB2_AX</p>
+<p>SLSTR IPF L1 6.17 and L2 6.16</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Unit</strong></th>
+<th><strong>Application Period </strong></th>
+<th><strong>Product Level </strong></th>
+<th><strong>Product Type</strong></th>
+<th><strong>Auxiliary Type</strong></th>
+<th><strong>Auxiliary File</strong></th>
+<th><strong>IPF Version</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>20160216T000000-20190101T000000</td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_GEC_AX</td>
+<td>S3A_SL_1_GEC_AX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_008.SEN3</td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>***</td>
+<td>all other static files</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_VSC_AX</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’, ProductLevel=’L1’)</p></td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>X</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>SL_2_SSTAAX</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’X’, SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’, ProductLevel=’L2’)</p></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.16</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>20190101T000000-20991231T235959</td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_GEC_AX</td>
+<td>S3A_SL_1_GEC_AX_20190101T000000_20991231T235959_20191010T120000___________________MPC_O_AL_009.SEN3</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>***</td>
+<td>all other static files</td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_VSC_AX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “A”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>X</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>SL_2_SSTAAX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.16</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20180425T000000-20190101T000000</td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_GEC_AX</td>
+<td>S3B_SL_1_GEC_AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>***</td>
+<td>all other static files</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_VSC_AX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”, “2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L1”)</td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>X</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>SL_2_SSTAAX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L2”)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.16</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>20190101T000000-20991231T235959</td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_GEC_AX</td>
+<td>S3B_SL_1_GEC_AX_20190101T000000_20991231T235959_20191010T120000___________________MPC_O_AL_004.SEN3</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>***</td>
+<td>all other static files</td>
+<td>6.17</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>RBT</td>
+<td>SL_1_VSC_AX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
+<td>6.17</td>
+</tr>
+<tr class="odd">
+<td>X</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>SL_2_SSTAAX</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LST and FRP</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.16</td>
+</tr>
+</tbody>
+</table>
+<p>List of applicable static files:</p>
+<p>S3A_SL_1_O_F1AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_O_F1AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_1_O_F2AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_O_F2AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_N_S1AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_009.SEN3</p>
+<p>S3B_SL_1_N_S1AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_N_S2AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_009.SEN3</p>
+<p>S3B_SL_1_N_S2AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_N_S3AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_009.SEN3</p>
+<p>S3B_SL_1_N_S3AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_N_S7AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_N_S7AX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_N_S8AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_N_S8AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_N_S9AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_N_S9AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_O_S1AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_011.SEN3</p>
+<p>S3A_SL_1_O_S2AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_011.SEN3</p>
+<p>S3A_SL_1_O_S3AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_011.SEN3</p>
+<p>S3B_SL_1_O_S1AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_O_S2AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_O_S3AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_O_S7AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_O_S7AX_20180425T000000_20991231T235959_20200410T120000___________________MPC_O_AL_004.SEN3</p>
+<p>S3A_SL_1_O_S8AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_O_S8AX_20180425T000000_20991231T235959_20180712T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_1_O_S9AX_20160216T000000_20991231T235959_20170324T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_O_S9AX_20180425T000000_20991231T235959_20180712T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_1_NAS4AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3A_SL_1_NAS5AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3A_SL_1_NAS6AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3B_SL_1_NAS4AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_NAS5AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_NAS6AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_NBS4AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3A_SL_1_NBS5AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3A_SL_1_NBS6AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3B_SL_1_NBS4AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_NBS5AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_NBS6AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_OAS4AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3A_SL_1_OAS5AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3A_SL_1_OAS6AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3B_SL_1_OAS4AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_OAS5AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_OAS6AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_OBS4AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3A_SL_1_OBS5AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3A_SL_1_OBS6AX_20160418T094050_20991231T235959_20180202T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3B_SL_1_OBS4AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_OBS5AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_OBS6AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_ANC_AX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_010.SEN3</p>
+<p>S3B_SL_1_ANC_AX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_VIC_AX_20160216T000000_20991231T235959_20161012T120000___________________MPC_O_AL_004.SEN3</p>
+<p>S3B_SL_1_VIC_AX_20180425T000000_20991231T235959_20181002T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_1_GEO_AX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_008.SEN3</p>
+<p>S3B_SL_1_GEO_AX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_ESSTAX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_ESSTAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_CLO_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_006.SEN3</p>
+<p>S3B_SL_1_CLO_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_IRE_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_IRE_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_LCC_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_LCC_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_CDP_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_CDP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_CLP_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_CLP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_PCP_AX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_012.SEN3</p>
+<p>S3B_SL_1_PCP_AX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_1_ADJ_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_ADJ_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_RTT_AX_20160216T000000_20991231T235959_20180202T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_1_RTT_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___DEM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___LWM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___OOM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___TRM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___CLM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_AX___OSF_AX_20160216T192404_99991231T235959_20200826T081958___________________EUM_O_AL_001.SEN3</p>
+<p>S3B_AX___OSF_AX_20180425T191855_99991231T235959_20200826T092034___________________EUM_O_AL_001.SEN3</p>
+<p>S3__AX___CST_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_PCP_AX_20160216T000000_20991231T235959_20180219T120000___________________MPC_O_AL_005.SEN3</p>
+<p>S3B_SL_2_PCP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S6N_AX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_2_S7N_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S8N_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S9N_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S6N_AX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S7N_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S8N_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S9N_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_F1N_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_F1N_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S7O_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S8O_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_S9O_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S7O_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S8O_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_S9O_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_N2_CAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_2_N3RCAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_2_N3_CAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_2_N2_CAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_N3RCAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_N3_CAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_D2_CAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SL_2_D3_CAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_2_D2_CAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_D3_CAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__SL_2_SST_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_SDI2AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_SDI3AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_SDI2AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SL_2_SDI3AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_SSESAX_20000101T000000_20991231T235959_20160721T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SL_2_SSESAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_LSTCAX_20160216T000000_20991231T235959_20190215T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_2_LSTCAX_20180425T000000_20991231T235959_20190215T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SL_2_LSTBAX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__SL_2_LSTVAX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__SL_2_LSTWAX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_LSTEAX_20160216T000000_20991231T235959_20170116T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SL_2_LSTEAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_2_FRPTAX_20160216T000000_20991231T235959_20191115T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_2_FRPTAX_20180425T000000_20991231T235959_20191115T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_2_FXPAAX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SL_2_FXPAAX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__SL_2_CFM_AX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_2_PCPFAX_20160216T000000_20991231T235959_20200708T120000___________________MPC_O_AL_004.SEN3</p>
+<p>S3B_SL_2_PCPFAX_20180425T000000_20991231T235959_20200708T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3__SL_2_PLFMAX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SL_2_SXPAAX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SL_2_SXPAAX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
+<p>OLCI IPF L1 6.08 and L2 6.13</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Unit</strong></th>
+<th><strong>Application Period </strong></th>
+<th><strong>Product Level </strong></th>
+<th><strong>Product Type</strong></th>
+<th><strong>Auxiliary Type</strong></th>
+<th><strong>Auxiliary File</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B</td>
+<td>20180425T000000-20180617T235959</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20180618T000000-20181105T000000</td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20180618T000147_20991231T235959_20190320T120000___________________MPC_O_AL_004.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20181105T000000-20190317T203033</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20180618T000000_20991231T235959_20181002T120000___________________MPC_O_AL_004.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20190317T203033-20190415T000000</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20180618T000147_20991231T235959_20190320T120000___________________MPC_O_AL_004.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20181105T000000_20991231T235959_20181122T120000___________________MPC_O_AL_005.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20190415T000000-20190709T192710</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20190415T000000_20991231T235959_20190711T120000___________________MPC_O_AL_005.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20190317T203033_20991231T235959_20190320T120000___________________MPC_O_AL_006.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20190709T192710-20191007T204320</td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20190415T000000_20991231T235959_20190711T120000___________________MPC_O_AL_005.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20191007T204320-20191030T000000</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20190709T192710_20991231T235959_20190711T120000___________________MPC_O_AL_007.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20191030T000000-20200301T000000</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20190415T000000_20991231T235959_20190711T120000___________________MPC_O_AL_005.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20191007T204320_20991231T235959_20191009T120000___________________MPC_O_AL_008.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20200301T000000-20200321T171527</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20190415T000000_20991231T235959_20190711T120000___________________MPC_O_AL_005.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20191030T000000_20991231T235959_20191129T120000___________________MPC_O_AL_009.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>LFR/LRR</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20200301T000000-20200321T171527</td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_EO__AX</td>
+<td>S3B_OL_1_EO__AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_PRG_AX</td>
+<td>S3B_OL_1_PRG_AX_20180618T000000_20991231T235959_20180621T120000___________________MPC_O_AL_003.SEN3</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_INS_AX</td>
+<td>S3B_OL_1_INS_AX_20200301T000000_20991231T235959_20200331T120000___________________MPC_O_AL_006.SEN3</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L1</td>
+<td>EFR/ERR</td>
+<td>OL_1_CAL_AX</td>
+<td>S3B_OL_1_CAL_AX_20191030T000000_20991231T235959_20191129T120000___________________MPC_O_AL_009.SEN3</td>
+</tr>
+</tbody>
+</table>
+<p>List of applicable static files:</p>
+<p>S3A_OL_1_RAC_AX_20160425T103700_20991231T235959_20190320T120000___________________MPC_O_AL_005.SEN3</p>
+<p>S3B_OL_1_RAC_AX_20180425T000000_20991231T235959_20190320T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_OL_1_SPC_AX_20160425T103700_20991231T235959_20190320T120000___________________MPC_O_AL_007.SEN3</p>
+<p>S3B_OL_1_SPC_AX_20180425T000000_20991231T235959_20190320T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_OL_1_CLUTAX_20160425T095210_20991231T235959_20160525T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_OL_1_CLUTAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___CLM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___DEM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___LWM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___OOM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__AX___TRM_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_AX___OSF_AX_20160216T192404_99991231T235959_20200826T081958___________________EUM_O_AL_001.SEN3</p>
+<p>S3B_AX___OSF_AX_20180425T191855_99991231T235959_20200826T092034___________________EUM_O_AL_001.SEN3</p>
+<p>S3__AX___CST_AX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_PCP_AX_20160216T000000_20991231T235959_20170609T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_OL_2_PCP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_PPP_AX_20160216T000000_20991231T235959_20170609T120000___________________MPC_O_AL_005.SEN3</p>
+<p>S3B_OL_2_PPP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_WVP_AX_20160216T000000_20991231T235959_20170113T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_OL_2_WVP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_ACP_AX_20160216T000000_20991231T235959_20170609T120000___________________MPC_O_AL_004.SEN3</p>
+<p>S3B_OL_2_ACP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_OCP_AX_20160216T000000_20991231T235959_20170609T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_OL_2_OCP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_VGP_AX_20160216T000000_20991231T235959_20170113T120000___________________MPC_O_AL_004.SEN3</p>
+<p>S3B_OL_2_VGP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_2_CLP_AX_20160216T000000_20991231T235959_20170210T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_OL_2_CLP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>SYNERGY IPF L1 3.37 and L2 6.20</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Unit</strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Level</strong></th>
+<th><strong>Product Type</strong></th>
+<th><strong>Auxiliary Type</strong></th>
+<th><strong>Auxiliary File</strong></th>
+<th><strong>IPF Version</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>20160216T000000-20990101T000000</td>
+<td>L1</td>
+<td>MISR</td>
+<td>***</td>
+<td>all static files</td>
+<td>3.37</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td></td>
+<td>L2</td>
+<td>SYN</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.20</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20180425T000000-20990101T000000</td>
+<td>L1</td>
+<td>MISR</td>
+<td>***</td>
+<td>all static files</td>
+<td>3.37</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td></td>
+<td>L2</td>
+<td>SYN</td>
+<td>***</td>
+<td>all static files</td>
+<td>6.20</td>
+</tr>
+</tbody>
+</table>
+<p>List of applicable static files:</p>
+<p>S3A_SY_1_PCP_AX_20160216T000000_20991231T235959_20170120T120000___________________MPC_O_AL_005.SEN3</p>
+<p>S3B_SY_1_PCP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SY_1_GCPBAX_20160216T000000_20991231T235959_20170120T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SY_1_GCPBAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_OL_1_MCHDAX_20160216T000000_20991231T235959_20170120T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_OL_1_MCHDAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SL_1_MCHDAX_20160216T000000_20991231T235959_20170120T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SL_1_MCHDAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3__SY_1_CDIBAX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SY_2_PCP_AX_20160216T000000_20991231T235959_20181207T120000___________________MPC_O_AL_005.SEN3</p>
+<p>S3B_SY_2_PCP_AX_20180425T000000_20991231T235959_20181207T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3A_SY_2_RAD_AX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_003.SEN3</p>
+<p>S3B_SY_2_RAD_AX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SY_2_RADPAX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SY_2_RADPAX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SY_2_SPCPAX_20000101T000000_20991231T235959_20151214T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3B_SY_2_SPCPAX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SY_2_RADSAX_20160216T000000_20991231T235959_20190912T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SY_2_RADSAX_20180425T000000_20991231T235959_20190912T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3A_SY_2_PCPSAX_20160216T000000_20991231T235959_20181207T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SY_2_PCPSAX_20180425T000000_20991231T235959_20181207T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SY_2_ACLMAX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SY_2_ART_AX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SY_2_LSR_AX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SY_2_OSR_AX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3__SY_2_AODCAX_20000101T000000_20991231T235959_20180704T120000___________________MPC_O_AL_001.SEN3</p>
+<p>S3A_SY_2_PCPAAX_20160216T000000_20991231T235959_20190930T120000___________________MPC_O_AL_002.SEN3</p>
+<p>S3B_SY_2_PCPAAX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
+<h1 id="annex-all-adf-table">Annex: All ADF Table</h1>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Type</strong></th>
+<th><strong>Origin</strong></th>
+<th><strong>Static/Dynamic</strong></th>
+<th><strong>Mission</strong></th>
+<th><strong>Usage</strong></th>
+<th><strong>unit dependency</strong></th>
+<th><strong>Comments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OL_2_PCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>Y</td>
+<td>Processing Control Parameters for L2</td>
+</tr>
+<tr class="even">
+<td>OL_2_PPP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>Y</td>
+<td>Pre-Processing Data</td>
+</tr>
+<tr class="odd">
+<td>OL_2_WVP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>N</td>
+<td>Water Vapour Data</td>
+</tr>
+<tr class="even">
+<td>OL_2_ACP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>N</td>
+<td>Atmospheric Correction Data</td>
+</tr>
+<tr class="odd">
+<td>OL_2_OCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>N</td>
+<td>Ocean Colour Data</td>
+</tr>
+<tr class="even">
+<td>OL_2_VGP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>N</td>
+<td>Vegetation Data</td>
+</tr>
+<tr class="odd">
+<td>OL_2_CLP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L2 LFR/LRR</td>
+<td>N</td>
+<td>Climatology Data</td>
+</tr>
+<tr class="even">
+<td>OL_1_EO__AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>processing control parameters for EO mode level 1</td>
+</tr>
+<tr class="odd">
+<td>OL_1_RAC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>processing control parameters for radiometric calibration mode level 1</td>
+</tr>
+<tr class="even">
+<td>OL_1_SPC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>processing control parameters for SC mode level 1</td>
+</tr>
+<tr class="odd">
+<td>OL_1_CLUTAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>classification thresholds LUT for L1.</td>
+</tr>
+<tr class="even">
+<td>OL_1_INS_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>instrumental characterisation and models from ICCDB</td>
+</tr>
+<tr class="odd">
+<td>OL_1_CAL_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>instrumental calibration coefficients and parameters from ICCDB</td>
+</tr>
+<tr class="even">
+<td>OL_1_PRG_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3OLCI</td>
+<td>L1 EFR/ERR</td>
+<td>Y</td>
+<td>instrumental programmation parameters</td>
+</tr>
+<tr class="odd">
+<td>SL_1_PCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>processing control parameters for L1</td>
+</tr>
+<tr class="even">
+<td>SL_1_ANC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>ancillary data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_N_S7AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>S7 thermal infrared chracterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_N_S8AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_N_S9AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_N_F1AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>F1 thermal infrared chracterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_N_F2AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_O_S7AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_O_S8AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_O_S9AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_O_F1AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_O_F2AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>thermal infrared chracterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_N_S1AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_N_S2AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_N_S3AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_O_S1AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_O_S2AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_O_S3AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_NAS4AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_NAS5AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_NAS6AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_NBS4AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_NBS5AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_NBS6AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_OAS4AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_OAS5AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_OAS6AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_OBS4AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_OBS5AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="even">
+<td>SL_1_OBS6AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible and shortwave infrared characterisation data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_VSC_AX</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>visible calibration data for L1 processor</td>
+</tr>
+<tr class="even">
+<td>SL_1_VIC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>vicarious calibration data initially from ICCDB before launch</td>
+</tr>
+<tr class="odd">
+<td>SL_1_GEO_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>geometric data from ICCDB before launch</td>
+</tr>
+<tr class="even">
+<td>SL_1_GEC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>geometric calibration data initially from ICCDB before launch</td>
+</tr>
+<tr class="odd">
+<td>SL_1_ESSTAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>maps of the SST uncertainties for IPF L1 processor</td>
+</tr>
+<tr class="even">
+<td>SL_1_CLO_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>cloud LUT for L1</td>
+</tr>
+<tr class="odd">
+<td>SL_2_PCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>processing control parameters for L2</td>
+</tr>
+<tr class="even">
+<td>SL_2_S6N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>S6 nadir SWIR nadir noise data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_S7N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) nadir noise data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_S8N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) nadir noise data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_S9N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) nadir noise data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_F1N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) nadir noise data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_F2N_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) nadir noise data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_S7O_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) oblic noise data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_S8O_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) oblic noise data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_S9O_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>thermal infrared (TIR) oblic noise data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_N2_CAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>N2 SST coeficients for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_N3RCAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>N3R SST coeficients for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_N3_CAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>N3 SST coeficients for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_D2_CAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>D2 SST coeficients for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_D3_CAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>D3 SST coeficients for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_SST_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>L2P SST algorithms data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_SDI3AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>SDI3 saharian dust index coefficients for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_SDI2AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>SDI2 saharian dust index coefficients for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_SSESAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>L2P Single Sensor Error Statistic (SSES) biases for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_SSTAAX</td>
+<td>MetOffice</td>
+<td>dynamic</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>N</td>
+<td>L4 SST analysis data</td>
+</tr>
+<tr class="odd">
+<td>SL_2_LSTCAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>LST coefficients for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_LSTBAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>N</td>
+<td>LST biome data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_LSTVAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>LST vegetation fraction data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_LSTWAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>LST water vapour data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_LSTEAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>LST error data for L2 PAD</td>
+</tr>
+<tr class="even">
+<td>SL_2_FRPTAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>FRP test data for L2 PAD</td>
+</tr>
+<tr class="odd">
+<td>SL_2_CFM_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>N</td>
+<td>L2 Classification Fire Mask</td>
+</tr>
+<tr class="even">
+<td>SL_2_FXPAAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>L2 fire channel pixel area</td>
+</tr>
+<tr class="odd">
+<td>SL_2_PCPFAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>L2 Fire Radiative Power Processing Control Parameter</td>
+</tr>
+<tr class="even">
+<td>SL_2_PLFMAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>N</td>
+<td>L2 Potential Land Fire Global Mask GLC2000</td>
+</tr>
+<tr class="odd">
+<td>SL_2_SXPAAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L2 LST/FRP</td>
+<td>Y</td>
+<td>L2 thermal channels pixel area</td>
+</tr>
+<tr class="even">
+<td>SL_1_IRE_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 input land surface IR emissivity data</td>
+</tr>
+<tr class="odd">
+<td>SL_1_LCC_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 input land cloud coefficients</td>
+</tr>
+<tr class="even">
+<td>SL_1_CDP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 Conditional Probability LUT - cloudy conditions</td>
+</tr>
+<tr class="odd">
+<td>SL_1_CLP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 Conditional Probability LUT - clear conditions</td>
+</tr>
+<tr class="even">
+<td>SL_1_ADJ_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 AVHRR/SLSTR Adjustment Parameters</td>
+</tr>
+<tr class="odd">
+<td>SL_1_RTT_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SLSTR</td>
+<td>L1 RBT</td>
+<td>Y</td>
+<td>L1 RTTOV Coefficients</td>
+</tr>
+<tr class="even">
+<td>SY_1_PCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L1 MISR</td>
+<td>Y</td>
+<td>Processing Control Parameters for SYN IPF L1</td>
+</tr>
+<tr class="odd">
+<td>SY_1_GCPBAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L1 MISR</td>
+<td>Y</td>
+<td>Ground Control Points Data Base</td>
+</tr>
+<tr class="even">
+<td>OL_1_MCHDAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L1 MISR</td>
+<td>Y</td>
+<td>OLCI Inter-channel Mis-registration Characterisation data file</td>
+</tr>
+<tr class="odd">
+<td>SL_1_MCHDAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L1 MISR</td>
+<td>Y</td>
+<td>SLSTR Inter-channel Mis-registration Characterisation data file</td>
+</tr>
+<tr class="even">
+<td>SY_1_CDIBAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L1 MISR</td>
+<td>N</td>
+<td>Map file of the distance to the coast</td>
+</tr>
+<tr class="odd">
+<td>SY_2_PCP_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>Processing Control Parameters for SYN IPF L2</td>
+</tr>
+<tr class="even">
+<td>SY_2_RAD_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>SYN L2 Radiative Transfer Simulation data file</td>
+</tr>
+<tr class="odd">
+<td>SY_2_RADPAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>VGT P Radiative Transfer Simulation data file</td>
+</tr>
+<tr class="even">
+<td>SY_2_SPCPAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>VGT P Spectral Response Function data file</td>
+</tr>
+<tr class="odd">
+<td>SY_2_RADSAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>VGT S Radiative Transfer Simulation data file</td>
+</tr>
+<tr class="even">
+<td>SY_2_PCPSAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>processing control parameters for SYN VGT-S</td>
+</tr>
+<tr class="odd">
+<td>SY_2_ACLMAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>N</td>
+<td>SYNERGY L2 Aerosol Climatology Data</td>
+</tr>
+<tr class="even">
+<td>SY_2_ART_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>N</td>
+<td>SYNERGY L2 Atmospheric Radiative Transfer LUT Data</td>
+</tr>
+<tr class="odd">
+<td>SY_2_LSR_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>N</td>
+<td>SYNERGY L2 Land Spectral Reflectance LUT Data</td>
+</tr>
+<tr class="even">
+<td>SY_2_OSR_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>N</td>
+<td>SYNERGY L2 Ocean Surface Reflectance LUT Data</td>
+</tr>
+<tr class="odd">
+<td>SY_2_AODCAX</td>
+<td>ECMWF</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>N</td>
+<td>SYNERGY L2 CAMS AOD climatology</td>
+</tr>
+<tr class="even">
+<td>SY_2_PCPAAX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3SYN</td>
+<td>L2</td>
+<td>Y</td>
+<td>SYNERGY L2 Processing Control Parameters</td>
+</tr>
+<tr class="odd">
+<td>AX___FRO_AX</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>Y</td>
+<td>Restituted orbit from FOS</td>
+</tr>
+<tr class="even">
+<td>AX___MA1_AX</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>ECMWF analysis at surface SFC and at pressure levels PL</td>
+</tr>
+<tr class="odd">
+<td>AX___MA2_AX</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>ECMWF analysis at model levels ML</td>
+</tr>
+<tr class="even">
+<td>AX___MFA_AX</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>ECMWF data such as surface pressure, mean sea level pressure, specific humidity, temperature and orography</td>
+</tr>
+<tr class="odd">
+<td>AX___BB2_AX</td>
+<td>IERS</td>
+<td>dynamic</td>
+<td>S3ALL</td>
+<td>L1</td>
+<td>N</td>
+<td>IERS bulletin B including TAI/UTC relationship</td>
+</tr>
+<tr class="even">
+<td>AX___CST_AX</td>
+<td>ESA</td>
+<td>static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>physical constant values and parameters</td>
+</tr>
+<tr class="odd">
+<td>AX___LWM_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>Land/Water Mask</td>
+</tr>
+<tr class="even">
+<td>AX___OOM_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>Open Ocean Mask</td>
+</tr>
+<tr class="odd">
+<td>AX___CLM_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>coast line mask</td>
+</tr>
+<tr class="even">
+<td>AX___TRM_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>tidal regions mask</td>
+</tr>
+<tr class="odd">
+<td>AX___DEM_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>N</td>
+<td>Digital Elevation Model</td>
+</tr>
+<tr class="even">
+<td>AX___OSF_AX</td>
+<td>ESA</td>
+<td>Static</td>
+<td>S3ALL</td>
+<td>L1+L2</td>
+<td>Y</td>
+<td>reference orbit scenario file</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="footer-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-11" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
+      <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

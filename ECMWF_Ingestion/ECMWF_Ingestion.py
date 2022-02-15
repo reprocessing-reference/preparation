@@ -161,11 +161,11 @@ if __name__ == "__main__":
                 files_to_tar.append(grib_output_filename)
             #create HDR file
             valid_start = (cur_date_pyt+datetime.timedelta(hours=int(request_1.step[0]))).strftime("%Y%m%dT%H%M%S")
-            valid_stop = (cur_date_pyt + datetime.timedelta(hours=int(request_1.step[-1]))).strftime("%Y%m%dT%H%M%S")
+            valid_stop = (cur_date_pyt + datetime.timedelta(hours=int(request_1.step[-1])+3)).strftime("%Y%m%dT%H%M%S")
             hdr_filename = "S2__OPER_AUX_ECMWFD_ADG__"+cur_date_pyt.strftime("%Y%m%dT%H%M%S")+"_V"+valid_start+"_"+valid_stop
             print(hdr_filename)
             valid_start_xml = (cur_date_pyt + datetime.timedelta(hours=int(request_1.step[0]))).strftime("UTC=%Y-%m-%dT%H:%M:%S")
-            valid_stop_xml = (cur_date_pyt + datetime.timedelta(hours=int(request_1.step[-1]))).strftime("UTC=%Y-%m-%dT%H:%M:%S")
+            valid_stop_xml = (cur_date_pyt + datetime.timedelta(hours=int(request_1.step[-1])+3)).strftime("UTC=%Y-%m-%dT%H:%M:%S")
             crea_time_xml = cur_date_pyt.strftime("UTC=%Y-%m-%dT%H:%M:%S")
             fixed_header_hdr.find("File_Name", my_namespaces).text = hdr_filename
             fixed_header_hdr.find("Validity_Period",my_namespaces).find("Validity_Start",my_namespaces).text = valid_start_xml
@@ -191,8 +191,11 @@ if __name__ == "__main__":
                 exit(1)
             shutil.move(os.path.join(args.working, hdr_filename + ".TGZ"),os.path.join(args.output, hdr_filename + ".TGZ"))
             print("TGZ file wrote : "+os.path.join(args.output, hdr_filename + ".TGZ"))
+            os.remove(os.path.join(args.working,hdr_filename+".DBL"))
+            os.remove(os.path.join(args.working,hdr_filename+".HDR"))
         work_date_pyt = work_date_pyt + datetime.timedelta(days=1)
 
+    exit(0)
     #CAMS
     print("Starting CAMS data handling")
     request_3 = request_generator.RequestGenerator()
