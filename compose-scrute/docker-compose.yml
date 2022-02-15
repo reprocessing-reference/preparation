@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  #######################################
+  # scrute
+  #######################################
+
+  scrute:
+    image: node:17
+    container_name: scrute
+    command: "node /var/www/scrute/index.js"
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/fligeard/Projets/AUXIP/preparation/compose-scrute/scrute:/var/www/scrute

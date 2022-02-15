@@ -79,6 +79,18 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
 
     @EdmParameter
     private String SearchName;
+
+    @EdmParameter
+    private Integer Top = -1;
+
+    @EdmParameter
+    private Integer Skip = -1;
+
+    @EdmParameter
+    private String OrderBy;
+
+    @EdmParameter
+    private String OrderByDirection = "ASC";
     
     @Override
     public List<AuxFile> doOperation(ODataRequestContext requestContext,
@@ -93,6 +105,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     	boolean hasProductType = true;
 		boolean hasVariability = true;
 		boolean hasSearchName = true;
+		boolean hasOrderBy = true;
     	
     	if (Mission == null)
     	{
@@ -131,20 +144,27 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     	{
     		hasSearchName = false;
     	}
+    	if (OrderBy == null)
+    	{
+    		hasOrderBy = false;
+    	}
+		if (!OrderByDirection.equals("ASC") && !OrderByDirection.equals("DESC")) {
+			LOG.info("Order by order " + OrderByDirection + " not supported \"ASC\" used by default. Please use \"ASC\" or \"DESC\".");
+			OrderByDirection = "ASC";
+		}
     	
     	Map<String, Object> queryParams = new HashMap<String,Object>();
     	EntityDataModel entityDataModel = requestContext.getEntityDataModel();
-    	String query_string = getQuery(hasMission, Mission, hasUnit,Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+    	String query_string = getQuery(hasMission, Mission, hasUnit,Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
 				queryParams);
-        
-    	
-    	JPAQuery query = new JPAQuery(query_string, queryParams);
+
+    	JPAQuery query = new JPAQuery(query_string, queryParams, Top, Skip);
 		List<Object> result = dataSource.executeQueryListResult(query);
         LOG.info("Found: {} items for query: {}", result.size(), query);
         
         if (isS3SRAL) {
         	Map<String, Object> queryS3MWRParams = new HashMap<String,Object>();
-        	String query_S3MWR_string = getQuery(true, "S3MWR" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+        	String query_S3MWR_string = getQuery(true, "S3MWR" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
         			queryS3MWRParams);        	
 			JPAQuery query_S3MWR = new JPAQuery(query_S3MWR_string, queryS3MWRParams);
 			List<Object> result_S3MWR = dataSource.executeQueryListResult(query_S3MWR);
@@ -154,7 +174,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
         }
         if (isS3) {
         	Map<String, Object> queryS3ALLParams = new HashMap<String,Object>();
-        	String query_S3ALL_string = getQuery(true, "S3ALL" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+        	String query_S3ALL_string = getQuery(true, "S3ALL" , hasUnit, Unit,hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
         			queryS3ALLParams);        	
 			JPAQuery query_S3ALL = new JPAQuery(query_S3ALL_string, queryS3ALLParams);
 			List<Object> result_S3ALL = dataSource.executeQueryListResult(query_S3ALL);
@@ -166,7 +186,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
         
         if (hasUnit) {
         	Map<String, Object> queryAllParams = new HashMap<String,Object>();
-        	String query_all_string = getQuery(hasMission, Mission, true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+        	String query_all_string = getQuery(hasMission, Mission, true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
         			queryAllParams);        	
 			JPAQuery query_all = new JPAQuery(query_all_string, queryAllParams);
 			List<Object> result_all = dataSource.executeQueryListResult(query_all);
@@ -175,7 +195,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
 	        result.addAll(result_all);
 	        if (isS3SRAL) {
 	        	Map<String, Object> queryS3MWRXParams = new HashMap<String,Object>();
-	        	String query_S3MWRX_string = getQuery(true, "S3MWR" , true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+	        	String query_S3MWRX_string = getQuery(true, "S3MWR" , true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
 	        			queryS3MWRXParams);        	
 				JPAQuery query_S3MWRX = new JPAQuery(query_S3MWRX_string, queryS3MWRXParams);
 				List<Object> result_S3MWRX = dataSource.executeQueryListResult(query_S3MWRX);
@@ -185,7 +205,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
 	        }
 	        if (isS3) {
 	        	Map<String, Object> queryS3ALLXParams = new HashMap<String,Object>();
-	        	String query_S3ALLX_string = getQuery(true, "S3ALL" , true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName,
+	        	String query_S3ALLX_string = getQuery(true, "S3ALL" , true, "X",hasSensingStart, hasSensingStop, hasProductType, hasVariability, hasSearchName, hasOrderBy,
 	        			queryS3ALLXParams);        	
 				JPAQuery query_S3ALLX = new JPAQuery(query_S3ALLX_string, queryS3ALLXParams);
 				List<Object> result_S3ALLX = dataSource.executeQueryListResult(query_S3ALLX);
@@ -216,7 +236,7 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     }
 
 	private String getQuery(boolean hasMission, String mission, boolean hasUnit, String unit, boolean hasSensingStart, boolean hasSensingStop,
-			boolean hasProductType, boolean hasVariability, boolean hasSearchName, Map<String, Object> queryParams) {
+			boolean hasProductType, boolean hasVariability, boolean hasSearchName, boolean hasOrderBy, Map<String, Object> queryParams) {
 		boolean firstWhere = true;
     	String query_string ="SELECT DISTINCT e1 FROM com.csgroup.rba.model.jpa.AuxFileJPA e1 "
     			+ "JOIN e1.AuxType e2 "
@@ -297,6 +317,11 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     		}
     		query_string = query_string.concat("e1.FullName LIKE :e1NamePart ");
     		queryParams.put("e1NamePart","%"+SearchName+"%");
+    	}
+    	if (hasOrderBy)
+    	{
+			query_string = query_string.concat("ORDER BY e1." + OrderBy + " " + OrderByDirection);
+			
     	}
 		return query_string;
 	}    

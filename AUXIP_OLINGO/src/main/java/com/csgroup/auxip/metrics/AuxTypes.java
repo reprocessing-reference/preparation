@@ -69,6 +69,9 @@ public class AuxTypes {
 			"AUX_ECMWFD",
 			"AUX_ECMWFT",
 			"AUX_RESORB",
+			"GIP_CLOPAR",
+			"AUX_CAMSAN",
+			"AUX_CAMSRE",
 			"AUX_PREORB"
 			));
 	
