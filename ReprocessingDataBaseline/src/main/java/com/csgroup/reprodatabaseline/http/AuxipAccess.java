@@ -56,7 +56,7 @@ public class AuxipAccess {
 				for (JsonNode value : valueNode) {
 					/*
 					 * {"@odata.context":"$metadata#Products",
-					 * "value":[{"@odata.mediaContentType":"text/plain","ID":
+					 * "value":[{"@odata.mediaContentType":"application/json","Id":
 					 * "ffc183a9-7555-4427-b246-176e2485abed", "Name":
 					 * "S2B_OPER_GIP_G2PARA_MPC__20170206T103032_V20170101T000000_21000101T000000_B00.TGZ",
 					 * "ContentType":"application/octet-stream","ContentLength":3039,
@@ -67,7 +67,7 @@ public class AuxipAccess {
 					 * "ContentDate":{"Start":"2016-12-31T23:00:00Z","End":"2099-12-31T23:00:00Z"}}]
 					 * }
 					 */
-					UUID id = UUID.fromString(value.get("ID").asText());
+					UUID id = UUID.fromString(value.get("Id").asText());
 
 					// String post_wasabi = httpHandler.getLocation(config.getAuxip_url()+
 					// "/Products("+id.toString()+")/$value", bearerToken);
@@ -107,7 +107,7 @@ public class AuxipAccess {
 					for (JsonNode value : valueNode) {
 						/*
 						 * {"@odata.context":"$metadata#Products",
-						 * "value":[{"@odata.mediaContentType":"text/plain","ID":
+						 * "value":[{"@odata.mediaContentType":"application/json","Id":
 						 * "ffc183a9-7555-4427-b246-176e2485abed", "Name":
 						 * "S2B_OPER_GIP_G2PARA_MPC__20170206T103032_V20170101T000000_21000101T000000_B00.TGZ",
 						 * "ContentType":"application/octet-stream","ContentLength":3039,
@@ -118,7 +118,7 @@ public class AuxipAccess {
 						 * "ContentDate":{"Start":"2016-12-31T23:00:00Z","End":"2099-12-31T23:00:00Z"}}]
 						 * }
 						 */
-						UUID id = UUID.fromString(value.get("ID").asText());
+						UUID id = UUID.fromString(value.get("Id").asText());
 
 						// String post_wasabi = httpHandler.getLocation(config.getAuxip_url()+
 						// "/Products("+id.toString()+")/$value", bearerToken);
