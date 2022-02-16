@@ -217,7 +217,7 @@ public class Product {
 		CsdlEntityType entityType = null;
 
 		// create EntityType properties
-		CsdlProperty id = new CsdlProperty().setName("ID").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
+		CsdlProperty id = new CsdlProperty().setName("Id").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
 		CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty contenttype = new CsdlProperty().setName("ContentType").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty contentlength = new CsdlProperty().setName("ContentLength").setType(EdmPrimitiveTypeKind.Int64.getFullQualifiedName());
@@ -229,7 +229,7 @@ public class Product {
 
 		// create PropertyRef for Key element
 		CsdlPropertyRef propertyRef = new CsdlPropertyRef();
-		propertyRef.setName("ID");
+		propertyRef.setName("Id");
 
 		// navigation property: many-to-one, 
 		CsdlNavigationProperty attributesNavProp = new CsdlNavigationProperty().setName("Attributes").setType(Attribute.FQN).setCollection(true);
@@ -299,7 +299,7 @@ public class Product {
 	{
 		org.apache.olingo.commons.api.data.Entity entity = new org.apache.olingo.commons.api.data.Entity();
 		// create EntityType properties
-		Property id = new Property("Guid", "ID",ValueType.PRIMITIVE,this.Id) ;
+		Property id = new Property("Guid", "Id",ValueType.PRIMITIVE,this.Id) ;
 		Property name = new Property("String", "Name",ValueType.PRIMITIVE,this.Name) ;
 		Property contenttype = new Property("String", "ContentType",ValueType.PRIMITIVE,this.ContentType) ;
 		Property contentlength = new Property("Int64", "ContentLength",ValueType.PRIMITIVE,this.ContentLength) ;
