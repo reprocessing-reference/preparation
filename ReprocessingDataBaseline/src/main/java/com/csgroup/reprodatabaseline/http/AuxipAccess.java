@@ -56,7 +56,7 @@ public class AuxipAccess {
 				for (JsonNode value : valueNode) {
 					/*
 					 * {"@odata.context":"$metadata#Products",
-					 * "value":[{"@odata.mediaContentType":"text/plain","Id":
+					 * "value":[{"@odata.mediaContentType":"application/json","Id":
 					 * "ffc183a9-7555-4427-b246-176e2485abed", "Name":
 					 * "S2B_OPER_GIP_G2PARA_MPC__20170206T103032_V20170101T000000_21000101T000000_B00.TGZ",
 					 * "ContentType":"application/octet-stream","ContentLength":3039,
@@ -107,7 +107,7 @@ public class AuxipAccess {
 					for (JsonNode value : valueNode) {
 						/*
 						 * {"@odata.context":"$metadata#Products",
-						 * "value":[{"@odata.mediaContentType":"text/plain","Id":
+						 * "value":[{"@odata.mediaContentType":"application/json","Id":
 						 * "ffc183a9-7555-4427-b246-176e2485abed", "Name":
 						 * "S2B_OPER_GIP_G2PARA_MPC__20170206T103032_V20170101T000000_21000101T000000_B00.TGZ",
 						 * "ContentType":"application/octet-stream","ContentLength":3039,

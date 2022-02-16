@@ -809,7 +809,7 @@ public class Storage {
 						check.setChecksumDate((Timestamp) pop.getValue());
 						break;
 					case "Algorithm":
-						check.setAlgorithm(pop.getValue().toString());
+						check.setAlgorithm(pop.getValue().toString().toUpperCase());
 						break;
 					case "Value":
 						check.setValue(pop.getValue().toString());

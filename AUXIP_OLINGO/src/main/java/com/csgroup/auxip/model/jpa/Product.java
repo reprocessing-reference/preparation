@@ -316,7 +316,7 @@ public class Product {
 		{
 			ComplexValue checksum = new ComplexValue() ;
 			checksum.getValue().add( new Property("DateTimeOffset", "ChecksumDate", ValueType.PRIMITIVE, cs.getChecksumDate() ) );
-			checksum.getValue().add( new Property("String", "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm() ) );
+			checksum.getValue().add( new Property("String", "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm().toUpperCase() ) );
 			checksum.getValue().add( new Property("String", "Value", ValueType.PRIMITIVE, cs.getValue() ) );
 			checksums.add(checksum);
 		}
@@ -331,7 +331,7 @@ public class Product {
 		entity.addProperty( contentDate );
 		entity.addProperty( mediaValue );
 		entity.addProperty( checksum );
-		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("text/plain").toContentTypeString());
+		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("application/json").toContentTypeString());
 		
 		entity.setType(FQN.getFullQualifiedNameAsString());
 		try {
