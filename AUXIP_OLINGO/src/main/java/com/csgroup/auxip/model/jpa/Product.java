@@ -223,7 +223,7 @@ public class Product {
 		CsdlProperty contentlength = new CsdlProperty().setName("ContentLength").setType(EdmPrimitiveTypeKind.Int64.getFullQualifiedName());
 		CsdlProperty origindate = new CsdlProperty().setName("OriginDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 		CsdlProperty publicationdate = new CsdlProperty().setName("PublicationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
-		CsdlProperty evictiondate = new CsdlProperty().setName("EvictionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
+		// CsdlProperty evictiondate = new CsdlProperty().setName("EvictionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 		CsdlProperty checksum = new CsdlProperty().setName("Checksum").setType(com.csgroup.auxip.model.jpa.Checksum.FQN).setCollection(true); //TODO : set a collection of checksums
 		CsdlProperty contentDate = new CsdlProperty().setName("ContentDate").setType(TimeRange.FQN);
 
@@ -248,7 +248,7 @@ public class Product {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(id, name,contenttype,contentlength ,origindate,publicationdate,evictiondate,checksum,contentDate));
+		entityType.setProperties(Arrays.asList(id, name,contenttype,contentlength ,origindate,publicationdate,checksum,contentDate));
 		entityType.setKey(Arrays.asList(propertyRef));
 		entityType.setNavigationProperties(navPropList);
 		entityType.setHasStream(true);
