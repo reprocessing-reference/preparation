@@ -789,7 +789,7 @@ public class Storage {
 			}			
 		} else if (edmEntitySet.getName().equals(Product.ES_NAME)) {
 			Product prod = new Product();
-			prod.setId(UUID.fromString(requestEntity.getProperty("ID").getValue().toString()));
+			prod.setId(UUID.fromString(requestEntity.getProperty("Id").getValue().toString()));
 			prod.setContentLength((long) requestEntity.getProperty("ContentLength").getValue());
 			prod.setName(requestEntity.getProperty("Name").getValue().toString());
 			prod.setContentType(requestEntity.getProperty("ContentType").getValue().toString());
@@ -809,7 +809,7 @@ public class Storage {
 						check.setChecksumDate((Timestamp) pop.getValue());
 						break;
 					case "Algorithm":
-						check.setAlgorithm(pop.getValue().toString());
+						check.setAlgorithm(pop.getValue().toString().toUpperCase());
 						break;
 					case "Value":
 						check.setValue(pop.getValue().toString());
@@ -871,7 +871,7 @@ public class Storage {
 			for (UriParameter p: keyParams)
 			{
 				LOG.debug(p.getName());
-				if (p.getName() == "ID")
+				if (p.getName() == "Id")
 				{
 					uid = UUID.fromString(p.getText());
 				}
@@ -974,17 +974,17 @@ public class Storage {
 		if (sourceEntityFqn.equals(Product.FQN.getFullQualifiedNameAsString())
 				&& relatedEntityFqn.equals(Attribute.FQN)) {
 			String className = StringAttribute.class.getName();
-			navigationTargetEntityCollection.setId(createId(sourceEntity, "ID", "Attributes"));
+			navigationTargetEntityCollection.setId(createId(sourceEntity, "Id", "Attributes"));
 			String queryString1= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
-					+ "JOIN entity.StringAttributes e1 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+					+ "JOIN entity.StringAttributes e1 WHERE entity.Id = '"+sourceEntity.getProperty("Id").getValue().toString()+"'";
 			String queryString2 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
-					+ "JOIN entity.IntegerAttributes e2 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+					+ "JOIN entity.IntegerAttributes e2 WHERE entity.Id = '"+sourceEntity.getProperty("Id").getValue().toString()+"'";
 			String queryString3 = "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
-					+ "JOIN entity.DoubleAttributes p1 WHERE entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+					+ "JOIN entity.DoubleAttributes p1 WHERE entity.Id = '"+sourceEntity.getProperty("Id").getValue().toString()+"'";
 			String queryString4= "SELECT DISTINCT entity FROM com.csgroup.auxip.model.jpa.Product entity "
-					+ "JOIN entity.DateTimeOffsetAttributes e4 WHERE  entity.Id = '"+sourceEntity.getProperty("ID").getValue().toString()+"'";
+					+ "JOIN entity.DateTimeOffsetAttributes e4 WHERE  entity.Id = '"+sourceEntity.getProperty("Id").getValue().toString()+"'";
 			Map<String, Object> queryParams_m = new HashMap<String,Object>();						
-			//queryParams_m.put("productid", UUID.fromString(sourceEntity.getProperty("ID").getValue().toString()));
+			//queryParams_m.put("productid", UUID.fromString(sourceEntity.getProperty("Id").getValue().toString()));
 			EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 			try {
 				List<Product> strAttribs;
@@ -1039,7 +1039,7 @@ public class Storage {
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					JsonNode actualObj = mapper.readTree(new String(mediaContent));
-					prod.setId(UUID.fromString(actualObj.get("ID").asText()));
+					prod.setId(UUID.fromString(actualObj.get("Id").asText()));
 					prod.setContentLength(actualObj.get("ContentLength").asLong());
 					prod.setName(actualObj.get("Name").asText());
 					prod.setContentType(actualObj.get("ContentType").asText());
@@ -1108,7 +1108,7 @@ public class Storage {
 					prod.setIntegerAttributes(intAttrib_list);
 					prod.setDateTimeOffsetAttributes(datetimeAttrib_list);
 					prod.setStringAttributes(strAttrib_list);
-					LOG.debug("Id: "+actualObj.get("ID").asText());
+					LOG.debug("Id: "+actualObj.get("Id").asText());
 				} catch (JsonProcessingException e) {
 					int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode() ;
 					throw new ODataApplicationException("Can't parse body as JSON for product POST",statusCode ,Locale.ENGLISH,String.valueOf(statusCode));

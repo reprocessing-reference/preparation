@@ -176,7 +176,7 @@ public class AuxipEntityCollectionProcessor implements EntityCollectionProcessor
         String attributesType = uriResourceNavigation.getProperty().getName();
         String firstKeyPredicate = uriResourceEntitySet.getKeyPredicates().get(0).getName() ; 
         String productUuid = uriResourceEntitySet.getKeyPredicates().get(0).getText() ; 
-        if ( !firstKeyPredicate.equals("ID")) 
+        if ( !firstKeyPredicate.equals("Id")) 
         {
           int statusCode = HttpStatusCode.BAD_REQUEST.getStatusCode();
           throw new ODataApplicationException("Bad request => a valid uuid is needed ! ", statusCode, Locale.ROOT,String.valueOf(statusCode));

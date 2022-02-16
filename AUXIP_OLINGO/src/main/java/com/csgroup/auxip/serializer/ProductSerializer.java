@@ -70,8 +70,8 @@ public class ProductSerializer {
 			json.writeStartArray();
 			for (final Product entity : products) {
 				json.writeStartObject();
-				json.writeStringField("@odata.mediaContentType", "text/plain");
-				json.writeStringField("ID", entity.getId().toString());
+				json.writeStringField("@odata.mediaContentType", "application/json");
+				json.writeStringField("Id", entity.getId().toString());
 				json.writeStringField("Name", entity.getName());
 				json.writeStringField("ContentType", entity.getContentType());
 				json.writeFieldName("ContentLength");

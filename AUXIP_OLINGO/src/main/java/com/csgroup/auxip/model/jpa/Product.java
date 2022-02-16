@@ -217,19 +217,19 @@ public class Product {
 		CsdlEntityType entityType = null;
 
 		// create EntityType properties
-		CsdlProperty id = new CsdlProperty().setName("ID").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
+		CsdlProperty id = new CsdlProperty().setName("Id").setType(EdmPrimitiveTypeKind.Guid.getFullQualifiedName());
 		CsdlProperty name = new CsdlProperty().setName("Name").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty contenttype = new CsdlProperty().setName("ContentType").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 		CsdlProperty contentlength = new CsdlProperty().setName("ContentLength").setType(EdmPrimitiveTypeKind.Int64.getFullQualifiedName());
 		CsdlProperty origindate = new CsdlProperty().setName("OriginDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 		CsdlProperty publicationdate = new CsdlProperty().setName("PublicationDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
-		CsdlProperty evictiondate = new CsdlProperty().setName("EvictionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
+		// CsdlProperty evictiondate = new CsdlProperty().setName("EvictionDate").setType(EdmPrimitiveTypeKind.DateTimeOffset.getFullQualifiedName()).setPrecision(3);
 		CsdlProperty checksum = new CsdlProperty().setName("Checksum").setType(com.csgroup.auxip.model.jpa.Checksum.FQN).setCollection(true); //TODO : set a collection of checksums
 		CsdlProperty contentDate = new CsdlProperty().setName("ContentDate").setType(TimeRange.FQN);
 
 		// create PropertyRef for Key element
 		CsdlPropertyRef propertyRef = new CsdlPropertyRef();
-		propertyRef.setName("ID");
+		propertyRef.setName("Id");
 
 		// navigation property: many-to-one, 
 		CsdlNavigationProperty attributesNavProp = new CsdlNavigationProperty().setName("Attributes").setType(Attribute.FQN).setCollection(true);
@@ -248,7 +248,7 @@ public class Product {
 		// configure EntityType
 		entityType = new CsdlEntityType();
 		entityType.setName(ET_NAME);
-		entityType.setProperties(Arrays.asList(id, name,contenttype,contentlength ,origindate,publicationdate,evictiondate,checksum,contentDate));
+		entityType.setProperties(Arrays.asList(id, name,contenttype,contentlength ,origindate,publicationdate,checksum,contentDate));
 		entityType.setKey(Arrays.asList(propertyRef));
 		entityType.setNavigationProperties(navPropList);
 		entityType.setHasStream(true);
@@ -299,7 +299,7 @@ public class Product {
 	{
 		org.apache.olingo.commons.api.data.Entity entity = new org.apache.olingo.commons.api.data.Entity();
 		// create EntityType properties
-		Property id = new Property("Guid", "ID",ValueType.PRIMITIVE,this.Id) ;
+		Property id = new Property("Guid", "Id",ValueType.PRIMITIVE,this.Id) ;
 		Property name = new Property("String", "Name",ValueType.PRIMITIVE,this.Name) ;
 		Property contenttype = new Property("String", "ContentType",ValueType.PRIMITIVE,this.ContentType) ;
 		Property contentlength = new Property("Int64", "ContentLength",ValueType.PRIMITIVE,this.ContentLength) ;
@@ -316,7 +316,7 @@ public class Product {
 		{
 			ComplexValue checksum = new ComplexValue() ;
 			checksum.getValue().add( new Property("DateTimeOffset", "ChecksumDate", ValueType.PRIMITIVE, cs.getChecksumDate() ) );
-			checksum.getValue().add( new Property("String", "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm() ) );
+			checksum.getValue().add( new Property("String", "Algorithm", ValueType.PRIMITIVE, cs.getAlgorithm().toUpperCase() ) );
 			checksum.getValue().add( new Property("String", "Value", ValueType.PRIMITIVE, cs.getValue() ) );
 			checksums.add(checksum);
 		}
@@ -331,7 +331,7 @@ public class Product {
 		entity.addProperty( contentDate );
 		entity.addProperty( mediaValue );
 		entity.addProperty( checksum );
-		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("text/plain").toContentTypeString());
+		entity.setMediaContentType(org.apache.olingo.commons.api.format.ContentType.parse("application/json").toContentTypeString());
 		
 		entity.setType(FQN.getFullQualifiedNameAsString());
 		try {

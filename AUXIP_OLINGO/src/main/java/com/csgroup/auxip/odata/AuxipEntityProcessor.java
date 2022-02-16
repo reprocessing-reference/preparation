@@ -475,7 +475,7 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 				mediaContent);
 		LOG.debug("Entity created : "+entity.getType());
 		//Check subscriptions
-		final String uuid = entity.getProperty("ID").getValue().toString();
+		final String uuid = entity.getProperty("Id").getValue().toString();
 		LOG.debug("Incoming uuid : "+uuid);
 		List<Subscription> subscriptions = storage.getAllValidSubscriptions();
 		for (Subscription scr : subscriptions) {
@@ -489,8 +489,8 @@ public class AuxipEntityProcessor implements EntityProcessor, MediaEntityProcess
 						ur.getOrderByOption(), ur.getSkipOption(), ur.getTopOption());
 				LOG.debug("Number of product subscription : "+String.valueOf(coll.getEntities().size()));
 				for (Entity ent : coll.getEntities()) {
-					LOG.debug("Product uuid : "+ent.getProperty("ID").getValue().toString());
-					if (ent.getProperty("ID").getValue().toString().equals(uuid)) {
+					LOG.debug("Product uuid : "+ent.getProperty("Id").getValue().toString());
+					if (ent.getProperty("Id").getValue().toString().equals(uuid)) {
 						LOG.debug("Matching product for subscription found");
 						Notification notif = new Notification(ent.getProperty("Name").getValue().toString()
 								, UUID.fromString(uuid), scr);
