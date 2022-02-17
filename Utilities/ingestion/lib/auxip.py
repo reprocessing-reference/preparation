@@ -99,7 +99,7 @@ def post_to_auxip(access_token,path_to_auxiliary_data_file,uuid,mode='dev'):
         publicationdate = datetime.strftime(datetime.utcnow(), odata_datetime_format)
     
         product = {
-            "ID" : uuid,
+            "Id" : uuid,
             "ContentLength": int(attributes['length']),
             "ContentType": "application/octet-stream",
             "EvictionDate": datetime.strftime(datetime.utcnow() + dt.timedelta(weeks=5346), odata_datetime_format),
