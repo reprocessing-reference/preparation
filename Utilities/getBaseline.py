@@ -50,7 +50,7 @@ def auxip_download(aux_name,access_token,output_folder,contains="*",exclude="non
             if response.status_code == 200:
 
                 if len(response.json()["value"]) > 0 :
-                    ID = response.json()["value"][0]["ID"]
+                    ID = response.json()["value"][0]["Id"]
                     length = float(response.json()["value"][0]["ContentLength"])
                     slength = "%.03f MB" % (length*1.e-6) if  length < 1.e9 else "%.03f GB" % (length*1.e-9)
 
