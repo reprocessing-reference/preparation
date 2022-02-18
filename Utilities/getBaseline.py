@@ -57,8 +57,8 @@ def auxip_download(aux_name,access_token,output_folder,contains="*",exclude="non
                     if download == True:
                         # get ID and size of the product 
                         print( "\nDownloading %s : %s" % (aux_name,slength) )
-                        with open(output_folder +"/"+aux_name,"w") as fid:
-                            start = time.clock()
+                        with open(output_folder +"/"+aux_name,"wb") as fid:
+                            start = time.time()
                             product_response = requests.get("https://reprocessing-auxiliary.copernicus.eu/auxip.svc/Products(%s)/$value" % ID ,headers=headers,stream=True)
                             total_length = int(product_response.headers.get('content-length'))
                             if total_length is None: # no content length header
@@ -69,12 +69,12 @@ def auxip_download(aux_name,access_token,output_folder,contains="*",exclude="non
                                     dl += len(data)
                                     fid.write(data)
                                     done = int(50 * dl / total_length)
-                                    sys.stdout.write("\r[%s%s] %s bps" % ('=' * done, ' ' * (50-done), dl//(time.clock() - start)))
+                                    sys.stdout.write("\r[%s%s] %s bps" % ('=' * done, ' ' * (50-done), dl//(time.time() - start)))
                                     sys.stdout.flush()
                             # fid.write(product_response.content)
                             fid.close()
                     else:
-                        print( "%s : %s" % (aux_name,slength) )
+                        print( "%s : %s - Id : %s" % (aux_name,slength,ID) )
                 else:
                     print( "%s : Not Found by the Auxip service" % aux_name )
             else:
