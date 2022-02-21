@@ -3,7 +3,6 @@ import datetime
 
 import requests
 from pip._vendor.requests import auth
-from requests.auth import HTTPBasicAuth
 
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
@@ -37,13 +36,20 @@ def main():
     parser.add_argument("-m", "--mission",
                         help="Satellite trigram",
                         required=True)
-    parser.add_argument(
-            "-o",
-            "--output",
-            help="Output data directory (report file): ex report.txt'",
-            required=True)
+    parser.add_argument("-o", "--output",
+                        help="Output data directory (report file): ex report.txt'",
+                        required=True)
+    parser.add_argument("-ss", "--sensitivity",
+                        help="Sensitivity of the test for gaps and overlaps : a gap/overlap will not be considered one if it is shorter than the sensitivity. Sensitivity format : dd-HH-MM-SS",
+                        required=False)
 
     args = parser.parse_args()
+
+    if args.sensitivity is None:
+        args.sensitivity = "00-00-00-01"
+
+    parsed_sensitivity=args.sensitivity.split('-')
+    gap_sensitivity = datetime.timedelta(days=int(parsed_sensitivity[0]), hours=int(parsed_sensitivity[1]), minutes=int(parsed_sensitivity[2]), seconds=int(parsed_sensitivity[3]))
 
     with open(args.output, mode='w') as report:
         report.write("##### Report start : type : " + args.type + " , step :  " + args.step + " hours ########\n")
@@ -148,11 +154,11 @@ def main():
             else:
                 stopDateFormat = odata_datetime_format
             # The file validity is valid for the tested date
-            if working_list[idx-1][1] > working_list[idx][0]:
+            if working_list[idx-1][1] > working_list[idx][0] and working_list[idx-1][1] - working_list[idx][0] > gap_sensitivity:
                 report.write("overlap: " + working_list[idx-1][2]['FullName'] + " and "+working_list[idx][2]['FullName']+" : "+
                              (working_list[idx-1][1].strftime(stopDateFormat)).replace("Z[GMT]","")+" / "+
                              (working_list[idx][0].strftime(startDateFormat)).replace("Z[GMT]","")+"\n")
-            if working_list[idx-1][1] < working_list[idx][0] and working_list[idx][0] - working_list[idx-1][1] > datetime.timedelta(seconds=1):
+            if working_list[idx-1][1] < working_list[idx][0] and working_list[idx][0] - working_list[idx-1][1] > gap_sensitivity:
                 report.write("gap: " + working_list[idx-1][2]['FullName'] + " and "+working_list[idx][2]['FullName']+" : "+
                              (working_list[idx-1][1].strftime(stopDateFormat)).replace("Z[GMT]","")+" / "+
                              (working_list[idx][0].strftime(startDateFormat)).replace("Z[GMT]","")+" not covered\n")
