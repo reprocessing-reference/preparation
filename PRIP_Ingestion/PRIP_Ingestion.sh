@@ -154,5 +154,6 @@ fi
 
 # Removing the error log if the number of lines equals 3 : one line per tmp directories created at the beginning
 if [ "$( wc -l < ${ERROR_FILE_LOG} )" -eq 3 ]; then
+  echo "No errors during ingestion : deleting error file"
   rm $ERROR_FILE_LOG
 fi

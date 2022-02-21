@@ -103,6 +103,7 @@ python3 ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $STA
 code=$?
 if [ $code -ne 0 ]; then
   echo "ECMWF Retrieve failed"
+  echo "ECMWF Retrieve failed" >> $ERROR_FILE_LOG
 else
   echo "ECMWF download done"
   echo "Starting AUXIP ingestion"
@@ -110,6 +111,7 @@ else
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
+    echo "AUXIP ingestion failed" >> $ERROR_FILE_LOG
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
@@ -117,6 +119,7 @@ else
     code=$?
     if [ $code -ne 0 ]; then
       echo "Reprobase jsons generation failed"
+      echo "Reprobase jsons generation failed" >> $ERROR_FILE_LOG
     else
       echo "Reprobase json generation done"
       master_code=0
@@ -131,6 +134,7 @@ else
       done
       if [ $master_code -ne 0 ]; then
             echo "Reprobase ingestion failed"
+            echo "Reprobase ingestion failed" >> $ERROR_FILE_LOG
       else
         echo "Removing temporary folders"
         rm -r ${TEMP_FOLDER}
