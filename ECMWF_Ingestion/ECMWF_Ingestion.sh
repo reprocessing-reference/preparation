@@ -85,12 +85,18 @@ fi
 
 STOP_DATE=$(date '+%Y-%m-%d' -d "5 day ago")
 START_DATE=$(date '+%Y-%m-%d' -d "$((TIME_PERIOD + 5)) day ago")
+ERROR_FILE_LOG="${WORK_FOLDER}/$(date '+%Y-%m-%d')_ECMWF_error.log"
 echo "START_DATE: "$START_DATE
 echo "STOP_DATE: "$STOP_DATE
+echo "START : ${START_DATE} - STOP : ${STOP_DATE}" >> $ERROR_FILE_LOG
 TEMP_FOLDER=$(mktemp -p $WORK_FOLDER -d)
+echo "TEMP_FOLDER : ${TEMP_FOLDER}" >> $ERROR_FILE_LOG
 TEMP_FOLDER_AUX=$(mktemp -p $WORK_FOLDER -d)
+echo "TEMP_FOLDER_JSONS : ${TEMP_FOLDER_AUX}" >> $ERROR_FILE_LOG
 TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
+echo "TEMP_FOLDER_LISTING : ${TEMP_FOLDER_LISTING}" >> $ERROR_FILE_LOG
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
+echo "TEMP_FOLDER_JSONS : ${TEMP_FOLDER_JSONS}" >> $ERROR_FILE_LOG
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting ECMWF download"
 python3 ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
@@ -129,8 +135,16 @@ else
         echo "Removing temporary folders"
         rm -r ${TEMP_FOLDER}
         rm -r ${TEMP_FOLDER_AUX}
+        rm -r ${TEMP_FOLDER_JSONS}
+        rm -r ${TEMP_FOLDER_LISTING}
       echo "Done"
       fi
     fi
   fi
+fi
+
+# Removing the error log if the number of lines equals 5 : one line per tmp directories created at the beginning plus one for the period
+if [ "$( wc -l < ${ERROR_FILE_LOG} )" -eq 5 ]; then
+  echo "No errors during ingestion : deleting error file"
+  rm $ERROR_FILE_LOG
 fi

@@ -195,7 +195,6 @@ if __name__ == "__main__":
             os.remove(os.path.join(args.working,hdr_filename+".HDR"))
         work_date_pyt = work_date_pyt + datetime.timedelta(days=1)
 
-    exit(0)
     #CAMS
     print("Starting CAMS data handling")
     request_3 = request_generator.RequestGenerator()
