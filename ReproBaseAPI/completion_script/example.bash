@@ -1,4 +1,6 @@
 TOKEN=$1
+mkdir reportsS1
+mkdir reportsS2
 
 #S2
 python verify_completion.py -o reportsS2/reportS2_UT1UTC.txt -s 168 -t 'AUX_UT1UTC' -m 'S2' -tk ${TOKEN} &
@@ -7,11 +9,11 @@ python verify_completion.py -o reportsS2/reportS2_CAMSAN.txt -s 24 -t 'AUX_CAMSA
 python verify_completion.py -o reportsS2/reportS2_CAMSRE.txt -s 24 -t 'AUX_CAMSRE' -m 'S2' -tk ${TOKEN} &
 
 #S1
-#python verify_completion.py -o reports/reportS1WND.txt -s 3 -t 'AUX_WND' -m 'S1' -tk ${TOKEN} &
-#python verify_completion.py -o reports/reportS1WAV.txt -s 3 -t 'AUX_WAV' -m 'S1' -tk ${TOKEN} &
-#python verify_completion.py -o reports/reportS1ICE.txt -s 24 -t 'AUX_ICE' -m 'S1' -tk ${TOKEN} &
-#python verify_completion.py -o reports/reportS1APOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1A' -tk ${TOKEN} &
-#python verify_completion.py -o reports/reportS1BPOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1B' -tk ${TOKEN} &
+python verify_completion.py -o reportsS1/reportS1WND.txt -s 3 -t 'AUX_WND' -m 'S1' -tk ${TOKEN} -ss '00-00-01-00' &
+python verify_completion.py -o reportsS1/reportS1WAV.txt -s 3 -t 'AUX_WAV' -m 'S1' -tk ${TOKEN} &
+python verify_completion.py -o reportsS1/reportS1ICE.txt -s 24 -t 'AUX_ICE' -m 'S1' -tk ${TOKEN} &
+python verify_completion.py -o reportsS1/reportS1APOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1A' -tk ${TOKEN} -ss '00-00-01-00' &
+python verify_completion.py -o reportsS1/reportS1BPOEORB.txt -s 24 -t 'AUX_POEORB' -m 'S1B' -tk ${TOKEN} -ss '00-00-01-00' &
 
 #S3
 #python verify_completion.py -o reports/reportS3A_AX___FRO_AX.txt -s 24 -t 'AX___FRO_AX' -m 'S3A' & -tk ${TOKEN} &
