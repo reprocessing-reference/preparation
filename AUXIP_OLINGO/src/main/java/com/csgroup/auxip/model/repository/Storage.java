@@ -625,10 +625,12 @@ public class Storage {
 			queryString = "SELECT entity FROM " + className + " entity" ;
 		}
 
+		UUID queryUUID = UUID.randomUUID();
+
 		// add OrderBy Options
 		queryString = addOrderByOption(entitySetName,queryString, orderByOption);
-		//queryString = addJoinOption(entitySetName,queryString);	
-		LOG.debug("Query: "+queryString);
+		//queryString = addJoinOption(entitySetName,queryString);
+		LOG.debug(queryUUID + " - Query: " + queryString);
 		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 
 		Query query = entityManager.createQuery(queryString);
@@ -666,6 +668,7 @@ public class Storage {
 				products = query.getResultList();
 				LOG.debug("main prod done");
 			} finally {
+				LOG.debug(queryUUID + " - Query returned");
 				entityManager.close();
 			}						
 			Boolean expandAttributes = false;
