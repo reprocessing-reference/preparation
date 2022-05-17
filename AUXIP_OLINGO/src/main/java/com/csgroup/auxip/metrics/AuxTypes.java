@@ -70,6 +70,7 @@ public class AuxTypes {
 			"AUX_ECMWFT",
 			"AUX_RESORB",
 			"GIP_CLOPAR",
+			"GIP_HRTPAR",
 			"AUX_CAMSAN",
 			"AUX_CAMSRE",
 			"AUX_PREORB"
