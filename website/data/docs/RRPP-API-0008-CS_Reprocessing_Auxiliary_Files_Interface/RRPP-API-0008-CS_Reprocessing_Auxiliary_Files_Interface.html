@@ -214,7 +214,7 @@
 <p>Roles and Users can be managed via the AUXIP administration interface in <a href="https://reprocessing-auxiliary.copernicus.eu/auth">https://reprocessing-auxiliary.copernicus.eu/auth</a></p>
 <h2 id="quotas"> Quotas</h2>
 <p>AUXIP requests are limited by a quota mechanism applicable to all clients with the ‘Download’ role; this mechanism is configured as follows:</p>
-<p>Maximum volume (in GB) transfer within a defined period /duration</p>
+<p>Maximum volume (in GB) transfer within the defined period</p>
 <ul>
 <li><p><em>quota.total_downloads = 1000</em></p></li>
 </ul>
@@ -231,6 +231,7 @@
 <li><p><em>quota.parallel_downloads_deltatime_in_seconds = 10</em></p></li>
 </ul>
 <p>Note that “Parallel downloads” are understood in AUXIP service as consecutive downloads with the delta time between them is less than the setting threshold <em>quota.parallel_downloads_deltatime_in_seconds</em></p>
+<p>For all services, a GET request should not exceed 2000 characters and the result is limited to 200 filenames (the “skip” parameter can be used to get the following results).</p>
 <h1 id="description">Description</h1>
 <p>The AUXIP access point allows to visualize and to retrieve the ADF needed for a reprocessing performance of Sentinel-1, Sentinel-2 and Sentinel-3 Level-1 or Level-2 data. There are three tables:</p>
 <ul>

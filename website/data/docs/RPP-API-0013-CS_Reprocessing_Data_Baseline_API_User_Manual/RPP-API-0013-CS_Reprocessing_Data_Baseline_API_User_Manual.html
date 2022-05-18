@@ -29,9 +29,9 @@
 <td>17/06/2021</td>
 </tr>
 <tr class="even">
-<td></td>
-<td></td>
-<td></td>
+<td>Limitations section added</td>
+<td>1.1</td>
+<td>14/04/2022</td>
 </tr>
 <tr class="odd">
 <td></td>
@@ -43,33 +43,34 @@
 <p><strong>Change Log:</strong></p>
 <p>Table of contents</p>
 <p></p>
-<p><a href="#introduction"><span class="underline">1.</span> <span class="underline">Introduction</span> 5</a></p>
-<p><a href="#purpose-and-scope"><span class="underline">1.1</span> <span class="underline">Purpose and scope</span> 5</a></p>
-<p><a href="#documents"><span class="underline">1.2</span> <span class="underline">Documents</span> 5</a></p>
-<p><a href="#reference-documents"><span class="underline">1.2.1</span> <span class="underline">Reference documents</span> 5</a></p>
-<p><a href="#applicable-documents"><span class="underline">1.2.2</span> <span class="underline">Applicable documents</span> 5</a></p>
-<p><a href="#terminology"><span class="underline">1.3</span> <span class="underline">Terminology</span> 6</a></p>
-<p><a href="#definitions"><span class="underline">1.3.1</span> <span class="underline">Definitions</span> 6</a></p>
-<p><a href="#list-of-acronyms"><span class="underline">1.3.2</span> <span class="underline">List of Acronyms</span> 6</a></p>
-<p><a href="#overview"><span class="underline">2.</span> <span class="underline">OVERVIEW</span> 7</a></p>
-<p><a href="#instruction-section"><span class="underline">3.</span> <span class="underline">INSTRUCTION SECTION</span> 8</a></p>
-<p><a href="#access-point"><span class="underline">3.1</span> <span class="underline">Access point</span> 8</a></p>
-<p><a href="#user-registration"><span class="underline">3.2</span> <span class="underline">User registration</span> 8</a></p>
-<p><a href="#access-token"><span class="underline">3.3</span> <span class="underline">Access token</span> 8</a></p>
-<p><a href="#via-postman"><span class="underline">3.3.1</span> <span class="underline">Via Postman</span> 9</a></p>
-<p><a href="#via-curl-and-python-for-developers"><span class="underline">3.3.2</span> <span class="underline">Via Curl and Python for developers</span> 10</a></p>
-<p><a href="#requesting-for-reprocessing-data-baseline"><span class="underline">3.4</span> <span class="underline">Requesting for reprocessing data baseline</span> 10</a></p>
-<p><a href="#requesting-examples"><span class="underline">3.4.1</span> <span class="underline">Requesting examples</span> 11</a></p>
-<p><a href="#appendices"><span class="underline">4.</span> <span class="underline">APPENDICES</span> 13</a></p>
-<p><a href="#appendix-a-http-status-and-error-messages"><span class="underline">4.1</span> <span class="underline">Appendix A – Http Status and Error Messages</span> 13</a></p>
-<p><a href="#appendix-b-metadata"><span class="underline">4.2</span> <span class="underline">Appendix B – $metadata</span> 13</a></p>
+<p><a href="#introduction">1. Introduction 4</a></p>
+<p><a href="#purpose-and-scope">1.1 Purpose and scope 4</a></p>
+<p><a href="#documents">1.2 Documents 4</a></p>
+<p><a href="#reference-documents">1.2.1 Reference documents 4</a></p>
+<p><a href="#applicable-documents">1.2.2 Applicable documents 4</a></p>
+<p><a href="#terminology">1.3 Terminology 5</a></p>
+<p><a href="#definitions">1.3.1 Definitions 5</a></p>
+<p><a href="#list-of-acronyms">1.3.2 List of Acronyms 5</a></p>
+<p><a href="#overview">2. OVERVIEW 6</a></p>
+<p><a href="#instruction-section">3. INSTRUCTION SECTION 7</a></p>
+<p><a href="#access-point">3.1 Access point 7</a></p>
+<p><a href="#user-registration">3.2 User registration 7</a></p>
+<p><a href="#access-token">3.3 Access token 7</a></p>
+<p><a href="#via-postman">3.3.1 Via Postman 8</a></p>
+<p><a href="#via-curl-and-python-for-developers">3.3.2 Via Curl and Python for developers 9</a></p>
+<p><a href="#requesting-for-reprocessing-data-baseline">3.4 Requesting for reprocessing data baseline 9</a></p>
+<p><a href="#requesting-examples">3.5 Requesting examples 10</a></p>
+<p><a href="#limitations">4. Limitations 12</a></p>
+<p><a href="#appendices">5. APPENDICES 13</a></p>
+<p><a href="#appendix-a-http-status-and-error-messages">5.1 Appendix A – HTTP Status and Error Messages 13</a></p>
+<p><a href="#appendix-b-metadata">5.2 Appendix B – $metadata 13</a></p>
 <ol type="1">
 <li><h1 id="introduction">Introduction</h1>
 <ol type="1">
 <li><h2 id="purpose-and-scope">Purpose and scope</h2></li>
 </ol></li>
 </ol>
-<p>This document is the Reprocessing Data Baseline API user manual, it contains the necessary instructions for getting started with this service, the main functionality exposed by this API is getReprocessingDataBaseline function allowing clients to retrieve the applicable up-to-date auxiliary data products from the reprocessing preparation package database allowing users to carry out reprocessing campaigns.</p>
+<p>This document is the Reprocessing Data Baseline API user manual, it contains the necessary instructions for getting started with this service, the main functionality exposed by this API is getReprocessingDataBaseline function allowing clients to retrieve the applicable up-to-date auxiliary data files from the reprocessing preparation package database allowing users to perform reprocessing campaigns.</p>
 <ol start="2" type="1">
 <li><h2 id="documents">Documents</h2>
 <ol type="1">
@@ -78,10 +79,10 @@
 </ol>
 <ol type="1">
 <li><blockquote>
-<p>OData Documentation <a href="http://www.odata.org/documentation"><span class="underline">http://www.odata.org/documentation</span></a></p>
+<p>OData Documentation <a href="http://www.odata.org/documentation">http://www.odata.org/documentation</a></p>
 </blockquote></li>
 <li><blockquote>
-<p>OData Protocol <a href="http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html"><span class="underline">http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</span></a></p>
+<p>OData Protocol <a href="http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html">http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</a></p>
 </blockquote>
 <ol start="2" type="1">
 <li><h3 id="applicable-documents">Applicable documents</h3></li>
@@ -111,8 +112,8 @@
 <td>A set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service.</td>
 </tr>
 <tr class="even">
-<td><strong>AUX_File</strong></td>
-<td>Auxiliary file used in a satellite processing chain</td>
+<td><strong>ADF</strong></td>
+<td>Auxiliary Data File used in a processing chain</td>
 </tr>
 <tr class="odd">
 <td></td>
@@ -139,7 +140,7 @@
 </tr>
 <tr class="odd">
 <td><strong>JSON</strong></td>
-<td>JavaScript Object Notation, commonly used format in web services</td>
+<td>JavaScript Object Notation, commonly used format in internet services</td>
 </tr>
 <tr class="even">
 <td><strong>URI</strong></td>
@@ -148,7 +149,7 @@
 </tbody>
 </table>
 <h1 id="overview">OVERVIEW</h1>
-<p>The Reprocessing Data Baseline main functionality is to identify for each Level-0 product name and Level-1/2 product type to be reprocessed, the applicable up to date list of auxiliary data files to be used for reprocessing campaigns.</p>
+<p>The Reprocessing Data Baseline main functionality is to identify for each Level-0 product name and Level-1/2 product type to be reprocessed, the applicable current list of auxiliary data files to be used for reprocessing campaigns.</p>
 <p>This document aims to teach new users how to use the Reprocessing Data Baseline API; it contains the following main instructions:</p>
 <ul>
 <li><p>The access point of the Reprocessing Data Baseline API.</p></li>
@@ -163,7 +164,7 @@
 </ol></li>
 </ol>
 <p>As a part of the Reprocessing Preparation Package, Reprocessing Data Baseline API can be accessed via the following URL:</p>
-<p><a href="%20https://reprocessing-auxiliary.copernicus.eu/rdb.svc"><span class="underline"> <strong>https://reprocessing-auxiliary.copernicus.eu/rdb.svc</strong></span></a></p>
+<p><a href="%20https://reprocessing-auxiliary.copernicus.eu/rdb.svc"><strong>https://reprocessing-auxiliary.copernicus.eu/rdb.svc</strong></a></p>
 <h2 id="user-registration">User registration </h2>
 <p>New users of Reprocessing Data Baseline API should be registered first in order to be able to use the API and request for the accessToken.</p>
 <table>
@@ -177,7 +178,7 @@
 <p>Figure 1 : Sign in &amp; registration Interface</p>
 <h2 id="access-token">Access token</h2>
 <p>To get the Reprocessing Data Baseline API token for a client, an HTTP POST request should be sent to the following Token resource:</p>
-<p><a href="https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"><strong><span class="underline">https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token</span></strong></a></p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token"><strong>https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token</strong></a></p>
 <p>In the post body, username and password are specified in JSON format, and the response body contains a token key with an actual API Token as the value. The token should be used in an HTTP Authorization header while communicating with the Reprocessing Data Baseline service.</p>
 <p>It is necessary to get a token using a tool (a browser or any other application that can send http requests). Depending on the client that is used, there are different ways to send HTTP headers.</p>
 <p>This chapter covers the following examples:</p>
@@ -235,11 +236,11 @@
 <ul>
 <li><p>With a comma separated list of level 0 products names + mission + unit + product_type :</p>
 <ul>
-<li><p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;L0_ProductName_1,%20L0_ProductName_2,L0_ProductName_3&#39;,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='L0_ProductName_1, L0_ProductName_2,L0_ProductName_3',mission='mission',unit='unit',product_type='product_Type')</span></a></p></li>
+<li><p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;L0_ProductName_1,%20L0_ProductName_2,L0_ProductName_3&#39;,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='L0_ProductName_1, L0_ProductName_2,L0_ProductName_3',mission='mission',unit='unit',product_type='product_Type')</a></p></li>
 </ul></li>
-<li><p>With sensing time interval (start and stop) + mission + unit + product_type :</p>
+<li><p>With a sensing time interval (start and stop) + mission + unit + product_type :</p>
 <ul>
-<li><p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=&#39;sensing_start_datetime&#39;,stop=&#39;sensing_stop_datetime&#39;,%20,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start='sensing_start_datetime',stop='sensing_stop_datetime', ,mission='mission',unit='unit',product_type='product_Type')</span></a></p></li>
+<li><p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=&#39;sensing_start_datetime&#39;,stop=&#39;sensing_stop_datetime&#39;,%20,mission=&#39;mission&#39;,unit=&#39;unit&#39;,product_type=&#39;product_Type&#39;)">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start='sensing_start_datetime',stop='sensing_stop_datetime', ,mission='mission',unit='unit',product_type='product_Type')</a></p></li>
 </ul></li>
 </ul>
 <table>
@@ -253,7 +254,7 @@
 <tbody>
 <tr class="odd">
 <td>l0_names</td>
-<td>Comma separated list of level 0 products names.</td>
+<td>Comma separated list of level 0 products names</td>
 <td>'S3A_OL_0_EFR____20201108T205651_20201108T205851_20201108T220426_0119_065_014______LN1_O_NR_002.SEN3'</td>
 </tr>
 <tr class="even">
@@ -299,20 +300,22 @@
 <ul>
 <li><p>With only one level 0 product name :</p></li>
 </ul>
-<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</span></a></p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</a></p>
 <ul>
-<li><p>With a list of level 0 product names :</p></li>
+<li><p>With a list of level-0 product names :</p></li>
 </ul>
-<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</span></a></p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names=&#39;S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip&#39;,mission=&#39;S1SAR&#39;,unit=&#39;A&#39;,product_type=&#39;L1SLC&#39;)">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(l0_names='S1A_IW_RAW__0NDV_20201001T062556_20201001T063833_034599_040733_8B28.SAFE.zip,S1A_IW_RAW__0SDV_20201124T101416_20201124T101448_035389_04229A_9816.SAFE.zip',mission='S1SAR',unit='A',product_type='L1SLC')</a></p>
 <ul>
-<li><p>With sensing date time interval :</p></li>
+<li><p>With a sensing time interval :</p></li>
 </ul>
-<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission=&#39;S3OLCI&#39;,unit=&#39;A&#39;,product_type=&#39;L1EFR&#39;)"><span class="underline">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission='S3OLCI',unit='A',product_type='L1EFR')</span></a></p>
+<p><a href="https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission=&#39;S3OLCI&#39;,unit=&#39;A&#39;,product_type=&#39;L1EFR&#39;)">https://reprocessing-auxiliary.copernicus.eu/rdb.svc/getReprocessingDataBaseline(start=2019-10-06T18:00:00Z,stop=2020-11-06T19:00:00Z,mission='S3OLCI',unit='A',product_type='L1EFR')</a></p>
 <p><strong>Example of the request response:</strong></p>
-<ol start="4" type="1">
+<h1 id="limitations">Limitations</h1>
+<p>For all services, a GET request should not exceed 2000 characters and the result is limited to 200 filenames (the “skip” parameter can be used to get the following results).</p>
+<ol start="5" type="1">
 <li><h1 id="appendices">APPENDICES</h1>
-<ol start="8" type="1">
-<li><h2 id="appendix-a-http-status-and-error-messages">Appendix A – Http Status and Error Messages</h2></li>
+<ol start="9" type="1">
+<li><h2 id="appendix-a-http-status-and-error-messages">Appendix A – HTTP Status and Error Messages</h2></li>
 </ol></li>
 </ol>
 <p>The GET response of applicable products list is an HTTP response to the GET reprocessing data baseline request. As recommended by the OData specification, the Reprocessing Data Baseline OData service supports responses in JSON.</p>
@@ -323,7 +326,7 @@
 <li><p>401 Unauthorized: if the requesting client is unauthorised</p></li>
 <li><p>404 Not Found</p></li>
 <li><p>500 Internal Server Error</p>
-<ol start="9" type="1">
+<ol start="10" type="1">
 <li><h2 id="appendix-b-metadata">Appendix B – $metadata </h2></li>
 </ol></li>
 </ul>
