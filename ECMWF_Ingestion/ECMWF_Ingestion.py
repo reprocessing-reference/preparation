@@ -267,7 +267,7 @@ if __name__ == "__main__":
                 exit(1)
             for c in req_cams_grib_file:
                 #Create the GRIB output files
-                grib_output_filename = "z_cams_c_ecmf_"+work_date_pyt.strftime("%Y%m%d")+"_prod_an_sfc_"+"{:03d}".format(t)+c[str(c).rfind("_"):]
+                grib_output_filename = "z_cams_c_ecmf_"+work_date_pyt.strftime("%Y%m%d%H%M%S")+"_prod_an_sfc_"+"{:03d}".format(t)+c[str(c).rfind("_"):]
                 #Agglomerate both files
                 shutil.copyfile(c,os.path.join(CAMS_working_dir,grib_output_filename))
                 files_to_tar.append(grib_output_filename)
