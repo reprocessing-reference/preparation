@@ -744,15 +744,16 @@ public class Storage {
 
 
 	public Entity readEntityData(EdmEntitySet edmEntitySet, List<UriParameter> keyParams) {
-		String uuid = keyParams.get(0).getText();
-
-		String queryString = "SELECT entity FROM " + Product.class.getName() + " entity WHERE entity.Id =  'uuid'".replace("uuid", uuid) ;
-
-		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
-
-		Query query = entityManager.createQuery(queryString);
+		
 		Product product;
+		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
 		try {
+			String uuid = keyParams.get(0).getText();
+	
+			String queryString = "SELECT entity FROM " + Product.class.getName() + " entity WHERE entity.Id =  'uuid'".replace("uuid", uuid) ;
+	
+			Query query = entityManager.createQuery(queryString);
+
 			product = (Product)query.getSingleResult();	
 		} finally {
 			entityManager.close();
