@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:22.04
 MAINTAINER CS SI
 
 ADD backup_postgres.sh /
