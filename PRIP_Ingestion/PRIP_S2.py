@@ -8,7 +8,7 @@ def prip_list(user, password, auxip_user, auxip_password, base_url, type_list, s
     file_list = []
     file_name_list = []
     token_info = get_token_info(auxip_user, auxip_password, mode=mode)
-    print(token_info['access_token'])
+    #print(token_info['access_token'])
     headers = {'Content-type': 'application/json'}
     if len(type_list) == 0:
         return file_list

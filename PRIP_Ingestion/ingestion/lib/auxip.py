@@ -94,7 +94,7 @@ def get_latest_of_type(access_token,aux_type_list,sat,mode='dev'):
         print("Request : " + request)
         response = requests.get(request,headers=headers)
         print(response.text)
-        print(access_token)
+        #print(access_token)
         if response.status_code != 200:
             print(response.status_code)
             print(response.text)
