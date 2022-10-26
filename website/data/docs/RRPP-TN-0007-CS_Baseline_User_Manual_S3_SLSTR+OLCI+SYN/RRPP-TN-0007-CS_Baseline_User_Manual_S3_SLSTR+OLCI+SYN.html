@@ -5,22 +5,42 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>...</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<p><img src="./media/media/image1.png" style="width:2.09375in;height:0.80694in" /> <img src="./media/media/image2.jpg" style="width:2.17352in;height:0.80198in" /></p>
+<p><img src="./media/media/image1.png"
+style="width:2.09375in;height:0.80694in" /> <img
+src="./media/media/image2.jpg"
+style="width:2.17352in;height:0.80198in" /></p>
 <p>RRPP-TN-0007-CS</p>
 <p>COPERNICUS - REPROCESSING REFERENCE PACKAGE PREPARATION</p>
-<p><span class="underline">Configuration Baseline User Manual For Sentinel-3-SLSTR-OLCI-SYN</span></p>
+<p><u>Configuration Baseline User Manual For
+Sentinel-3-SLSTR-OLCI-SYN</u></p>
 <p>25 August 2021</p>
 <p>Document Change Record</p>
 <table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
 <tbody>
 <tr class="odd">
 <td>Version</td>
@@ -58,90 +78,190 @@
 </tbody>
 </table>
 <p>Table of Content</p>
-<p><a href="#context-and-scope"><span class="underline">1.</span> <span class="underline">Context and Scope</span> 3</a></p>
-<p><a href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide"><span class="underline">2.</span> <span class="underline">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</span> 4</a></p>
-<p><a href="#annex-all-adf-table"><span class="underline">3.</span> <span class="underline">Annex: All ADF Table</span> 16</a></p>
+<p><a href="#context-and-scope">1. Context and Scope <a
+href="#context-and-scope">3</a></a></p>
+<p><a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">2.
+Presentation of the Reprocessing Configuration Baseline Reference and
+User Guide <a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">4</a></a></p>
+<p><a href="#annex-all-adf-table">3. Annex: All ADF Table <a
+href="#annex-all-adf-table">16</a></a></p>
 <p>Reference Documents for Sentinel-3</p>
-<p>COPE-S3GS-EOPG-TN-14-0008 Sentinel-3 Product units initial configuration 1.4.pdf</p>
+<p>COPE-S3GS-EOPG-TN-14-0008 Sentinel-3 Product units initial
+configuration 1.4.pdf</p>
 <p>GMV-S3PODIPF-ICD-0001_v1.18_Sentinel-3_POD_IPF_Interface_Control_Document.pdf</p>
 <p>S3IPF ICD 001 - i1r4 - Interface Control Document - Common.pdf</p>
 <p>S3IPF ICD 002 - i1r5 - Interface Control Document - Level 0.pdf</p>
-<p>S3IPF ICD 003.1 - i1r3 - Interface Control Document - OLCI Level 1.pdf</p>
-<p>S3IPF ICD 003.2 - i1r3 - Interface Control Document - OLCI Level 2 Land.pdf</p>
-<p>S3IPF ICD 004.2 - i1r6 - Interface Control Document - SLSTR Level 2 Land.pdf</p>
-<p>S3IPF ICD 004.2 - i1r7 - Interface Control Document - SLSTR Level 2 Land.pdf</p>
+<p>S3IPF ICD 003.1 - i1r3 - Interface Control Document - OLCI Level
+1.pdf</p>
+<p>S3IPF ICD 003.2 - i1r3 - Interface Control Document - OLCI Level 2
+Land.pdf</p>
+<p>S3IPF ICD 004.2 - i1r6 - Interface Control Document - SLSTR Level 2
+Land.pdf</p>
+<p>S3IPF ICD 004.2 - i1r7 - Interface Control Document - SLSTR Level 2
+Land.pdf</p>
 <p>S3IPF ICD 005 - i1r5 - Interface Control Document - SYNERGY.pdf</p>
 <p>S3IPF ICD 007 - i1r4 - Interface Control Document - MWR.pdf</p>
-<p>S3IPF ICD 008.1 - i3r9 - Interface Control Document - SRAL Level 1.pdf</p>
-<p>S3IPF ICD 008.2 - i3r10 - Interface Control Document - SRAL Level 2 Land.pdf</p>
-<p>S3IPF PDS 001 - i1r8 - Product Data Format Specification - Level 0.pdf</p>
-<p>S3IPF PDS 002 - i1r7 - Product Data Format Specification - Product Structures.pdf</p>
-<p>S3IPF PDS 003.1 - i2r12 - Product Data Format Specification - SRAL &amp; MWR Level 1.pdf</p>
-<p>S3IPF PDS 003.2 - i2r12 - Product Data Format Specification - SRAL&amp;MWR Level 2 Land.pdf</p>
-<p>S3IPF PDS 004.1 - i2r2 - Product Data Format Specification - OLCI Level 1.pdf</p>
-<p>S3IPF PDS 004.2 - i2r2 - Product Data Format Specification - OLCI Level 2 Land.pdf</p>
-<p>S3IPF PDS 005.1 - i2r8 - Product Data Format Specification - SLSTR Level 1.pdf</p>
-<p>S3IPF PDS 005.2 - i2r7 - Product Data Format Specification - SLSTR Level 2 Land.pdf</p>
-<p>S3IPF PDS 006 - i1r10 - Product Data Format Specification - SYNERGY.pdf</p>
-<p>S3IPF PDS 007.1 - i2r10 - Auxiliary Data Format Specification - OLCI Level 1.pdf</p>
-<p>S3IPF PDS 007.2 - i2r9 - Auxiliary Data Format Specification - OLCI Level 2.pdf</p>
-<p>S3IPF PDS 007.3 - i2r11 - Auxiliary Data Format Specification - SLSTR Level 1.pdf S3IPF PDS 007.4 - i2r10 - Auxiliary Data Format Specification - SLSTR Level 2.pdf</p>
-<p>S3IPF PDS 007.5 - i2r12 - Auxiliary Data Format Specification - SYNERGY.pdf S3IPF PDS 007.7 - i2r12 - Auxiliary Data Format Specification - MWR-SRAL Level 2.pdf</p>
-<p>S3MPC.ACR.AOD.003 - 02 - i1r2 - SYN L2 NTC Product Data Format Specification.pdf</p>
-<p>S3MPC.ACR.AOD.004 - 01 - i1r2 - SLSTR L2 NRT Auxiliary Data Format Specification.pdf</p>
-<p>S3MPC.ACR.AOD.005 - 02 - i1r1 - SYN L2 NTC Interface Control Document.pdf</p>
-<p>S3MPC.ACR.AOD.005 - 02 - i1r2 - SYN L2 NTC Interface Control Document.pdf</p>
-<p>S3MPC.ACR.FRP.005 - i1r1 - SLSTR L2 Interface Control Document.pdf</p>
-<p>S3MPC.ACR.PBD.001 - i2r47 - S3A - IPF Processing Baseline Document.pdf</p>
-<p>S3MPC.ACR.PBD.002 - i1r19 - S3B - IPF Processing Baseline Document.pdf</p>
+<p>S3IPF ICD 008.1 - i3r9 - Interface Control Document - SRAL Level
+1.pdf</p>
+<p>S3IPF ICD 008.2 - i3r10 - Interface Control Document - SRAL Level 2
+Land.pdf</p>
+<p>S3IPF PDS 001 - i1r8 - Product Data Format Specification - Level
+0.pdf</p>
+<p>S3IPF PDS 002 - i1r7 - Product Data Format Specification - Product
+Structures.pdf</p>
+<p>S3IPF PDS 003.1 - i2r12 - Product Data Format Specification - SRAL
+&amp; MWR Level 1.pdf</p>
+<p>S3IPF PDS 003.2 - i2r12 - Product Data Format Specification -
+SRAL&amp;MWR Level 2 Land.pdf</p>
+<p>S3IPF PDS 004.1 - i2r2 - Product Data Format Specification - OLCI
+Level 1.pdf</p>
+<p>S3IPF PDS 004.2 - i2r2 - Product Data Format Specification - OLCI
+Level 2 Land.pdf</p>
+<p>S3IPF PDS 005.1 - i2r8 - Product Data Format Specification - SLSTR
+Level 1.pdf</p>
+<p>S3IPF PDS 005.2 - i2r7 - Product Data Format Specification - SLSTR
+Level 2 Land.pdf</p>
+<p>S3IPF PDS 006 - i1r10 - Product Data Format Specification -
+SYNERGY.pdf</p>
+<p>S3IPF PDS 007.1 - i2r10 - Auxiliary Data Format Specification - OLCI
+Level 1.pdf</p>
+<p>S3IPF PDS 007.2 - i2r9 - Auxiliary Data Format Specification - OLCI
+Level 2.pdf</p>
+<p>S3IPF PDS 007.3 - i2r11 - Auxiliary Data Format Specification - SLSTR
+Level 1.pdf S3IPF PDS 007.4 - i2r10 - Auxiliary Data Format
+Specification - SLSTR Level 2.pdf</p>
+<p>S3IPF PDS 007.5 - i2r12 - Auxiliary Data Format Specification -
+SYNERGY.pdf S3IPF PDS 007.7 - i2r12 - Auxiliary Data Format
+Specification - MWR-SRAL Level 2.pdf</p>
+<p>S3MPC.ACR.AOD.003 - 02 - i1r2 - SYN L2 NTC Product Data Format
+Specification.pdf</p>
+<p>S3MPC.ACR.AOD.004 - 01 - i1r2 - SLSTR L2 NRT Auxiliary Data Format
+Specification.pdf</p>
+<p>S3MPC.ACR.AOD.005 - 02 - i1r1 - SYN L2 NTC Interface Control
+Document.pdf</p>
+<p>S3MPC.ACR.AOD.005 - 02 - i1r2 - SYN L2 NTC Interface Control
+Document.pdf</p>
+<p>S3MPC.ACR.FRP.005 - i1r1 - SLSTR L2 Interface Control
+Document.pdf</p>
+<p>S3MPC.ACR.PBD.001 - i2r47 - S3A - IPF Processing Baseline
+Document.pdf</p>
+<p>S3MPC.ACR.PBD.002 - i1r19 - S3B - IPF Processing Baseline
+Document.pdf</p>
 <p>Applicable Documents</p>
-<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API ICD</p>
+<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API
+ICD</p>
 <h1 id="context-and-scope">Context and Scope</h1>
-<p>The Reprocessing Reference Package allows the preparation of the future Sentinel-1/2/3 reprocessing activities by ensuring that all information required to reprocess past instrumental data is available and ready to use in the frame of a reprocessing operational service.</p>
+<p>The Reprocessing Reference Package allows the preparation of the
+future Sentinel-1/2/3 reprocessing activities by ensuring that all
+information required to reprocess past instrumental data is available
+and ready to use in the frame of a reprocessing operational service.</p>
 <p>The Reprocessing Preparation Package is composed of :</p>
-<p>- a summary Reprocessing Configuration Baseline and an API to query the Reprocessing Configuration Baseline based on the mission satellite unit, sensing time, IPF version to be used, product level and type to be generated,</p>
-<p>- an interface delivery point on a cloud environment providing access to all auxiliary files required for the reprocessing operation,</p>
-<p>- a detailed Reprocessing Data Baseline and an API to retrieve the auxiliary files to be used for a given time period.</p>
-<p>The processing chains of Level-1&amp;2 products use a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
-<p>The auxiliary files used in a reprocessing operation include typically:</p>
+<p>- a summary Reprocessing Configuration Baseline and an API to query
+the Reprocessing Configuration Baseline based on the mission satellite
+unit, sensing time, IPF version to be used, product level and type to be
+generated,</p>
+<p>- an interface delivery point on a cloud environment providing access
+to all auxiliary files required for the reprocessing operation,</p>
+<p>- a detailed Reprocessing Data Baseline and an API to retrieve the
+auxiliary files to be used for a given time period.</p>
+<p>The processing chains of Level-1&amp;2 products use a set of
+auxiliary files to ensure that the generated products meet the quality
+and calibration/validation specifications.</p>
+<p>The auxiliary files used in a reprocessing operation include
+typically:</p>
 <ul>
-<li><p>Static auxiliary files, which are not instrument or time dependent. They may be updated rarely in case a new version becomes available.</p></li>
-<li><p>Processor auxiliary files, which are generated by the Copernicus/ESA Ground Segment. They are linked to a specific instrument configuration or to an enhanced set of calibration and/or validation information. They are updated on a case by case basis.</p></li>
-<li><p>External auxiliary files, which are generated based on information retrieved from external sources, e.g. from meteo centres. These files are updated frequently, up to several times per day.</p></li>
-<li><p>Orbit auxiliary files, which are updated frequently, up to once per orbit.</p></li>
+<li><p>Static auxiliary files, which are not instrument or time
+dependent. They may be updated rarely in case a new version becomes
+available.</p></li>
+<li><p>Processor auxiliary files, which are generated by the
+Copernicus/ESA Ground Segment. They are linked to a specific instrument
+configuration or to an enhanced set of calibration and/or validation
+information. They are updated on a case by case basis.</p></li>
+<li><p>External auxiliary files, which are generated based on
+information retrieved from external sources, e.g. from meteo centres.
+These files are updated frequently, up to several times per
+day.</p></li>
+<li><p>Orbit auxiliary files, which are updated frequently, up to once
+per orbit.</p></li>
 </ul>
-<p>The reprocessing operation is performed with an upgraded version of the data processor and a corresponding set of auxiliary files.</p>
-<h1 id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</h1>
-<p>This document is the User Manual of the Reprocessing Configuration Baseline for Sentinel-3 SLSTR, OLCI and SYNERGY missions.</p>
-<p>It gives information on the content of the Reprocessing Configuration Baseline, how it is implemented and how it should be used.</p>
-<p>It provides the necessary definition and information for the preparation of any reprocessing campaign using the last IPF versions available today.</p>
-<p>The generic table in annex (called “All_ADF”) provides the list of all types of auxiliary files needed for the Sentinel missions. For each type, the table provides the unit dependency (yes or no), the usage (in processor level 0 or 1 or 2) and the variability (static of dynamic). A static type is rarely updated while a dynamic type is often updated.</p>
-<p>Then a Reprocessing Configuration Baseline table provides the list of exact auxiliary files to be used with the last processor applicable version with their application time, for each sentinel unit.</p>
+<p>The reprocessing operation is performed with an upgraded version of
+the data processor and a corresponding set of auxiliary files.</p>
+<h1
+id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation
+of the Reprocessing Configuration Baseline Reference and User Guide</h1>
+<p>This document is the User Manual of the Reprocessing Configuration
+Baseline for Sentinel-3 SLSTR, OLCI and SYNERGY missions.</p>
+<p>It gives information on the content of the Reprocessing Configuration
+Baseline, how it is implemented and how it should be used.</p>
+<p>It provides the necessary definition and information for the
+preparation of any reprocessing campaign using the last IPF versions
+available today.</p>
+<p>The generic table in annex (called “All_ADF”) provides the list of
+all types of auxiliary files needed for the Sentinel missions. For each
+type, the table provides the unit dependency (yes or no), the usage (in
+processor level 0 or 1 or 2) and the variability (static of dynamic). A
+static type is rarely updated while a dynamic type is often updated.</p>
+<p>Then a Reprocessing Configuration Baseline table provides the list of
+exact auxiliary files to be used with the last processor applicable
+version with their application time, for each sentinel unit.</p>
 <p>This table is made of the following columns:</p>
 <ul>
 <li><p>The satellite unit: A or B</p></li>
-<li><p>The application period: period of sensing time where the given auxiliary files are applicable</p></li>
-<li><p>The product level and type: the product type which can be generated using the given auxiliary files</p></li>
+<li><p>The application period: period of sensing time where the given
+auxiliary files are applicable</p></li>
+<li><p>The product level and type: the product type which can be
+generated using the given auxiliary files</p></li>
 <li><p>The processor (IPF) version considered for this table</p></li>
-<li><p>The auxiliary type and the auxiliary file name which are applicable</p></li>
+<li><p>The auxiliary type and the auxiliary file name which are
+applicable</p></li>
 </ul>
-<p>It takes into account any changes in time affecting the instrument configuration or on-board calibration, the potential enhancements in the auxiliary files, the potential changes related to the processor evolutions, etc, in order to ensure the ingestion of the applicable auxiliary files for the last operational IPF version.</p>
-<p>The Application Programming Interface (API) allows the query and retrieval of the corresponding list of auxiliary files given a mission satellite unit, sensing time period and product type to be generated.</p>
-<p>The API access is protected and uses an authorization protocol with generic mail address.</p>
+<p>It takes into account any changes in time affecting the instrument
+configuration or on-board calibration, the potential enhancements in the
+auxiliary files, the potential changes related to the processor
+evolutions, etc, in order to ensure the ingestion of the applicable
+auxiliary files for the last operational IPF version.</p>
+<p>The Application Programming Interface (API) allows the query and
+retrieval of the corresponding list of auxiliary files given a mission
+satellite unit, sensing time period and product type to be
+generated.</p>
+<p>The API access is protected and uses an authorization protocol with
+generic mail address.</p>
 <p>The users connect to the API according to [AD-2].</p>
-<p>The main focus is on the set of the auxiliary (ADF) files for the mission.</p>
-<p>The general reprocessing rules agreed with ESA are the following ones:</p>
+<p>The main focus is on the set of the auxiliary (ADF) files for the
+mission.</p>
+<p>The general reprocessing rules agreed with ESA are the following
+ones:</p>
 <ul>
-<li><p>CAL data must correspond to the real instrument configuration and calibration status at the considered sensing time.</p></li>
-<li><p>IERS data must be as close as possible to the considered sensing time (less than one week before).</p></li>
-<li><p>ECMWF data should come from the same reanalysis version for all the reprocessing coherency (no forecast needed).</p></li>
-<li><p>Processing parameters should be the best ones and the same version for all the reprocessing coherency.</p></li>
-<li><p>HKTM data should be the last version correcting any previous temporary anomalies or data gaps.</p></li>
-<li><p>Orbit data must be the best quality (precise for Sentinel-1 and Sentinel-3, restituted for Sentinel-2) from the Copernicus POD service.</p></li>
-<li><p>Black orbits should be listed and not reprocessed because these orbits suffered from anomalies in raw data which are impossible to correct.</p></li>
+<li><p>CAL data must correspond to the real instrument configuration and
+calibration status at the considered sensing time.</p></li>
+<li><p>IERS data must be as close as possible to the considered sensing
+time (less than one week before).</p></li>
+<li><p>ECMWF data should come from the same reanalysis version for all
+the reprocessing coherency (no forecast needed).</p></li>
+<li><p>Processing parameters should be the best ones and the same
+version for all the reprocessing coherency.</p></li>
+<li><p>HKTM data should be the last version correcting any previous
+temporary anomalies or data gaps.</p></li>
+<li><p>Orbit data must be the best quality (precise for Sentinel-1 and
+Sentinel-3, restituted for Sentinel-2) from the Copernicus POD
+service.</p></li>
+<li><p>Black orbits should be listed and not reprocessed because these
+orbits suffered from anomalies in raw data which are impossible to
+correct.</p></li>
 </ul>
-<p>The last available IPF versions are provided in the following table:</p>
+<p>The last available IPF versions are provided in the following
+table:</p>
 <table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 31%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>mission</th>
@@ -203,10 +323,16 @@
 </tr>
 </tbody>
 </table>
-<p>These processing versions are considered as the applicable baselines for this activity.</p>
-<p>Any new IPF version official release will trigger a new version of this User Manual.</p>
+<p>These processing versions are considered as the applicable baselines
+for this activity.</p>
+<p>Any new IPF version official release will trigger a new version of
+this User Manual.</p>
 <p>The following auxiliary types are out of scope.</p>
 <table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>SL_2_ACLMAX</th>
@@ -257,6 +383,10 @@
 </tbody>
 </table>
 <table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>OL_2_PCPBAX</th>
@@ -287,6 +417,10 @@
 </tbody>
 </table>
 <table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>SY_2_PCPBAX</th>
@@ -319,19 +453,31 @@
 <p>S3B_OL_1_CAL_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
 <p>S3B_OL_1_EO__AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
 <p>S3B_OL_1_INS_AX_20180425T000000_20180617T235959_20180621T120000___________________MPC_O_AL_002.SEN3</p>
-<p>are not available and products from the commissioning phase (april-june 2018) cannot be reprocessed.</p>
+<p>are not available and products from the commissioning phase
+(april-june 2018) cannot be reprocessed.</p>
 <p>Examples of Baseline Tables are provided on the following pages</p>
 <p>(Baselines S3 SLSTR, OLCI, SYN).</p>
 <p>For any reprocessing action, all “AX___” ADF types are necessary:</p>
-<p>Static ones: S3__AX___DEM_AX, S3__AX___LWM_AX, S3__AX___OOM_AX, S3__AX___TRM_AX, S3__AX___CLM_AX, S3_AX___CST_AX, AX___OSF_AX,</p>
-<p>Dynamic ones: AX___FRO_AX, AX___MA1_AX, AX___MA2_AX, AX___MFA_AX, AX___BB2_AX</p>
+<p>Static ones: S3__AX___DEM_AX, S3__AX___LWM_AX, S3__AX___OOM_AX,
+S3__AX___TRM_AX, S3__AX___CLM_AX, S3_AX___CST_AX, AX___OSF_AX,</p>
+<p>Dynamic ones: AX___FRO_AX, AX___MA1_AX, AX___MA2_AX, AX___MFA_AX,
+AX___BB2_AX</p>
 <p>SLSTR IPF L1 6.17 and L2 6.16</p>
 <table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 8%" />
+<col style="width: 4%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 65%" />
+<col style="width: 5%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Unit</strong></th>
-<th><strong>Application Period </strong></th>
-<th><strong>Product Level </strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Level</strong></th>
 <th><strong>Product Type</strong></th>
 <th><strong>Auxiliary Type</strong></th>
 <th><strong>Auxiliary File</strong></th>
@@ -341,7 +487,7 @@
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>20160216T000000-20190101T000000</td>
+<td rowspan="5">20160216T000000-20190101T000000</td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_GEC_AX</td>
@@ -350,7 +496,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>***</td>
@@ -359,27 +504,28 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_VSC_AX</td>
-<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
-<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’, ProductLevel=’L1’)</p></td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’,
+ProductLevel=’L1’)</p></td>
 <td>6.17</td>
 </tr>
 <tr class="even">
 <td>X</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>SL_2_SSTAAX</td>
-<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’X’, SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
-<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’, ProductLevel=’L2’)</p></td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S3SLSTR’, Unit=’X’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2019-01-01T00:00:00.000Z’,
+ProductLevel=’L2’)</p></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>***</td>
@@ -388,7 +534,7 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td>20190101T000000-20991231T235959</td>
+<td rowspan="5">20190101T000000-20991231T235959</td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_GEC_AX</td>
@@ -397,7 +543,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>***</td>
@@ -406,25 +551,24 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_VSC_AX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “A”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “A”,
+“2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
 <td>6.17</td>
 </tr>
 <tr class="odd">
 <td>X</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>SL_2_SSTAAX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”,
+“2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>***</td>
@@ -433,7 +577,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20180425T000000-20190101T000000</td>
+<td rowspan="5">20180425T000000-20190101T000000</td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_GEC_AX</td>
@@ -442,7 +586,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>***</td>
@@ -451,25 +594,24 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_VSC_AX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”, “2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L1”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”,
+“2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L1”)</td>
 <td>6.17</td>
 </tr>
 <tr class="even">
 <td>X</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>SL_2_SSTAAX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L2”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”,
+“2018-04-25T00:00:00.000Z”, “2019-01-01T00:00:00.000Z”,”L2”)</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>***</td>
@@ -478,7 +620,7 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td>20190101T000000-20991231T235959</td>
+<td rowspan="5">20190101T000000-20991231T235959</td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_GEC_AX</td>
@@ -487,7 +629,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>***</td>
@@ -496,25 +637,24 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>RBT</td>
 <td>SL_1_VSC_AX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “B”,
+“2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L1”)</td>
 <td>6.17</td>
 </tr>
 <tr class="odd">
 <td>X</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>SL_2_SSTAAX</td>
-<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”, “2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
+<td>GetReproBaselineListForPeriod(“S3SLSTR”, “X”,
+“2019-01-01T00:00:00.000Z”, “2099-01-01T00:00:00.000Z”,”L2”)</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LST and FRP</td>
 <td>***</td>
@@ -662,11 +802,19 @@
 <p>S3B_SL_2_SXPAAX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
 <p>OLCI IPF L1 6.08 and L2 6.13</p>
 <table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 9%" />
+<col style="width: 4%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 68%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Unit</strong></th>
-<th><strong>Application Period </strong></th>
-<th><strong>Product Level </strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Level</strong></th>
 <th><strong>Product Type</strong></th>
 <th><strong>Auxiliary Type</strong></th>
 <th><strong>Auxiliary File</strong></th>
@@ -675,7 +823,7 @@
 <tbody>
 <tr class="odd">
 <td>B</td>
-<td>20180425T000000-20180617T235959</td>
+<td rowspan="4">20180425T000000-20180617T235959</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -683,7 +831,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -691,7 +838,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -699,7 +845,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -707,7 +852,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20180618T000000-20181105T000000</td>
+<td rowspan="4">20180618T000000-20181105T000000</td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -715,7 +860,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -723,7 +867,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -731,7 +874,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -739,7 +881,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20181105T000000-20190317T203033</td>
+<td rowspan="4">20181105T000000-20190317T203033</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -747,7 +889,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -755,7 +896,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -763,7 +903,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -771,7 +910,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20190317T203033-20190415T000000</td>
+<td rowspan="4">20190317T203033-20190415T000000</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -779,7 +918,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -787,7 +925,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -795,7 +932,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -803,7 +939,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20190415T000000-20190709T192710</td>
+<td rowspan="4">20190415T000000-20190709T192710</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -811,7 +947,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -819,7 +954,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -827,7 +961,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -835,7 +968,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20190709T192710-20191007T204320</td>
+<td rowspan="4">20190709T192710-20191007T204320</td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -843,7 +976,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -851,7 +983,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -859,7 +990,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -867,7 +997,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20191007T204320-20191030T000000</td>
+<td rowspan="4">20191007T204320-20191030T000000</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -875,7 +1005,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -883,7 +1012,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -891,7 +1019,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -899,7 +1026,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20191030T000000-20200301T000000</td>
+<td rowspan="4">20191030T000000-20200301T000000</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -907,7 +1034,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -915,7 +1041,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -923,7 +1048,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -931,7 +1055,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20200301T000000-20200321T171527</td>
+<td rowspan="4">20200301T000000-20200321T171527</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -939,7 +1063,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -947,7 +1070,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -955,7 +1077,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LFR/LRR</td>
 <td>***</td>
@@ -963,7 +1084,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20200301T000000-20200321T171527</td>
+<td rowspan="4">20200301T000000-20200321T171527</td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_EO__AX</td>
@@ -971,7 +1092,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_PRG_AX</td>
@@ -979,7 +1099,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_INS_AX</td>
@@ -987,7 +1106,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>EFR/ERR</td>
 <td>OL_1_CAL_AX</td>
@@ -1026,6 +1144,15 @@
 <p>S3B_OL_2_CLP_AX_20180425T000000_20991231T235959_20180409T120000___________________MPC_O_AL_001.SEN3</p>
 <p>SYNERGY IPF L1 3.37 and L2 6.20</p>
 <table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 9%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 8%" />
+<col style="width: 59%" />
+<col style="width: 5%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Unit</strong></th>
@@ -1040,7 +1167,7 @@
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>20160216T000000-20990101T000000</td>
+<td rowspan="2">20160216T000000-20990101T000000</td>
 <td>L1</td>
 <td>MISR</td>
 <td>***</td>
@@ -1049,7 +1176,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>SYN</td>
 <td>***</td>
@@ -1058,7 +1184,7 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20180425T000000-20990101T000000</td>
+<td rowspan="2">20180425T000000-20990101T000000</td>
 <td>L1</td>
 <td>MISR</td>
 <td>***</td>
@@ -1067,7 +1193,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>SYN</td>
 <td>***</td>
@@ -1107,6 +1232,15 @@
 <p>S3B_SY_2_PCPAAX_20180425T000000_20991231T235959_20190930T120000___________________MPC_O_AL_001.SEN3</p>
 <h1 id="annex-all-adf-table">Annex: All ADF Table</h1>
 <table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 4%" />
+<col style="width: 75%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Type</strong></th>
@@ -1198,7 +1332,8 @@
 <td>S3OLCI</td>
 <td>L1 EFR/ERR</td>
 <td>Y</td>
-<td>processing control parameters for radiometric calibration mode level 1</td>
+<td>processing control parameters for radiometric calibration mode level
+1</td>
 </tr>
 <tr class="even">
 <td>OL_1_SPC_AX</td>
@@ -2089,7 +2224,8 @@
 <td>S3ALL</td>
 <td>L1+L2</td>
 <td>N</td>
-<td>ECMWF data such as surface pressure, mean sea level pressure, specific humidity, temperature and orography</td>
+<td>ECMWF data such as surface pressure, mean sea level pressure,
+specific humidity, temperature and orography</td>
 </tr>
 <tr class="odd">
 <td>AX___BB2_AX</td>
@@ -2177,7 +2313,8 @@
 <div class="footer-strip">
   <div class="container">
     <div class="row">
-      <div class="col-11" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
+      <div class="col-3" style="color: white"><a href="http://github.com/reprocessing-reference/ " style="color:white" target="_blank">Project's Github</a></div>
+      <div class="col-7" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
       <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
       </div>
   </div>
