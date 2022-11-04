@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
-gem 'github-pages','204'
-gem 'jekyll','3.8.5'
+
+# gem "rails"
+
+gem "jekyll", "4.2.2"
 gem 'jekyll-environment-variables'
 group :jekyll_plugins do
   gem "jekyll-feed"
@@ -10,21 +14,3 @@ group :jekyll_plugins do
   gem "datatables"
 end
 
-gem 'activesupport','6.0.2.1'
-gem 'faraday','1.0.0'
-gem 'nokogiri','1.10.8'
-gem 'octokit','4.16.0'
-gem 'ruby-enum','0.7.2'
-gem 'rubyzip','2.2.0'
-gem 'tzinfo','1.2.6'
-gem 'unicode-display_width','1.6.1'
-gem 'zeitwerk','2.2.2'
-gem 'ffi','1.12.2'
-gem 'typhoeus','1.3.1'
-gem 'rb-fsevent','0.10.3'
-gem 'html-pipeline','2.12.3'
-gem 'minitest','5.14.0'
-
-gem 'concurrent-ruby','1.1.6'
-gem 'addressable','2.7.0'
-gem 'execjs','2.7.0'

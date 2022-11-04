@@ -27,13 +27,13 @@ geometry=portrait
 #alignment=flushleft
 #alignment=flushright
 #alignment=center
-
+cd /home/1000/website/data/docs
 for fichier in *.docx
 do
     echo Converting $fichier
     mkdir $(basename $fichier .${fichier##*.})
+
     cd $(basename $fichier .${fichier##*.})
-    #pandoc -s -c ../../../assets/css/styledoc.css -A ../../../_includes/footer.html -o $(basename $fichier .${fichier##*.}).html --extract-media=./media ../$(basename $fichier .${fichier##*.}).docx --metadata pagetitle="..."
     pandoc -s -c ../../../assets/css/styledoc.css -A ../../../_includes/footer.html -o $(basename $fichier .${fichier##*.}).html --extract-media=./media ../$(basename $fichier .${fichier##*.}).docx --metadata pagetitle="..."
     cd ..
 done

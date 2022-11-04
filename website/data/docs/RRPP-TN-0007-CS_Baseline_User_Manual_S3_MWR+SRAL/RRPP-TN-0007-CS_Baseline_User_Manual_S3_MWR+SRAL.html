@@ -5,22 +5,41 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>...</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<p><img src="./media/media/image1.png" style="width:2.09375in;height:0.80694in" /> <img src="./media/media/image2.jpg" style="width:2.17352in;height:0.80198in" /></p>
+<p><img src="./media/media/image1.png"
+style="width:2.09375in;height:0.80694in" /> <img
+src="./media/media/image2.jpg"
+style="width:2.17352in;height:0.80198in" /></p>
 <p>RRPP-TN-0007-CS</p>
 <p>COPERNICUS - REPROCESSING REFERENCE PACKAGE PREPARATION</p>
-<p><span class="underline">Configuration Baseline User Manual For Sentinel-3-MWR-SRAL</span></p>
+<p><u>Configuration Baseline User Manual For Sentinel-3-MWR-SRAL</u></p>
 <p>25 August 2021</p>
 <p>Document Change Record</p>
 <table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
 <tbody>
 <tr class="odd">
 <td>Version</td>
@@ -65,72 +84,152 @@
 </tbody>
 </table>
 <p>Table of Content</p>
-<p><a href="#context-and-scope"><span class="underline">1.</span> <span class="underline">Context and Scope</span> 3</a></p>
-<p><a href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide"><span class="underline">2.</span> <span class="underline">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</span> 4</a></p>
-<p><a href="#annex-all-adf-table"><span class="underline">3.</span> <span class="underline">Annex: All ADF Table</span> 12</a></p>
+<p><a href="#context-and-scope">1. Context and Scope <a
+href="#context-and-scope">3</a></a></p>
+<p><a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">2.
+Presentation of the Reprocessing Configuration Baseline Reference and
+User Guide <a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">4</a></a></p>
+<p><a href="#annex-all-adf-table">3. Annex: All ADF Table <a
+href="#annex-all-adf-table">12</a></a></p>
 <p>Reference Documents for Sentinel-3</p>
-<p>COPE-S3GS-EOPG-TN-14-0008 Sentinel-3 Product units initial configuration 1.4.pdf</p>
+<p>COPE-S3GS-EOPG-TN-14-0008 Sentinel-3 Product units initial
+configuration 1.4.pdf</p>
 <p>GMV-S3PODIPF-ICD-0001_v1.18_Sentinel-3_POD_IPF_Interface_Control_Document.pdf</p>
 <p>S3IPF ICD 001 - i1r4 - Interface Control Document - Common.pdf</p>
 <p>S3IPF ICD 002 - i1r5 - Interface Control Document - Level 0.pdf</p>
 <p>S3IPF ICD 007 - i1r4 - Interface Control Document - MWR.pdf</p>
-<p>S3IPF ICD 008.1 - i3r9 - Interface Control Document - SRAL Level 1.pdf</p>
-<p>S3IPF ICD 008.2 - i3r10 - Interface Control Document - SRAL Level 2 Land.pdf</p>
-<p>S3IPF PDS 001 - i1r8 - Product Data Format Specification - Level 0.pdf</p>
-<p>S3IPF PDS 002 - i1r7 - Product Data Format Specification - Product Structures.pdf</p>
-<p>S3IPF PDS 003.1 - i2r12 - Product Data Format Specification - SRAL &amp; MWR Level 1.pdf</p>
-<p>S3IPF PDS 003.2 - i2r12 - Product Data Format Specification - SRAL&amp;MWR Level 2 Land.pdf</p>
-<p>S3IPF PDS 007.7 - i2r12 - Auxiliary Data Format Specification - MWR-SRAL Level 2.pdf</p>
-<p>S3MPC.ACR.PBD.001 - i2r47 - S3A - IPF Processing Baseline Document.pdf</p>
-<p>S3MPC.ACR.PBD.002 - i1r19 - S3B - IPF Processing Baseline Document.pdf</p>
+<p>S3IPF ICD 008.1 - i3r9 - Interface Control Document - SRAL Level
+1.pdf</p>
+<p>S3IPF ICD 008.2 - i3r10 - Interface Control Document - SRAL Level 2
+Land.pdf</p>
+<p>S3IPF PDS 001 - i1r8 - Product Data Format Specification - Level
+0.pdf</p>
+<p>S3IPF PDS 002 - i1r7 - Product Data Format Specification - Product
+Structures.pdf</p>
+<p>S3IPF PDS 003.1 - i2r12 - Product Data Format Specification - SRAL
+&amp; MWR Level 1.pdf</p>
+<p>S3IPF PDS 003.2 - i2r12 - Product Data Format Specification -
+SRAL&amp;MWR Level 2 Land.pdf</p>
+<p>S3IPF PDS 007.7 - i2r12 - Auxiliary Data Format Specification -
+MWR-SRAL Level 2.pdf</p>
+<p>S3MPC.ACR.PBD.001 - i2r47 - S3A - IPF Processing Baseline
+Document.pdf</p>
+<p>S3MPC.ACR.PBD.002 - i1r19 - S3B - IPF Processing Baseline
+Document.pdf</p>
 <p>Applicable Documents</p>
-<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline API ICD</p>
+<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline API
+ICD</p>
 <h1 id="context-and-scope">Context and Scope</h1>
-<p>The Reprocessing Reference Package allows the preparation of the future Sentinel-1/2/3 reprocessing activities by ensuring that all information required to reprocess past instrumental data is available and ready to use in the frame of a reprocessing operational service.</p>
+<p>The Reprocessing Reference Package allows the preparation of the
+future Sentinel-1/2/3 reprocessing activities by ensuring that all
+information required to reprocess past instrumental data is available
+and ready to use in the frame of a reprocessing operational service.</p>
 <p>The Reprocessing Preparation Package is composed of :</p>
-<p>- a summary Reprocessing Configuration Baseline and an API to query the Reprocessing Configuration Baseline based on the mission satellite unit, sensing time, IPF version to be used, product level and type to be generated,</p>
-<p>- an interface delivery point on a cloud environment providing access to all auxiliary files required for the reprocessing operation,</p>
-<p>- a detailed Reprocessing Data Baseline and an API to retrieve the auxiliary files to be used for a given time period.</p>
-<p>The processing chains of Level-1&amp;2 products use a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
-<p>The auxiliary files used in a reprocessing operation include typically:</p>
+<p>- a summary Reprocessing Configuration Baseline and an API to query
+the Reprocessing Configuration Baseline based on the mission satellite
+unit, sensing time, IPF version to be used, product level and type to be
+generated,</p>
+<p>- an interface delivery point on a cloud environment providing access
+to all auxiliary files required for the reprocessing operation,</p>
+<p>- a detailed Reprocessing Data Baseline and an API to retrieve the
+auxiliary files to be used for a given time period.</p>
+<p>The processing chains of Level-1&amp;2 products use a set of
+auxiliary files to ensure that the generated products meet the quality
+and calibration/validation specifications.</p>
+<p>The auxiliary files used in a reprocessing operation include
+typically:</p>
 <ul>
-<li><p>Static auxiliary files, which are not instrument or time dependent. They may be updated rarely in case a new version becomes available.</p></li>
-<li><p>Processor auxiliary files, which are generated by the Copernicus/ESA Ground Segment. They are linked to a specific instrument configuration or to an enhanced set of calibration and/or validation information. They are updated on a case by case basis.</p></li>
-<li><p>External auxiliary files, which are generated based on information retrieved from external sources, e.g. from meteo centres. These files are updated frequently, up to several times per day.</p></li>
-<li><p>Orbit auxiliary files, which are updated frequently, up to once per orbit.</p></li>
+<li><p>Static auxiliary files, which are not instrument or time
+dependent. They may be updated rarely in case a new version becomes
+available.</p></li>
+<li><p>Processor auxiliary files, which are generated by the
+Copernicus/ESA Ground Segment. They are linked to a specific instrument
+configuration or to an enhanced set of calibration and/or validation
+information. They are updated on a case by case basis.</p></li>
+<li><p>External auxiliary files, which are generated based on
+information retrieved from external sources, e.g. from meteo centres.
+These files are updated frequently, up to several times per
+day.</p></li>
+<li><p>Orbit auxiliary files, which are updated frequently, up to once
+per orbit.</p></li>
 </ul>
-<p>The reprocessing operation is performed with an upgraded version of the data processor and a corresponding set of auxiliary files.</p>
-<h1 id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</h1>
-<p>This document is the User Manual of the Reprocessing Configuration Baseline for Sentinel-3 MWR+SRAL mission.</p>
-<p>It gives information on the content of the Reprocessing Configuration Baseline, how it is implemented and how it should be used.</p>
-<p>It provides the necessary definition and information for the preparation of any reprocessing campaign using the last IPF versions available today.</p>
-<p>The generic table in annex (called “All_ADF”) provides the list of all types of auxiliary files needed for the Sentinel missions. For each type, the table provides the unit dependency (yes or no), the usage (in processor level 0 or 1 or 2) and the variability (static of dynamic). A static type is rarely updated while a dynamic type is often updated.</p>
-<p>Then a Reprocessing Configuration Baseline table provides the list of exact auxiliary files to be used with the last processor applicable version with their application time, for each sentinel unit.</p>
+<p>The reprocessing operation is performed with an upgraded version of
+the data processor and a corresponding set of auxiliary files.</p>
+<h1
+id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation
+of the Reprocessing Configuration Baseline Reference and User Guide</h1>
+<p>This document is the User Manual of the Reprocessing Configuration
+Baseline for Sentinel-3 MWR+SRAL mission.</p>
+<p>It gives information on the content of the Reprocessing Configuration
+Baseline, how it is implemented and how it should be used.</p>
+<p>It provides the necessary definition and information for the
+preparation of any reprocessing campaign using the last IPF versions
+available today.</p>
+<p>The generic table in annex (called “All_ADF”) provides the list of
+all types of auxiliary files needed for the Sentinel missions. For each
+type, the table provides the unit dependency (yes or no), the usage (in
+processor level 0 or 1 or 2) and the variability (static of dynamic). A
+static type is rarely updated while a dynamic type is often updated.</p>
+<p>Then a Reprocessing Configuration Baseline table provides the list of
+exact auxiliary files to be used with the last processor applicable
+version with their application time, for each sentinel unit.</p>
 <p>This table is made of the following columns:</p>
 <ul>
 <li><p>The satellite unit: A or B</p></li>
-<li><p>The application period: period of sensing time where the given auxiliary files are applicable</p></li>
-<li><p>The product level and type: the product type which can be generated using the given auxiliary files</p></li>
+<li><p>The application period: period of sensing time where the given
+auxiliary files are applicable</p></li>
+<li><p>The product level and type: the product type which can be
+generated using the given auxiliary files</p></li>
 <li><p>The processor (IPF) version considered for this table</p></li>
-<li><p>The auxiliary type and the auxiliary file name which are applicable</p></li>
+<li><p>The auxiliary type and the auxiliary file name which are
+applicable</p></li>
 </ul>
-<p>It takes into account any changes in time affecting the instrument configuration or on-board calibration, the potential enhancements in the auxiliary files, the potential changes related to the processor evolutions, etc, in order to ensure the ingestion of the applicable auxiliary files for the last operational IPF version.</p>
-<p>The Application Programming Interface (API) allows the query and retrieval of the corresponding list of auxiliary files given a mission satellite unit, sensing time period and product type to be generated.</p>
-<p>The API access is protected and uses an authorization protocol with generic mail address.</p>
+<p>It takes into account any changes in time affecting the instrument
+configuration or on-board calibration, the potential enhancements in the
+auxiliary files, the potential changes related to the processor
+evolutions, etc, in order to ensure the ingestion of the applicable
+auxiliary files for the last operational IPF version.</p>
+<p>The Application Programming Interface (API) allows the query and
+retrieval of the corresponding list of auxiliary files given a mission
+satellite unit, sensing time period and product type to be
+generated.</p>
+<p>The API access is protected and uses an authorization protocol with
+generic mail address.</p>
 <p>The users connect to the API according to [AD-2].</p>
-<p>The main focus is on the set of the auxiliary (ADF) files for the mission.</p>
-<p>The general reprocessing rules agreed with ESA are the following ones:</p>
+<p>The main focus is on the set of the auxiliary (ADF) files for the
+mission.</p>
+<p>The general reprocessing rules agreed with ESA are the following
+ones:</p>
 <ul>
-<li><p>CAL data must correspond to the real instrument configuration and calibration status at the considered sensing time.</p></li>
-<li><p>IERS data must be as close as possible to the considered sensing time (less than one week before).</p></li>
-<li><p>ECMWF data should come from the same reanalysis version for all the reprocessing coherency (no forecast needed).</p></li>
-<li><p>Processing parameters should be the best ones and the same version for all the reprocessing coherency.</p></li>
-<li><p>HKTM data should be the last version correcting any previous temporary anomalies or data gaps.</p></li>
-<li><p>Orbit data must be the best quality (precise from the Copernicus POD service).</p></li>
-<li><p>Black orbits should be listed and not reprocessed because these orbits suffered from anomalies in raw data which are impossible to correct.</p></li>
+<li><p>CAL data must correspond to the real instrument configuration and
+calibration status at the considered sensing time.</p></li>
+<li><p>IERS data must be as close as possible to the considered sensing
+time (less than one week before).</p></li>
+<li><p>ECMWF data should come from the same reanalysis version for all
+the reprocessing coherency (no forecast needed).</p></li>
+<li><p>Processing parameters should be the best ones and the same
+version for all the reprocessing coherency.</p></li>
+<li><p>HKTM data should be the last version correcting any previous
+temporary anomalies or data gaps.</p></li>
+<li><p>Orbit data must be the best quality (precise from the Copernicus
+POD service).</p></li>
+<li><p>Black orbits should be listed and not reprocessed because these
+orbits suffered from anomalies in raw data which are impossible to
+correct.</p></li>
 </ul>
-<p>The last available IPF versions are provided in the following table:</p>
+<p>The last available IPF versions are provided in the following
+table:</p>
 <table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 31%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>mission</th>
@@ -168,28 +267,65 @@
 </tr>
 </tbody>
 </table>
-<p>These processing versions are considered as the applicable baselines for this activity.</p>
-<p>Any new IPF version official release will trigger a new version of this User Manual.</p>
-<p>SR_2_PCPPAX (from CPOD) is used but SR_2_PCPSAX (from CNES) is not.</p>
-<p>SR___POEPAX (from CPOD) is used but SR___POESAX (from CNES) is not.</p>
-<p>Note that SR___CHDRAX files are not available and not necessary for now.</p>
-<p>The following dynamic ADF types are not used for reprocessing activity:</p>
-<p>ROE_AX, MGNPAX, MGNSAX, PMPPAX, PMPSAX, MDO_AX, POESAX, PCPSAX, PMO_AX, PGI_AX</p>
+<p>These processing versions are considered as the applicable baselines
+for this activity.</p>
+<p>Any new IPF version official release will trigger a new version of
+this User Manual.</p>
+<p>SR_2_PCPPAX (from CPOD) is used but SR_2_PCPSAX (from CNES) is
+not.</p>
+<p>SR___POEPAX (from CPOD) is used but SR___POESAX (from CNES) is
+not.</p>
+<p>Note that SR___CHDRAX files are not available and not necessary for
+now.</p>
+<p>The following dynamic ADF types are not used for reprocessing
+activity:</p>
+<p>ROE_AX, MGNPAX, MGNSAX, PMPPAX, PMPSAX, MDO_AX, POESAX, PCPSAX,
+PMO_AX, PGI_AX</p>
 <p>List of gaps in dynamic ADF:</p>
-<p>gap: S3A_SR___POEPAX_20170113T215942_20170114T235942_20170208T071436___________________POD_O_NT_001.SEN3.zip - S3A_SR___POEPAX_20170115T215942_20170116T235942_20170210T071647___________________POD_O_NT_001.SEN3.zip : 2017-01-14T23:59:42 - 2017-01-15T21:59:42 not covered</p>
-<p>gap: S3__SR_2_RMO_AX_20160324T180000_20160324T180000_20160414T114751___________________CNE_O_NT_001.SEN3.zip - S3__SR_2_RMO_AX_20160330T180000_20160330T180000_20160420T114742___________________CNE_O_NT_001.SEN3.zip : 2016-03-25T00:00 - 2016-03-30T12:00 not covered</p>
-<p>For POL_AX and USO_AX, the files are incremental: each new file contains the previous file plus new information. The validity start date is always the same; only the validity stop date is incremented. Therefore, the completeness check is between the two consecutive validity stop dates and the difference must be less or equal to the frequency interval.</p>
-<p>For RMO_AX, the validity period is null (validity start date equals validity stop date).</p>
-<p>Based on S3IPF.ICD.008.2 Interface Control Document - SRAL Level 2 Land, +/- 6hours have to be applied on validity start and stop; this information is used for the completeness check, in order to overcome the null validity period.</p>
-<p>An example of Baseline Table is provided on the following page (Baseline S3 SRAL).</p>
-<p>In case of MWR reprocessing only (without SRAL), only the ADF with MW_1, MW__ and AX__ are necessary.</p>
-<p>The contrary is not true: MWR ADF are necessary for SRAL reprocessing action.</p>
+<p>gap:
+S3A_SR___POEPAX_20170113T215942_20170114T235942_20170208T071436___________________POD_O_NT_001.SEN3.zip
+-
+S3A_SR___POEPAX_20170115T215942_20170116T235942_20170210T071647___________________POD_O_NT_001.SEN3.zip
+: 2017-01-14T23:59:42 - 2017-01-15T21:59:42 not covered</p>
+<p>gap:
+S3__SR_2_RMO_AX_20160324T180000_20160324T180000_20160414T114751___________________CNE_O_NT_001.SEN3.zip
+-
+S3__SR_2_RMO_AX_20160330T180000_20160330T180000_20160420T114742___________________CNE_O_NT_001.SEN3.zip
+: 2016-03-25T00:00 - 2016-03-30T12:00 not covered</p>
+<p>For POL_AX and USO_AX, the files are incremental: each new file
+contains the previous file plus new information. The validity start date
+is always the same; only the validity stop date is incremented.
+Therefore, the completeness check is between the two consecutive
+validity stop dates and the difference must be less or equal to the
+frequency interval.</p>
+<p>For RMO_AX, the validity period is null (validity start date equals
+validity stop date).</p>
+<p>Based on S3IPF.ICD.008.2 Interface Control Document - SRAL Level 2
+Land, +/- 6hours have to be applied on validity start and stop; this
+information is used for the completeness check, in order to overcome the
+null validity period.</p>
+<p>An example of Baseline Table is provided on the following page
+(Baseline S3 SRAL).</p>
+<p>In case of MWR reprocessing only (without SRAL), only the ADF with
+MW_1, MW__ and AX__ are necessary.</p>
+<p>The contrary is not true: MWR ADF are necessary for SRAL reprocessing
+action.</p>
 <table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 9%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 8%" />
+<col style="width: 54%" />
+<col style="width: 12%" />
+<col style="width: 1%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Unit</strong></th>
-<th><strong>Application Period </strong></th>
-<th><strong>Product Level </strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Level</strong></th>
 <th><strong>Product Type</strong></th>
 <th><strong>Auxiliary Type</strong></th>
 <th><strong>Auxiliary File</strong></th>
@@ -200,127 +336,139 @@
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>20160216T000000-20991231T235959</td>
+<td rowspan="18">20160216T000000-20991231T235959</td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_DNB_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_MON_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_NIR_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___BB2_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1&amp;2</td>
 <td>CAL and SRA</td>
 <td>SR___POEPAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___MA1_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___MA2_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_USO_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA1LAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA1SAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA2CAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA2KAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>***</td>
@@ -330,177 +478,194 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_RMO_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_POL_AX</td>
-<td><strong>G</strong>etReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td><strong>G</strong>etReproBaselineListForPeriod(Mission=’S3SRAL’,
+“Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_RGI_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_SIC_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
 <td>L1&amp;2</td>
 <td>LAN</td>
 <td>SR_2_PCPPAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’, SensingTimeStart=’2016-02-16T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’A’,
+SensingTimeStart=’2016-02-16T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20180425T000000-20991231T235959</td>
+<td rowspan="18">20180425T000000-20991231T235959</td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_DNB_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_MON_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and MWR</td>
 <td>MW_1_NIR_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3MWR’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>MWR-6.11</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___BB2_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1&amp;2</td>
 <td>CAL and SRA</td>
 <td>SR___POEPAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___MA1_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>AX___MA2_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_USO_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA1LAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA1SAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA2CAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1</td>
 <td>CAL and SRA</td>
 <td>SR_1_CA2KAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L1’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>***</td>
@@ -510,51 +675,56 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_RMO_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_POL_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_RGI_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
 <td>L2</td>
 <td>LAN</td>
 <td>SR_2_SIC_AX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
 <td>L1&amp;2</td>
 <td>LAN</td>
 <td>SR_2_PCPPAX</td>
-<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’, SensingTimeStart=’2018-04-25T00:00:00.000Z’, SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
+<td>GetReproBaselineListForPeriod(Mission=’S3SRAL’, “Unit=’B’,
+SensingTimeStart=’2018-04-25T00:00:00.000Z’,
+SensingTimeStop=’2100-01-01T00:00:00.000Z’, ProductLevel=’L2’)</td>
 <td>SRAL-6.19</td>
 <td></td>
 </tr>
@@ -676,6 +846,14 @@
 <p>S3A_SR_2_IC10AX_20160216T000000_20991231T235959_20161010T120000___________________MPC_O_AL_002.SEN3</p>
 <h1 id="annex-all-adf-table">Annex: All ADF Table</h1>
 <table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 4%" />
+<col style="width: 3%" />
+<col style="width: 5%" />
+<col style="width: 4%" />
+<col style="width: 76%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Type</strong></th>
@@ -709,7 +887,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Land/Sea mask classification on the earth surface as Land/Sea or coastline, land ice or lakes in IPF L1 and L2</td>
+<td>Land/Sea mask classification on the earth surface as Land/Sea or
+coastline, land ice or lakes in IPF L1 and L2</td>
 </tr>
 <tr class="even">
 <td>SR_2_RMO_AX</td>
@@ -717,7 +896,11 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Restituted MOG2D data files generated by SALP for the generation of the STC products. MOG2D allows IGDR products to integrate both corrections of the high frequency part of the ocean variability and the low frequency part of the inverse barometer effect. The barotropic corrections are on a regular Cartesian grid 0.25º x 0.25º.</td>
+<td>Restituted MOG2D data files generated by SALP for the generation of
+the STC products. MOG2D allows IGDR products to integrate both
+corrections of the high frequency part of the ocean variability and the
+low frequency part of the inverse barometer effect. The barotropic
+corrections are on a regular Cartesian grid 0.25º x 0.25º.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_POL_AX</td>
@@ -725,7 +908,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Pole location data files generated by SALP. Each file contains the instantaneous pole location used for polar tide computation in IPF L2.</td>
+<td>Pole location data files generated by SALP. Each file contains the
+instantaneous pole location used for polar tide computation in IPF
+L2.</td>
 </tr>
 <tr class="even">
 <td>SR_2_RGI_AX</td>
@@ -733,7 +918,10 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>Y</td>
-<td>Along track GIM ionospheric corrections generated by SALP and used for the generation of the STC/NTC products. Each file contains the nadir ionospheric correction to be applied to the altimeter range on Ku band in IPF L2.</td>
+<td>Along track GIM ionospheric corrections generated by SALP and used
+for the generation of the STC/NTC products. Each file contains the nadir
+ionospheric correction to be applied to the altimeter range on Ku band
+in IPF L2.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_EOT1AX</td>
@@ -741,7 +929,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Coefficients map for the diurnal and semi diurnal elastic ocean tide calculation, including harmonic coefficients for the principal tide waves from model GOT4.8 for solution 1 in IPF L2 processor</td>
+<td>Coefficients map for the diurnal and semi diurnal elastic ocean tide
+calculation, including harmonic coefficients for the principal tide
+waves from model GOT4.8 for solution 1 in IPF L2 processor</td>
 </tr>
 <tr class="even">
 <td>SR_2_EOT2AX</td>
@@ -749,7 +939,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Coefficients map for the diurnal and semi diurnal elastic ocean tide calculation, including harmonic coefficients for the principal tide waves from model FES2004 for solution 2 in IPF L2 processor</td>
+<td>Coefficients map for the diurnal and semi diurnal elastic ocean tide
+calculation, including harmonic coefficients for the principal tide
+waves from model FES2004 for solution 2 in IPF L2 processor</td>
 </tr>
 <tr class="odd">
 <td>SR_2_LT1_AX</td>
@@ -757,7 +949,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Coefficients map for the tidal loading effect calculation, including harmonic coefficients for the principal tide waves from model GOT4.8 for solution 1 in IPF L2 processor</td>
+<td>Coefficients map for the tidal loading effect calculation, including
+harmonic coefficients for the principal tide waves from model GOT4.8 for
+solution 1 in IPF L2 processor</td>
 </tr>
 <tr class="even">
 <td>SR_2_LT2_AX</td>
@@ -765,7 +959,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Coefficients map for the tidal loading effect calculation, including harmonic coefficients for the principal tide waves from model FES2004 for solution 2 in IPF L2 processor</td>
+<td>Coefficients map for the tidal loading effect calculation, including
+harmonic coefficients for the principal tide waves from model FES2004
+for solution 2 in IPF L2 processor</td>
 </tr>
 <tr class="odd">
 <td>SR_2_LNEQAX</td>
@@ -773,7 +969,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Coefficients map for long period ocean tide calculation, including harmonic coefficients to the four dynamical waves of the FES2004 model for IPF L2</td>
+<td>Coefficients map for long period ocean tide calculation, including
+harmonic coefficients to the four dynamical waves of the FES2004 model
+for IPF L2</td>
 </tr>
 <tr class="even">
 <td>SR_2_MSS1AX</td>
@@ -805,7 +1003,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Bathymetry/Topography from the Global Digital Elevation Model ACE2, with a 30 arcseconds resolution.</td>
+<td>Bathymetry/Topography from the Global Digital Elevation Model ACE2,
+with a 30 arcseconds resolution.</td>
 </tr>
 <tr class="even">
 <td>SR_2_WNDLAX</td>
@@ -813,7 +1012,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Wind tables for wind speed values from Abdala, 2007. The format is identical for LRM and SAR modes.</td>
+<td>Wind tables for wind speed values from Abdala, 2007. The format is
+identical for LRM and SAR modes.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_WNDSAX</td>
@@ -821,7 +1021,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Wind tables for wind speed values from Abdala, 2007. The format is identical for LRM and SAR modes.</td>
+<td>Wind tables for wind speed values from Abdala, 2007. The format is
+identical for LRM and SAR modes.</td>
 </tr>
 <tr class="even">
 <td>SR_2_SIGLAX</td>
@@ -829,7 +1030,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Expected Ku-band sigma0 tables. The format is identical for LRM and SAR modes.</td>
+<td>Expected Ku-band sigma0 tables. The format is identical for LRM and
+SAR modes.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_SIGSAX</td>
@@ -837,7 +1039,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Expected Ku-band sigma0 tables. The format is identical for LRM and SAR modes.</td>
+<td>Expected Ku-band sigma0 tables. The format is identical for LRM and
+SAR modes.</td>
 </tr>
 <tr class="even">
 <td>SR_2_SET_AX</td>
@@ -845,7 +1048,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Cartwright and Edden tide potential amplitudes for the solid earth tide and the equilibrium long period ocean tide height calculation</td>
+<td>Cartwright and Edden tide potential amplitudes for the solid earth
+tide and the equilibrium long period ocean tide height calculation</td>
 </tr>
 <tr class="odd">
 <td>SR_2_SSM_AX</td>
@@ -861,7 +1065,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Map of the slopes of the MSS/geoid with respect to the ellipsoid</td>
+<td>Map of the slopes of the MSS/geoid with respect to the
+ellipsoid</td>
 </tr>
 <tr class="odd">
 <td>SR_2_CP00AX</td>
@@ -869,7 +1074,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Climatological pressure grids (4 files) with climatological sea-level pressure on a cartesian grid, for each of the twelve months of the year</td>
+<td>Climatological pressure grids (4 files) with climatological
+sea-level pressure on a cartesian grid, for each of the twelve months of
+the year</td>
 </tr>
 <tr class="even">
 <td>SR_2_CP06AX</td>
@@ -877,7 +1084,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Climatological pressure grids (4 files) with climatological sea-level pressure on a cartesian grid, for each of the twelve months of the year</td>
+<td>Climatological pressure grids (4 files) with climatological
+sea-level pressure on a cartesian grid, for each of the twelve months of
+the year</td>
 </tr>
 <tr class="odd">
 <td>SR_2_CP12AX</td>
@@ -885,7 +1094,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Climatological pressure grids (4 files) with climatological sea-level pressure on a cartesian grid, for each of the twelve months of the year</td>
+<td>Climatological pressure grids (4 files) with climatological
+sea-level pressure on a cartesian grid, for each of the twelve months of
+the year</td>
 </tr>
 <tr class="even">
 <td>SR_2_CP18AX</td>
@@ -893,7 +1104,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Climatological pressure grids (4 files) with climatological sea-level pressure on a cartesian grid, for each of the twelve months of the year</td>
+<td>Climatological pressure grids (4 files) with climatological
+sea-level pressure on a cartesian grid, for each of the twelve months of
+the year</td>
 </tr>
 <tr class="odd">
 <td>SR_2_S1AMAX</td>
@@ -933,7 +1146,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Mean Dynamic Topography and variance values. The model used is CNES-CLS-09.</td>
+<td>Mean Dynamic Topography and variance values. The model used is
+CNES-CLS-09.</td>
 </tr>
 <tr class="even">
 <td>SR_2_SHD_AX</td>
@@ -941,7 +1155,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Distance to shore on a grid in a netCDF file with a 1/16º resolution</td>
+<td>Distance to shore on a grid in a netCDF file with a 1/16º
+resolution</td>
 </tr>
 <tr class="odd">
 <td>SR_2_SSBLAX</td>
@@ -949,7 +1164,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>Y</td>
-<td>SSB corrections for LRM mode, with values of the Sea State Bias for Ku and C bands. The format is identical for both LRM and SAR modes.</td>
+<td>SSB corrections for LRM mode, with values of the Sea State Bias for
+Ku and C bands. The format is identical for both LRM and SAR modes.</td>
 </tr>
 <tr class="even">
 <td>SR_2_SSBSAX</td>
@@ -957,7 +1173,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>Y</td>
-<td>SSB corrections for SAR mode, with values of the Sea State Bias for Ku and C bands. The format is identical for both LRM and SAR modes.</td>
+<td>SSB corrections for SAR mode, with values of the Sea State Bias for
+Ku and C bands. The format is identical for both LRM and SAR modes.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_SDMMAX</td>
@@ -965,7 +1182,10 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Snow depth climatology from the National Snow and Ice Data Centre (NSIDC), processed by UCL for the period Jan 1994 to Dec 2002, to create 12 files containing gridded snow depth, one for each calendar month MM=01,…,12</td>
+<td>Snow depth climatology from the National Snow and Ice Data Centre
+(NSIDC), processed by UCL for the period Jan 1994 to Dec 2002, to create
+12 files containing gridded snow depth, one for each calendar month
+MM=01,…,12</td>
 </tr>
 <tr class="even">
 <td>SR_2_SIMMAX</td>
@@ -973,7 +1193,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Sea Ice concentration climatology derived from SSM/I daily brightness temperatures. One file per month (MM=01,…,12) from the median concentration over 1994 - 2002.</td>
+<td>Sea Ice concentration climatology derived from SSM/I daily
+brightness temperatures. One file per month (MM=01,…,12) from the median
+concentration over 1994 - 2002.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_SIC_AX</td>
@@ -989,7 +1211,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Seasonal SST grids covering -60º to +60º latitude and 0º to 358º longitude, with 2º resolution.</td>
+<td>Seasonal SST grids covering -60º to +60º latitude and 0º to 358º
+longitude, with 2º resolution.</td>
 </tr>
 <tr class="odd">
 <td>SR_2_LRC_AX</td>
@@ -997,7 +1220,10 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Lapse rate climatology table over -60º to +60º in latitude and 0º to 360º in longitude, with 1º resolution. The Gama parameter (unit is K/km) is computed through a linear fit of the temperature decrease rate with altitude (between surface and 800 mbar level) from 3D ECMWF fields.</td>
+<td>Lapse rate climatology table over -60º to +60º in latitude and 0º to
+360º in longitude, with 1º resolution. The Gama parameter (unit is K/km)
+is computed through a linear fit of the temperature decrease rate with
+altitude (between surface and 800 mbar level) from 3D ECMWF fields.</td>
 </tr>
 <tr class="even">
 <td>SR_2_SFL_AX</td>
@@ -1005,7 +1231,10 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>Seasonal freezing level table over -70º to +70º in latitude, with 2.5º of resolution and 0º to 360º in longitude, with 5º of resolution. The freezing level parameter is computed from monthly tables provided by IFREMER (Tournadre).</td>
+<td>Seasonal freezing level table over -70º to +70º in latitude, with
+2.5º of resolution and 0º to 360º in longitude, with 5º of resolution.
+The freezing level parameter is computed from monthly tables provided by
+IFREMER (Tournadre).</td>
 </tr>
 <tr class="odd">
 <td>SR_2_FLT_AX</td>
@@ -1029,7 +1258,9 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>Y</td>
-<td>coastal configuration type file, in netCDF, giving information about the geographical situation of given point, taking into account the surrounding area</td>
+<td>coastal configuration type file, in netCDF, giving information about
+the geographical situation of given point, taking into account the
+surrounding area</td>
 </tr>
 <tr class="even">
 <td>SR_2_SURFAX</td>
@@ -1037,7 +1268,8 @@
 <td>S3SRAL</td>
 <td>L2 LAN</td>
 <td>N</td>
-<td>surface classification mask from combination of GlobCover and MODIS data giving classification among 7 different classes</td>
+<td>surface classification mask from combination of GlobCover and MODIS
+data giving classification among 7 different classes</td>
 </tr>
 <tr class="odd">
 <td>SR___POEPAX</td>
@@ -1061,7 +1293,9 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA+L2 LAN</td>
 <td>Y</td>
-<td>instrumental characterisation (nominal path) including platform data used to reference altimeter range to the platform COG and to provide mispointing angle</td>
+<td>instrumental characterisation (nominal path) including platform data
+used to reference altimeter range to the platform COG and to provide
+mispointing angle</td>
 </tr>
 <tr class="even">
 <td>SR___CHDRAX</td>
@@ -1069,7 +1303,9 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA+L2 LAN</td>
 <td>Y</td>
-<td>instrumental characterisation (redundant path) including platform data used to reference altimeter range to the platform COG and to provide mispointing angle</td>
+<td>instrumental characterisation (redundant path) including platform
+data used to reference altimeter range to the platform COG and to
+provide mispointing angle</td>
 </tr>
 <tr class="odd">
 <td>SR_1_CA1LAX</td>
@@ -1077,7 +1313,8 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA</td>
 <td>Y</td>
-<td>CAL1 LRM Long Term Monitoring parameters from internal calibration</td>
+<td>CAL1 LRM Long Term Monitoring parameters from internal
+calibration</td>
 </tr>
 <tr class="even">
 <td>SR_1_CA1SAX</td>
@@ -1085,7 +1322,8 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA</td>
 <td>Y</td>
-<td>CAL1 SAR Long Term Monitoring parameters from internal calibration</td>
+<td>CAL1 SAR Long Term Monitoring parameters from internal
+calibration</td>
 </tr>
 <tr class="odd">
 <td>SR_1_CA2KAX</td>
@@ -1093,7 +1331,8 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA</td>
 <td>Y</td>
-<td>CAL2 Ku-band Long Term Monitoring parameters from internal calibration</td>
+<td>CAL2 Ku-band Long Term Monitoring parameters from internal
+calibration</td>
 </tr>
 <tr class="even">
 <td>SR_1_CA2CAX</td>
@@ -1101,7 +1340,8 @@
 <td>S3SRAL</td>
 <td>L1 CAL/SRA</td>
 <td>Y</td>
-<td>CAL2 C-band Long Term Monitoring parameters from internal calibration</td>
+<td>CAL2 C-band Long Term Monitoring parameters from internal
+calibration</td>
 </tr>
 <tr class="odd">
 <td>SR_1_CONCAX</td>
@@ -1269,7 +1509,8 @@
 <td>S3MWR</td>
 <td>L1 CAL/MWR</td>
 <td>Y</td>
-<td>instrumental characterisation and calibration data (nominal path)</td>
+<td>instrumental characterisation and calibration data (nominal
+path)</td>
 </tr>
 <tr class="even">
 <td>MW___CHDRAX</td>
@@ -1277,7 +1518,8 @@
 <td>S3MWR</td>
 <td>L1 CAL/MWR</td>
 <td>Y</td>
-<td>instrumental characterisation and calibration data (redundant path)</td>
+<td>instrumental characterisation and calibration data (redundant
+path)</td>
 </tr>
 <tr class="odd">
 <td>MW___STD_AX</td>
@@ -1293,7 +1535,8 @@
 <td>S3MWR</td>
 <td>L1 CAL/MWR</td>
 <td>Y</td>
-<td>internal calibration and long term monitoring parameters for NIR calibration mode</td>
+<td>internal calibration and long term monitoring parameters for NIR
+calibration mode</td>
 </tr>
 <tr class="odd">
 <td>MW_1_DNB_AX</td>
@@ -1301,7 +1544,8 @@
 <td>S3MWR</td>
 <td>L1 CAL/MWR</td>
 <td>Y</td>
-<td>internal calibration and long term monitoring parameters for Dicke non-balanced calibration mode</td>
+<td>internal calibration and long term monitoring parameters for Dicke
+non-balanced calibration mode</td>
 </tr>
 <tr class="even">
 <td>MW_1_MON_AX</td>
@@ -1316,7 +1560,8 @@
 <div class="footer-strip">
   <div class="container">
     <div class="row">
-      <div class="col-11" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
+      <div class="col-3" style="color: white"><a href="http://github.com/reprocessing-reference/ " style="color:white" target="_blank">Project's Github</a></div>
+      <div class="col-7" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
       <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
       </div>
   </div>

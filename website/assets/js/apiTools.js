@@ -376,7 +376,9 @@ var getToken = function() {
                 failureCallback(xhr.status)
             }
         };
-        data = "grant_type=password&username=frederic.ligeard@csgroup.eu&password=NsxtxfE96nfGKvR&client_id=reprocessing-preparation"
+        //data = "grant_type=password&username=frederic.ligeard@csgroup.eu&password=NsxtxfE96nfGKvR&client_id=reprocessing-preparation"
+        data = "grant_type=password&username=copernicus.reprocessing@csgroup.eu&password=DinBKZ2WiDNqyFM&client_id=reprocessing-preparation"
+        
         xhr.send(data)
     })
 }
@@ -726,6 +728,7 @@ var populateSelects = function(refresh = true) {
 }
 /**
  * Populate selects of mision and product types
+ * ==> WHY ???
  * @param {*} refresh 
  * @returns 
  */
@@ -762,12 +765,12 @@ var prefetchReprocessingDataBaseline = function() {
     return new Promise((successCallback, failureCallback) => {
         currentQuery = false
         getToken()
-        .then(result => populateSelectsData(false))
-        //.then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductLevels")))
-        //.then(result => updateAuxTypes(result))
-        //.then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductTypes")))
-        //.then(result => updateAuxTypes(result))
-        //.then(result => populateSelects(false))
+        //.then(result => populateSelectsData(false))
+        .then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductLevels")))
+        .then(result => updateAuxTypes(result))
+        .then(result => getReprocessingAuxTypes(createFilter(null,null,null,null,null,"ProductTypes")))
+        .then(result => updateAuxTypes(result))
+        .then(result => populateSelects(false))
         .then(result => initTableReprocessingDataBaseline('table_id') )
         .then(successCallback())
     })

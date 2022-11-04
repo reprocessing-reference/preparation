@@ -5,22 +5,41 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>...</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<p><img src="./media/media/image1.png" style="width:2.09375in;height:0.80694in" /> <img src="./media/media/image2.jpg" style="width:2.17352in;height:0.80198in" /></p>
+<p><img src="./media/media/image1.png"
+style="width:2.09375in;height:0.80694in" /> <img
+src="./media/media/image2.jpg"
+style="width:2.17352in;height:0.80198in" /></p>
 <p>RRPP-TN-0006-CS</p>
 <p>COPERNICUS - REPROCESSING REFERENCE PACKAGE PREPARATION</p>
-<p><span class="underline">Configuration Baseline User Manual For Sentinel-1-SAR</span></p>
+<p><u>Configuration Baseline User Manual For Sentinel-1-SAR</u></p>
 <p>11 January 2022</p>
 <p>Document Change Record</p>
 <table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
 <tbody>
 <tr class="odd">
 <td>Version</td>
@@ -65,105 +84,191 @@
 </tbody>
 </table>
 <p>Table of Content</p>
-<p><a href="#context-and-scope">1. Context and Scope 3</a></p>
-<p><a href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">2. Presentation of the Reprocessing Configuration Baseline Reference and User Guide 4</a></p>
-<p><a href="#annex-all-adf-table">3. Annex: All ADF Table 12</a></p>
+<p><a href="#context-and-scope">1. Context and Scope <a
+href="#context-and-scope">3</a></a></p>
+<p><a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">2.
+Presentation of the Reprocessing Configuration Baseline Reference and
+User Guide <a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">4</a></a></p>
+<p><a href="#annex-all-adf-table">3. Annex: All ADF Table <a
+href="#annex-all-adf-table">12</a></a></p>
 <p>Reference Documents for Sentinel-1</p>
 <p>Sentinel-1 Product Unit Definition and Metadata ICD_v1.3.pdf</p>
 <p>Sentinel-1_IPF_Auxiliary_Product_Specification.pdf</p>
 <p>[S1-MA-ACS-GS-0430] SD-10-1100-4 [SUM-ACQ] v4.6.0.pdf</p>
 <p>[S1-RS-MDA-52-7440] Sentinel-1-Product-Definition.pdf</p>
 <p>[S1-RS-MDA-52-7441] Sentinel-1-Product-Specification.pdf</p>
-<p>[S1PD.SP.00110.ASTR] Sentinel-1_Level-0_Product_Format_Specification.pdf</p>
+<p>[S1PD.SP.00110.ASTR]
+Sentinel-1_Level-0_Product_Format_Specification.pdf</p>
 <p>[SEN-RS-52-7454] 1-10-IPF_ICD.pdf</p>
 <p>Applicable Documents</p>
-<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API ICD</p>
+<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API
+ICD</p>
 <h1 id="context-and-scope">Context and Scope</h1>
-<p>The Reprocessing Reference Package allows the preparation of the future Sentinel-1/2/3 reprocessing activities by ensuring that all information required to reprocess past instrumental data is available and ready to use in the frame of a reprocessing operational service.</p>
+<p>The Reprocessing Reference Package allows the preparation of the
+future Sentinel-1/2/3 reprocessing activities by ensuring that all
+information required to reprocess past instrumental data is available
+and ready to use in the frame of a reprocessing operational service.</p>
 <p>The Reprocessing Preparation Package is composed of :</p>
-<p>- a summary Reprocessing Configuration Baseline and an API to query the Reprocessing Configuration Baseline based on the mission satellite unit, sensing time, IPF version to be used, product level and type to be generated,</p>
-<p>- an interface delivery point on a cloud environment providing access to all auxiliary files required for the reprocessing operation,</p>
-<p>- a detailed Reprocessing Data Baseline and an API to retrieve the auxiliary files to be used for a given time period.</p>
-<p>The processing chains of Level-1&amp;2 products use a set of auxiliary files to ensure that the generated products meet the quality and calibration/validation specifications.</p>
-<p>The auxiliary files used in a reprocessing operation include typically:</p>
+<p>- a summary Reprocessing Configuration Baseline and an API to query
+the Reprocessing Configuration Baseline based on the mission satellite
+unit, sensing time, IPF version to be used, product level and type to be
+generated,</p>
+<p>- an interface delivery point on a cloud environment providing access
+to all auxiliary files required for the reprocessing operation,</p>
+<p>- a detailed Reprocessing Data Baseline and an API to retrieve the
+auxiliary files to be used for a given time period.</p>
+<p>The processing chains of Level-1&amp;2 products use a set of
+auxiliary files to ensure that the generated products meet the quality
+and calibration/validation specifications.</p>
+<p>The auxiliary files used in a reprocessing operation include
+typically:</p>
 <ul>
-<li><p>Static auxiliary files, which are not instrument or time dependent. They may be updated rarely in case a new version becomes available.</p></li>
-<li><p>Processor auxiliary files, which are generated by the Copernicus/ESA Ground Segment. They are linked to a specific instrument configuration or to an enhanced set of calibration and/or validation information. They are updated on a case by case basis.</p></li>
-<li><p>External auxiliary files, which are generated based on information retrieved from external sources, e.g. from meteo centres. These files are updated frequently, up to several times per day.</p></li>
-<li><p>Orbit auxiliary files, which are updated frequently, up to once per orbit.</p></li>
+<li><p>Static auxiliary files, which are not instrument or time
+dependent. They may be updated rarely in case a new version becomes
+available.</p></li>
+<li><p>Processor auxiliary files, which are generated by the
+Copernicus/ESA Ground Segment. They are linked to a specific instrument
+configuration or to an enhanced set of calibration and/or validation
+information. They are updated on a case by case basis.</p></li>
+<li><p>External auxiliary files, which are generated based on
+information retrieved from external sources, e.g. from meteo centres.
+These files are updated frequently, up to several times per
+day.</p></li>
+<li><p>Orbit auxiliary files, which are updated frequently, up to once
+per orbit.</p></li>
 </ul>
-<p>The reprocessing operation is performed with an upgraded version of the data processor and a corresponding set of auxiliary files.</p>
-<h1 id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation of the Reprocessing Configuration Baseline Reference and User Guide</h1>
-<p>This document is the User Manual of the Reprocessing Configuration Baseline for Sentinel-1 SAR mission.</p>
-<p>It gives information on the content of the Reprocessing Configuration Baseline, how it is implemented and how it should be used.</p>
-<p>It provides the necessary definition and information for the preparation of any reprocessing campaign using the last IPF versions available today.</p>
-<p>The generic table in annex (called “All_ADF”) provides the list of all types of auxiliary files needed for the Sentinel missions. For each type, the table provides the unit dependency (yes or no), the usage (in processor level 0 or 1 or 2) and the variability (static of dynamic). A static type is rarely updated while a dynamic type is often updated.</p>
-<p>Then a Reprocessing Configuration Baseline table provides the list of exact auxiliary files to be used with the last processor applicable version with their application time, for each sentinel unit.</p>
+<p>The reprocessing operation is performed with an upgraded version of
+the data processor and a corresponding set of auxiliary files.</p>
+<h1
+id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation
+of the Reprocessing Configuration Baseline Reference and User Guide</h1>
+<p>This document is the User Manual of the Reprocessing Configuration
+Baseline for Sentinel-1 SAR mission.</p>
+<p>It gives information on the content of the Reprocessing Configuration
+Baseline, how it is implemented and how it should be used.</p>
+<p>It provides the necessary definition and information for the
+preparation of any reprocessing campaign using the last IPF versions
+available today.</p>
+<p>The generic table in annex (called “All_ADF”) provides the list of
+all types of auxiliary files needed for the Sentinel missions. For each
+type, the table provides the unit dependency (yes or no), the usage (in
+processor level 0 or 1 or 2) and the variability (static of dynamic). A
+static type is rarely updated while a dynamic type is often updated.</p>
+<p>Then a Reprocessing Configuration Baseline table provides the list of
+exact auxiliary files to be used with the last processor applicable
+version with their application time, for each sentinel unit.</p>
 <p>This table is made of the following columns:</p>
 <ul>
 <li><p>The satellite unit: A or B</p></li>
-<li><p>The application period: period of sensing time where the given auxiliary files are applicable</p></li>
-<li><p>The product level and type: the product type which can be generated using the given auxiliary files</p></li>
+<li><p>The application period: period of sensing time where the given
+auxiliary files are applicable</p></li>
+<li><p>The product level and type: the product type which can be
+generated using the given auxiliary files</p></li>
 <li><p>The processor (IPF) version considered for this table</p></li>
-<li><p>The auxiliary type and the auxiliary file name which are applicable</p></li>
+<li><p>The auxiliary type and the auxiliary file name which are
+applicable</p></li>
 </ul>
-<p>It takes into account any changes in time affecting the instrument configuration or on-board calibration, the potential enhancements in the auxiliary files, the potential changes related to the processor evolutions, etc, in order to ensure the ingestion of the applicable auxiliary files for the last operational IPF version.</p>
-<p>The Application Programming Interface (API) allows the query and retrieval of the corresponding list of auxiliary files given a mission satellite unit, sensing time period and product type to be generated.</p>
-<p>The API access is protected and uses an authorization protocol with generic mail address.</p>
+<p>It takes into account any changes in time affecting the instrument
+configuration or on-board calibration, the potential enhancements in the
+auxiliary files, the potential changes related to the processor
+evolutions, etc, in order to ensure the ingestion of the applicable
+auxiliary files for the last operational IPF version.</p>
+<p>The Application Programming Interface (API) allows the query and
+retrieval of the corresponding list of auxiliary files given a mission
+satellite unit, sensing time period and product type to be
+generated.</p>
+<p>The API access is protected and uses an authorization protocol with
+generic mail address.</p>
 <p>The users connect to the API according to [AD-01].</p>
-<p>The main focus is on the set of the auxiliary (ADF) files for Sentinel-1 mission.</p>
-<p>The general reprocessing rules agreed with ESA are the following ones:</p>
+<p>The main focus is on the set of the auxiliary (ADF) files for
+Sentinel-1 mission.</p>
+<p>The general reprocessing rules agreed with ESA are the following
+ones:</p>
 <ul>
-<li><p>CAL data must correspond to the real instrument configuration and calibration status at the considered sensing time.</p></li>
-<li><p>IERS data must be as close as possible to the considered sensing time (less than one week before).</p></li>
-<li><p>ECMWF data should come from the same reanalysis version for all the reprocessing coherency (no forecast needed).</p></li>
-<li><p>Processing parameters should be the best ones and the same version for all the reprocessing coherency.</p></li>
-<li><p>HKTM data should be the last version correcting any previous temporary anomalies or data gaps.</p></li>
-<li><p>Orbit data must be the best quality (precise for Sentinel-1 and Sentinel-3, restituted for Sentinel-2) from the Copernicus POD service.</p></li>
-<li><p>Black orbits should be listed and not reprocessed because these orbits suffered from anomalies in raw data which are impossible to correct.</p></li>
+<li><p>CAL data must correspond to the real instrument configuration and
+calibration status at the considered sensing time.</p></li>
+<li><p>IERS data must be as close as possible to the considered sensing
+time (less than one week before).</p></li>
+<li><p>ECMWF data should come from the same reanalysis version for all
+the reprocessing coherency (no forecast needed).</p></li>
+<li><p>Processing parameters should be the best ones and the same
+version for all the reprocessing coherency.</p></li>
+<li><p>HKTM data should be the last version correcting any previous
+temporary anomalies or data gaps.</p></li>
+<li><p>Orbit data must be the best quality (precise for Sentinel-1 and
+Sentinel-3, restituted for Sentinel-2) from the Copernicus POD
+service.</p></li>
+<li><p>Black orbits should be listed and not reprocessed because these
+orbits suffered from anomalies in raw data which are impossible to
+correct.</p></li>
 </ul>
-<p>The pages of https://qc.sentinel1.copernicus.eu/ provide most of necessary information about the IPF versions and the associated auxiliary files.</p>
+<p>The pages of https://qc.sentinel1.copernicus.eu/ provide most of
+necessary information about the IPF versions and the associated
+auxiliary files.</p>
 <p>The following auxiliary types are out of scope:</p>
 <table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>AUX_TIM</th>
-<th>Unavailable in cloud repository and ESA informed that it is not mandatory</th>
+<th>Unavailable in cloud repository and ESA informed that it is not
+mandatory</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>AUX_OBMEMC</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 <tr class="even">
 <td>AUX_RDB</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 <tr class="odd">
 <td>ASA_XCH</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 <tr class="even">
 <td>ASA_XCA</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 <tr class="odd">
 <td>ASA_INS</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 <tr class="even">
 <td>AUX_ECE</td>
-<td>Unavailable in cloud repository and ESA informed that it is replaced by AM[H/V]_ERRMAT_MPC</td>
+<td>Unavailable in cloud repository and ESA informed that it is replaced
+by AM[H/V]_ERRMAT_MPC</td>
 </tr>
 <tr class="odd">
 <td>AUX_RESATT</td>
-<td>Unavailable in cloud repository and ESA informed that it is not mandatory</td>
+<td>Unavailable in cloud repository and ESA informed that it is not
+mandatory</td>
 </tr>
 </tbody>
 </table>
-<p>The last available IPF versions are provided in the following table:</p>
+<p>The last available IPF versions are provided in the following
+table:</p>
 <table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 31%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>mission</th>
@@ -193,32 +298,71 @@
 </tr>
 </tbody>
 </table>
-<p>These processing versions are considered as the applicable baselines for this activity.</p>
-<p>Any new IPF version official release will trigger a new version of this User Manual.</p>
-<p>For the platform and the instrument configuration (ICID) at the time of the acquisition, the selection rule uses the last ADF generated for which the validity date is before the acquisition date. This rule applies to AUX_INS, AUX_CAL, AUX_PP1, AUX_PP2, AUX_SCS.</p>
+<p>These processing versions are considered as the applicable baselines
+for this activity.</p>
+<p>Any new IPF version official release will trigger a new version of
+this User Manual.</p>
+<p>For the platform and the instrument configuration (ICID) at the time
+of the acquisition, the selection rule uses the last ADF generated for
+which the validity date is before the acquisition date. This rule
+applies to AUX_INS, AUX_CAL, AUX_PP1, AUX_PP2, AUX_SCS.</p>
 <p>S1B ICID 1 was active at the beginning of the mission.</p>
-<p>In May 2019, a test was made with a new instrument configuration ICID 2 during two weeks.</p>
-<p>At the end of the testing period, the instrument configuration was rolled back to ICID 1.</p>
-<p>20190528T084300 is the date identifying the end of usage of ICID 2.</p>
+<p>In May 2019, a test was made with a new instrument configuration ICID
+2 during two weeks.</p>
+<p>At the end of the testing period, the instrument configuration was
+rolled back to ICID 1.</p>
+<p>20190528T084300 is the date identifying the end of usage of ICID
+2.</p>
 <p>The same test was performed on S1A in March 2019.</p>
-<p>The date of the rollback from ICID 7 to ICID 6 is 20190312T092500.</p>
-<p>This old configuration back into operation is not possible for the system. One solution could be to create new ADF with corresponding 2019 validity start: this is recommended in the S1 PDGS for the sake of consistency and clarity. For now, another solution is implemented in the system to support this anomaly: the concerned ADF are referenced twice, with their current validity start and with the 2019 reactivation dates.</p>
+<p>The date of the rollback from ICID 7 to ICID 6 is
+20190312T092500.</p>
+<p>This old configuration back into operation is not possible for the
+system. One solution could be to create new ADF with corresponding 2019
+validity start: this is recommended in the S1 PDGS for the sake of
+consistency and clarity. For now, another solution is implemented in the
+system to support this anomaly: the concerned ADF are referenced twice,
+with their current validity start and with the 2019 reactivation
+dates.</p>
 <p>The AUX_SCS (Simulated Cross Spectra) to be used are :</p>
-<p>S1__AUX_SCS_V20140402T000000_G20160413T103855 – application 20140402T000000-20140406T133000</p>
-<p>S1__AUX_SCS_V20140406T133000_G20200623T142050 – application 20140406T133000-21000101T000000</p>
+<p>S1__AUX_SCS_V20140402T000000_G20160413T103855 – application
+20140402T000000-20140406T133000</p>
+<p>S1__AUX_SCS_V20140406T133000_G20200623T142050 – application
+20140406T133000-21000101T000000</p>
 <p>The others should be discarded.</p>
-<p>AUX_SCS does not depend on ICID so, as the last one was generated on 23/06/2020, it is the one selected for products acquired after 06/04/2014.</p>
-<p>For products acquired before this date, the one to be used is the one generated on 13/04/2016. However, there were no product acquired in that early period and, even if there were, products acquired before September 2014 are not made available to users.</p>
-<p>The precise orbit ADF (AUX_POEORB) are not available for the commissioning phases of S1A (april-september 2014) and S1B (april-september 2016).</p>
-<p>Also, many AUX_WND, AUX_WAV, AUX_ICE files are missing for 2014, so no level-2 reprocessing action is possible for 2014.</p>
-<p>A few AUX_WND, AUX_WAV, AUX_ICE files are missing in 2015 and 2016, but the reprocessing system can use the last previous available file, as done for the current archived production of 2015 and 2016.</p>
-<p>The Configuration Baseline Table is provided on the following page (Baseline S1-IPF-03.40).</p>
-<table>
+<p>AUX_SCS does not depend on ICID so, as the last one was generated on
+23/06/2020, it is the one selected for products acquired after
+06/04/2014.</p>
+<p>For products acquired before this date, the one to be used is the one
+generated on 13/04/2016. However, there were no product acquired in that
+early period and, even if there were, products acquired before September
+2014 are not made available to users.</p>
+<p>The precise orbit ADF (AUX_POEORB) are not available for the
+commissioning phases of S1A (april-september 2014) and S1B
+(april-september 2016).</p>
+<p>Also, many AUX_WND, AUX_WAV, AUX_ICE files are missing for 2014, so
+no level-2 reprocessing action is possible for 2014.</p>
+<p>A few AUX_WND, AUX_WAV, AUX_ICE files are missing in 2015 and 2016,
+but the reprocessing system can use the last previous available file, as
+done for the current archived production of 2015 and 2016.</p>
+<p>The Configuration Baseline Table is provided on the following page
+(Baseline S1-IPF-03.40).</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 13%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 5%" />
+<col style="width: 48%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 9%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Unit</strong></th>
-<th><strong>Application Period </strong></th>
-<th><strong>Product Level </strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Level</strong></th>
 <th><strong>Product Type</strong></th>
 <th><strong>Auxiliary Type</strong></th>
 <th><strong>Auxiliary File</strong></th>
@@ -230,9 +374,9 @@
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>20140908T000000-20150519T120000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20140908T000000-20150519T120000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20140908T000000_G20211028T132730</td>
 <td>S1IPF03.31</td>
@@ -241,9 +385,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20140908T000000_G20190626T100201</td>
 <td>S1IPF03.31</td>
@@ -252,9 +393,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20140908T000000_G20211028T131051</td>
 <td>S1IPF03.31</td>
@@ -263,9 +401,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20140908T000000_G20160413T105124</td>
 <td>S1IPF03.31</td>
@@ -274,9 +411,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20140908T000000_G20200623T082447</td>
 <td>S1IPF03.31</td>
@@ -285,9 +419,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -296,9 +427,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -307,21 +435,17 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
-<td><p>GetReproBaselineListForPeriod(Mission=’S1SAR’, Unit=’A’, SensingTimeStart=’2014-09-08T00:00:00.000Z’,</p>
-<p>SensingTimeStop=’2015-05-19T12:00:00.000Z’, ProductType=’L2OCN’, Variability=’Dynamic’)</p></td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S1SAR’, Unit=’A’,
+SensingTimeStart=’2014-09-08T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2015-05-19T12:00:00.000Z’, ProductType=’L2OCN’,
+Variability=’Dynamic’)</p></td>
 <td>S1IPF03.31</td>
 <td></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -330,9 +454,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -341,9 +462,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20150519T120000-20150722T120000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20150519T120000-20150722T120000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20150519T120000_G20211028T132821</td>
 <td>S1IPF03.31</td>
@@ -352,9 +473,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20150519T120000_G20190626T100229</td>
 <td>S1IPF03.31</td>
@@ -363,9 +481,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20150519T120000_G20211028T131140</td>
 <td>S1IPF03.31</td>
@@ -374,9 +489,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20150519T120000_G20160413T105253</td>
 <td>S1IPF03.31</td>
@@ -385,9 +499,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20150519T120000_G20200623T082512</td>
 <td>S1IPF03.31</td>
@@ -396,9 +507,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -407,9 +515,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -418,9 +523,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -429,9 +531,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -440,9 +539,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -451,9 +547,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20150722T120000-20160627T000000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20150722T120000-20160627T000000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20150722T120000_G20211028T132901</td>
 <td>S1IPF03.31</td>
@@ -462,9 +558,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20150722T120000_G20190626T100253</td>
 <td>S1IPF03.31</td>
@@ -473,9 +566,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20150722T120000_G20211028T131219</td>
 <td>S1IPF03.31</td>
@@ -484,9 +574,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20150722T120000_G20160413T105410</td>
 <td>S1IPF03.31</td>
@@ -495,9 +584,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20150722T120000_G20200623T082546</td>
 <td>S1IPF03.31</td>
@@ -506,9 +592,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -517,9 +600,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -528,9 +608,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -539,9 +616,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -550,9 +624,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -561,9 +632,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20160627T000000-20171017T080000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20160627T000000-20171017T080000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20160627T000000_G20211028T133055</td>
 <td>S1IPF03.31</td>
@@ -572,9 +643,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20160627T000000_G20190626T100501</td>
 <td>S1IPF03.31</td>
@@ -583,9 +651,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20150722T120000_G20211028T131219</td>
 <td>S1IPF03.31</td>
@@ -594,9 +659,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20150722T120000_G20160413T105410</td>
 <td>S1IPF03.31</td>
@@ -605,9 +669,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20150722T120000_G20200623T082546</td>
 <td>S1IPF03.31</td>
@@ -616,9 +677,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -627,9 +685,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -638,9 +693,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -649,9 +701,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -660,9 +709,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -671,9 +717,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20171017T080000-20190228T092500</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20171017T080000-20190228T092500</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20171017T080000_G20211028T133136</td>
 <td>S1IPF03.31</td>
@@ -682,9 +728,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20171017T080000_G20210104T141000</td>
 <td>S1IPF03.31</td>
@@ -693,9 +736,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20171017T080000_G20211028T131258</td>
 <td>S1IPF03.31</td>
@@ -704,9 +744,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20171017T080000_G20171016T150910</td>
 <td>S1IPF03.31</td>
@@ -715,9 +754,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20171017T080000_G20200623T082615</td>
 <td>S1IPF03.31</td>
@@ -726,9 +762,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -737,9 +770,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -748,9 +778,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -759,9 +786,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -770,9 +794,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -781,9 +802,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20190228T092500-20210622T130000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20190228T092500-20210622T130000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20190228T092500_G20211103T111906</td>
 <td>S1IPF03.31</td>
@@ -792,9 +813,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20190228T092500_G20210104T141310</td>
 <td>S1IPF03.31</td>
@@ -803,9 +821,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20190228T092500_G20211103T111743</td>
 <td>S1IPF03.31</td>
@@ -814,9 +829,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20171017T080000_G20171016T150910</td>
 <td>S1IPF03.31</td>
@@ -825,9 +839,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20190228T092500_G20200623T082643</td>
 <td>S1IPF03.31</td>
@@ -836,9 +847,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -847,9 +855,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -858,9 +863,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -869,9 +871,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -880,9 +879,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -891,9 +887,9 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td>20210622T130000-21000101T000000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20210622T130000-21000101T000000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1A_AUX_INS_V20190228T092500_G20211103T111906</td>
 <td>S1IPF03.31</td>
@@ -902,9 +898,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1A_AUX_CAL_V20190228T092500_G20210104T141310</td>
 <td>S1IPF03.31</td>
@@ -913,9 +906,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1A_AUX_PP1_V20190228T092500_G20211103T111743</td>
 <td>S1IPF03.31</td>
@@ -924,9 +914,8 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20210622T130000_G20210621T100158</td>
 <td>S1IPF03.31</td>
@@ -935,9 +924,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1A_AUX_PP2_V20190228T092500_G20200623T082643</td>
 <td>S1IPF03.31</td>
@@ -946,9 +932,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -957,9 +940,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -968,9 +948,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -979,9 +956,6 @@
 </tr>
 <tr class="odd">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -990,9 +964,6 @@
 </tr>
 <tr class="even">
 <td>A</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1001,9 +972,9 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20160422T000000-20171017T080000</td>
-<td>L1</td>
-<td>SLC and GRD</td>
+<td rowspan="10">20160422T000000-20171017T080000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC and GRD</td>
 <td>AUX_INS</td>
 <td>S1B_AUX_INS_V20160422T000000_G20211027T134314</td>
 <td>S1IPF03.31</td>
@@ -1012,9 +983,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1B_AUX_CAL_V20160422T000000_G20210104T140113</td>
 <td>S1IPF03.31</td>
@@ -1023,9 +991,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1B_AUX_PP1_V20160422T000000_G20211027T133747</td>
 <td>S1IPF03.31</td>
@@ -1034,9 +999,8 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="7">L2</td>
+<td rowspan="7">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20150722T120000_G20160413T105410</td>
 <td>S1IPF03.31</td>
@@ -1045,9 +1009,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1B_AUX_PP2_V20160422T000000_G20200623T082204</td>
 <td>S1IPF03.31</td>
@@ -1056,9 +1017,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1067,9 +1025,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1078,9 +1033,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1089,9 +1041,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMH_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1100,9 +1049,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AMV_ERRMAT</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1111,9 +1057,9 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20171017T080000-20190514T090000</td>
-<td>L1</td>
-<td>SLC  and GRD</td>
+<td rowspan="8">20171017T080000-20190514T090000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC  and GRD</td>
 <td>AUX_INS</td>
 <td>S1B_AUX_INS_V20160422T000000_G20211027T134314</td>
 <td>S1IPF03.31</td>
@@ -1122,9 +1068,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1B_AUX_CAL_V20160422T000000_G20210104T140113</td>
 <td>S1IPF03.31</td>
@@ -1133,9 +1076,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1B_AUX_PP1_V20160422T000000_G20211027T133747</td>
 <td>S1IPF03.31</td>
@@ -1144,9 +1084,8 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="5">L2</td>
+<td rowspan="5">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20171017T080000_G20171016T150910</td>
 <td>S1IPF03.31</td>
@@ -1155,9 +1094,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1B_AUX_PP2_V20160422T000000_G20200623T082204</td>
 <td>S1IPF03.31</td>
@@ -1166,9 +1102,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1177,9 +1110,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1188,21 +1118,20 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
-<td><p>GetReproBaselineListForPeriod(Mission=’S1SAR’, Unit=’B’, SensingTimeStart=’2017-10-17T08:00:00.000Z’,</p>
-<p>SensingTimeStop=’2019-05-14T09:00:00.000Z’, ProductType=’L2OCN’, Variability=’Dynamic’)</p></td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S1SAR’, Unit=’B’,
+SensingTimeStart=’2017-10-17T08:00:00.000Z’,</p>
+<p>SensingTimeStop=’2019-05-14T09:00:00.000Z’, ProductType=’L2OCN’,
+Variability=’Dynamic’)</p></td>
 <td>S1IPF03.31</td>
 <td></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20190514T090000-20210622T130000</td>
-<td>L1</td>
-<td>SLC  and GRD</td>
+<td rowspan="8">20190514T090000-20210622T130000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC  and GRD</td>
 <td>AUX_INS</td>
 <td>S1B_AUX_INS_V20190514T090000_G20211103T112107</td>
 <td>S1IPF03.31</td>
@@ -1211,9 +1140,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1B_AUX_CAL_V20190514T090000_G20210104T140612</td>
 <td>S1IPF03.31</td>
@@ -1222,9 +1148,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1B_AUX_PP1_V20190514T090000_G20211103T112019</td>
 <td>S1IPF03.31</td>
@@ -1233,9 +1156,8 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="5">L2</td>
+<td rowspan="5">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20171017T080000_G20171016T150910</td>
 <td>S1IPF03.31</td>
@@ -1244,9 +1166,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1B_AUX_PP2_V20190514T090000_G20200623T082237</td>
 <td>S1IPF03.31</td>
@@ -1255,9 +1174,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1266,9 +1182,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1277,9 +1190,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1288,9 +1198,9 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td>20210622T130000-21000101T000000</td>
-<td>L1</td>
-<td>SLC  and GRD</td>
+<td rowspan="8">20210622T130000-21000101T000000</td>
+<td rowspan="3">L1</td>
+<td rowspan="3">SLC  and GRD</td>
 <td>AUX_INS</td>
 <td>S1B_AUX_INS_V20190514T090000_G20211103T112107</td>
 <td>S1IPF03.31</td>
@@ -1299,9 +1209,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_CAL</td>
 <td>S1B_AUX_CAL_V20190514T090000_G20210104T140612</td>
 <td>S1IPF03.31</td>
@@ -1310,9 +1217,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP1</td>
 <td>S1B_AUX_PP1_V20190514T090000_G20211103T112019</td>
 <td>S1IPF03.31</td>
@@ -1321,9 +1225,8 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td>L2</td>
-<td>OCN</td>
+<td rowspan="5">L2</td>
+<td rowspan="5">OCN</td>
 <td>AUX_SCS</td>
 <td>S1__AUX_SCS_V20210622T130000_G20210621T100158</td>
 <td>S1IPF03.31</td>
@@ -1332,9 +1235,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_PP2</td>
 <td>S1B_AUX_PP2_V20190514T090000_G20200623T082237</td>
 <td>S1IPF03.31</td>
@@ -1343,9 +1243,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WND</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1354,9 +1251,6 @@
 </tr>
 <tr class="odd">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_WAV</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1365,9 +1259,6 @@
 </tr>
 <tr class="even">
 <td>B</td>
-<td></td>
-<td></td>
-<td></td>
 <td>AUX_ICE</td>
 <td>GetReproBaselineListForPeriod(…)</td>
 <td>S1IPF03.31</td>
@@ -1378,6 +1269,14 @@
 </table>
 <h1 id="annex-all-adf-table">Annex: All ADF Table</h1>
 <table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 62%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Name</strong></th>
@@ -1443,7 +1342,9 @@
 <td>static</td>
 <td>L2 OCN</td>
 <td>N</td>
-<td>Look-up table for OSW processing algorithm to predict the modulation transfer function and to remove nonlinear effects from the crossspectra</td>
+<td>Look-up table for OSW processing algorithm to predict the modulation
+transfer function and to remove nonlinear effects from the
+crossspectra</td>
 </tr>
 <tr class="even">
 <td>S1__AUX_WND</td>
@@ -1459,7 +1360,8 @@
 <td>dynamic</td>
 <td>L2 OCN</td>
 <td>N</td>
-<td>WaveWatchIII surface stockes drift velocity and direction for the interpretation of the RVL component of the L2 OCN product</td>
+<td>WaveWatchIII surface stockes drift velocity and direction for the
+interpretation of the RVL component of the L2 OCN product</td>
 </tr>
 <tr class="even">
 <td>S1__AUX_ICE</td>
@@ -1467,7 +1369,8 @@
 <td>dynamic</td>
 <td>L2 OCN</td>
 <td>N</td>
-<td>Sea ice percentage to process the OWI component of the L2 OCN product</td>
+<td>Sea ice percentage to process the OWI component of the L2 OCN
+product</td>
 </tr>
 <tr class="odd">
 <td>AMH_ERRMAT_MPC</td>
@@ -1490,7 +1393,8 @@
 <div class="footer-strip">
   <div class="container">
     <div class="row">
-      <div class="col-11" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
+      <div class="col-3" style="color: white"><a href="http://github.com/reprocessing-reference/ " style="color:white" target="_blank">Project's Github</a></div>
+      <div class="col-7" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
       <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
       </div>
   </div>
