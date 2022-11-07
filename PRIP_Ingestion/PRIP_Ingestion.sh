@@ -100,7 +100,7 @@ else
   master_code_auxip=0
   
   echo "Starting AUXIP ingestion S2"
-  python3 ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER}/S2 -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+  python3 -u ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER}/S2 -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
   code=$?
   if [ $code -ne 0 ]; then
      echo "Auxip ingestion failed for S2"
@@ -115,7 +115,7 @@ else
     echo "AUXIP ingestion done"
     master_code_reprobase=0
     echo "Starting Reprobase jsons generation for S2"
-    python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
+    python3 -u ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
      echo "Reprobase jsons generation failed for S2"
