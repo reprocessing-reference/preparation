@@ -93,21 +93,21 @@ TEMP_FOLDER_LISTING=$(mktemp -p $WORK_FOLDER -d)
 TEMP_FOLDER_JSONS=$(mktemp -p $WORK_FOLDER -d)
 echo "Temporary folder : "$TEMP_FOLDER
 echo "Starting ECMWF download"
-python3 ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
+python3 -u ${CUR_DIR}/ECMWF_Ingestion.py -k ${ECMWF_PASS} -w ${TEMP_FOLDER} -s $START_DATE -e $STOP_DATE -u ${ECMWF_URL} -m ${ECMWF_USER} -o ${TEMP_FOLDER_AUX}
 code=$?
 if [ $code -ne 0 ]; then
   echo "ECMWF Retrieve failed"
 else
   echo "ECMWF download done"
   echo "Starting AUXIP ingestion"
-  python3 ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
+  python3 -u ${CUR_DIR}/ingestion/ingestion.py -i ${TEMP_FOLDER_AUX} -u ${AUXIP_USER} -pw ${AUXIP_PASS} -mc ${MCPATH} -b "wasabi-auxip-archives/"${S3_BUCKET} -o ${TEMP_FOLDER_LISTING}/file_list_S2.txt -m ${MODE}
   code=$?
   if [ $code -ne 0 ]; then
     echo "AUXIP ingestion failed"
   else
     echo "AUXIP ingestion done"
     echo "Starting Reprobase jsons generation"
-    python3 ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
+    python3 -u ${CUR_DIR}/ingest_s2files.py -i ${TEMP_FOLDER_LISTING}/file_list_S2.txt -f ${CUR_DIR}/file_types -t ${CUR_DIR}/template.json -o ${TEMP_FOLDER_JSONS}/
     code=$?
     if [ $code -ne 0 ]; then
       echo "Reprobase jsons generation failed"
