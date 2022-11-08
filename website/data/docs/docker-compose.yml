@@ -1,0 +1,9 @@
+version: '3'
+services:
+  jekyll:
+      image: pandoc/core:2.19.2.0
+      entrypoint: /home/1000/website/data/docs/convert_docker.sh
+      # command: bundle install
+      user: 1000:1000
+      volumes:
+          - ../../..:/home/1000

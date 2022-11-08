@@ -1,7 +1,7 @@
 permalink: auxip
 title: 'Reprocessing reference package preparation'
 collections_dir: collections
-destination: ../3-deliveries/site
+destination: /home/static
 description: Copernicus page to navigate through web reprocessing configuration/data baseline
 url: https://www.copernicus.eu/en
 author: CS Group
