@@ -14,7 +14,7 @@ def downloadCamsreGribForSmallPeriod(start, stop, outputFilePathName):
               'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm', 'total_aerosol_optical_depth_550nm',
               'total_aerosol_optical_depth_670nm', 'total_aerosol_optical_depth_865nm',
           ],
-          'date': start+'/'+stop,
+          'date': start.strftime('%Y-%m-%d')+'/'+stop.strftime('%Y-%m-%d'),
           'time': [
               '00:00', '03:00', '06:00',
               '09:00', '12:00', '15:00',
