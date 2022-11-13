@@ -54,7 +54,7 @@ if __name__ == "__main__":
     for file in os.listdir(workingDir):
         # Iterate over all files of the current directory
     
-        if re.fullmatch(rawGribNamePattern % '\\d{1}', file):
+        if re.fullmatch(rawGribNamePattern % '\\d{1}', file) or re.fullmatch(rawGribNamePattern % '\\d{2}', file) or re.fullmatch(rawGribNamePattern % '\\d{3}', file):
             # The file is a main grib file downloaded
 
             # Split the grib into pieces to recompose afterward
