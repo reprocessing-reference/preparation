@@ -17,15 +17,23 @@ if __name__ == "__main__":
                         required=True)
     args = parser.parse_args()
 
+    # Timestamps of every grib files that need to appear in the final DBL file
+    timestampsToAddToDBL = [0,3,6,9,12,15,18,21,24,27]
+
     startDate = datetime.datetime.strptime(args.start, "%Y-%m-%d")
     stopDate = datetime.datetime.strptime(args.stop, "%Y-%m-%d")
+
     workingDir = args.workingDir
 
     # Pattern of the main grib files downloaded
     rawGribNamePattern = 'r%s.grib'
   
     # Launching downloads
-    DownloadCamsreGrib.downloadCamsreGribForLargePeriodInParallel(startDate, stopDate, workingDir, rawGribNamePattern)
+    stopDateToDownload = stopDate
+    # We modifiy the end date of download to take into account all the timeStamps we want into the DBL archive
+    if timestampsToAddToDBL[-1] > 24:
+        stopDateToDownload = stopDateToDownload + datetime.timedelta(hours=timestampsToAddToDBL[-1] - 24)
+    DownloadCamsreGrib.downloadCamsreGribForLargePeriodInParallel(startDate, stopDateToDownload, workingDir, rawGribNamePattern)
 
     outputDir = os.path.join(workingDir, "Output_CAMSRE")
     os.makedirs(outputDir, exist_ok=True)
@@ -34,9 +42,6 @@ if __name__ == "__main__":
     # downloaded
     initialGribExtractionDir = os.path.join(workingDir, 'initialGribExtraction')
     os.makedirs(initialGribExtractionDir, exist_ok=True)
-
-    # Timestamps of every grib files that need to appear in the final DBL file
-    timestampsToAddToDBL = [0,3,6,9,12,15,18,21,24,27]
 
     # Open HDR template file
     template_filename_cams = os.path.join(os.path.dirname(os.path.realpath(__file__)),"hdr_template_cams.xml")
