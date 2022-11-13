@@ -31,8 +31,8 @@ if __name__ == "__main__":
     # Launching downloads
     stopDateToDownload = stopDate
     # We modifiy the end date of download to take into account all the timeStamps we want into the DBL archive
-    if timestampsToAddToDBL[-1] > 24:
-        stopDateToDownload = stopDateToDownload + datetime.timedelta(hours=timestampsToAddToDBL[-1] - 24)
+    if timestampsToAddToDBL[-1]/24 > 1:
+        stopDateToDownload = stopDateToDownload + datetime.timedelta(days=int(timestampsToAddToDBL[-1]/24))
     DownloadCamsreGrib.downloadCamsreGribForLargePeriodInParallel(startDate, stopDateToDownload, workingDir, rawGribNamePattern)
 
     outputDir = os.path.join(workingDir, "Output_CAMSRE")
