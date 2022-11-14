@@ -1,8 +1,7 @@
 #!/bin/python
 # -*- coding: utf-8 -*-
 
-import argparse
-import requests
+import argparse, requests, collections
 from requests.auth import HTTPBasicAuth
 from calendar import monthrange
 
@@ -61,7 +60,7 @@ def getL0(year,month, ltaUsr, ltaPwd):
             else:
                 raise Exception("Bad return code for request: "+request)
 
-        namesToValidity = sorted(namesToValidity)
+        namesToValidity = collections.OrderedDict(sorted(namesToValidity.items()))
         for (aux, validity) in namesToValidity.items():
             print(aux)
             l0_names.write(str(aux) + ';' + validity + '\n')
