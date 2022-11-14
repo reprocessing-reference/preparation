@@ -7,10 +7,8 @@ from requests.auth import HTTPBasicAuth
 from calendar import monthrange
 
 coreURL = "https://lta.cloudferro.copernicus.eu/odata/v1/Products?$filter=ContentDate/Start gt %04d-%02d-%02dT00:00:00.000000Z and ContentDate/Start lt %04d-%02d-%02dT23:59:59.999999Z and contains(Name,'_RAW__0S')&$top=200"
-ltaUsr = ""
-ltaPwd = ""
 
-def getL0(year,month):
+def getL0(year, month, ltaUsr, ltaPwd):
     headers = {'Content-type': 'application/json'}
     days_in_month = monthrange(year,month)[1]
     names = set()
@@ -67,14 +65,20 @@ if __name__ == "__main__":
                         help="Month",
                         default="all",
                         required=False)
+    parser.add_argument("-u", "--user",
+                        help="LTA user",
+                        required=True)
+    parser.add_argument("-pwd", "--password",
+                        help="LTA password",
+                        required=True)
 
     args = parser.parse_args()
     year = int(args.year)
 
     if args.month == "all":
         for m in range(12):
-            getL0(year,int(m+1))
+            getL0(year, int(m+1), args.user, args.password)
     else :
         month = int(args.month)
-        getL0(year,month)
+        getL0(year, month, args.user, args.password)
 
