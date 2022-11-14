@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2')"], "Format": "NotSpecified", "Comments": "SYNERGY L2 Aerosol Climatology Data", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "SY_2_ACLMAX", "ShortName": "SY_2_ACLMAX"}

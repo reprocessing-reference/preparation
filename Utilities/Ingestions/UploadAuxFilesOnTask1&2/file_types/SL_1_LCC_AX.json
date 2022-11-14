@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1RBT')"], "Format": "NotSpecified", "Comments": "L1 input land cloud coefficients", "Mission": "S3SLSTR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "SL_1_LCC_AX", "ShortName": "SL_1_LCC_AX"}

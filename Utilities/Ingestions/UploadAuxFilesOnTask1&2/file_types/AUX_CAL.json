@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1SLC')", "ProductTypes('L1GRD')"], "Format": "SAFE", "Comments": "IPF calibration parameters", "Mission": "S1SAR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "LatestValCover", "Validity": "ValidityPeriod", "LongName": "AUX_CAL", "ShortName": "AUX_CAL"}

@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2')"], "Format": "ASCII", "Comments": "SYN VGT-S L2 browse processing palette", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "ValIntersectWithoutDuplicate", "Validity": "AnyTime", "LongName": "SY_2_PVSBAX", "ShortName": "SY_2_PVSBAX"}

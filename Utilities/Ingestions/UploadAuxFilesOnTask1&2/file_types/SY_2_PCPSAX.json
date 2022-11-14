@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2')"], "Format": "NCDF", "Comments": "processing control parameters for SYN VGT-S", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValCover", "Validity": "AnyTime", "LongName": "SY_2_PCPSAX", "ShortName": "SY_2_VSCPAX"}
