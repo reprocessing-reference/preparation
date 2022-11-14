@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2LAN')"], "Format": "EOF", "Comments": "instrumental corrections", "Mission": "S3SRAL", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValCover", "Validity": "AnyTime", "LongName": "SR_2_IC01AX", "ShortName": "SR_2_IC01AX"}

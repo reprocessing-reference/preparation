@@ -1,0 +1,1 @@
+{"Variability": "Dynamic", "ProductTypes@odata.bind": ["ProductTypes('L2OCN')"], "Format": "SAFE", "Comments": "ECMWF wind speed and direction at 10m ASL", "Mission": "S1SAR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValCover", "Validity": "ValidityPeriod", "LongName": "S1__AUX_WND", "ShortName": "AUX_WND"}

@@ -1,0 +1,1 @@
+{"Variability": "Dynamic", "ProductTypes@odata.bind": ["ProductTypes('L2A')"], "Format": "GRIB1", "Comments": "atmospheric data from reanalysis", "Mission": "S2MSI", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValCover", "Validity": "ValidityPeriod", "LongName": "AUX_CAMSRE", "ShortName": "AUX_CAMSRE"}

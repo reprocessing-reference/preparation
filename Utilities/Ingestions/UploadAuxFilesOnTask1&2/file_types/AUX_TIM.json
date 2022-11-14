@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1SLC')", "ProductTypes('L1GRD')"], "Format": "EOF", "Comments": "Time correlation data", "Mission": "S1SAR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "LatestGeneration", "Validity": "ValidityPeriod", "LongName": "AUX_TIM", "ShortName": "AUX_TIM"}
