@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1MISR')"], "Format": "geoTIFF", "Comments": "Map file of the distance to the coast", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "SY_1_CDIBAX", "ShortName": "SY_1_CDIBAX"}

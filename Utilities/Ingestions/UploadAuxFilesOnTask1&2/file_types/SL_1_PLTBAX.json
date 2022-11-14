@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1RBT')"], "Format": "ASCII", "Comments": "SLSTR L1 browse processing palette", "Mission": "S3SLSTR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "ValIntersectWithoutDuplicate", "Validity": "AnyTime", "LongName": "SL_1_PLTBAX", "ShortName": "SL_1_PLTBAX"}

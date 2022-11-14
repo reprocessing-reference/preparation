@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L1MISR')"], "Format": "XML", "Comments": "Processing Control Parameters for SYN IPF L1", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L1')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "SY_1_PCP_AX", "ShortName": "SY_1_PCP_AX"}
