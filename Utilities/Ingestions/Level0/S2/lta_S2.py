@@ -6,15 +6,26 @@ import requests
 from requests.auth import HTTPBasicAuth
 from calendar import monthrange
 
-coreURL = "https://lta.cloudferro.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S2') and ContentDate/Start gt %04d-%02d-%02dT00:00:00.000000Z and ContentDate/Start lt %04d-%02d-%02dT23:59:59.999999Z and contains(Name,'_L0__DS_')&$top=200&$expand=Attributes"
+coreURL = "https://lta.cloudferro.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S2') and ContentDate/Start gt %04d-%02d-%02dT00:00:00.000000Z and ContentDate/Start lt %04d-%02d-%02dT23:59:59.999999Z and contains(Name,'_L0__DS_')&$top=200&$expand=Attributes&$count=true"
 ltaUsr = ""
 ltaPwd = ""
+
+def getValidityFromAttributes(attributes):
+
+    validityDate = ''
+
+    for attributeDict in attributes:
+        if attributeDict['Name'] == 'productGroupId':
+            validityDate = attributeDict['Value'].split('_')[1]
+            break
+    
+    return validityDate
 
 def getL0(year,month):
 
     headers = {'Content-type': 'application/json'}
     days_in_month = monthrange(year,month)[1]
-    names = set()
+    namesToValidity = {}
     authentification = HTTPBasicAuth(ltaUsr, ltaPwd)
     with open("S2_L0_names_%02d_%04d__L0__DS_.txt" % (month,year) ,"w") as l0_names:
     
@@ -34,7 +45,7 @@ def getL0(year,month):
                 
                 for aux in resp.json()["value"]:
                     name = aux['Name']
-                    names.add(name)
+                    namesToValidity[name] = getValidityFromAttributes(aux["Attributes"])
 
                 for step in range( nb_steps ):
                     # On boucle sur toutes les pages de 200 fichiers L0
@@ -46,16 +57,16 @@ def getL0(year,month):
                     if resp.status_code == 200:
                         for aux in resp.json()["value"]:
                             name = aux['Name']
-                            names.add(name)
+                            namesToValidity[name] = getValidityFromAttributes(aux["Attributes"])
                     else:
                         raise Exception("Bad return code for request: "+request)
             else:
                 raise Exception("Bad return code for request: "+request)
 
-        names = sorted(names)
-        for aux in names:
+        namesToValidity = sorted(namesToValidity)
+        for (aux, validity) in namesToValidity.items():
             print(aux)
-            l0_names.write(str(aux) + '\n')
+            l0_names.write(str(aux) + ';' + validity + '\n')
 
         l0_names.close()
 

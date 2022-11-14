@@ -29,9 +29,9 @@ if __name__ == "__main__":
             lines = fid.readlines()
             for line in lines:
                 if "http" not in line:
-                    l0_name = line.replace('\n','').strip()
-                    start = l0_name[42:42+15]
-                    stop = start
+                    splittedLine = line.split(';')
+                    l0_name = splittedLine[0].strip()
+                    start = stop = splittedLine[1].replace('\n', '').strip()
                     print(l0_name)
                     
                     # S2A_OPER_MSI_L0__DS_MPS__20160504T004104_S20160503T213533_N02.02.tar
