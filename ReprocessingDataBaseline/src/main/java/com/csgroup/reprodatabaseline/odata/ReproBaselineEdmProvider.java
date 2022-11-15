@@ -84,10 +84,11 @@ public class ReproBaselineEdmProvider extends CsdlAbstractEdmProvider {
     {
       entityType = new CsdlEntityType();
       CsdlProperty level0Name = new CsdlProperty().setName("Level0").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+      CsdlProperty message = new CsdlProperty().setName("Message").setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
       CsdlProperty auxiDataFiles = new CsdlProperty().setName("AuxDataFiles").setCollection(true).setType(PRODUCT_FQN);
       
       entityType.setName(DATA_BASELINE_ET_NAME);
-      entityType.setProperties(Arrays.asList(level0Name,auxiDataFiles));
+      entityType.setProperties(Arrays.asList(level0Name, message,auxiDataFiles));
     }
 
     return entityType;
