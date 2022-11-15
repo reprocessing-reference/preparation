@@ -238,7 +238,7 @@ public class ReproBaselineAccess {
 		String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.L0Product entity "
 				+ "WHERE entity.name LIKE \'%level0Name%\'";
 		
-		queryString.replace("level0Name", level0Name);
+		queryString = queryString.replace("level0Name", level0Name.replace("\\\"", ""));
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		List<L0Product> l0_products;
