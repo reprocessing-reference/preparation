@@ -1,5 +1,6 @@
 package com.csgroup.reprodatabaseline.http;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -231,9 +232,33 @@ public class ReproBaselineAccess {
 		}
 		return l0_products;
 	}
+	
+	public List<L0Product> getLevel0ProductsByName(String level0Name) {
+		
+		String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.L0Product entity"
+				+ "WHERE entity.name LIKE \'%level0Name%\'";
+		
+		queryString.replace("level0Name", level0Name);
+		
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<L0Product> l0_products;
+		try {	
+			Query query = entityManager.createQuery(queryString);
+			l0_products = query.getResultList();
+			LOG.debug(MessageFormat.format("{0} L0 products match \"{1}\" in the database.", String.valueOf(l0_products.size()), level0Name));
+		} finally {
+			entityManager.close();
+		}
+		
+		return l0_products;
+	}
+	
+	private class T0T1DateTime {
+		public ZonedDateTime _t0;
+		public ZonedDateTime _t1;
+	}
 
-
-	public List<AuxFile> getReprocessingDataBaseline(String level0,String mission,String unit,String productType) {
+	public List<AuxFile> getReprocessingDataBaseline(L0Product level0,String mission,String unit,String productType) {
 		// 1 -> get mission and sat_unit
 		// 2 -> get AuxType for this mission
 		// 3 -> get AuxFiles
@@ -245,13 +270,13 @@ public class ReproBaselineAccess {
 		// the output AuxFile listing 
 		List<AuxFile> results = new ArrayList<>();
 		
-		String platformShortName = level0.substring(0, 2); // "S1", "S2" or "S3"
-        String platformSerialIdentifier = level0.substring(2, 3); //"A" or "B" or "_"
+		String platformShortName = level0.getName().substring(0, 2); // "S1", "S2" or "S3"
+        String platformSerialIdentifier = level0.getName().substring(2, 3); //"A" or "B" or "_"
 
 		// Check the matching between the level0 and mission/unit 
 		if( !platformShortName.equals(mission.substring(0, 2)) || !platformSerialIdentifier.equals(unit) )
 		{
-			LOG.info(">> ReproBaselineAccess.getReprocessingDataBaseline : mismatching between level0 product " + level0 + " and mission/unit " + mission + "/" + unit);
+			LOG.info(">> ReproBaselineAccess.getReprocessingDataBaseline : mismatching between level0 product " + level0.getName() + " and mission/unit " + mission + "/" + unit);
 			// return an empty collection
 			return results;
 		}
@@ -267,24 +292,21 @@ public class ReproBaselineAccess {
 			types = getListOfAuxTypes(mission);
 			this.cachedAuxTypes.put(mission, types);
 		}
-			
-		ZonedDateTime t0;
-		ZonedDateTime t1;
+		
+		T0T1DateTime t0t1;
+		
 		if( platformShortName.equals("S3"))
 		{
-			// S3B_OL_0_EFR____20210418T201042_20210418T201242_20210418T215110_0119_051_242______LN1_O_NR_002.SEN3
-			t0 = ZonedDateTime.parse(level0.subSequence(16, 16+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
-			t1 = ZonedDateTime.parse(level0.subSequence(32, 32+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+			t0t1 = getT0T1ForS3(level0);
+			
 		}else if( platformShortName.equals("S2"))
 		{
-			// S2A_OPER_MSI_L0__LT_MTI__20150725T193419_S20150725T181440_N01.01
-			t0 = ZonedDateTime.parse(level0.subSequence(42, 42+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
-			t1 = t0;
+			t0t1 = getT0T1ForS2(level0);
+			
 		}else
 		{
-			// S1A_IW_RAW__0SDV_20201102T203348_20201102T203421_035074_0417B3_02B4.SAFE.zip
-			t0 = ZonedDateTime.parse(level0.subSequence(17, 17+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
-			t1 = ZonedDateTime.parse(level0.subSequence(33, 33+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+			t0t1 = getT0T1ForS1(level0);
+			
 		}
 
 		try {
@@ -323,7 +345,7 @@ public class ReproBaselineAccess {
 							files_repro_filtered = new ArrayList<AuxFile>();
 
 							for (String band : sortedFilesByBand.keySet()) {
-								files_repro_filtered.addAll(rule_applier.apply(sortedFilesByBand.get(band),t0,t1,delta0,delta1));
+								files_repro_filtered.addAll(rule_applier.apply(sortedFilesByBand.get(band),t0t1._t0,t0t1._t1,delta0,delta1));
 							}
 
 
@@ -331,7 +353,7 @@ public class ReproBaselineAccess {
 							// The type does not have band files
 
 							// We need to apply the rule on every file at once
-							files_repro_filtered = rule_applier.apply(files_repro,t0,t1,delta0,delta1);
+							files_repro_filtered = rule_applier.apply(files_repro,t0t1._t0,t0t1._t1,delta0,delta1);
 
 						}
 					
@@ -356,6 +378,58 @@ public class ReproBaselineAccess {
 
 		return results;
 
+	}
+
+	private T0T1DateTime getT0T1ForS3(L0Product level0) {
+		
+		T0T1DateTime t0t1 = new T0T1DateTime();
+		
+		// We should read t0 and t1 from the validityStart and validityStop of the L0Product, but having the L0Product object is new and not
+		// necessary for the following operation. To keep the current service stable, we left it the way it was since the launching of the service.
+		
+		// S3B_OL_0_EFR____20210418T201042_20210418T201242_20210418T215110_0119_051_242______LN1_O_NR_002.SEN3
+		t0t1._t0 = ZonedDateTime.parse(level0.getName().subSequence(16, 16+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+		t0t1._t1 = ZonedDateTime.parse(level0.getName().subSequence(32, 32+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+		
+		return t0t1;
+	}
+
+	private T0T1DateTime getT0T1ForS2(L0Product level0) {
+		
+		T0T1DateTime t0t1 = new T0T1DateTime();
+		
+		if (level0 != null && level0.getValidityStart() != null) {
+			// L0Product was found on data base
+			
+			// Retrieve the t0t1 from the data base content
+			t0t1._t0 = level0.getValidityStart().atZone(ZoneId.of("UTC"));
+			t0t1._t1 = level0.getValidityStop().atZone(ZoneId.of("UTC"));
+			
+		} else {
+			// L0Product not found 
+
+			// We read the t0t1 from the validity date contained in the file name
+			
+			// S2A_OPER_MSI_L0__LT_MTI__20150725T193419_S20150725T181440_N01.01
+			t0t1._t0 = ZonedDateTime.parse(level0.getName().subSequence(42, 42+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+			t0t1._t1 = t0t1._t0;
+		}
+		
+		return t0t1;
+	}
+
+	private T0T1DateTime getT0T1ForS1(L0Product level0) {
+		
+		T0T1DateTime t0t1 = new T0T1DateTime();
+		
+		// We should read t0 and t1 from the validityStart and validityStop of the L0Product, but having the L0Product object is new and not
+		// necessary for the following operation. To keep the current service stable, we left it the way it was since the launching of the service.
+		
+		// S1A_IW_RAW__0SDV_20201102T203348_20201102T203421_035074_0417B3_02B4.SAFE.zip
+		t0t1._t0 = ZonedDateTime.parse(level0.getName().subSequence(17, 17+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+		t0t1._t1 = ZonedDateTime.parse(level0.getName().subSequence(33, 33+15),DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss").withZone(ZoneId.of("UTC")));
+		
+		return t0t1;
 	}
 
 	private Map<String, List<AuxFile>> sortFilesByBand(List<AuxFile> files) {
