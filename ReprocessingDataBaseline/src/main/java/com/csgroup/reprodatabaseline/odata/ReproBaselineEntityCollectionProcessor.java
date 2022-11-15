@@ -24,12 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.csgroup.reprodatabaseline.datamodels.AuxFile;
-import com.csgroup.reprodatabaseline.datamodels.AuxType;
-import com.csgroup.reprodatabaseline.datamodels.AuxTypes;
-import com.csgroup.reprodatabaseline.datamodels.L0Product;
-import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
-
 import org.apache.olingo.commons.api.data.ComplexValue;
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Entity;
@@ -56,9 +50,13 @@ import org.apache.olingo.server.api.uri.UriParameter;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceFunction;
 import org.apache.olingo.server.api.uri.UriResourceNavigation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.util.Pair;
+
+import com.csgroup.reprodatabaseline.datamodels.AuxFile;
+import com.csgroup.reprodatabaseline.datamodels.L0Product;
+import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
 
 public class ReproBaselineEntityCollectionProcessor implements EntityCollectionProcessor {
 
@@ -150,7 +148,7 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
       String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
       this.reproBaselineAccess.setAccessToken(accessToken);
 
-      Map<String, List<AuxFile>> dataBaselines = new HashMap<>();
+      Map<Pair<String, String>, List<AuxFile>> dataBaselines = new HashMap<>();
       String level0Names = "";
       String start = "";
       String stop = "";
@@ -190,9 +188,29 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
       if (nbParameters == 4) {
 
         for (String level0Name : level0Names.split(",")) {
-          List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(level0Name, mission, unit,
-              productType);
-          dataBaselines.put(level0Name, auxDataFiles);
+        	
+        	List<L0Product> level0Products = this.reproBaselineAccess.getLevel0ProductsByName(level0Name);
+        	L0Product level0;
+        	String warningMessage = null;
+        	
+        	if (level0Products != null && !level0Products.isEmpty()) {
+        		// The L0Product has been found
+        		
+        		level0 = level0Products.get(0);
+        		
+        	} else {
+        		// The L0Product has not been found
+        		
+        		// We create an empty one for the following actions WITHOUT validityStart or validityStop to make it clear it was not found on the data base
+        		level0 = new L0Product();
+        		level0.setName(level0Name);
+        		warningMessage = "WARNING : The Level0 product name you entered in the request was not found on our data base."
+        				+ "Hence, the selection rules have been applied from the validityStart and validityStop of the name of the file.";
+        	}
+        	
+        	
+			List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(level0, mission, unit, productType);
+			dataBaselines.put(Pair.of(level0Name, warningMessage), auxDataFiles);
         }
 
       } else {
@@ -200,17 +218,28 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         List<L0Product> l0Products = this.reproBaselineAccess.getLevel0Products(start, stop, mission, unit,
             productType);
         for (L0Product product : l0Products) {
-          List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(product.getName(), mission,
+          List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(product, mission,
               unit, productType);
-          dataBaselines.put(product.getName(), auxDataFiles);
+          dataBaselines.put(Pair.of(product.getName(), null), auxDataFiles);
         }
       }
 
       final EntityCollection resultCollection = new EntityCollection();
 
-      for (Map.Entry me : dataBaselines.entrySet()) {
+      for (Map.Entry<Pair<String, String>, List<AuxFile>> me : dataBaselines.entrySet()) {
         Entity entity = new Entity();
-        Property level0 = new Property("String", "Level0", ValueType.PRIMITIVE, me.getKey());
+        Property level0 = new Property("String", "Level0", ValueType.PRIMITIVE, me.getKey().getFirst());
+
+        // Adding the property to the response
+        entity.addProperty(level0);
+        
+        if (me.getKey().getSecond() != null) {
+        	// A warning message has been added during the processing of the request
+        	
+        	// Adding the message property to the response
+        	Property warningMessage = new Property("String", "Message", ValueType.PRIMITIVE, me.getKey().getSecond());
+            entity.addProperty(warningMessage);
+        }
 
         List<ComplexValue> auxDataCollection = new ArrayList<>();
         for (AuxFile auxFile : (List<AuxFile>) me.getValue()) {
@@ -220,8 +249,6 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
           auxDataCollection.add(auxData);
         }
         Property auxDataFiles = new Property(null, "AuxDataFiles", ValueType.COLLECTION_COMPLEX, auxDataCollection);
-
-        entity.addProperty(level0);
         entity.addProperty(auxDataFiles);
         entity.setType("OData.CSC.DataBaseline");
 
