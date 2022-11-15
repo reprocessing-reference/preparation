@@ -235,7 +235,7 @@ public class ReproBaselineAccess {
 	
 	public List<L0Product> getLevel0ProductsByName(String level0Name) {
 		
-		String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.L0Product entity"
+		String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.L0Product entity "
 				+ "WHERE entity.name LIKE \'%level0Name%\'";
 		
 		queryString.replace("level0Name", level0Name);
