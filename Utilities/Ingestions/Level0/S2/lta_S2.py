@@ -38,7 +38,7 @@ def getL0(year,month, ltaUsr, ltaPwd):
             resp = requests.get(request, auth=authentification,headers=headers)
             if resp.status_code == 200:
                 count = int(resp.json()["@odata.count"])
-                nb_steps = int(count/200) +1
+                nb_steps = int(count/200)
                 
                 for aux in resp.json()["value"]:
                     name = aux['Name']
