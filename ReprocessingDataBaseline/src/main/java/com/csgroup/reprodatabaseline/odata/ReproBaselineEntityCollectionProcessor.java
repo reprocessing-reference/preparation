@@ -184,6 +184,9 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
             break;
         }
       }
+      
+      String defaultLevel0InformationMessage = "The L0 product name entered in the request was found in the data base. "
+      		+ "So, the ADF selection rule has been applied using the sensing start of the corresponding data take.";
 
       if (nbParameters == 4) {
 
@@ -191,7 +194,7 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         	
         	List<L0Product> level0Products = this.reproBaselineAccess.getLevel0ProductsByName(level0Name);
         	L0Product level0;
-        	String warningMessage = "";
+        	String level0InfoMessage = defaultLevel0InformationMessage;
         	
         	if (level0Products != null && !level0Products.isEmpty()) {
         		// The L0Product has been found
@@ -204,14 +207,14 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         		// We create an empty one for the following actions WITHOUT validityStart or validityStop to make it clear it was not found on the data base
         		level0 = new L0Product();
         		level0.setName(level0Name);
-        		warningMessage = "WARNING : The Level0 product name you entered in the request was not found on our data base. "
-        				+ "Hence, the selection rules have been applied from the validityStart and validityStop of the name of the file.";
-        		LOG.warn(warningMessage);
+        		level0InfoMessage = "Warning : The L0 product name entered in the request was not found in the data base. "
+        				+ "So, the ADF selection rule has been applied using the sensing start in the provided product name.";
+        		LOG.warn(level0InfoMessage);
         	}
         	
         	
 			List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(level0, mission, unit, productType);
-			dataBaselines.put(Pair.of(level0Name, warningMessage), auxDataFiles);
+			dataBaselines.put(Pair.of(level0Name, level0InfoMessage), auxDataFiles);
         }
 
       } else {
@@ -221,7 +224,7 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         for (L0Product product : l0Products) {
           List<AuxFile> auxDataFiles = this.reproBaselineAccess.getReprocessingDataBaseline(product, mission,
               unit, productType);
-          dataBaselines.put(Pair.of(product.getName(), ""), auxDataFiles);
+          dataBaselines.put(Pair.of(product.getName(), defaultLevel0InformationMessage), auxDataFiles);
         }
       }
 
@@ -234,13 +237,9 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         // Adding the property to the response
         entity.addProperty(level0);
         
-        if (!me.getKey().getSecond().isBlank()) {
-        	// A warning message has been added during the processing of the request
-        	
-        	// Adding the message property to the response
-        	Property warningMessage = new Property("String", "Message", ValueType.PRIMITIVE, me.getKey().getSecond());
-            entity.addProperty(warningMessage);
-        }
+    	// Adding the message property to the response
+    	Property warningMessage = new Property("String", "Message", ValueType.PRIMITIVE, me.getKey().getSecond());
+        entity.addProperty(warningMessage);
 
         List<ComplexValue> auxDataCollection = new ArrayList<>();
         for (AuxFile auxFile : (List<AuxFile>) me.getValue()) {
