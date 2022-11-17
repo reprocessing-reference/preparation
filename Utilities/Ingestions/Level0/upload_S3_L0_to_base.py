@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--inputFile",
                         help="Input listing file",
                         required=True)
-    parser.add_argument("-h", "--host",
+    parser.add_argument("-dbh", "--host",
                         help="IP of the host of the DataBase",
                         required=True)
     parser.add_argument("-p", "--port",
