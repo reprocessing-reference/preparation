@@ -8,6 +8,8 @@ from calendar import monthrange
 
 coreURL = "https://lta.cloudferro.copernicus.eu/odata/v1/Products?$filter=ContentDate/Start gt %04d-%02d-%02dT00:00:00.000000Z and ContentDate/Start lt %04d-%02d-%02dT23:59:59.999999Z and contains(Name,'_RAW__0S')&$top=200"
 
+nbRequestsMaxTries = 5
+
 def getL0(year, month, ltaUsr, ltaPwd):
     headers = {'Content-type': 'application/json'}
     days_in_month = monthrange(year,month)[1]
@@ -24,7 +26,15 @@ def getL0(year, month, ltaUsr, ltaPwd):
             #Construction de la requête
             request = (coreURL + "&$count=true") % (year,month,start_day,year,month,nb_days)
             print(request)
-            resp = requests.get(request, auth=authentification,headers=headers)
+
+            resp = None
+            requestTriesLeft = nbRequestsMaxTries
+
+            while ((resp is None) or (resp.status_code != 200)) and (requestTriesLeft > 0):
+                requestTriesLeft -= 1
+                print('Sending request try : [%s/%s]' % (nbRequestsMaxTries - requestTriesLeft, nbRequestsMaxTries))
+                resp = requests.get(request, auth=authentification,headers=headers)
+
             if resp.status_code == 200:
                 count = int(resp.json()["@odata.count"])
                 nb_steps = int(count/200)
@@ -39,7 +49,15 @@ def getL0(year, month, ltaUsr, ltaPwd):
                     # Mise à jour de la requete
                     request = (coreURL + "&$skip=%d") % (year,month,start_day,year,month,nb_days,(step+1)*200)
                     print(request)
-                    resp = requests.get(request, auth=authentification,headers=headers)            
+
+                    resp = None
+                    requestTriesLeft = nbRequestsMaxTries
+
+                    while ((resp is None) or (resp.status_code != 200)) and (requestTriesLeft > 0):
+                        requestTriesLeft -= 1
+                        print('Sending request try : [%s/%s]' % (nbRequestsMaxTries - requestTriesLeft, nbRequestsMaxTries))
+                        resp = requests.get(request, auth=authentification,headers=headers)
+
                     if resp.status_code == 200:
                         for aux in resp.json()["value"]:
                             name = aux['Name']
