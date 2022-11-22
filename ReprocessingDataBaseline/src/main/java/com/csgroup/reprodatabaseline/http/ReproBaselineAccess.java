@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -235,17 +236,20 @@ public class ReproBaselineAccess {
 	
 	public List<L0Product> getLevel0ProductsByName(String level0Name) {
 		
+		String reformatedLevel0Name = level0Name.replace("\\\"", "");
+		reformatedLevel0Name = FilenameUtils.removeExtension(reformatedLevel0Name);
+		
 		String queryString = "SELECT DISTINCT entity FROM com.csgroup.reprodatabaseline.datamodels.L0Product entity "
 				+ "WHERE entity.name LIKE \'%level0Name%\'";
 		
-		queryString = queryString.replace("level0Name", level0Name.replace("\\\"", ""));
+		queryString = queryString.replace("level0Name", reformatedLevel0Name);
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		List<L0Product> l0_products;
 		try {	
 			Query query = entityManager.createQuery(queryString);
 			l0_products = query.getResultList();
-			LOG.debug(MessageFormat.format("{0} L0 products match \"{1}\" in the database.", String.valueOf(l0_products.size()), level0Name));
+			LOG.debug(MessageFormat.format("{0} L0 products match \"{1}\" in the database.", String.valueOf(l0_products.size()), reformatedLevel0Name));
 		} finally {
 			entityManager.close();
 		}
