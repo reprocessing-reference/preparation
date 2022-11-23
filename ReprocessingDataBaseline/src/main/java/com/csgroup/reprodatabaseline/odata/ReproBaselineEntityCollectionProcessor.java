@@ -61,6 +61,10 @@ import com.csgroup.reprodatabaseline.http.ReproBaselineAccess;
 public class ReproBaselineEntityCollectionProcessor implements EntityCollectionProcessor {
 
   private static final Logger LOG = LoggerFactory.getLogger(ReproBaselineEntityCollectionProcessor.class);
+  
+  // Using the logger defined in the logback.xml config file in resources to log to a specific file the names of the L0 that have not been found
+  // on the database
+  private static final Logger LOG_L0_NOT_FOUND = LoggerFactory.getLogger("L0NotFoundOnBase");
 
   private OData odata;
   private ServiceMetadata srvMetadata;
@@ -210,6 +214,7 @@ public class ReproBaselineEntityCollectionProcessor implements EntityCollectionP
         		level0InfoMessage = "Warning : The L0 product name entered in the request was not found in the data base. "
         				+ "So, the ADF selection rule has been applied using the sensing start in the provided product name.";
         		LOG.warn(level0InfoMessage);
+        		LOG_L0_NOT_FOUND.warn(level0Name);
         	}
         	
         	

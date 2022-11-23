@@ -287,6 +287,8 @@ services:
       - database_reprocessing
     networks:
       - proxynet
+    volumes:
+      - /var/log/ReprocessingDataBaseline:/var/log/ReprocessingDataBaseline    
 
   #######################################
   # proxy 
