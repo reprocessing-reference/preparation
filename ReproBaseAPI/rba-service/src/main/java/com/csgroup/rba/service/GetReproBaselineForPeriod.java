@@ -148,6 +148,9 @@ public class GetReproBaselineForPeriod implements Operation<List<AuxFile>> {
     	{
     		hasOrderBy = false;
     	}
+    	
+    	OrderByDirection = OrderByDirection.toUpperCase();
+    	
 		if (!OrderByDirection.equals("ASC") && !OrderByDirection.equals("DESC")) {
 			LOG.info("Order by order " + OrderByDirection + " not supported \"ASC\" used by default. Please use \"ASC\" or \"DESC\".");
 			OrderByDirection = "ASC";

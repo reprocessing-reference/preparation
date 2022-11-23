@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--inputFile",
                         help="Input listing file",
                         required=True)
-    parser.add_argument("-h", "--host",
+    parser.add_argument("-dbh", "--host",
                         help="IP of the host of the DataBase",
                         required=True)
     parser.add_argument("-p", "--port",
@@ -47,7 +47,7 @@ if __name__ == "__main__":
                     splittedLine = line.split(';')
                     l0_name = splittedLine[0].strip()
                     start = stop = splittedLine[1].replace('\n', '').strip()
-                    print(l0_name)
+                    print(l0_name + ' - ' + start)
                     
                     # S2A_OPER_MSI_L0__DS_MPS__20160504T004104_S20160503T213533_N02.02.tar
 
