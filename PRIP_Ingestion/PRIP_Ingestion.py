@@ -36,7 +36,7 @@ if __name__ == "__main__":
     try:
         token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
-                                           args.auxipuser, args.auxippassword,"https://lta.cloudferro.copernicus.eu/odata/v1/", ["_UT1UTC_"],sat="S2",mode="prod")
+                                           args.auxipuser, args.auxippassword,"https://lta.cloudferro.copernicus.eu/odata/v1/", ["_UT1UTC_", "_ECMWFD_ADG_"],sat="S2",mode="prod")
                                            #args.auxipuser, args.auxippassword,"https://lta.cloudferro.copernicus.eu/odata/v1/", ["_GIP_","_UT1UTC_"],sat="S2",mode="prod")
     except Exception as e:
         print(e)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         token_info = get_token_info(args.auxipuser, args.auxippassword, mode="prod")
         prip_list_GIPP = PRIP_S2.prip_list(args.user, args.password,
                                            args.auxipuser, args.auxippassword,
-                                           "https://lta.cloudferro.copernicus.eu/odata/v1/", ["_UT1UTC_"],sat="S2",mode="prod")
+                                           "https://lta.cloudferro.copernicus.eu/odata/v1/", ["_UT1UTC_", "_ECMWFD_ADG_"],sat="S2",mode="prod")
                                            #"https://lta.cloudferro.copernicus.eu/odata/v1/", ["_GIP_","_UT1UTC_"],sat="S2",mode="prod")
     print("Number of PRIP File : "+str(len(prip_list_GIPP)))
     for f in prip_list_GIPP:
