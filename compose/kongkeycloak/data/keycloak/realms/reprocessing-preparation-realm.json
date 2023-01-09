@@ -675,7 +675,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "696232a7-baaa-43b2-8263-756cb5c29e7d",
       "redirectUris": [
-        "https://reprocessing-preparation.ml/*"
+        "https://reprocessing-auxiliary.copernicus.eu/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -853,18 +853,18 @@
     {
       "id": "b40bc066-9c75-44b4-964e-7d11ee60491a",
       "clientId": "reprocessing-preparation",
-      "rootUrl": "https://reprocessing-preparation.ml",
-      "adminUrl": "https://reprocessing-preparation.ml",
+      "rootUrl": "https://reprocessing-auxiliary.copernicus.eu",
+      "adminUrl": "https://reprocessing-auxiliary.copernicus.eu",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://reprocessing-preparation.ml/*"
+        "https://reprocessing-auxiliary.copernicus.eu/*"
       ],
       "webOrigins": [
-        "https://reprocessing-preparation.ml"
+        "https://reprocessing-auxiliary.copernicus.eu"
       ],
       "notBefore": 0,
       "bearerOnly": false,

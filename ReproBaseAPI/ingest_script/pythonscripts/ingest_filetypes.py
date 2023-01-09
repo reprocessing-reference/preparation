@@ -383,7 +383,7 @@ def main():
             template['LongName'] = lines['long name']
             print("curl -X PUT -u admin:'%HEl$1698OgDa%L' -H 'Content-Type: application/json' -d @"
                   +os.path.join(args.output, lines['long name']+".json")
-                  + " \"https://reprocessing-preparation.ml/reprocessing.svc/AuxTypes('"+lines['long name']+"')\"")
+                  + " \"https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxTypes('"+lines['long name']+"')\"")
             if lines['short name'] != '':
                 template['ShortName'] = lines['short name']
             else:

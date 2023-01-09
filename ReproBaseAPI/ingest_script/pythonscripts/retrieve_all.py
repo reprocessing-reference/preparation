@@ -6,7 +6,7 @@ import time
 
 import requests
 url_dev = "https://dev.reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
-url_prod = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
+url_prod = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxFiles"
 import tocken_utils
 
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
