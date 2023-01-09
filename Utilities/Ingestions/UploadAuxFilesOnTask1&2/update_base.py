@@ -10,7 +10,7 @@ from ingestion.lib.auxip import get_token_info
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 url_dev = "https://dev.reprocessing-preparation.ml/reprocessing.svc"
-url_prod = "https://reprocessing-preparation.ml/reprocessing.svc"
+url_prod = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc"
 
 def send_request(request, jsonload, access_token):
     headers = {'Content-type': 'application/json','Authorization' : 'Bearer %s' % access_token}

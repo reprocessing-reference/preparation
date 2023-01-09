@@ -15,7 +15,7 @@ def get_token_info(user,password,service="auxip", mode="dev"):
     if mode == "dev":
         token_endpoint = "https://dev.reprocessing-preparation.ml/auth/realms/%s/protocol/openid-connect/token" % service
     else:
-        token_endpoint = "https://reprocessing-preparation.ml/auth/realms/%s/protocol/openid-connect/token" % service
+        token_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auth/realms/%s/protocol/openid-connect/token" % service
 
     print(token_endpoint)
     response = requests.post(token_endpoint,data=data,headers=headers)
@@ -30,6 +30,6 @@ def refresh_token_info(token_info,timer,service="auxip"):
     else:
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         data = {"refresh_token":token_info['refresh_token'],"client_id":"%s" % service,"grant_type":"refresh_token"}
-        token_endpoint = "https://reprocessing-preparation.ml/auth/realms/%s/protocol/openid-connect/token" % service
+        token_endpoint = "https://reprocessing-auxiliary.copernicus.eu/auth/realms/%s/protocol/openid-connect/token" % service
         response = requests.post(token_endpoint,data=data,headers=headers)
         return response.json() 

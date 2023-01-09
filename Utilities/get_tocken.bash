@@ -8,7 +8,7 @@ RAWTKN=$(curl -s -X POST \
     -d "password="$PASSWORD \
     -d 'grant_type=password' \
     -d "client_id=reprocessing-preparation" \
-    https://reprocessing-preparation.ml/auth/realms/reprocessing-preparation/protocol/openid-connect/token \
+    https://reprocessing-auxiliary.copernicus.eu/auth/realms/reprocessing-preparation/protocol/openid-connect/token \
     |jq . )
 
 TOKEN=$(echo $RAWTKN | jq -r '.access_token')

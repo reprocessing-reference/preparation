@@ -213,7 +213,7 @@ for period in periods_dict :
     unit = periods_dict[period][1]
     # GET request
     headers = {'Content-Type': 'application/json','Authorization' : 'Bearer %s' % args.token}
-    request="https://reprocessing-preparation.ml/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s',Variability='Static')" % (mission,unit,start,stop)
+    request="https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/GetReproBaselineNamesForPeriod(Mission='%s',Unit='%s',SensingTimeStart='%s',SensingTimeStop='%s',Variability='Static')" % (mission,unit,start,stop)
 
     # print(request)
 

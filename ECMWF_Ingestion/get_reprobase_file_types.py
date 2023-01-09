@@ -14,7 +14,7 @@ def send_request(mode, access_token):
     auxip_endpoint = "https://dev.reprocessing-preparation.ml/reprocessing.svc/AuxTypes?$expand=ProductLevels"
     res = None
     if mode == 'prod':
-        auxip_endpoint = "https://reprocessing-preparation.ml/reprocessing.svc/AuxTypes?$expand=ProductLevels"
+        auxip_endpoint = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxTypes?$expand=ProductLevels"
     resp = requests.get(auxip_endpoint,headers=headers)
     if resp.status_code != 200:
         print(resp.status_code)

@@ -115,7 +115,7 @@ services:
       KEYCLOAK_USER:     admin
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
       PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_FRONTEND_URL: https://reprocessing-preparation.ml/auth
+      KEYCLOAK_FRONTEND_URL: https://reprocessing-auxiliary.copernicus.eu/auth
     volumes:
       - ./data/keycloak/realms:/opt/jboss/keycloak/realm-config
 

@@ -1,4 +1,4 @@
-url="http://reprocessing-preparation.ml:8080/reprocessing.svc"
+url="http://reprocessing-auxiliary.copernicus.eu:8080/reprocessing.svc"
 pass="%HEl$1698OgDa%L"
 base_path="/home/beon/AUXIP/Code/"
 #rm -r ${base_path}/json/file_types
