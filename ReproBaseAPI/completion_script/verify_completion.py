@@ -6,7 +6,7 @@ from pip._vendor.requests import auth
 
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
-url = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
+url = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxFiles"
 test_dur=True
 test_miss=False
 

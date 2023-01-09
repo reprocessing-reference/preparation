@@ -10,7 +10,7 @@ import tocken_utils
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
 url_dev = "https://dev.reprocessing-preparation.ml/reprocessing.svc"
-url_prod = "https://reprocessing-preparation.ml/reprocessing.svc"
+url_prod = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc"
 login="admin"
 password = "***PASSWORD***"
 

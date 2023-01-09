@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(reprocessing-preparation.ml)
+domains=(reprocessing-auxiliary.copernicus.eu)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="yannick.peyrotau@csgroup.eu" # Adding a valid address is strongly recommended
