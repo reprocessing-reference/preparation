@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2OCN')"], "Format": "SAFE", "Comments": "IPF L2 processing parameters", "Mission": "S1SAR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValCover", "Validity": "ValidityPeriod", "LongName": "AUX_PP2", "ShortName": "AUX_PP2"}

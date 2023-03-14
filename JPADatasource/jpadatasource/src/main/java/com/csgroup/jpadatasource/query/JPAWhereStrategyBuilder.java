@@ -102,7 +102,7 @@ public class JPAWhereStrategyBuilder {
     	 }
     	builder.append("(");
         buildFromCriteriaValue(criteria.getProperty(), builder);
-        builder.append(" LIKE '%").append(containes).append("')");
+        builder.append(" LIKE '%").append(containes.replace("_","\\_")).append("'  ESCAPE '\\' )");
 	}
 
 	private void buildFromStartsWithCriteria(StartsWithMethodCriteria criteria, StringBuilder builder) throws ODataException {
@@ -115,7 +115,7 @@ public class JPAWhereStrategyBuilder {
     	
     	builder.append("(");
         buildFromCriteriaValue(criteria.getProperty(), builder);
-        builder.append(" LIKE '").append(containes).append("%')");
+        builder.append(" LIKE '").append(containes.replace("_","\\_")).append("%' ESCAPE '\\' )");
 		
 	}
 
@@ -129,7 +129,7 @@ public class JPAWhereStrategyBuilder {
     	
     	builder.append("(");
         buildFromCriteriaValue(criteria.getProperty(), builder);
-        builder.append(" LIKE '%").append(containes).append("%')");
+        builder.append(" LIKE '%").append(containes.replace("_","\\_")).append("%' ESCAPE '\\' )");
 		
 	}
 

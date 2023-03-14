@@ -7,7 +7,7 @@ import os
 import re
 import uuid
 
-DEBUG=False
+DEBUG=True
 
 def parse_filename_wnd(the_file_name):
     if DEBUG:
@@ -101,6 +101,8 @@ def main():
     list_of_files = {}
     idx = 1
     for filenames in lines:
+        if filenames.startswith("#"):
+            continue
         filename = os.path.basename(filenames)
         if DEBUG:
             print("Treating "+filename+ " : " +str(idx)+ " / " + str(len(lines)))
@@ -234,6 +236,7 @@ def main():
                 print("AUX_RESORB file detected")
             if DEBUG:
                 print("AUX_RESORB out of scope")
+            idx = idx + 1
             continue
             filetype_str = "AUX_RESORB_S1"
             dic = parse_filename_orb(os.path.splitext(os.path.splitext(filename)[0])[0])

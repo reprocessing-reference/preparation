@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>...</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../../../assets/css/styledoc.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p><img src="./media/media/image1.png"
+style="width:2.09375in;height:0.80694in" /> <img
+src="./media/media/image2.jpg"
+style="width:2.17352in;height:0.80198in" /></p>
+<p>RRPP-TN-0004-CS</p>
+<p>COPERNICUS - REPROCESSING REFERENCE PACKAGE PREPARATION</p>
+<p><u>Configuration Baseline User Manual</u></p>
+<p><u>For Sentinel-2-MSI</u></p>
+<p>18 May 2022</p>
+<p>Document Change Record</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>Version</td>
+<td>Date</td>
+<td>Changes</td>
+</tr>
+<tr class="even">
+<td>Version 1</td>
+<td>30 November 2020</td>
+<td><blockquote>
+<p>Sentinel-2 preliminary version</p>
+</blockquote></td>
+</tr>
+<tr class="odd">
+<td>Version 1.1</td>
+<td>20 January 2021</td>
+<td><blockquote>
+<p>Baseline Table is completed</p>
+</blockquote></td>
+</tr>
+<tr class="even">
+<td>Version 2</td>
+<td>02 April 2021</td>
+<td><blockquote>
+<p>Several corrections</p>
+</blockquote></td>
+</tr>
+<tr class="odd">
+<td>Version 2.1</td>
+<td>11 June 2021</td>
+<td><blockquote>
+<p>GIPP types out of scope</p>
+</blockquote></td>
+</tr>
+<tr class="even">
+<td>Version 2.2</td>
+<td>27 July 2021</td>
+<td><blockquote>
+<p>CAMSAN and CAMSRE added</p>
+</blockquote></td>
+</tr>
+<tr class="odd">
+<td>Version 3.0</td>
+<td>28 January 2022</td>
+<td><blockquote>
+<p>Baseline Table is updated with new GIPP files</p>
+</blockquote></td>
+</tr>
+<tr class="even">
+<td>Version 3.1</td>
+<td>18 May 2022</td>
+<td><blockquote>
+<p>Few new GIPP files</p>
+</blockquote></td>
+</tr>
+</tbody>
+</table>
+<p>Table of Content</p>
+<p><a href="#context-and-scope">1. Context and Scope <a
+href="#context-and-scope">3</a></a></p>
+<p><a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">2.
+Presentation of the Reprocessing Configuration Baseline Reference and
+User Guide <a
+href="#presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">4</a></a></p>
+<p><a href="#annex-all-adf-table">3. Annex: All ADF Table <a
+href="#annex-all-adf-table">12</a></a></p>
+<p>Reference Documents for Sentinel-2</p>
+<p>Sentinel-2 Product Unit Definition and Metadata ICD_v1.3.pdf</p>
+<p>Sentinel-2-Products-Specification-Document.pdf</p>
+<p>[CCDD-IPF]S2-PDGS-BP-IPF-CCDD [11] - IPF DDD.pdf</p>
+<p>[CCDD-PS] S2-PDGS-TAS-DI-CCDD-PS [18] - Production DDD.pdf</p>
+<p>[CCDD-PS]S2-PDGS-TAS-DI-CCDD-PS [21].pdf</p>
+<p>[CCTS-IPF] S2-PDGS-TAS-DI-BPDP-CCTS-IPF [11] - IPF TS.pdf</p>
+<p>[CCTS-PS]S2-PDGS-TAS-DI-CCTS-PS [09] - Production TS.pdf</p>
+<p>[CICD-ADP] S2-PDGS-TAS-DI-ICD-ADP [08] - Aux ICD.pdf</p>
+<p>[CICD-IPF] S2-PDGS-TAS-DI-BPDP-ICD-IPF [15] - IDP-OLQC ICD.pdf</p>
+<p>[ICD-PS]S2-PDGS-TAS-DI-ICD-PS [15] - Production ICD.pdf</p>
+<p>[ICD-PS]S2-PDGS-TAS-DI-ICD-PS [16].pdf</p>
+<p>[L2A-SRN]S2-PDGS-MPC-L2A-SRN-V2.8.0_V01.pdf</p>
+<p>[L2A-SUM]S2-PDGS-MPC-L2A-SUM-V2.8.0_V01.pdf</p>
+<p>[S2-PSD]S2-PDGS-TAS-DI-PSD.pdf</p>
+<p>[SUM-DPC]S2-PDGS-TAS-DI-SUM-MOP-PS [14] - DPC Manual.pdf</p>
+<p>[SUM-IPF] S2-PDGS-BP-IPF-CCSUM [17] IPF Manual.pdf</p>
+<p>Applicable Documents</p>
+<p>[AD-01] RRPP-API-0001-CS Reprocessing-Configuration-Baseline-API
+ICD</p>
+<h1 id="context-and-scope">Context and Scope</h1>
+<p>The Reprocessing Reference Package allows the preparation of the
+future Sentinel-1/2/3 reprocessing activities by ensuring that all
+information required to reprocess past instrumental data is available
+and ready to use in the frame of a reprocessing operational service.</p>
+<p>The Reprocessing Preparation Package is composed of :</p>
+<ul>
+<li><p>a summary Reprocessing Configuration Baseline and an API to query
+the Reprocessing Configuration Baseline based on the mission satellite
+unit, sensing time, IPF version to be used, product level and type to be
+generated,</p></li>
+<li><p>an interface delivery point on a cloud environment providing
+access to all auxiliary files required for the reprocessing
+operation,</p></li>
+<li><p>a detailed Reprocessing Data Baseline and an API to retrieve the
+auxiliary files to be used for a given time period.</p></li>
+</ul>
+<p>The processing chains of Level-1&amp;2 products use a set of
+auxiliary files to ensure that the generated products meet the quality
+and calibration/validation specifications.</p>
+<p>The auxiliary files used in a reprocessing operation include
+typically:</p>
+<ul>
+<li><p>Static auxiliary files, which are not instrument or time
+dependent. They may be updated rarely in case a new version becomes
+available.</p></li>
+<li><p>Processor auxiliary files, which are generated by the
+Copernicus/ESA Ground Segment. They are linked to a specific instrument
+configuration or to an enhanced set of calibration and/or validation
+information. They are updated on a case by case basis.</p></li>
+<li><p>External auxiliary files, which are generated based on
+information retrieved from external sources, e.g. from meteo centres.
+These files are updated frequently, up to several times per
+day.</p></li>
+</ul>
+<p>The reprocessing operation is performed with an upgraded version of
+the data processor and a corresponding set of auxiliary files.</p>
+<h1
+id="presentation-of-the-reprocessing-configuration-baseline-reference-and-user-guide">Presentation
+of the Reprocessing Configuration Baseline Reference and User Guide</h1>
+<p>This document is the User Manual of the Reprocessing Configuration
+Baseline for Sentinel-2 MSI.</p>
+<p>It gives information on the content of the Reprocessing Configuration
+Baseline, how it is implemented and how it should be used.</p>
+<p>It provides the necessary definition and information for the
+preparation of any reprocessing campaign using the last IPF version
+available today.</p>
+<p>The generic table in annex (called “All_ADF”) provides the list of
+all types of auxiliary files needed for the Sentinel missions. For each
+type, the table provides the unit dependency (yes or no), the selection
+rule (number referring to the Rule Table in the next chapter) for the
+processing task, the usage (in processor level 0 or 1 or 2) and the
+variability (static of dynamic). A static type is rarely updated while a
+dynamic type is often updated. The selection rules for the auxiliary
+files depend on the data processor task.</p>
+<p>Then a Reprocessing Configuration Baseline table provides the list of
+exact auxiliary files to be used with the last processor applicable
+version with their application time, for each sentinel unit.</p>
+<p>This table is made of the following columns:</p>
+<ul>
+<li><p>The satellite unit: A or B</p></li>
+<li><p>The application period: period of sensing time where the given
+auxiliary files are applicable</p></li>
+<li><p>The product level and type: the product type which can be
+generated using the given auxiliary files</p></li>
+<li><p>The processor (IPF) version considered for this table</p></li>
+<li><p>The auxiliary type and the auxiliary file name which is
+applicable</p></li>
+</ul>
+<p>It takes into account any changes in time affecting the instrument
+configuration or on-board calibration, the potential enhancements in the
+auxiliary files, the potential changes related to the processor
+evolutions, etc, in order to ensure the ingestion of the applicable
+auxiliary files for the last operational IPF version.</p>
+<p>The Application Programming Interface (API) allows the query and
+retrieval of the corresponding list of auxiliary files given a mission
+satellite unit, sensing time period and product level and type to be
+generated.</p>
+<p>The API access is protected and uses an authorization protocol with
+generic mail address.</p>
+<p>The users connect to the API according to [AD-1].</p>
+<p>The main focus is on the set of the auxiliary data files for
+Sentinel-2 mission.</p>
+<p>The general reprocessing rules agreed with ESA are the following
+ones:</p>
+<ul>
+<li><p>CAL data must correspond to the real instrument configuration and
+calibration status at the considered sensing time.</p></li>
+<li><p>IERS data must be as close as possible to the considered sensing
+time (less than one week before).</p></li>
+<li><p>ECMWF data should come from the same reanalysis version for all
+the reprocessing coherency (no forecast needed).</p></li>
+<li><p>The DEM is the responsibility of the Reprocessing Contract, so
+out of the scope of this activity. It is static and installed within the
+IPF.</p></li>
+<li><p>Processing parameters should be the best ones and the same
+version for all the reprocessing coherency.</p></li>
+<li><p>HKTM data should be the last version correcting any previous
+temporary anomalies or data gaps.</p></li>
+<li><p>Sentinel-2 orbit data from the Copernicus POD service are not
+used.</p></li>
+<li><p>Black orbits should be listed and not reprocessed because these
+orbits suffered from anomalies in raw data which are impossible to
+correct.</p></li>
+</ul>
+<p>The following auxiliary types are out of scope:</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>AUX_GRIXXX_</th>
+<th>The GRI is included in the IPF SW, as the DEM and the geoid.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PRD_HKTM___</td>
+<td>The PRD_HKTM are provided with the L0 data.</td>
+</tr>
+<tr class="even">
+<td>AUX_SADATA</td>
+<td>The AUX_SADATA are provided with the L0 data.</td>
+</tr>
+<tr class="odd">
+<td>AUX_SXXYYY</td>
+<td>The AUX_SXXYYY are included in the AUX_SADATA.</td>
+</tr>
+<tr class="even">
+<td>AUX_GPS___</td>
+<td>The AUX_GPS is listed in section 5.2.3.1 of
+S2-PDGS-TAS-DI-BPDP-ICD-IPF v15, but it is probably a mistake, as this
+AUX_GPS file never existed.</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2DEBA</td>
+<td>Unused by PDGS</td>
+</tr>
+<tr class="even">
+<td>GIP_R2MACO</td>
+<td>Unused by PDGS</td>
+</tr>
+<tr class="odd">
+<td>GIP_L2ACFG</td>
+<td>Unused by PDGS</td>
+</tr>
+</tbody>
+</table>
+<p>Some GIPP files should be unit-independent (as specified in S2 PDGS
+documentation) but in fact, they are found different for S2A and S2B
+:</p>
+<p>GIP_TILPAR, GIP_ECMWFP, GIP_JP2KPA, GIP_OLQCPA, GIP_PROBAS</p>
+<p>The last available IPF versions are provided in the following
+table:</p>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>mission</th>
+<th>instrument</th>
+<th>level 1/2</th>
+<th>release date</th>
+<th>IPF version</th>
+<th>Baseline ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S2</td>
+<td>MSI</td>
+<td>L1</td>
+<td>02/02/2022</td>
+<td>???</td>
+<td>04.00</td>
+</tr>
+<tr class="even">
+<td>S2</td>
+<td>MSI</td>
+<td>L2</td>
+<td>02/02/2022</td>
+<td>???</td>
+<td>04.00</td>
+</tr>
+</tbody>
+</table>
+<p>These processing versions are considered as the applicable baselines
+for this activity.</p>
+<p>Any new IPF version official release triggers a new version of this
+User Manual.</p>
+<p>The Configuration Baseline Table is provided on the following
+page.</p>
+<p>(B00: no spectral band dependency; BXX: one file for each spectral
+band)</p>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Unit</strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Type</strong></th>
+<th><strong>Auxiliary Type</strong></th>
+<th><strong>Auxiliary file to be used</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td rowspan="10">20150622T000000-20150818T143000</td>
+<td>L1A/B/C</td>
+<td>R2DEPI</td>
+<td>S2A_OPER_GIP_R2DEPI_MPC__20210608T000016_V20150622T000000_20151013T134200_B00</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2EOB2</td>
+<td>S2A_OPER_GIP_R2EOB2_MPC__20210608T000016_V20150622T000000_20150818T143000_BXX</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2SWIR</td>
+<td>S2A_OPER_GIP_R2SWIR_MPC__20210608T000001_V20150622T000000_20150819T112600_B00</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>SPAMOD</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2ABCA</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2EQOG</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>AUX_ECMWFD</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C,
+Variability=’Dynamic’’)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1+L2A</td>
+<td>AUX_CAMSRE</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>AUX_UT1UTC</td>
+<td>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’A’,
+SensingTimeStart=’2015-06-22T00:00:00.000Z’,
+SensingTimeStop=’2015-08-18T14:30:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1+L2A</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td rowspan="10">20150818T143000-20150819T112600</td>
+<td>L1A/B/C</td>
+<td>R2DEPI</td>
+<td>S2A_OPER_GIP_R2DEPI_MPC__20210608T000016_V20150622T000000_20151013T134200_B00</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2EOB2</td>
+<td>S2A_OPER_GIP_R2EOB2_MPC__20210608T000009_V20150818T143000_20150903T110752_BXX</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2SWIR</td>
+<td>S2A_OPER_GIP_R2SWIR_MPC__20210608T000001_V20150622T000000_20150819T112600_B00</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>SPAMOD</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2ABCA</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>R2EQOG</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>AUX_ECMWFD</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1+L2A</td>
+<td>AUX_CAMSRE</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>L1A/B/C</td>
+<td>AUX_UT1UTC</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>L1+L2A</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+</tbody>
+</table>
+<p>Etc…</p>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 25%" />
+<col style="width: 5%" />
+<col style="width: 9%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Unit</strong></th>
+<th><strong>Application Period</strong></th>
+<th><strong>Product Type</strong></th>
+<th><strong>Auxiliary Type</strong></th>
+<th><strong>Auxiliary file to be used</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B</td>
+<td rowspan="10">20170306T000000-20170517T090510</td>
+<td>L1A/B/C</td>
+<td>R2SWIR</td>
+<td>S2B_OPER_GIP_R2SWIR_MPC__20210608T000001_V20150622T000000_20170517T090510_B00</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2DEPI</td>
+<td>S2B_OPER_GIP_R2DEPI_MPC__20210608T000004_V20150622T000000_20180221T000000_B00</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2EOB2</td>
+<td>S2B_OPER_GIP_R2EOB2_MPC__20210608T000001_V20150622T000000_20170519T142050_BXX</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>SPAMOD</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-05-17T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2ABCA</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-05-17T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2EQOG</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-05-17T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>AUX_ECMWFD</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-05-17T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1+L2A</td>
+<td>AUX_CAMSRE</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-05-17T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>AUX_UT1UTC</td>
+<td><p>GetReproBaselineListForPeriod(Mission=’S2MSI’, Unit=’B’,
+SensingTimeStart=’2017-03-06T00:00:00.000Z’,</p>
+<p>SensingTimeStop=’2017-03-22T00:00:00.000Z’, ProductType=‘L1C’,
+Variability=’Dynamic’)</p></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1+L2A</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td rowspan="10">20170517T090510-20170519T142050</td>
+<td>L1A/B/C</td>
+<td>R2SWIR</td>
+<td>S2B_OPER_GIP_R2SWIR_MPC__20210608T000003_V20170517T090510_21000101T000000_B00</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2DEPI</td>
+<td>S2B_OPER_GIP_R2DEPI_MPC__20210608T000004_V20150622T000000_20180221T000000_B00</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2EOB2</td>
+<td>S2B_OPER_GIP_R2EOB2_MPC__20210608T000001_V20150622T000000_20170519T142050_BXX</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>SPAMOD</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2ABCA</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>R2EQOG</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>AUX_ECMWFD</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1+L2A</td>
+<td>AUX_CAMSRE</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>L1A/B/C</td>
+<td>AUX_UT1UTC</td>
+<td>GetReproBaselineListForPeriod(…)</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>L1+L2A</td>
+<td>***</td>
+<td>all static files</td>
+</tr>
+</tbody>
+</table>
+<p>Etc …….</p>
+<p>List of static ADF :</p>
+<p>S2A_OPER_GIP_ATMIMA_MPC__20210608T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_ATMIMA_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_ATMSAD_MPC__20210608T000005_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_ATMSAD_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_BLINDP_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_BLINDP_MPC__20210608T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_CLOINV_MPC__20210609T000005_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_CLOINV_MPC__20210609T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_CLOPAR_MPC__20220120T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_CLOPAR_MPC__20220120T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_CONVER_MPC__20210608T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_CONVER_MPC__20210608T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_DATATI_MPC__20210608T000007_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_DATATI_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_DECOMP_MPC__20210608T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_DECOMP_MPC__20210727T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2__OPER_GIP_EARMOD_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_ECMWFP_MPC__20210608T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_ECMWFP_MPC__20210727T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_G2PARA_MPC__20220328T000025_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_G2PARA_MPC__20220328T000025_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_G2PARE_MPC__20150605T094736_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_G2PARE_MPC__20210610T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_GEOPAR_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_GEOPAR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_HRTPAR_MPC__20220328T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_HRTPAR_MPC__20220328T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_INVLOC_MPC__20210608T000006_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_INVLOC_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_INTDET_MPC__20210906T000010_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_INTDET_MPC__20210906T000010_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_JP2KPA_MPC__20210713T123700_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_JP2KPA_MPC__20210713T123700_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_LREXTR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_LREXTR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_MASPAR_MPC__20220120T000009_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_MASPAR_MPC__20220120T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_OLQCPA_MPC__20220217T000041_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_OLQCPA_MPC__20220217T000041_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_PRDLOC_MPC__20210608T000012_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_PRDLOC_MPC__20210608T000009_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_PROBAS_MPC__20220121T000400_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_PROBAS_MPC__20220121T000400_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_R2BINN_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_R2BINN_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_R2CRCO_MPC__20210608T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_R2CRCO_MPC__20220120T000002_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_R2DECT_MPC__20210608T000003_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_R2DECT_MPC__20210608T000001_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2A_OPER_GIP_R2DEFI_MPC__20210608T000003_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_R2DEFI_MPC__20210608T000001_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2A_OPER_GIP_R2DENT_MPC__20210608T000003_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_R2DENT_MPC__20210608T000001_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2A_OPER_GIP_R2L2NC_MPC__20210608T000003_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_R2L2NC_MPC__20210608T000001_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2A_OPER_GIP_R2NOMO_MPC__20210608T000004_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_R2NOMO_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_R2PARA_MPC__20220307T000009_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_R2PARA_MPC__20220307T000009_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_R2WAFI_MPC__20210608T000003_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_R2WAFI_MPC__20210608T000001_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2A_OPER_GIP_RESPAR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_RESPAR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_TILPAR_MPC__20210608T000007_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2B_OPER_GIP_TILPAR_MPC__20210608T000001_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2A_OPER_GIP_VIEDIR_MPC__20210608T000005_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2B_OPER_GIP_VIEDIR_MPC__20210608T000006_V20150622T000000_21000101T000000_BXX.TGZ</p>
+<p>S2__OPER_GIP_L2ACAC_MPC__20220121T000004_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2__OPER_GIP_L2ACFG_MPC__20220124T000000_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2__OPER_GIP_L2ACSC_MPC__20220121T000003_V20150622T000000_21000101T000000_B00.TGZ</p>
+<p>S2__OPER_GIP_PROBA2_MPC__20220121T000400_V20150622T000000_21000101T000000_B00.TGZ</p>
+<h1 id="annex-all-adf-table">Annex: All ADF Table</h1>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 4%" />
+<col style="width: 10%" />
+<col style="width: 6%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Type</strong></th>
+<th><strong>Origin</strong></th>
+<th><strong>Static/Dynamic</strong></th>
+<th><strong>Usage</strong></th>
+<th><strong>Comment</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GIP_R2MACO</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>Maximum signal denoising coefficients (13 files, one per band)</td>
+</tr>
+<tr class="even">
+<td>GIP_L2ACSC</td>
+<td>ESA</td>
+<td>static</td>
+<td>L2</td>
+<td>GIPP for IDPSC: L2A Surface Classification (no dependence on
+satellite unit)</td>
+</tr>
+<tr class="odd">
+<td>GIP_L2ACAC</td>
+<td>ESA</td>
+<td>static</td>
+<td>L2</td>
+<td>GIPP for IDPSC: L2A Atmospheric Correction (no dependence on
+satellite unit)</td>
+</tr>
+<tr class="even">
+<td>GIP_L2ACFG</td>
+<td>ESA</td>
+<td>static</td>
+<td>L2</td>
+<td>Configuration parameters for L2A processor</td>
+</tr>
+<tr class="odd">
+<td>L2A_GIPP</td>
+<td>ESA</td>
+<td>static</td>
+<td>L2</td>
+<td>L2A processor user configuration parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_PROBA2</td>
+<td>ESA</td>
+<td>static</td>
+<td>L2</td>
+<td>GIPP for IDPSC: L2A Processing Baseline</td>
+</tr>
+<tr class="odd">
+<td>AUX_UT1UTC_</td>
+<td>IERS</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>International Earth Rotation &amp; Reference Systems service (IERS)
+data</td>
+</tr>
+<tr class="even">
+<td>GIP_ATMIMA_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>image telemetry parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_ATMSAD_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>HKTM parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_BLINDP_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>list of blind pixels</td>
+</tr>
+<tr class="odd">
+<td>GIP_EARMOD_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>earth model parameters (no dependence on satellite unit)</td>
+</tr>
+<tr class="even">
+<td>GIP_CLOINV/PAR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>CLOINV : cloud inversion parameters ; CLOPAR : cloud algorithm
+parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_CONVER_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>Mapping parameters from 16 to 18 bits</td>
+</tr>
+<tr class="even">
+<td>GIP_DATATI_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>datation parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_DECOMP_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>On-board decompression parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_G2PARA_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>geometric parameters for IPF L1 processor</td>
+</tr>
+<tr class="odd">
+<td>GIP_G2PARE_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>geometric parameters for IPF L1 refinement</td>
+</tr>
+<tr class="even">
+<td>GIP_GEOPAR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>global geometric parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_INTDET_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>list of interdetector pixels</td>
+</tr>
+<tr class="even">
+<td>GIP_INVLOC_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>inverse location parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_JP2KPA_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1+L2</td>
+<td>JP2000 compression parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_LREXTR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>extraction parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_MASPAR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>mask parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_OLQCPA_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1+L2</td>
+<td>parameters and tests for the On Line Quality Control</td>
+</tr>
+<tr class="odd">
+<td>GIP_PRDLOC_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>product location parameters</td>
+</tr>
+<tr class="even">
+<td>GIP_PROBAS_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>L1 processing baseline parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2ABCA_</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>radiometric absolute calibration coefficients</td>
+</tr>
+<tr class="even">
+<td>GIP_R2BINN_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>binning parameters for 60m bands</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2CRCO_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>crosstalk correction</td>
+</tr>
+<tr class="even">
+<td>GIP_R2DEBA</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>decomposition base (13 files, one for each band)</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2DECT_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>deconvolution thresholds (13 files, one for each band)</td>
+</tr>
+<tr class="even">
+<td>GIP_R2DEFI_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>deconvolution filters (13 files, one for each band)</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2DENT_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>denoising thresholds (13 files, one for each band)</td>
+</tr>
+<tr class="even">
+<td>GIP_R2DEPI_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>list and status of defective pixels</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2EOB2_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>radiometric equalisation coefficients for on-board processor (13
+files, one per band)</td>
+</tr>
+<tr class="even">
+<td>GIP_R2EQOG_</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>radiometric equalisation coefficients for on-ground L1 processor (13
+files, one per band)</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2L2NC_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>L2 norm coefficients (13 files, one for each band)</td>
+</tr>
+<tr class="even">
+<td>GIP_R2NOMO_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>noise model parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2PARA_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>radiometric parameters for IPF L1</td>
+</tr>
+<tr class="even">
+<td>GIP_R2SWIR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>SWIR pixels status</td>
+</tr>
+<tr class="odd">
+<td>GIP_R2WAFI_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>wavelet filters (13 files, one for each band)</td>
+</tr>
+<tr class="even">
+<td>GIP_RESPAR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>resampling parameters</td>
+</tr>
+<tr class="odd">
+<td>GIP_SPAMOD_</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>platform orientation angles</td>
+</tr>
+<tr class="even">
+<td>GIP_TILPAR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>tiling parameters from global map of tiles (no dependence on
+satellite unit)</td>
+</tr>
+<tr class="odd">
+<td>GIP_VIEDIR_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>viewing directions for each spectral band (13 files)</td>
+</tr>
+<tr class="even">
+<td>GIP_ECMWFP_</td>
+<td>ESA</td>
+<td>static</td>
+<td>L1</td>
+<td>ECMWF support parameters (no dependence on satellite unit)</td>
+</tr>
+<tr class="odd">
+<td>AUX_ECMWFD</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>GRIB data: Total Column Ozone (TCO3), Total Column Water Vapour
+(TCWV) and Mean Sea Level pressure (MSLP)</td>
+</tr>
+<tr class="even">
+<td>AUX_CAMSAN</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>L1+L2</td>
+<td>CAMS AOD data from analysis</td>
+</tr>
+<tr class="odd">
+<td>AUX_CAMSRE</td>
+<td>ECMWF</td>
+<td>dynamic</td>
+<td>L1+L2</td>
+<td>CAMS AOD data from reanalysis</td>
+</tr>
+<tr class="even">
+<td>AUX_ECMWFT</td>
+<td>ESA</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>ECMWF data resampled on the UTM grid in output in L1C product</td>
+</tr>
+<tr class="odd">
+<td>AUX_RESORB</td>
+<td>CPOD</td>
+<td>dynamic</td>
+<td>L1</td>
+<td>Restituted Orbit from POD service</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="footer-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-3" style="color: white"><a href="http://github.com/reprocessing-reference/ " style="color:white" target="_blank">Project's Github</a></div>
+      <div class="col-7" style="color: white"><a href="" style="color:white" target="_blank"></a></div>
+      <div class="col-1"><a href="mailto:{{ site.docurl }}?subject=[General] Commentss&body=Hello, this is some comments about the website" title="Send comments"><span class="ui-icon ui-icon-mail-closed" style="background-color:white"></span></a></div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

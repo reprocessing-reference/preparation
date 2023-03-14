@@ -1,0 +1,1 @@
+{"Variability": "Dynamic", "ProductTypes@odata.bind": ["ProductTypes('L2OCN')"], "Format": "EOF", "Comments": "antenna model error matrices", "Mission": "S1SAR", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "ClosestStopValidity", "Validity": "ValidityPeriod", "LongName": "AMH_ERRMAT_MPC", "ShortName": "AMH_ERRMAT_MPC"}

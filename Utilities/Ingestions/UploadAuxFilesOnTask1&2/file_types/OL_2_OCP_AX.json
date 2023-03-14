@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2LFR')", "ProductTypes('L2LRR')"], "Format": "NCDF", "Comments": "Ocean Colour Data", "Mission": "S3OLCI", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "OL_2_OCP_AX", "ShortName": "OL_2_OCP_AX"}

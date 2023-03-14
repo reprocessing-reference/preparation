@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2')"], "Format": "NCDF", "Comments": "SYN L2 Radiative Transfer Simulation data file", "Mission": "S3SYN", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestValIntersect", "Validity": "AnyTime", "LongName": "SY_2_RAD_AX", "ShortName": "SY_2_SYRTAX"}

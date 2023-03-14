@@ -52,9 +52,16 @@ def main():
     filetype_dict = []
     for (dirpath, dirnames, filenames) in os.walk(args.filetypes):
         for filename in filenames:
+            print(os.path.join(args.filetypes, filename))
             with open(os.path.join(args.filetypes, filename)) as f:
                 filetype = json.load(f)
-                filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
+                if "ProductLevels@odata.bind" in filetype:
+                    filetype_dict.append((filetype["LongName"], filetype["Mission"], filetype["ProductLevels@odata.bind"]))
+                else:
+                    list_of_product_levels = ["ProductLevels('"+p["Level"]+"')" for p in filetype["ProductLevels"] ]
+                    filetype_dict.append(
+                        (filetype["LongName"], filetype["Mission"], list_of_product_levels))
+
 
 
     odata_datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"

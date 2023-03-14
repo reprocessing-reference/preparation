@@ -1,13 +1,8 @@
-FROM ubuntu:20.04
+FROM global_exec:01.00.00
 MAINTAINER CS SI
 
+ADD Auxip-<version>.tar.gz /
 
-COPY auxip-*.jar /app.jar
+RUN chmod a+x /Auxip-<version>/launch.bash
 
-RUN apt-get update -y \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
-       	 openjdk-11-jre \
-    && apt-get clean
-
-ENTRYPOINT ["java" , "-jar" , "/app.jar"]
+ENTRYPOINT ["/Auxip-<version>/launch.bash"]

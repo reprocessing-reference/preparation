@@ -100,15 +100,17 @@ public class AuxipPrimitiveProcessor implements PrimitiveProcessor {
     // 2.1. retrieve the entity data, for which the property has to be read
     Entity entity = storage.readEntityData(edmEntitySet, keyPredicates);
     if (entity == null) { // Bad request
-      throw new ODataApplicationException("Entity not found",
-          HttpStatusCode.NOT_FOUND.getStatusCode(), Locale.ENGLISH);
+
+      int statusCode = HttpStatusCode.NOT_FOUND.getStatusCode();
+      throw new ODataApplicationException("Entity not found",statusCode, Locale.ROOT,String.valueOf(statusCode));
     }
 
     // 2.2. retrieve the property data from the entity
     Property property = entity.getProperty(edmPropertyName);
     if (property == null) {
-      throw new ODataApplicationException("Property not found",
-          HttpStatusCode.NOT_FOUND.getStatusCode(), Locale.ENGLISH);
+      
+      int statusCode = HttpStatusCode.NOT_FOUND.getStatusCode();
+      throw new ODataApplicationException("Property not found",statusCode, Locale.ROOT,String.valueOf(statusCode));
     }
 
     // 3. serialize
@@ -140,11 +142,15 @@ public class AuxipPrimitiveProcessor implements PrimitiveProcessor {
   public void updatePrimitive(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType requestFormat,
       ContentType responseFormat)
       throws ODataApplicationException, DeserializerException, SerializerException {
-    throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
+          
+      int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+      throw new ODataApplicationException("Not supported.",statusCode, Locale.ROOT,String.valueOf(statusCode));
   }
 
   public void deletePrimitive(ODataRequest request, ODataResponse response, UriInfo uriInfo)
       throws ODataApplicationException {
-    throw new ODataApplicationException("Not supported.", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ROOT);
-  }
+          
+        int statusCode = HttpStatusCode.NOT_IMPLEMENTED.getStatusCode();
+        throw new ODataApplicationException("Not supported.",statusCode, Locale.ROOT,String.valueOf(statusCode));
+    }
 }

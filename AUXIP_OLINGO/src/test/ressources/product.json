@@ -1,0 +1,77 @@
+{
+    "ID":"7fc282fc-4a00-417f-b77c-4e851440105a",
+    "Name":"S2A_OPER_GIP_R2DENT_MPC__20150605T094742_V20150622T000000_21000101T000000_B06.TGZ",
+    "ContentType":"application/octet-stream",
+    "ContentLength":6177,
+    "OriginDate":"2015-06-05T09:47:42Z",
+    "PublicationDate":"2021-03-04T11:44:30.180942Z",
+    "EvictionDate":"2123-08-19T11:44:30.180927Z",
+    "Checksum":[
+	{
+	    "ChecksumDate":"2021-03-04T11:44:30.180942Z",
+	    "Algorithm":"md5",
+	    "Value":"3f4f57e7e1680b9f461ff4e96eff4e74"
+	}
+    ],
+    "ContentDate":
+    {
+	"Start":"2015-06-22T00:00:00Z",
+	"End":"2100-01-01T00:00:00Z"
+    },
+    "Attributes": [
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "productType",
+            "ValueType": "String",
+            "Value": "GIP_R2DENT_B06"
+        },
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "platformShortName",
+            "ValueType": "String",
+            "Value": "S2A"
+        },
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "platformSerialIdentifier",
+            "ValueType": "String",
+            "Value": "S2A"
+        },
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "processingCenter",
+            "ValueType": "String",
+            "Value": "MPC_"
+        },
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "processorName",
+            "ValueType": "String",
+            "Value": "IQP"
+        },
+        {
+            "@odata.type": "#OData.CSC.StringAttribute",
+            "Name": "processorVersion",
+            "ValueType": "String",
+            "Value": "2.0"
+        },
+        {
+            "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+            "Name": "processingDate",
+            "ValueType": "DateTimeOffset",
+            "Value": "2015-06-05T09:47:42Z"
+        },
+        {
+            "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+            "Name": "beginningDateTime",
+            "ValueType": "DateTimeOffset",
+            "Value": "2015-06-22T00:00:00Z"
+        },
+        {
+            "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+            "Name": "endingDateTime",
+            "ValueType": "DateTimeOffset",
+            "Value": "2100-01-01T00:00:00Z"
+        }
+    ]
+}

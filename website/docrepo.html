@@ -1,0 +1,28 @@
+---
+title: Documentation repository
+layout: layout-toc
+bodyClass: page-product
+---
+
+<script>
+</script>
+
+
+
+<div class="container pt-5 pt-md-5">
+  <div class="row justify-content-center">
+	<div class="col-12">
+		<h1 class="title-1">Documentation repository</h1>
+	</div>
+  </div>
+</div>
+
+<div class="container pt-5 pt-md-5">
+	<div class="row justify-content-start">
+	{% assign docs = site.docs | sort: 'date' | reverse %}
+		{% for doc in docs %}
+			{% include doc_card.html %}
+	{% endfor %}
+	</div>
+</div>
+

@@ -1,0 +1,1 @@
+{"Variability": "Static", "ProductTypes@odata.bind": ["ProductTypes('L2A')"], "Format": "EOF", "Comments": "Configuration parameters for L2A processor", "Mission": "S2MSI", "@odata.context": "$metadata#AuxTypes", "ProductLevels@odata.bind": ["ProductLevels('L2')"], "Rule": "LatestGeneration", "Validity": "AnyTime", "LongName": "GIP_L2ACFG", "ShortName": "GIP_L2A"}

@@ -67,7 +67,7 @@ for product_type in product_types_bis:
     if product_type : 
         product_type = product_type.strip()
         try:
-            request = "https://reprocessing-preparation.ml/reprocessing.svc/AuxTypes('%s')" % product_type
+            request = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxTypes('%s')" % product_type
             r = s.get(request)
 
             # print("GET %s" % request )

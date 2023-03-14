@@ -3,19 +3,17 @@ import datetime
 
 import requests
 from pip._vendor.requests import auth
-from requests.auth import HTTPBasicAuth
 
 odata_datetime_format = "%Y-%m-%dT%H:%M:%SZ[GMT]"
 odata_datetime_nosec_format = "%Y-%m-%dT%H:%MZ[GMT]"
-url = "https://reprocessing-preparation.ml/reprocessing.svc/AuxFiles"
-login="user"
-password = "*K7KzTrZWhC2zkc"
+url = "https://reprocessing-auxiliary.copernicus.eu/reprocessing.svc/AuxFiles"
 test_dur=True
 test_miss=False
 
-def send_request(request, log, passwd):
-    headers = {'Content-type': 'application/json'}
-    resp = requests.get(request, auth=HTTPBasicAuth(log, passwd),headers=headers)
+def send_request(request, token):
+    print("Request Sent : " + request)
+    headers = {'Content-type': 'application/json','Authorization' : 'Bearer %s' % token}
+    resp = requests.get(request, headers=headers)
     if resp.status_code != 200:
         raise Exception("Bad return code for request: "+request)
     res = resp.json()
@@ -32,51 +30,80 @@ def main():
     parser.add_argument("-t", "--type",
                         help="type to search",
                         required=True)
+    parser.add_argument("-tk", "--token",
+                        help="token to access API",
+                        required=True)
     parser.add_argument("-m", "--mission",
                         help="Satellite trigram",
                         required=True)
-    parser.add_argument(
-            "-o",
-            "--output",
-            help="Output data directory (report file): ex report.txt'",
-            required=True)
+    parser.add_argument("-o", "--output",
+                        help="Output data directory (report file): ex report.txt'",
+                        required=True)
+    parser.add_argument("-ss", "--sensitivity",
+                        help="Sensitivity of the test for gaps and overlaps : a gap/overlap will not be considered one if it is shorter than the sensitivity. Sensitivity format : dd-HH-MM-SS",
+                        required=False)
 
     args = parser.parse_args()
 
+    if args.sensitivity is None:
+        args.sensitivity = "00-00-00-01"
+
+    parsed_sensitivity=args.sensitivity.split('-')
+    gap_sensitivity = datetime.timedelta(days=int(parsed_sensitivity[0]), hours=int(parsed_sensitivity[1]), minutes=int(parsed_sensitivity[2]), seconds=int(parsed_sensitivity[3]))
+
     with open(args.output, mode='w') as report:
         report.write("##### Report start : type : " + args.type + " , step :  " + args.step + " hours ########\n")
-        request = url + "?$orderby=SensingTimeApplicationStart asc&$filter=contains(FullName,'"+args.type+"') and startswith(FullName,'"+args.mission+"')"
-        result = send_request(request,login,password)
+        request = url + "?$orderby=ValidityStart asc&$filter=contains(FullName,'"+args.type+"') and startswith(FullName,'"+args.mission+"')"
+        if "ECMWFD" in args.type:
+            request += " and contains(FullName,'ADG')"
+        result = send_request(request, args.token)
         working_list = []
-        report.write("Number of result tested : "+str(len(result['value']))+"\n")
+        report.write("Number of found files : "+str(len(result['value']))+"\n")
         if len(result['value']) == 0 :
             report.write("ERROR : no file found !!!!!\n")
             report.write("##### Report end ########\n")
             return
         for f in result['value']:
-            start_date_str = f['SensingTimeApplicationStart']
-            stop_date_str = f['SensingTimeApplicationStop']
+            start_date_str = f['ValidityStart']
+            stop_date_str = f['ValidityStart']
+            startDateFormat = ""
+            stopDateFormat = ""
             if len(start_date_str) == 22:
-                start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_nosec_format)
+                startDateFormat = odata_datetime_nosec_format
             else:
-                start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_format)
+                startDateFormat = odata_datetime_format
+
             if len(stop_date_str) == 22:
-                stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_nosec_format)
+                stopDateFormat = odata_datetime_nosec_format
             else:
-                stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_format)
+                stopDateFormat = odata_datetime_format
+
+            start_dt = datetime.datetime.strptime(start_date_str, startDateFormat)
+            stop_dt = datetime.datetime.strptime(stop_date_str, stopDateFormat)
+            # Stop = ValidityStart + Step
+            stop_dt += datetime.timedelta(hours = int(args.step))
+
             working_list.append((start_dt, stop_dt, f))
-        start_date_str = result['value'][0]['SensingTimeApplicationStart']
-        stop_date_str = result['value'][-1]['SensingTimeApplicationStop']
+
+        start_date_str = result['value'][0]['ValidityStart']
+        stop_date_str = result['value'][-1]['ValidityStart']
         if len(start_date_str) == 22:
-            start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_nosec_format)
+            startDateFormat = odata_datetime_nosec_format
         else:
-            start_dt = datetime.datetime.strptime(start_date_str, odata_datetime_format)
+            startDateFormat = odata_datetime_format
+
         if len(stop_date_str) == 22:
-            stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_nosec_format)
+            stopDateFormat = odata_datetime_nosec_format
         else:
-            stop_dt = datetime.datetime.strptime(stop_date_str, odata_datetime_format)
-        report.write("Start date : "+start_date_str.replace("Z[GMT]","")+"\n")
-        report.write("Stop date : " + stop_date_str.replace("Z[GMT]","") + "\n")
+            stopDateFormat = odata_datetime_format
+
+        start_dt = datetime.datetime.strptime(start_date_str, startDateFormat)
+        stop_dt = datetime.datetime.strptime(stop_date_str, stopDateFormat)
+        # Stop = ValidityStart + Step
+        stop_dt += datetime.timedelta(hours = int(args.step))
+
+        report.write("Start date : "+start_dt.strftime(startDateFormat)+"\n")
+        report.write("Stop date : " +stop_dt.strftime(stopDateFormat) +"\n")
         work_dt = start_dt
         found = 0
         idx = 0
@@ -117,15 +144,24 @@ def main():
         # test if there is only one file for a given date using the step
         idx = 1
         while idx < len(working_list):
+            if len(working_list[idx][2]['ValidityStart']) == 22:
+                startDateFormat = odata_datetime_nosec_format
+            else:
+                startDateFormat = odata_datetime_format
+
+            if len(working_list[idx-1][2]['ValidityStart']) == 22:
+                stopDateFormat = odata_datetime_nosec_format
+            else:
+                stopDateFormat = odata_datetime_format
             # The file validity is valid for the tested date
-            if working_list[idx-1][1] > working_list[idx][0]:
-                report.write("overlap: " + working_list[idx-1][2]['FullName'] + " and file : "+working_list[idx][2]['FullName']+
-                             (working_list[idx-1][2]["SensingTimeApplicationStop"]).replace("Z[GMT]","")+" / "+
-                             (working_list[idx][2]["SensingTimeApplicationStart"]).replace("Z[GMT]","")+"\n")
-            if working_list[idx-1][1] < working_list[idx][0] and working_list[idx][0] - working_list[idx-1][1] > datetime.timedelta(seconds=1):
-                report.write("gap: " + working_list[idx-1][2]['FullName'] + " and file "+working_list[idx][2]['FullName']+" : "+
-                             (working_list[idx-1][2]["SensingTimeApplicationStop"]).replace("Z[GMT]","")+" / "+
-                              (working_list[idx][2]["SensingTimeApplicationStart"]).replace("Z[GMT]","")+" not covered\n")
+            if working_list[idx-1][1] > working_list[idx][0] and working_list[idx-1][1] - working_list[idx][0] > gap_sensitivity:
+                report.write("overlap: " + working_list[idx-1][2]['FullName'] + " and "+working_list[idx][2]['FullName']+" : "+
+                             (working_list[idx-1][1].strftime(stopDateFormat)).replace("Z[GMT]","")+" / "+
+                             (working_list[idx][0].strftime(startDateFormat)).replace("Z[GMT]","")+"\n")
+            if working_list[idx-1][1] < working_list[idx][0] and working_list[idx][0] - working_list[idx-1][1] > gap_sensitivity:
+                report.write("gap: " + working_list[idx-1][2]['FullName'] + " and "+working_list[idx][2]['FullName']+" : "+
+                             (working_list[idx-1][1].strftime(stopDateFormat)).replace("Z[GMT]","")+" / "+
+                             (working_list[idx][0].strftime(startDateFormat)).replace("Z[GMT]","")+" not covered\n")
             idx = idx + 1
         report.write("#### Testing overlaps/gaps stop ####\n")
 

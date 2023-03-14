@@ -10,6 +10,8 @@ import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
 import org.apache.olingo.commons.api.data.Property;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.csgroup.auxip.model.repository.Storage;
+
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,38 +34,26 @@ import javax.persistence.Id;
 import javax.print.Doc;
 
 public class Notification {
+	private static final Logger LOG = LoggerFactory.getLogger(Notification.class);
 
-    private Product product;
-    private Subscription subscription;
-    private Timestamp notificationDate;
-	
+	private String productName;
+	private UUID productId;
+	private Subscription subscription;
+	private Timestamp notificationDate;
+
 	public Notification() {
 		this.notificationDate = new Timestamp(System.currentTimeMillis());
 	}
 
-	public Notification( Product product, Subscription subscription) {
-		this.product = product;
+	public Notification( final String prod_name, final UUID prod_id, Subscription subscription) {
+		this.productName = prod_name;
+		this.productId = prod_id;
 		this.subscription = subscription;
 		this.notificationDate = new Timestamp(System.currentTimeMillis());
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-	public void setSubscription(Subscription subscription) {
-		this.subscription = subscription;
-	}
-
 	public Timestamp getNotificationDate() {
 		return notificationDate;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public Subscription getSubscription() {
-		return subscription;
 	}
 
 	/**
@@ -68,7 +61,7 @@ public class Notification {
 	 * @return HttpStatus
 	 */
 	public HttpStatus send() {
-		
+
 		String url = subscription.getNotificationEndpoint();
 
 		// create headers
@@ -78,12 +71,12 @@ public class Notification {
 		// set `accept` header
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		headers.setBasicAuth(subscription.getNotificationEpUsername(), subscription.getNotificationEpPassword());
-		
+
 		// create a map for post parameters
 		Map<String, String> notificationJson = new HashMap<>();
 
-		notificationJson.put("ProductId", product.getId().toString());
-		notificationJson.put("ProductName", product.getName());
+		notificationJson.put("ProductId", productId.toString());
+		notificationJson.put("ProductName", productName);
 		notificationJson.put("SubscriptionId", subscription.getId().toString());
 		notificationJson.put("NotificationDate", notificationDate.toString());
 
@@ -91,18 +84,25 @@ public class Notification {
 		HttpEntity<Map<String, String>> entity = new HttpEntity<>(notificationJson, headers);
 
 		// send POST request
-		ResponseEntity<String> response = new RestTemplate().postForEntity(url, entity, String.class);
+		try {
+			ResponseEntity<String> response = new RestTemplate().postForEntity(url, entity, String.class);
+			HttpStatus status = response.getStatusCode();
+			if( status == HttpStatus.OK )
+			{
+				//update a subscription lastNotificationDate
+				subscription.setLastNotificationDate(notificationDate);
+			}
+			// System.out.println( response.getStatusCode().toString() );
 
-		HttpStatus status = response.getStatusCode();
-		if( status == HttpStatus.OK )
-		{
-			//update a subscription lastNotificationDate
-			subscription.setLastNotificationDate(notificationDate);
+			return status;
+
+		} catch (Exception e) {
+			LOG.warn("Couldn't send notification on endpoint : "+url);
+			LOG.warn(e.getLocalizedMessage());
+			return HttpStatus.NOT_FOUND;
 		}
-		System.out.println( response.getStatusCode().toString() );
 
-		return status;
 	}
-	
+
 
 }
